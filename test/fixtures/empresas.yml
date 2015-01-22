@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  dns: MyString
+  rfc: MyString
+  urlwebservice: MyString
+  usuariosob: MyString
+  passob: MyString
+
+two:
+  dns: MyString
+  rfc: MyString
+  urlwebservice: MyString
+  usuariosob: MyString
+  passob: MyString

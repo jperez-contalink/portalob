@@ -1,0 +1,152 @@
+    1  sudo su
+    2  apt-install yum
+    3  apt-get install yum
+    4  sudo su
+    5  source ~/.rvm/scripts/rvm
+    6  cd /usr/local/rvm/scripts/
+    7  ./rvm
+    8  rvm install 1.9.3-p547
+    9  source ~/.rvm/scripts/rvm
+   10  rails server
+   11  cd /home/julio/woodstock/
+   12  rails server
+   13  bundle install
+   14  rails server
+   15  eb init
+   16  cd /home/julio/
+   17  ls
+   18  sudo python get-pip.py
+   19  sudo pip install awsebcli
+   20  cd /home/julio/.ssh/
+   21  ls
+   22  git clone https://github.com/jperez-tegik/pinteresting.git
+   23  ls
+   24  rm -r pinteresting/
+   25  rm -rf pinteresting/
+   26  cd ..
+   27  cd /home/julio/
+   28  git clone https://github.com/jperez-tegik/pinteresting.git
+   29  cd /home/julio/pinteresting/
+   30  rails server
+   31  source ~/.rvm/scripts/rvm
+   32  bundle install
+   33  vim Gemfile
+   34  bundle install
+   35  ruby -v
+   36  rvm use
+   37  rvm use 2.0.0
+   38  rvm install 
+   39  bundle install
+   40  apt-get install postgresql-9.
+   41  sudo apt-get install postgresql-9.3
+   42  bundle install
+   43  vim Gemfile
+   44  gem install pg -v '0.18.1'
+   45  sudo apt-get install postgresql-server-dev-X.Y
+   46  sudo apt-get install postgresql-server-dev-9.3
+   47  bundle install
+   48  rails server
+   49  rake db:migrate
+   50  rails server
+   51  cd app/
+   52  ls
+   53  cd views/
+   54  ls
+   55  cd layouts/
+   56  vim application.html.erb
+   57  rails server
+   58  cd /home/julio/pinteresting/
+   59  rails server
+   60  bundle install
+   61  ls
+   62  cd pinteresting/
+   63  vim Gemfile
+   64  rvm use 2.0.0
+   65  bundle install
+   66  rails server
+   67  rake secret
+   68  eb setenv SECRET_KEY_BASE="cc6e21b15658fb649ac3ceaeb50f42c364bad7dbd2aaf578ec6777c207019d74f331844df5979887f40c6bb771d136e327b1296cf68a7566d9c69bf5fcd363a9"
+   69  eb deploy
+   70  vim config/database.yml 
+   71  git add .
+   72  git commit -am "Amazon Nuevo"
+   73  eb deploy
+   74  eb status
+   75  vim app/views/pages/
+   76  cd app/views/pages/
+   77  ls
+   78  vim about.html.erb 
+   79  cd /home/julio/pinteresting/
+   80  eb init
+   81  eb create "pinteresting-julio"
+   82  vim /home/julio/.ssh/pinteresting-julio
+   83  ssh -i pinteresting-julio ec2-user@ec2-54-144-72-12.compute-1.amazonaws.com
+   84  ls
+   85  eb logs
+   86  vim config/database.yml 
+   87  vim Gemfile
+   88  git add .
+   89  git commit -am "A Amazon"
+   90  source ~/.rvm/scripts/rvm
+   91  cd /home/julio/
+   92  ls
+   93  cd Rbys/
+   94  ls
+   95  cd ..
+   96  rm Rbys/
+   97  rm -r Rbys/
+   98  cd Rubys/
+   99  ls
+  100  cd ..
+  101  rm -r Rubys/
+  102  mkdir Tegik
+  103  cd Tegik/
+  104  rails new portalob
+  105  cd portalob/
+  106  git remote add origin git@github.com:jperez-tegik/portalob.git
+  107  git push -u origin master
+  108  git init
+  109  git remote add origin git@github.com:jperez-tegik/portalob.git
+  110  git push -u origin master
+  111  ls
+  112  cd ..
+  113  ls
+  114  git remote add origin git@github.com:jperez-tegik/portalob.git
+  115  git push -u origin master
+  116  cd portalob/
+  117  git status
+  118  git remote add origin git@github.com:jperez-tegik/portalob
+  119  git push -u origin master
+  120  cd ..
+  121  cd woodstock/
+  122  vim .git
+  123  cd .git/info/
+  124  ls
+  125  cd ..
+  126  vim description 
+  127  cd ..
+  128  ls
+  129  vim .git
+  130  cd ..
+  131  ls
+  132  cd Tegik/
+  133  ls
+  134  git remote add origin git@github.com:jperez-tegik/portalob.git
+  135  git push -u origin master
+  136  cd portalob/
+  137  ls
+  138  git init
+  139  git add .
+  140  git commit -am "Commit incial"
+  141  git remote add origin git@github.com:jperez-tegik/portalob.git
+  142  git push -u origin master
+  143  rails generate controller pages home
+  144  vim config/routes.rb 
+  145  vim ../../woodstock/config/routes.rb 
+  146  vim config/routes.rb 
+  147  vim Gemfile
+  148  bundle install
+  149  vim Gemfile
+  150  bundle install
+  151  gem install byebug -v '3.5.1'
+  152  history > JuLog

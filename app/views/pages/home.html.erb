@@ -1,0 +1,9 @@
+<div class="jumbotron center">
+	<h1>Bienvenido</h1>
+	<p><br><br>
+	  <% if !usuario_signed_in? %>
+	    <%= link_to "Iniciar Sesion", new_usuario_session_path, class: "btn btn-primary btn-lg" %>
+	    <%= link_to "Registrarse", new_usuario_registration_path, class: "btn btn-primary btn-lg" %>
+	  <% end %>
+	</p>
+</div>

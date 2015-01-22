@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+<%= link_to 'Regresar', empresas_path %><br>
+<div style="float:left">
+  <p>
+    <strong>DNS:</strong>
+    <%= @empresa.dns %>
+  </p>
+  <p>
+    <strong>RFC:</strong>
+    <%= @empresa.rfc %>
+  </p>
+
+  <p>
+    <strong>URL del servicio Web:</strong>
+    <%= @empresa.urlwebservice %>
+  </p>
+
+  <p>
+    <strong>Usuario OB:</strong>
+    <%= @empresa.usuariosob %>
+  </p>
+
+  <p>
+    <strong>Password OB:</strong>
+    <%= @empresa.passob %>
+  </p>
+</div>
+<div align="center">
+  <%= image_tag @empresa.logo.url(:medium) %>
+</div>
+
+<br><br>
+<div align="center">
+  <%= link_to 'Editar', edit_empresa_path(@empresa) %>
+</div>

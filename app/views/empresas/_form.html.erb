@@ -1,0 +1,40 @@
+<%= form_for(@empresa) do |f| %>
+  <% if @empresa.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@empresa.errors.count, "error") %> prohibited this empresa from being saved:</h2>
+
+      <ul>
+      <% @empresa.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+    <div class="form-group">
+      <p><strong>DNS</strong></p>
+      <%= f.text_field :dns, class: "form-control" %>
+    </div>
+    <div class="form-group">
+      <p><strong>RFC</strong></p>
+      <%= f.text_field :rfc, class: "form-control" %>
+    </div>
+    <div class="form-group">
+      <p><strong>URL del servicio Web</strong></p>
+      <%= f.text_field :urlwebservice, class: "form-control" %>
+    </div>
+    <div class="form-group">
+      <%= f.label :logo %>
+      <%= f.file_field :logo, class: "form-control" %>
+    </div>
+    <div class="form-group">
+      <p><strong>Usuario OB</strong></p>
+      <%= f.text_field :usuariosob, class: "form-control" %>
+    </div>
+    <div class="form-group">
+      <p><strong>Password OB</strong></p>
+      <%= f.text_field :passob, class: "form-control" %>
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>

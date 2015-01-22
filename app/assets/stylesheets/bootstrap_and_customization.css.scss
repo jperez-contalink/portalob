@@ -1,0 +1,24 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
+
+$body-bg:    						#ecf0f1;
+$navbar-default-bg: 				#3498db;
+$navbar-default-link-hover-color: 	#e74c3c;
+$navbar-default-link-color:			#ecf0f1;
+
+$navbar-inverse-border: 			0px;
+$navbar-inverse-bg: 				#ecf0f1;
+$navbar-inverse-link-hover-color: 	#e74c3c;
+$navbar-inverse-link-color:			#3498db;
+
+
+$jumbotron-bg:						#bdc3c7;
+$btn-default-bg:					#3498db;
+$btn-primary-bg:					#3498db;
+$btn-default-border:				black;
+$font-family-sans-serif:			'Source Sans Pro';
+
+@import 'bootstrap';
+
+.center {
+  text-align:center;
+}
