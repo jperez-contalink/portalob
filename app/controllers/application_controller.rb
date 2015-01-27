@@ -12,16 +12,17 @@ class ApplicationController < ActionController::Base
    devise_parameter_sanitizer.for(:sign_up) << :rfcempresa
    devise_parameter_sanitizer.for(:sign_up) << :nombre
    devise_parameter_sanitizer.for(:sign_up) << :empresa_id
+   devise_parameter_sanitizer.for(:sign_up) << :rfc
    devise_parameter_sanitizer.for(:account_update) << :nombre
   end
 
-  	def empresa_rfc
-	  #redirect_to new_usuario_registration_path, notice: "No existe una empresa con este rfc" if Empresa.where(:rfc=>params[:rfcempresa]).count < 1 
-	  #redirect_to new_usuario_registration_path, notice: "No existe una empresa con este rfc." if Empresa.where(:rfc=>params["usuario"]["rfcempresa"]).count < 1 
-    redirect_to new_usuario_registration_path, notice: params if Empresa.where(:rfc=>params["usuario"]["rfcempresa"]).count < 1 
-    if Empresa.where(:rfc=>params["usuario"]["rfcempresa"]).count > 0 
-      @empresa = Empresa.find_by(rfc: params["usuario"]["rfcempresa"])
-      params["usuario"]["empresa_id"] = @empresa.id
+  def empresa_rfc
+    if request.referer == 'sign_up'
+      redirect_to new_usuario_registration_path, notice: "No existe una empresa con este rfc." if Empresa.where(:rfc=>params["usuario"]["rfcempresa"]).count < 1 
+      if Empresa.where(:rfc=>params["usuario"]["rfcempresa"]).count > 0 
+        @empresa = Empresa.find_by(rfc: params["usuario"]["rfcempresa"])
+        params["usuario"]["empresa_id"] = @empresa.id
+      end
     end
 	end 
 

@@ -17,6 +17,7 @@ $btn-primary-bg:					#3498db;
 $btn-default-border:				black;
 $font-family-sans-serif:			'Source Sans Pro';
 
+@import 'bootstrap-sprockets';
 @import 'bootstrap';
 
 .center {

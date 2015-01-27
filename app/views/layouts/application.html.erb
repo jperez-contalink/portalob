@@ -4,6 +4,7 @@
   <title>Portal OB</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'jquery.watable' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -13,8 +14,8 @@
     <div class="navbar-header">
 
       <% if usuario_signed_in? %>
-        <% link_to (image_tag current_usuario.empresa.logo.url(:thumb)), root_path, class:"navbar-brand"%>
-        <%= link_to "opcion 1", root_path, class:"navbar-brand"%>
+        <%= link_to (image_tag current_usuario.empresa.logo.url(:thumb)), root_path, class:"navbar-brand"%>
+        <%= link_to "Mis facturas", facturas_path, class:"navbar-brand"%>
         <%= link_to "opcion 2", root_path, class:"navbar-brand"%>
       <% else %>
         <%= link_to "Portal OB", root_path, class:"navbar-brand"%> 
@@ -27,7 +28,7 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul class="nav navbar-nav navbar-right">
 	<% if usuario_signed_in? %>
-    <li><% link_to "Empresa", empresa_path(current_usuario.empresa) %></li>
+    <li><%= link_to "Empresa", empresa_path(current_usuario.empresa) %></li>
 	  <li><%= link_to "Salir", destroy_usuario_session_path, method: :delete%></li>
 	<% else %>
 	  <li><%= link_to "Ingresar", new_usuario_session_path%></li>

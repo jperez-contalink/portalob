@@ -12,5 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.turbolinks
 //= require turbolinks
+//= require jquery.watable
 //= require_tree .
+//= require bootstrap
+//= require masonry/jquery.masonry

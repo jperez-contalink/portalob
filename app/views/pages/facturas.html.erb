@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--ec2-54-237-28-95.compute-1.amazonaws.com/openbravo/ws/dal/POB_VistaFacturasPortal?_where=taxid="GOSM751111QV3"-->
+    <!-- .rvm/gems/ruby-1.9.3-p547/gems/web-console-2.0.0 -->
+    <title>WATable</title>
+    <style type="text/css">
+    .watable .checkable {
+        width:3%;
+        text-align: center;
+    }
+    .watable .montos {
+        text-align: right;
+    }
+    </style>
+</head>
+<body>
+    <h2>Facturas</h2>
+    <div id="example2" style="width:auto"></div>
+
+    <script type="text/javascript">
+        $(document).ready( function() {
+              
+                //Second example that shows all options.
+                var waTable = $('#example2').WATable({
+                //data: generateSampleData(100), //Initiate with data if you already have it
+                debug:false,                //Prints some debug info to console
+                dataBind: true,             //Auto-updates table when changing data row values. See example below. (Note. You need a column with the 'unique' property)
+                pageSize: 11,                //Initial pagesize
+                pageSizePadding: true,      //Pads with empty rows when pagesize is not met
+                transition: 'slide',       //Type of transition when paging (bounce, fade, flip, rotate, scroll, slide).Requires https://github.com/daneden/animate.css.
+                transitionDuration: 0.2,    //Duration of transition in seconds.
+                filter: false,               //Show filter fields
+                sorting: true,              //Enable sorting
+                sortEmptyLast:true,         //Empty values will be shown last
+                columnPicker: true,         //Show the columnPicker button
+                pageSizes: [1,5,8,12,200],  //Set custom pageSizes. Leave empty array to hide button.
+                hidePagerOnEmpty: true,     //Removes the pager if data is empty.
+                checkboxes: true,           //Make rows checkable. (Note. You need a column with the 'unique' property)
+                checkAllToggle:true,        //Show the check-all toggle
+                preFill: true,              //Initially fills the table with empty rows (as many as the pagesize).
+                //url: '/someWebservice'    //Url to a webservice if not setting data manually as we do in this example
+                urlData: { report:1 }     //Any data you need to pass to the webservice
+                urlPost: true             //Use POST httpmethod to webservice. Default is GET.
+                types: {                    //If you want, you can supply some properties that will be applied for specific data types.
+                    string: {
+                        //filterTooltip: "Giggedi..."    //What to say in tooltip when hoovering filter fields. Set false to remove.
+                        //placeHolder: "Type here..."    //What to say in placeholder filter fields. Set false for empty.
+                    },
+                    number: {
+                        decimals: 2   //Sets decimal precision for float types
+                    },
+                    bool: {
+                        //filterTooltip: false
+                    },
+                    date: {
+                      utc: true,            //Show time as universal time, ie without timezones.
+                      //format: 'yy/dd/MM',   //The format. See all possible formats here http://arshaw.com/xdate/#Formatting.
+                      datePicker: true      //Requires "Datepicker for Bootstrap" plugin (http://www.eyecon.ro/bootstrap-datepicker).
+                    }
+                },
+                actions: {                //This generates a button where you can add elements.
+                    filter: true,         //If true, the filter fields can be toggled visible and hidden.
+                    columnPicker: true,   //if true, the columnPicker can be toggled visible and hidden.
+                    custom: [             //Add any other elements here. Here is a refresh and export example.
+                      $('<a href="#" class="refresh"><span class="glyphicon glyphicon-refresh"></span>&nbsp;Refresh</a>'),
+                      $('<a href="#" class="export all"><span class="glyphicon glyphicon-share"></span>&nbsp;Export all rows</a>'),
+                      $('<a href="#" class="export checked"><span class="glyphicon glyphicon-share"></span>&nbsp;Export checked rows</a>'),
+                      $('<a href="#" class="export filtered"><span class="glyphicon glyphicon-share"></span>&nbsp;Export filtered rows</a>'),
+                      $('<a href="#" class="export rendered"><span class="glyphicon glyphicon-share"></span>&nbsp;Export rendered rows</a>')
+                    ]
+                },
+                tableCreated: function(data) {    //Fires when the table is created / recreated. Use it if you want to manipulate the table in any way.
+                    console.log('table created'); //data.table holds the html table element.
+                    console.log(data);            //'this' keyword also holds the html table element.
+                },
+                rowClicked: function(data) {      //Fires when a row is clicked (Note. You need a column with the 'unique' property).
+                    console.log('row clicked');   //data.event holds the original jQuery event.
+                    console.log(data);            //data.row holds the underlying row you supplied.
+                                                  //data.column holds the underlying column you supplied.
+                                                  //data.checked is true if row is checked. (Set to false/true to have it unchecked/checked)
+                                                  //'this' keyword holds the clicked element.
+                    if (data.column) {
+                        data.event.preventDefault();
+                        alert('You clicked column:' + data.column.column + ' with value:' + data.row[data.column.column]);
+                    }
+                },
+                columnClicked: function(data) {    //Fires when a column is clicked
+                  console.log('column clicked');  //data.event holds the original jQuery event
+                  console.log(data);              //data.column holds the underlying column you supplied
+                                                  //data.descending is true when sorted descending (duh)
+                },
+                pageChanged: function(data) {      //Fires when manually changing page
+                  console.log('page changed');    //data.event holds the original jQuery event
+                  console.log(data);              //data.page holds the new page index
+                },
+                pageSizeChanged: function(data) {  //Fires when manually changing pagesize
+                  console.log('pagesize changed');//data.event holds teh original event
+                  console.log(data);              //data.pageSize holds the new pagesize
+                }
+            }).data('WATable');  //This step reaches into the html data property to get the actual WATable object. Important if you want a reference to it as we want here.
+
+            //Generate some data
+            var data = jsonConstructor(jsonReturn());
+            waTable.setData(data);  //Sets the data.
+            //waTable.setData(data, true); //Sets the data but prevents any previously set columns from being overwritten
+            //waTable.setData(data, false, false); //Sets the data and prevents any previously checked rows from being reset
+
+            //Get the data
+            var allRows = waTable.getData(false); //Returns the data you previously set.
+            var checkedRows = waTable.getData(true); //Returns only the checked rows.
+            var filteredRows = waTable.getData(false, true); //Returns only the filtered rows.
+            var renderedRows = waTable.getData(false, false, true) //Returns only the rendered rows.
+
+            //Set options on the fly
+            var pageSize = waTable.option("pageSize"); //Get option
+            //waTable.option("pageSize", pageSize); //Set option
+
+            //Databinding example
+            var row = waTable.getRow(5).row; //Get row with unique value of 5.
+            row.name = "Data-Binding Works"; //This would update the table...but only in ultra modern browsers. (See here http://caniuse.com/#search=observe)
+            Platform.performMicrotaskCheckpoint(); //This make sure it also works in browsers not yet compatible with Object.observe. This is the polyfill that's used.(https://github.com/polymer/observe-js).
+            //More databinding
+            data.rows.shift(); //Removes the first row.
+            //var newRow = generateSampleData(1).rows[0];
+            //data.rows.push(newRow); //Add new row
+            //Platform.performMicrotaskCheckpoint();
+
+            //Example event handler triggered by the custom refresh link above.
+            $('#example2').on('click', '.refresh', function(e) {
+                e.preventDefault();
+                //Get and set some new data
+                var data = generateSampleData(100);
+                waTable.setData(data, true);
+            });
+            //Example event handler triggered by the custom export links above.
+            $('#example2').on('click', '.export', function(e) {
+                e.preventDefault();
+                var elem = $(e.target);
+                var data;
+                if (elem.hasClass('all')) data = waTable.getData(false);
+                else if (elem.hasClass('checked')) data = waTable.getData(true);
+                else if (elem.hasClass('filtered')) data = waTable.getData(false, true);
+                else if (elem.hasClass('rendered')) data = waTable.getData(false, false, true);
+                console.log(data.rows.length + ' rows returned');
+                console.log(data);
+                alert(data.rows.length + ' rows returned.\nSee data in console.');
+            });
+
+        });           
+   
+
+function jsonReturn() {
+    var jsonObject = {  
+   "response":{  
+      "data":[  
+         {  
+            "_identifier":"POB_VistaFacturasPortal (F1F0712B9E3D4FD786D8152D2AF9FB70)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/F1F0712B9E3D4FD786D8152D2AF9FB70",
+            "id":"F1F0712B9E3D4FD786D8152D2AF9FB70",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-12-11T17:32:04-06:00",
+            "createdBy":"3351DE4ECC5B47DAB3A460FDCF31FFFA",
+            "createdBy$_identifier":"MARTIN LUNA REYES",
+            "updated":"2014-12-15T13:40:35-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":2300,
+            "grandtotal":2668,
+            "impuesto":368,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"NCC1002012",
+            "recordTime":1422312264008
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (D8056B6146134D1F8A8FD45F89B44CB7)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/D8056B6146134D1F8A8FD45F89B44CB7",
+            "id":"D8056B6146134D1F8A8FD45F89B44CB7",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-10-29T22:21:29-06:00",
+            "createdBy":"724DE353971841CDB77F2B474B79293D",
+            "createdBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "updated":"2014-10-30T12:15:02-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":209,
+            "grandtotal":243,
+            "impuesto":33,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"NC1000630",
+            "recordTime":1422312264008
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (D3FCA55BB25240448A088EB35179D839)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/D3FCA55BB25240448A088EB35179D839",
+            "id":"D3FCA55BB25240448A088EB35179D839",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-11-13T13:19:57-06:00",
+            "createdBy":"724DE353971841CDB77F2B474B79293D",
+            "createdBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "updated":"2014-11-13T13:21:00-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":206,
+            "grandtotal":239,
+            "impuesto":33,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"NC1000929",
+            "recordTime":1422312264009
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (C25D40DA587F4FE98BE19BF3E0378C58)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/C25D40DA587F4FE98BE19BF3E0378C58",
+            "id":"C25D40DA587F4FE98BE19BF3E0378C58",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-10-28T13:00:22-06:00",
+            "createdBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "createdBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "updated":"2014-11-13T13:21:00-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":1044,
+            "grandtotal":1212,
+            "impuesto":167,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"1002805",
+            "recordTime":1422312264010
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (B6D228BA277B42E4958C50C447FDEB22)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/B6D228BA277B42E4958C50C447FDEB22",
+            "id":"B6D228BA277B42E4958C50C447FDEB22",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-12-17T14:46:24-06:00",
+            "createdBy":"724DE353971841CDB77F2B474B79293D",
+            "createdBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "updated":"2014-12-17T14:47:21-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":365,
+            "grandtotal":423,
+            "impuesto":58,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"NC1001681",
+            "recordTime":1422312264011
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (B6AD439C53844AFA88FB0DAD4EB453C4)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/B6AD439C53844AFA88FB0DAD4EB453C4",
+            "id":"B6AD439C53844AFA88FB0DAD4EB453C4",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-11-11T14:53:15-06:00",
+            "createdBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "createdBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "updated":"2014-11-29T12:41:55-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":1169,
+            "grandtotal":1356,
+            "impuesto":187,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"1004243",
+            "recordTime":1422312264011
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (A74152E9A6E742368E372A1D227C9608)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/A74152E9A6E742368E372A1D227C9608",
+            "id":"A74152E9A6E742368E372A1D227C9608",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-11-27T16:48:24-06:00",
+            "createdBy":"3351DE4ECC5B47DAB3A460FDCF31FFFA",
+            "createdBy$_identifier":"MARTIN LUNA REYES",
+            "updated":"2014-11-28T17:40:36-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":1640,
+            "grandtotal":1902,
+            "impuesto":262,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"NCC1001599",
+            "recordTime":1422312264012
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (A48C9E8F09D14BAEAD4F1193032B214F)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/A48C9E8F09D14BAEAD4F1193032B214F",
+            "id":"A48C9E8F09D14BAEAD4F1193032B214F",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-12-09T16:31:47-06:00",
+            "createdBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "createdBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "updated":"2014-12-29T14:44:26-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":840,
+            "grandtotal":974,
+            "impuesto":134,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"1007485",
+            "recordTime":1422312264013
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (A006BDF7E8A940D2AAF3B28C0D768B64)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/A006BDF7E8A940D2AAF3B28C0D768B64",
+            "id":"A006BDF7E8A940D2AAF3B28C0D768B64",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-11-11T14:54:10-06:00",
+            "createdBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "createdBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "updated":"2014-11-29T12:41:55-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":285,
+            "grandtotal":330,
+            "impuesto":45,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"1004244",
+            "recordTime":1422312264013
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (97576BA102624AFB9D64295674123F85)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/97576BA102624AFB9D64295674123F85",
+            "id":"97576BA102624AFB9D64295674123F85",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-11-11T14:51:35-06:00",
+            "createdBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "createdBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "updated":"2014-11-29T12:41:55-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":6877,
+            "grandtotal":7977,
+            "impuesto":1100,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"1004242",
+            "recordTime":1422312264014
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (960A8188375B43AF946DA1B038157867)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/960A8188375B43AF946DA1B038157867",
+            "id":"960A8188375B43AF946DA1B038157867",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-12-09T16:33:56-06:00",
+            "createdBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "createdBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "updated":"2014-12-29T14:44:26-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":13125,
+            "grandtotal":15225,
+            "impuesto":2100,
+            "pagado":false,
+            "pendiente":0,
+            "documentno":"1007486",
+            "recordTime":1422312264015
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (95B85ECD9CCA4AE2A5ED49DD20D7A380)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/95B85ECD9CCA4AE2A5ED49DD20D7A380",
+            "id":"95B85ECD9CCA4AE2A5ED49DD20D7A380",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-12-05T16:58:41-06:00",
+            "createdBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "createdBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "updated":"2014-12-29T14:44:26-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":3846,
+            "grandtotal":4462,
+            "impuesto":615,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"1007097",
+            "recordTime":1422312264016
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (900C3F34148F4316910E7125E532B84C)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/900C3F34148F4316910E7125E532B84C",
+            "id":"900C3F34148F4316910E7125E532B84C",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-10-31T13:37:14-06:00",
+            "createdBy":"3351DE4ECC5B47DAB3A460FDCF31FFFA",
+            "createdBy$_identifier":"MARTIN LUNA REYES",
+            "updated":"2014-11-14T17:30:58-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":825,
+            "grandtotal":957,
+            "impuesto":132,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"NCC1000827",
+            "recordTime":1422312264017
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (7F35E30D822D4DC9BCAD2ABE451825A9)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/7F35E30D822D4DC9BCAD2ABE451825A9",
+            "id":"7F35E30D822D4DC9BCAD2ABE451825A9",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-10-20T17:07:05-05:00",
+            "createdBy":"3351DE4ECC5B47DAB3A460FDCF31FFFA",
+            "createdBy$_identifier":"MARTIN LUNA REYES",
+            "updated":"2014-10-24T17:30:58-05:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":1065,
+            "grandtotal":1235,
+            "impuesto":170,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"NCC1000412",
+            "recordTime":1422312264018
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (7A13D31019F24116AEE1E1953759FC60)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/7A13D31019F24116AEE1E1953759FC60",
+            "id":"7A13D31019F24116AEE1E1953759FC60",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-10-03T18:29:28-05:00",
+            "createdBy":"3351DE4ECC5B47DAB3A460FDCF31FFFA",
+            "createdBy$_identifier":"MARTIN LUNA REYES",
+            "updated":"2014-10-09T14:41:46-05:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":1070,
+            "grandtotal":1241,
+            "impuesto":171,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"NCC1000065",
+            "recordTime":1422312264019
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (6AC8EA112219477986CFF5F751543D6F)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/6AC8EA112219477986CFF5F751543D6F",
+            "id":"6AC8EA112219477986CFF5F751543D6F",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-10-28T13:02:23-06:00",
+            "createdBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "createdBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "updated":"2014-11-13T13:21:00-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":1698,
+            "grandtotal":1970,
+            "impuesto":271,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"1002806",
+            "recordTime":1422312264020
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (5A959402CF9D42499E6354DB7E5B5BFD)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/5A959402CF9D42499E6354DB7E5B5BFD",
+            "id":"5A959402CF9D42499E6354DB7E5B5BFD",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-11-13T18:03:24-06:00",
+            "createdBy":"3351DE4ECC5B47DAB3A460FDCF31FFFA",
+            "createdBy$_identifier":"MARTIN LUNA REYES",
+            "updated":"2014-11-18T16:47:09-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":1480,
+            "grandtotal":1716,
+            "impuesto":236,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"NCC1001212",
+            "recordTime":1422312264021
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (58799223A28845A68E920607B250953B)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/58799223A28845A68E920607B250953B",
+            "id":"58799223A28845A68E920607B250953B",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-11-25T17:22:41-06:00",
+            "createdBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "createdBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "updated":"2014-12-19T10:49:51-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":8748,
+            "grandtotal":10147,
+            "impuesto":1399,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"1005758",
+            "recordTime":1422312264021
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (57AE114FF4CB40CB97AE7FA9993C38E0)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/57AE114FF4CB40CB97AE7FA9993C38E0",
+            "id":"57AE114FF4CB40CB97AE7FA9993C38E0",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-12-29T14:42:56-06:00",
+            "createdBy":"724DE353971841CDB77F2B474B79293D",
+            "createdBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "updated":"2014-12-29T14:44:26-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":712,
+            "grandtotal":826,
+            "impuesto":114,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"NC1001914",
+            "recordTime":1422312264022
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (315CFF01D7244FC7940C10948CE0A682)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/315CFF01D7244FC7940C10948CE0A682",
+            "id":"315CFF01D7244FC7940C10948CE0A682",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-10-16T14:45:26-05:00",
+            "createdBy":"724DE353971841CDB77F2B474B79293D",
+            "createdBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "updated":"2014-10-16T14:48:26-05:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":299,
+            "grandtotal":347,
+            "impuesto":47,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"NC1000302",
+            "recordTime":1422312264023
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (312FC5CD6044488188D8328C3AEEDFB2)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/312FC5CD6044488188D8328C3AEEDFB2",
+            "id":"312FC5CD6044488188D8328C3AEEDFB2",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-10-25T14:18:32-05:00",
+            "createdBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "createdBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "updated":"2014-11-14T17:30:58-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":2423,
+            "grandtotal":2810,
+            "impuesto":387,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"1002619",
+            "recordTime":1422312264024
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (2F341283B7F749FD9F549FAADA34A0D3)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/2F341283B7F749FD9F549FAADA34A0D3",
+            "id":"2F341283B7F749FD9F549FAADA34A0D3",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-12-11T17:34:47-06:00",
+            "createdBy":"3351DE4ECC5B47DAB3A460FDCF31FFFA",
+            "createdBy$_identifier":"MARTIN LUNA REYES",
+            "updated":"2014-12-30T17:13:25-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":735,
+            "grandtotal":852,
+            "impuesto":117,
+            "pagado":false,
+            "pendiente":-852,
+            "documentno":"NCC1002014",
+            "recordTime":1422312264025
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (2E97F741202D4B13A51684AD60CED837)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/2E97F741202D4B13A51684AD60CED837",
+            "id":"2E97F741202D4B13A51684AD60CED837",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-12-23T17:23:18-06:00",
+            "createdBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "createdBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "updated":"2014-12-23T17:33:11-06:00",
+            "updatedBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "updatedBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":7864,
+            "grandtotal":9123,
+            "impuesto":1258,
+            "pagado":false,
+            "pendiente":0,
+            "documentno":"1009232",
+            "recordTime":1422312264025
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (29C3825A7E274345B7F6971388327549)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/29C3825A7E274345B7F6971388327549",
+            "id":"29C3825A7E274345B7F6971388327549",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-10-06T12:28:48-05:00",
+            "createdBy":"724DE353971841CDB77F2B474B79293D",
+            "createdBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "updated":"2014-10-06T12:33:13-05:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":160,
+            "grandtotal":186,
+            "impuesto":25,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"NC1000014",
+            "recordTime":1422312264026
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (222DDB60836742319B01EF5531F889B5)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/222DDB60836742319B01EF5531F889B5",
+            "id":"222DDB60836742319B01EF5531F889B5",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-12-26T17:26:41-06:00",
+            "createdBy":"3351DE4ECC5B47DAB3A460FDCF31FFFA",
+            "createdBy$_identifier":"MARTIN LUNA REYES",
+            "updated":"2014-12-27T10:40:52-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":1720,
+            "grandtotal":1995,
+            "impuesto":275,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"NCC1002349",
+            "recordTime":1422312264026
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (0EC0AA1612CD444D906F013EFD063F78)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/0EC0AA1612CD444D906F013EFD063F78",
+            "id":"0EC0AA1612CD444D906F013EFD063F78",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-11-25T17:24:27-06:00",
+            "createdBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "createdBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "updated":"2014-12-19T10:49:51-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":377,
+            "grandtotal":438,
+            "impuesto":60,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"1005761",
+            "recordTime":1422312264026
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (0B57829095E24EFB8E947AF03CFCBDED)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/0B57829095E24EFB8E947AF03CFCBDED",
+            "id":"0B57829095E24EFB8E947AF03CFCBDED",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-11-29T12:40:45-06:00",
+            "createdBy":"724DE353971841CDB77F2B474B79293D",
+            "createdBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "updated":"2014-11-29T12:41:55-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":333,
+            "grandtotal":386,
+            "impuesto":53,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"NC1001229",
+            "recordTime":1422312264027
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (02112301047244CD8E329CB5AE69B5DC)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/02112301047244CD8E329CB5AE69B5DC",
+            "id":"02112301047244CD8E329CB5AE69B5DC",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-12-23T17:22:10-06:00",
+            "createdBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "createdBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "updated":"2014-12-27T10:40:52-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":8295,
+            "grandtotal":9622,
+            "impuesto":1327,
+            "pagado":false,
+            "pendiente":0,
+            "documentno":"1009231",
+            "recordTime":1422312264027
+         },
+         {  
+            "_identifier":"POB_VistaFacturasPortal (00758B5813A8403E9DF367734C430D61)",
+            "_entityName":"POB_VistaFacturasPortal",
+            "$ref":"POB_VistaFacturasPortal\/00758B5813A8403E9DF367734C430D61",
+            "id":"00758B5813A8403E9DF367734C430D61",
+            "client":"AAA1C042B53C49959FE4D68DA8C5628B",
+            "client$_identifier":"CADENA-PRODUCCION",
+            "organization":"F2832E5A4E214EA1A5FD2808DF45FF92",
+            "organization$_identifier":"01 Bodega",
+            "active":true,
+            "creationDate":"2014-10-14T14:05:05-05:00",
+            "createdBy":"D55145F9F98F45E6BB3BC736D7A9A74C",
+            "createdBy$_identifier":"JESUS HUERTA MUÑOZ",
+            "updated":"2014-10-30T12:15:02-06:00",
+            "updatedBy":"724DE353971841CDB77F2B474B79293D",
+            "updatedBy$_identifier":"LETICIA CASTILLO HERRERA",
+            "isocode":"MXN",
+            "taxid":"EUGR720226QP8",
+            "totallines":5241,
+            "grandtotal":6080,
+            "impuesto":838,
+            "pagado":true,
+            "pendiente":0,
+            "documentno":"1001381",
+            "recordTime":1422312264028
+         }
+      ],
+      "status":0,
+      "totalRows":29,
+      "startRow":0,
+      "endRow":28
+   }
+};
+return jsonObject;
+}
+
+
+function jsonConstructor(json) {
+    //alert()json.response[].data[]
+    var rows = [];
+    var jsonObject = json.response;
+    // Vaciar rows del json en el formato necesario.    
+    for (var i=0;i<jsonObject.totalRows;i++) {
+        console.log("$>" + jsonObject.data[i].totallines);
+        var row = {};
+        row.Factura =   jsonObject.data[i].documentno,
+        row.Subtotal =  jsonObject.data[i].totallines,
+        row.Impuesto =  jsonObject.data[i].impuesto,
+        row.Total =     jsonObject.data[i].grandtotal,
+        row.Pagado =    jsonObject.data[i].pagado,
+        row.Pendiente = jsonObject.data[i].pendiente,
+        row["row-checkable"] = true;
+        row["row-checked"]   = false;
+        row["row-cls"]       = "";
+
+        rows.push(row);
+    } 
+    // Definir columnas
+    var cols = {
+        Factura: {
+            index: 2,
+            type: "string",
+            friendly: "# Factura",
+            format: "<a href='#' target='_blank'>{0}</a>",
+            unique: true,
+            sortOrder: "asc"
+        },
+        Subtotal: {
+            index: 3,
+            type: "number",
+            friendly: "",
+            cls: "montos", //apply some css classes
+            placeHolder: "",
+            format: "$ {0}",
+            decimals: 2,
+        },
+        Impuesto: {
+            index: 4,
+            type: "number",
+            friendly: "",
+            cls: "montos", //apply some css classes
+            placeHolder: "",
+            format: "$ {0}",
+            decimals: 2,
+        },
+        Total: {
+            index: 5,
+            type: "number",
+            friendly: "",
+            cls: "montos", //apply some css classes
+            placeHolder: "",
+            format: "$ {0}",
+            decimals: 2,
+        },
+        Pagado: {
+            index: 6,
+            type: "string",
+            friendly: "Pagado",
+            cls: "blue, anotherClass", //apply some css classes
+            placeHolder: ""
+        },
+        Pendiente: {
+            index: 7,
+            type: "number",
+            friendly: "",
+            cls: "montos", //apply some css classes
+            placeHolder: "",
+            format: "$ {0}",
+            decimals: 2,
+        }
+    };
+    // Contruir el json de datos
+    var data = {
+                cols: cols,
+                rows: rows,
+                otherStuff: {
+                    thatIMight: 1,
+                    needLater: true
+                }
+            };
+    return data;
+}
+</script>
+</body>
+</html>

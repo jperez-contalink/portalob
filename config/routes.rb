@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   devise_for :usuarios
 
   root 'pages#home'
+  get "facturas" => "pages#facturas"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
