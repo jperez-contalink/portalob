@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Reporte Estado Cuenta</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @reporte_estado_cuenta.each do |reporte_estado_cuentum| %>
+      <tr>
+        <td><%= link_to 'Show', reporte_estado_cuentum %></td>
+        <td><%= link_to 'Edit', edit_reporte_estado_cuentum_path(reporte_estado_cuentum) %></td>
+        <td><%= link_to 'Destroy', reporte_estado_cuentum, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Reporte estado cuentum', new_reporte_estado_cuentum_path %>

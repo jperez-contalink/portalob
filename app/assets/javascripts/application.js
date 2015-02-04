@@ -15,6 +15,7 @@
 //= require jquery.turbolinks
 //= require turbolinks
 //= require jquery.watable
+//= require bootstrap-datepicker
 //= require_tree .
 //= require bootstrap
 //= require masonry/jquery.masonry

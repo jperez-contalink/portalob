@@ -213,7 +213,7 @@
             //create table itself
             if (!_table) {
                 _head = _body = _foot = undefined;
-                _table = $('<table class="watable table table-striped table-hover table-bordered table-condensed"></table>').appendTo(_cont);
+                _table = $('<table width="200%" class="watable table table-striped table-hover table-bordered table-condensed"></table>').appendTo(_cont);
             }
 
             //create the header which will later hold both sorting and filtering
@@ -344,8 +344,11 @@
                                 if (placeHolder == undefined) placeHolder = priv.options.types.date.placeHolder;
                                 placeHolder = (placeHolder === true || placeHolder == undefined) ? '-7..0' : placeHolder === false ? '' : placeHolder;
                                 if (tooltip == undefined) tooltip = priv.options.types.date.filterTooltip;
-                                tooltip = (tooltip === true || tooltip == undefined) ? 'Today:<br/>0..1<br/>All except today:<br/>!0..1<br/>A week today excluded:<br/>-7..0' : tooltip === false ? '' : tooltip;
-                                elem = $('<div><input placeholder="{0}" class="filter" type="text" /></div>'.f(placeHolder));
+                                //tooltip = (tooltip === true || tooltip == undefined) ? 'Today:<br/>0..1<br/>All except today:<br/>!0..1<br/>A week today excluded:<br/>-7..0' : tooltip === false ? '' : tooltip;
+                                //elem = $('<div><input placeholder="{0}" class="filter" type="text" /></div>'.f(placeHolder));
+                                //Se agregan estas columnas para visualizar el campo de texto (JPS)
+                                tooltip = (tooltip === true || tooltip == undefined) ? 'Fecha inicio <br> Fecha fin.' : tooltip === false ? '' : tooltip;                                
+                                elem = $('<div><input placeholder="{0}" class="filter" type="hidden" /></div>'.f(placeHolder));
 
                                 if (priv.options.types.date.datePicker === true || priv.options.types.date.datePicker == undefined)
                                 {
@@ -355,8 +358,11 @@
                                         var today = new priv.ext.XDate(false).setHours(0, 0, 0, 0).toString('yyyy-MM-dd');
                                         var dp = $('<div style="float:right" class="date" data-date="{0}" data-date-format="{1}" />'.f(today, 'yyyy-mm-dd')).appendTo(elem);
                                         $('<input style="display:none" type="text"  />').appendTo(dp);
-                                        $('<span class="add-on glyphicon glyphicon-chevron-right"></span>').on('click', {op: "l"}, priv.dpOpChanged).appendTo(dp);
-                                        $('<span class="add-on glyphicon glyphicon-chevron-left"></span>').on('click', {op: "r"}, priv.dpOpChanged).appendTo(dp);
+                                        //Se comabiaron los iconos del selector de fechas (JPS)
+                                        //$('<span class="add-on glyphicon glyphicon-chevron-right"></span>').on('click', {op: "l"}, priv.dpOpChanged).appendTo(dp);
+                                        //$('<span class="add-on glyphicon glyphicon-chevron-left"></span>').on('click', {op: "r"}, priv.dpOpChanged).appendTo(dp);
+                                        $('<span class="add-on glyphicon glyphicon glyphicon-calendar"></span>').on('click', {op: "l"}, priv.dpOpChanged).appendTo(dp);
+                                        $('<span class="add-on glyphicon glyphicon glyphicon-calendar"></span>').on('click', {op: "r"}, priv.dpOpChanged).appendTo(dp);
                                         dp.datepicker({weekStart:1});
                                         dp.on('changeDate', {column: column, input: $('input.filter', elem)}, priv.dpClicked);
                                     }
@@ -373,7 +379,7 @@
                                 break;
                             case "string":
                                 if (placeHolder == undefined) placeHolder = priv.options.types.string.placeHolder;
-                                placeHolder = (placeHolder === true || placeHolder == undefined) ? 'John Doe' : placeHolder === false ? '' : placeHolder;
+                                placeHolder = (placeHolder === true || placeHolder == undefined) ? '' : placeHolder === false ? '' : placeHolder;
                                 if (tooltip == undefined) tooltip = priv.options.types.string.filterTooltip;
                                 tooltip = (tooltip === true || tooltip == undefined) ? 'Find John Doe:<br/>John Doe<br/>Find John and Jane Doe(Regex):<br/>?John Doe|Jane Doe<br/>Find all except John Doe:<br/>!John Doe' : tooltip === false ? '' : tooltip;
                                 elem = $('<input placeholder="{0}" class="filter" type="text" />'.f(placeHolder));

@@ -1,12 +1,32 @@
+require 'api_constraints'
 Rails.application.routes.draw do
  
   resources :empresas
 
   devise_for :usuarios
 
-  root 'pages#home'
-  get "facturas" => "pages#facturas"
+  resources :reporte_estado_cuenta
 
+  resources :reporte_facturas
+
+  #root 'pages#home'
+  root 'pages#estadosdecuenta'
+  get "facturas" => "pages#facturas"
+  get "estadosdecuenta" => "pages#estadosdecuenta"
+
+
+
+    namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      resources :reporte_facturas
+    end  
+  end
+
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      resources :reporte_estado_cuenta
+    end  
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

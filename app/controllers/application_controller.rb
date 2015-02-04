@@ -17,7 +17,8 @@ class ApplicationController < ActionController::Base
   end
 
   def empresa_rfc
-    if request.referer == 'sign_up'
+    if request.referer.include? "sign_up"
+      #redirect_to new_usuario_registration_path, notice: request.referer
       redirect_to new_usuario_registration_path, notice: "No existe una empresa con este rfc." if Empresa.where(:rfc=>params["usuario"]["rfcempresa"]).count < 1 
       if Empresa.where(:rfc=>params["usuario"]["rfcempresa"]).count > 0 
         @empresa = Empresa.find_by(rfc: params["usuario"]["rfcempresa"])

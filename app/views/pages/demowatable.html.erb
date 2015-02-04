@@ -2,31 +2,22 @@
 <html>
 <head>
     <title>WATable</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js" type="text/javascript"></script>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js" type="text/javascript"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="jquery.watable.js" type="text/javascript" charset="utf-8"></script>
     <link rel='stylesheet' href="http://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
     <link rel='stylesheet' href='watable.css'/>
     <style type="text/css">
         body { padding: 30px; font-size: 12px }
-    </style>
+    </style>-->
 </head>
-<body>
-    <h2>WATable</h2>
-    <p><a href="http://wootapa-watable.appspot.com/">http://wootapa-watable.appspot.com/</a></p>
-    
-    <h4>Example 1. No options supplied</h4>
-    <div id="example1" style="width:auto"></div>
-    
-    <h4>Example 2. Lots of options supplied</h4>
+<body>   
+    <h4>Estado de cuenta</h4>
     <div id="example2" style="width:auto"></div>
 
     <script type="text/javascript">
         $(document).ready( function() {
                 //First example. No options supplied.
-                $('#example1').WATable({
-                    data: generateSampleData(2)
-                });
                 
                 //Second example that shows all options.
                 var waTable = $('#example2').WATable({
@@ -93,6 +84,7 @@
                     }
                 },
                 columnClicked: function(data) {    //Fires when a column is clicked
+                  console.log("ROWS FILTRADAS: " + JSON.stringify(filteredRows));  
                   console.log('column clicked');  //data.event holds the original jQuery event
                   console.log(data);              //data.column holds the underlying column you supplied
                                                   //data.descending is true when sorted descending (duh)
@@ -107,8 +99,27 @@
                 }
             }).data('WATable');  //This step reaches into the html data property to get the actual WATable object. Important if you want a reference to it as we want here.
 
+
+            /*console.log("$> Consumir Servicio");
+            var data = {};
+            $.ajax({
+                    type:"GET",
+                    dataType : 'json',
+                    //url: "http://localhost:3000/api/v1/reporte_facturas",
+                    url: "http://localhost:3000/api/v1/reporte_estado_cuenta",
+                    success: function(data){
+                    //console.log("kraken : " + JSON.stringify(jsonConstructor(data)));
+                    waTable.setData(jsonConstructor(data));         
+                }
+            });*/
+
+
+
+
+
             //Generate some data
-            var data = generateSampleData(400);
+            var data = generateSampleData(5);
+            console.log("jsonNativo : " + JSON.stringify(data));
             waTable.setData(data);  //Sets the data.
             //waTable.setData(data, true); //Sets the data but prevents any previously set columns from being overwritten
             //waTable.setData(data, false, false); //Sets the data and prevents any previously checked rows from being reset
@@ -155,6 +166,7 @@
             });
 
         });
+
 
         //Generates some data.
         function generateSampleData(limit) {

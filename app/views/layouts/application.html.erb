@@ -14,11 +14,11 @@
     <div class="navbar-header">
 
       <% if usuario_signed_in? %>
-        <%= link_to (image_tag current_usuario.empresa.logo.url(:thumb)), root_path, class:"navbar-brand"%>
+        <%= link_to (image_tag current_usuario.empresa.logo.url(:thumb)), root_path, class:"navbar-brand" %>
+        <%= link_to "Estado de Cuenta", estadosdecuenta_path, class:"navbar-brand" %>
         <%= link_to "Mis facturas", facturas_path, class:"navbar-brand"%>
-        <%= link_to "opcion 2", root_path, class:"navbar-brand"%>
       <% else %>
-        <%= link_to "Portal OB", root_path, class:"navbar-brand"%> 
+        <%= link_to "Extranet", root_path, class:"navbar-brand"%> 
       <% end %>
     </div>
 
@@ -28,6 +28,7 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul class="nav navbar-nav navbar-right">
 	<% if usuario_signed_in? %>
+    <li><%= link_to "Mi Cuenta", edit_usuario_registration_path(current_usuario) %></li>
     <li><%= link_to "Empresa", empresa_path(current_usuario.empresa) %></li>
 	  <li><%= link_to "Salir", destroy_usuario_session_path, method: :delete%></li>
 	<% else %>
@@ -46,6 +47,10 @@
     <% end %>
     <%= yield %>
   </div>
+      <div id="footer">
+      <div class="container">
+        <p class="muted credit">Tegik S.A. de C.V. todos los derechos reservados - www.tegik.com</p>
+      </div>
 </body>
 </html>
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>FAC</title>
+    <title>EDO CTA</title>
     <style type="text/css">
         .watable .checkable {
             width:3%;
@@ -151,7 +151,7 @@
         </button>
     </div>
     <div>
-        <h2>Facturas</h2>
+        <h2>Estado de Cuenta</h2>
     </div>
     <div id="example2" style="width:100%;">
     </div>
@@ -160,7 +160,7 @@
             var waTable = $('#example2').WATable({
             debug:false,
             dataBind: true,
-            pageSize: 9,
+            pageSize: 50,
             pageSizePadding: true,
             filter: true,
             sorting: true,
@@ -218,7 +218,7 @@
         $.ajax({
                 type:"GET",
                 dataType : 'json',
-                url: "http://localhost:3000/api/v1/reporte_facturas",
+                url: "http://localhost:3000/api/v1/reporte_estado_cuenta",
                 success: function(data){
                 waTable.setData(jsonConstructor(data));         
             }
@@ -257,30 +257,27 @@
 function jsonConstructor(json) {
     var rows = [];
     var jsonObject = json.response;
+    var sinicial = 0;
+    var sfinal = 0;
     for (var i=0;i<jsonObject.totalRows;i++) {
-        var strDate = JSON.stringify(jsonObject.data[i].dateinvoiced);
-        var strPagado = JSON.stringify(jsonObject.data[i].pagado);
-        var pagado = "";
+    //for (var i=0;i<5;i++) {
+        strDate = JSON.stringify(jsonObject.data[i].fecha);
         jsDate = new Date(strDate);
         var dia = jsDate.getDate();
         var mes = jsDate.getMonth();
-        var ano = jsDate.getFullYear()
-        // validar pago
-        console.log("PAGADO: " + strPagado);
-        if (strPagado == "true") {
-            pagado = '<input type="checkbox" disabled="disabled" checked="checked">';
-        } else if (strPagado == "false") {
-            pagado = '<input type="checkbox" disabled="disabled">';
-        }
+        var ano = jsDate.getFullYear();
         var row = {};
-        row.Factura =   jsonObject.data[i].documentno;
-        row.Subtotal =  jsonObject.data[i].totallines;
-        row.Impuesto =  jsonObject.data[i].impuesto;
-        row.Total =     jsonObject.data[i].grandtotal;
+
+        row.TipoDoc =   jsonObject.data[i].documento;
+        row.Documentno =   jsonObject.data[i].documentno;
         row.Fecha = Date.UTC(ano, mes, dia);
-        //row.Pagado =    jsonObject.data[i].pagado;
-        row.Pagado = pagado;
-        row.Pendiente = jsonObject.data[i].pendiente;
+        row.Cargo =  jsonObject.data[i].cargo;
+        row.Abono =  jsonObject.data[i].abono;
+        row.Inicial = sinicial;
+        sfinal = sinicial + jsonObject.data[i].cargo - jsonObject.data[i].abono;
+        row.Final = sfinal;
+        sinicial = sfinal;
+
         row["row-checkable"] = true;
         row["row-checked"]   = false;
         row["row-cls"]       = "";
@@ -289,62 +286,59 @@ function jsonConstructor(json) {
     } 
     // Definir columnas
     var cols = {
-        Factura: {
+        Documentno: {
             index: 1,
             type: "string",
-            friendly: "# Factura",
+            friendly: "No. Documento",
             format: "<a href='#' target='_blank'>{0}</a>",
             unique: true,
             sortOrder: "asc"
         },
-        Subtotal: {
+        TipoDoc: {
             index: 2,
-            type: "number",
-            friendly: "",
-            cls: "montos", //apply some css classes
-            placeHolder: "",
-            format: "$ {0}",
-            decimals: 2,
+            type: "string",
+            friendly: "Tipo Doc."
         },
-        Impuesto: {
+        Fecha: {
             index: 3,
-            type: "number",
-            friendly: "",
-            cls: "montos", //apply some css classes
-            placeHolder: "",
-            format: "$ {0}",
-            decimals: 2,
+            type: "date",
+            friendly: "Fecha"
         },
-        Total: {
+        Inicial: {
             index: 4,
             type: "number",
-            friendly: "",
-            cls: "montos", //apply some css classes
+            friendly: "S. Inicial",
+            cls: "montos",
             placeHolder: "",
             format: "$ {0}",
-            decimals: 2,
+            decimals: 2
         },
-         Fecha: {
+         Cargo: {
             index: 5,
-            type: "date", //Don't forget dates are expressed in milliseconds
-            dateFormat: "yyyy-MM-dd", //Special date format
-            friendly: "Fecha",
-            placeHolder: "Las facturas màs antiguas se ven primero."
+            type: "number",
+            friendly: "Cargo",
+            cls: "montos",
+            placeHolder: "",
+            format: "$ {0}",
+            decimals: 2
         },
-        Pagado: {
+        Abono: {
             index: 6,
-            type: "string",
-            friendly: "Pagado",
-            placeHolder: ""
+            type: "number",
+            friendly: "Abono",
+            cls: "montos",
+            placeHolder: "",
+            format: "$ {0}",
+            decimals: 2
         },
-        Pendiente: {
+        Final: {
             index: 7,
             type: "number",
-            friendly: "",
-            cls: "montos", //apply some css classes
+            friendly: "S. Final",
+            cls: "montos",
             placeHolder: "",
             format: "$ {0}",
-            decimals: 2,
+            decimals: 2
         }
     };
     // Contruir el json de datos

@@ -17,7 +17,9 @@ gem 'masonry-rails', '~> 0.2.4'
 gem 'will_paginate', '~> 3.0.5'
 gem 'will_paginate-bootstrap'
 gem 'json'
-gem 'ob', '~> 0.0.1.4'
+gem 'rest-client'
+gem 'rack-cors', :require => 'rack/cors'
+
 
 group :development, :test do
   gem 'sqlite3'
