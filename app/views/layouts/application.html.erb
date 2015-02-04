@@ -2,6 +2,9 @@
 <html>
 <head>
   <title>Portal OB</title>
+  <style type="text/css">
+
+  </style>  
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'jquery.watable' => true %>
@@ -43,14 +46,13 @@
 </nav>
   <div class="container">
     <% flash.each do |name, msg| %>
-	<%= content_tag(:div, msg, class: "alert alert-info") %>
+    <%= content_tag(:div, msg, class: "alert alert-info") %>
     <% end %>
     <%= yield %>
   </div>
-      <div id="footer">
-      <div class="container">
-        <p class="muted credit">Tegik S.A. de C.V. todos los derechos reservados - www.tegik.com</p>
-      </div>
+<div style="position:fixed;bottom:0;width:100%;background-color:#2980b9;color:white;text-align:center;vertical-align:baseline;">
+  <p><b> Creado por Tegik S.A. de C.V. todos los derechos reservados.</b></p>
+</div>
 </body>
 </html>
 
