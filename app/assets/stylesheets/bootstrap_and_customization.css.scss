@@ -11,10 +11,12 @@ $navbar-inverse-link-hover-color: 	#e74c3c;
 $navbar-inverse-link-color:			#3498db;
 
 
-$jumbotron-bg:						#bdc3c7;
-$btn-default-bg:					#3498db;
+$jumbotron-bg:						white;
+$jumbotron-boder:					gray;
+$btn-default-bg:					white;
+$btn-default-color:					#2980b9;
+$btn-default-border:				#2980b9;
 $btn-primary-bg:					#3498db;
-$btn-default-border:				black;
 $font-family-sans-serif:			'Source Sans Pro';
 
 @import 'bootstrap-sprockets';

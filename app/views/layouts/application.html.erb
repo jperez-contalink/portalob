@@ -3,7 +3,9 @@
 <head>
   <title>Portal OB</title>
   <style type="text/css">
-
+    .imglogo {
+      height:130%;
+    }
   </style>  
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
@@ -17,7 +19,7 @@
     <div class="navbar-header">
 
       <% if usuario_signed_in? %>
-        <%= link_to (image_tag current_usuario.empresa.logo.url(:thumb)), root_path, class:"navbar-brand" %>
+        <%= link_to (image_tag current_usuario.empresa.logo.url(), class: "imglogo"), root_path, class:"navbar-brand" %>
         <%= link_to "Estado de Cuenta", estadosdecuenta_path, class:"navbar-brand" %>
         <%= link_to "Mis facturas", facturas_path, class:"navbar-brand"%>
       <% else %>
@@ -50,7 +52,7 @@
     <% end %>
     <%= yield %>
   </div>
-<div style="position:fixed;bottom:0;width:100%;background-color:#2980b9;color:white;text-align:center;vertical-align:baseline;">
+<div style="position:fixed;bottom:0;width:100%;height:5%;background-color:#2980b9;color:white;text-align:right;vertical-align:baseline;">
   <p><b> Creado por Tegik S.A. de C.V. todos los derechos reservados.</b></p>
 </div>
 </body>

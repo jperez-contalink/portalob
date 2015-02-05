@@ -9,10 +9,12 @@ Rails.application.routes.draw do
 
   resources :reporte_facturas
 
-  #root 'pages#home'
+
+
   root 'pages#estadosdecuenta'
   get "facturas" => "pages#facturas"
   get "estadosdecuenta" => "pages#estadosdecuenta"
+  get "demowatable" => "pages#demowatable"
 
 
 

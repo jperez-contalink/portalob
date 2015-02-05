@@ -23,7 +23,6 @@
  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 (function ($, undefined) {
-
     var WATable = function () {
 
         var priv = {}; //private api
@@ -336,7 +335,7 @@
                                 if (placeHolder == undefined) placeHolder = priv.options.types.number.placeHolder;
                                 placeHolder = (placeHolder === true || placeHolder == undefined) ? '10..20 =50' : placeHolder === false ? '' : placeHolder;
                                 if (tooltip == undefined) tooltip = priv.options.types.number.filterTooltip;
-                                tooltip = (tooltip === true || tooltip == undefined) ? 'Values 10 to 20:<br/>10..20<br/>Values except 10 to 20:<br/>!10..20<br/>Values exactly 50:<br/>=50' : tooltip === false ? '' : tooltip;
+                                tooltip = (tooltip === true || tooltip == undefined) ? 'Escriba algún criterio de búsqueda.' : tooltip === false ? '' : tooltip;
                                 elem = $('<input placeholder="{0}" class="filter" type="text" />'.f(placeHolder));
                                 elem.on('keyup', {column: column}, priv.filterChanged);
                                 break;
@@ -556,9 +555,9 @@
 
                 //create summary
                 if (_data.rows.length > 0)
-                    $('<p>Rows {0}-{1} of {2}</p>'.f(_data.meta.fromRow + 1, Math.min(_data.meta.toRow, _data.rows.length), _data.rows.length)).appendTo(footCell);
+                    $('<p>Filas {0}-{1} de {2}</p>'.f(_data.meta.fromRow + 1, Math.min(_data.meta.toRow, _data.rows.length), _data.rows.length)).appendTo(footCell);
                 else {
-                    $('<p>No results</p>').appendTo(footCell);
+                    $('<p>No se encontraron resultados.</p>').appendTo(footCell);
                 }
 
                 //create the pager.
@@ -596,7 +595,7 @@
                 //create pagesize dropdown
                 if (priv.options.pageSizes.length) {
                     var div = $('<div class="btn-group dropup pagesize"></div>').appendTo(footToolbar);
-                    //var btn = $('<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">Rowss&nbsp;</button>').appendTo(div);
+                    var btn = $('<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">Filas&nbsp;</button>').appendTo(div);
                     var span = $('<span class="caret"></span>').appendTo(btn);
                     var ul = $('<ul class="dropdown-menu">').appendTo(div);
 
@@ -610,7 +609,7 @@
                 //create columnpicker dropdown
                 if (priv.options.columnPicker) {
                     var div = $('<div class="btn-group dropup columnpicker"></div>').appendTo(footToolbar);
-                    var btn = $('<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">Columns&nbsp;</button>').appendTo(div);
+                    var btn = $('<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">Columnas&nbsp;</button>').appendTo(div);
                     var span = $('<span class="caret"></span>').appendTo(btn);
                     var ul = $('<ul class="dropdown-menu">').appendTo(div);
 
