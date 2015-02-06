@@ -1,6 +1,8 @@
 require 'api_constraints'
 Rails.application.routes.draw do
  
+  resources :impresion_documentos
+
   resources :empresas
 
   devise_for :usuarios
@@ -18,7 +20,7 @@ Rails.application.routes.draw do
 
 
 
-    namespace :api, defaults: {format: 'json'} do
+  namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       resources :reporte_facturas
     end  
@@ -27,6 +29,12 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       resources :reporte_estado_cuenta
+    end  
+  end
+
+  namespace :api, defaults: {format: 'xml'} do
+    namespace :v1 do
+      resources :impresion_documentos
     end  
   end
   # The priority is based upon order of creation: first created -> highest priority.

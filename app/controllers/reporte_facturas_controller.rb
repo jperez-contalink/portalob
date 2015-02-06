@@ -7,7 +7,6 @@ class ReporteFacturasController < ApplicationController
     puts carlos
     @reportefacturas = Reportefactura.all
     respond_to do |format|
-      format.html
       format.json {render json: @reportefacturas}
     end
   end

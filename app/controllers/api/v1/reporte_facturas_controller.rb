@@ -7,11 +7,10 @@ module Api
       def index
         @user = current_usuario
         order_link = "http://" + @user.empresa.usuariosob + ":" + @user.empresa.passob + "@" + @user.empresa.urlwebservice + "POB_VistaFacturasPortal?_where=taxid=%27" + @user.rfc + "%27"
-      	#order_link = 'http://csalinas-tegik:KopoTegik@ec2-54-160-80-97.compute-1.amazonaws.com/openbravo/org.openbravo.service.json.jsonrest/POB_VistaFacturasPortal?_where=taxid=%27ASJ9810288T9%27'
     	  response = RestClient.get order_link 
       	respond_to do |format|
       		format.json {render json: response}
-    	end
+    	   end
       end
 
       def show

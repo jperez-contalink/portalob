@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>FAC</title>
+    <title>LST FAC</title>
     <style type="text/css">
         .watable .checkable {
             width:3%;
@@ -140,26 +140,33 @@
 
         .watable .gray {
           background-color: #d3d3d3 !important;
-        }      
-
+        }        
     </style>
 </head>
 <body>
+<% if usuario_signed_in? %>
   <div id="lst_fac" style="width:100%;">
     <div  align="right">
-        <button type="button" class="btn btn-default" onclick="alert('Descarga documentos dummy.');" aria-label="Left Align">
+        <button type="button" class="btn btn-default export_checked" aria-
+        label="Left Align">
             <span class="glyphicon glyphicon glyphicon-arrow-down" aria-hidden="true"></span>&nbsp;Descargar Documentos
         </button>
     </div>
-    <div>
-        <h2>Facturas</h2>
+      <h2>Mis facturas</h2>
     </div>
-    
-    </div>
+  <% else %>
+  <div class="jumbotron center">
+  <h1>Bienvenido</h1>
+  <p><br><br>
+      <%= link_to "Iniciar Sesion", new_usuario_session_path, class: "btn btn-primary btn-lg" %>
+      <%= link_to "Registrarse", new_usuario_registration_path, class: "btn btn-primary btn-lg" %>
+  </p>
+  </div>
+  <% end %>
     <script type="text/javascript">
     var flagJQ = false;
         $(document).ready( function() {
-          if (document.getElementById('lst_fac') != null && flagJQ == false) {
+            if (document.getElementById('lst_fac') != null && flagJQ == false) {
             flagJQ = true;
             var waTable = $('#lst_fac').WATable({
             debug:false,
@@ -170,7 +177,7 @@
             sorting: true,
             sortEmptyLast:true,
             columnPicker: true,
-            pageSizes: [10,50,100,200,"all"],
+            pageSizes: [1,5,8,12,200, "all"],
             hidePagerOnEmpty: true,
             checkboxes: true,
             checkAllToggle:true,
@@ -190,18 +197,17 @@
                   datePicker: true
                 }
             },
-            actions: {                //This generates a button where you can add elements.
-                    filter: true,         //If true, the filter fields can be toggled visible and hidden.
-                    columnPicker: true,   //if true, the columnPicker can be toggled visible and hidden.
-                    custom: [             //Add any other elements here. Here is a refresh and export example.
-                      $('<a href="#" class="refresh"><span class="glyphicon glyphicon-refresh"></span>&nbsp;Refresh</a>'),
-                      $('<a href="#" class="export all"><span class="glyphicon glyphicon-share"></span>&nbsp;Exportar todas las filas</a>'),
-                      $('<a href="#" class="export checked"><span class="glyphicon glyphicon-share"></span>&nbsp;Exportar filas chequeadas</a>'),
-                      $('<a href="#" class="export filtered"><span class="glyphicon glyphicon-share"></span>&nbsp;Exportar filas filtradas</a>'),
-                      $('<a href="#" class="export rendered"><span class="glyphicon glyphicon-share"></span>&nbsp;Exportar filas rendereadas</a>')
-                    ]
-                },            
-           
+           actions: {                //This generates a button where you can add elements.
+                filter: true,         //If true, the filter fields can be toggled visible and hidden.
+                columnPicker: true,   //if true, the columnPicker can be toggled visible and hidden.
+                custom: [             //Add any other elements here. Here is a refresh and export example.
+                  $('<a href="#" class="refresh"><span class="glyphicon glyphicon-refresh"></span>&nbsp;Refresh</a>'),
+                  $('<a href="#" class="export all"><span class="glyphicon glyphicon-share"></span>&nbsp;Exportar todas las filas</a>'),
+                  $('<a href="#" class="export checked"><span class="glyphicon glyphicon-share"></span>&nbsp;Exportar filas chequeadas</a>'),
+                  $('<a href="#" class="export filtered"><span class="glyphicon glyphicon-share"></span>&nbsp;Exportar filas filtradas</a>'),
+                  $('<a href="#" class="export rendered"><span class="glyphicon glyphicon-share"></span>&nbsp;Exportar filas rendereadas</a>')
+                ]
+            }, 
             tableCreated: function(data) {
                 console.log('table created');
                 console.log(data);
@@ -227,7 +233,6 @@
               console.log(data);
             }
         }).data('WATable');
-        
 
         console.log("$> Consumir Servicio");
         var datox = {};
@@ -237,13 +242,13 @@
                 url: "http://localhost:3000/api/v1/reporte_facturas",
                 success: function(datox){
                 waTable.setData(jsonConstructor(datox));         
-                },
+            },
                 error:  function(){
                 var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
                 document.getElementById("lst_fac").innerHTML = mensajeError;
                 }
         });
-            
+
             //Get the data
             var allRows = waTable.getData(false);
             var checkedRows = waTable.getData(true);
@@ -269,8 +274,32 @@
                 console.log(data);
                 alert(data.rows.length + ' rows returned.\nSee data in console.');
             });
-          }//termina validacion elemento
-       });
+            $("#lst_fac").on('click', '.export_checked', function (e) {
+                e.preventDefault();
+                var data = waTable.getData(true);
+                console.log(data.rows.length + ' rows returned');
+                console.log(data);
+                window.open("http://localhost:3000/api/v1/impresion_documentos");
+                //alert(data.rows.length + ' rows returned.\nSee console for details.');
+                /*console.log("$> Web Service Descargar archivos");
+                var datox = {};
+                $.ajax({
+                  type:"GET",
+                  dataType : 'xml',
+                  url: "http://localhost:3000/api/v1/impresion_documentos",
+                  success: function(datoz){
+                  //waTable.setData(jsonConstructor(datox));
+                  //document.getElementById("lst_fac").innerHTML = datoz;
+                  alert("Funcionó");
+                },
+                error:  function(){
+                  var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
+                  document.getElementById("lst_fac").innerHTML = mensajeError;
+                }
+                });*/
+            });
+          }// termina validacion elemento    
+        });           
 
 
 function jsonConstructor(json) {
@@ -291,12 +320,12 @@ function jsonConstructor(json) {
             pagado = '<input type="checkbox" disabled="disabled">';
         }
         var row = {};
+        row.FacturaID = jsonObject.data[i].id;
         row.Factura =   jsonObject.data[i].documentno;
         row.Subtotal =  jsonObject.data[i].totallines;
         row.Impuesto =  jsonObject.data[i].impuesto;
         row.Total =     jsonObject.data[i].grandtotal;
         row.Fecha = Date.UTC(ano, mes, dia);
-        //row.Pagado =    jsonObject.data[i].pagado;
         row.Pagado = pagado;
         row.Pendiente = jsonObject.data[i].pendiente;
         row["row-checkable"] = true;
@@ -363,6 +392,12 @@ function jsonConstructor(json) {
             placeHolder: "",
             format: "$ {0}",
             decimals: 2,
+        },
+        FacturaID: {
+            index: 1,
+            type: "string",
+            friendly: "ID",
+            hidden: true
         }
     };
     // Contruir el json de datos
@@ -376,7 +411,6 @@ function jsonConstructor(json) {
             };
     return data;
 }
-
 /*!
  * Bootstrap v3.3.1 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
