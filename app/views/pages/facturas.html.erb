@@ -275,28 +275,16 @@
                 alert(data.rows.length + ' rows returned.\nSee data in console.');
             });
             $("#lst_fac").on('click', '.export_checked', function (e) {
+                console.log("DESCARGAR DOCUMENTOS");
                 e.preventDefault();
                 var data = waTable.getData(true);
-                console.log(data.rows.length + ' rows returned');
-                console.log(data);
-                window.open("http://localhost:3000/api/v1/impresion_documentos");
-                //alert(data.rows.length + ' rows returned.\nSee console for details.');
-                /*console.log("$> Web Service Descargar archivos");
-                var datox = {};
-                $.ajax({
-                  type:"GET",
-                  dataType : 'xml',
-                  url: "http://localhost:3000/api/v1/impresion_documentos",
-                  success: function(datoz){
-                  //waTable.setData(jsonConstructor(datox));
-                  //document.getElementById("lst_fac").innerHTML = datoz;
-                  alert("Funcionó");
-                },
-                error:  function(){
-                  var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
-                  document.getElementById("lst_fac").innerHTML = mensajeError;
+                var strParam = "?facturaids=";
+                var checkRows = data.rows;
+                for (var i=0;i<checkRows.length;i++) {
+                  strParam = strParam + checkRows[i].FacturaID + "_";
                 }
-                });*/
+                console.log("url:" + strParam);
+                window.open("http://localhost:3000/api/v1/impresion_documentos" + strParam);
             });
           }// termina validacion elemento    
         });           

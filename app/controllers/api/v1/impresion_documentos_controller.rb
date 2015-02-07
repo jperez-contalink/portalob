@@ -6,15 +6,12 @@ module Api
 
       def index
         @user = current_usuario
-        #order_link = "http://csalinas-tegik:KopoTegik@ec2-54-146-147-171.compute-1.amazonaws.com/openbravo/ws/com.tegik.portalob.DescargaDocumentosPortal"
-        #order_link = "http://" + @user.empresa.usuariosob + ":" + @user.empresa.passob + "@" + @user.empresa.urlwebservice + "/openbravo/ws/com.tegik.portalob.DescargaDocumentosPortal?c_invoice_id='#{params[:id]}'"
-        order_link = "http://" + @user.empresa.usuariosob + ":" + @user.empresa.passob + "@" + @user.empresa.urlwebservice + "/openbravo/ws/com.tegik.portalob.DescargaDocumentosPortal"
-        puts order_link
+        order_link = "http://" + @user.empresa.usuariosob + ":" + @user.empresa.passob + "@" + @user.empresa.urlwebservice + "/openbravo/ws/com.tegik.portalob.DescargaDocumentosPortal?facturaids=#{params[:facturaids]}"
         response = RestClient.get order_link
         respond_to do |format|
           format.xml {
               #render xml: response
-              send_data(response)
+              send_data(response, :filename => 'tusarchivos.zip')
             }
     	  end
 

@@ -21,6 +21,7 @@
       <% if usuario_signed_in? %>
         <%= link_to (image_tag current_usuario.empresa.logo.url(), class: "imglogo"), root_path, class:"navbar-brand" %>
         <%= link_to "Estado de Cuenta", estadosdecuenta_path, class:"navbar-brand" %>
+        <!--<span class="glyphicon glyphicon glyphicon-arrow-down" aria-hidden="true">-->
         <%= link_to "Mis facturas", facturas_path, class:"navbar-brand"%>
       <% else %>
         <%= link_to "Extranet", root_path, class:"navbar-brand"%> 
@@ -34,6 +35,9 @@
       <ul class="nav navbar-nav navbar-right">
 	<% if usuario_signed_in? %>
     <li><%= link_to "Mi Cuenta", edit_usuario_registration_path(current_usuario) %></li>
+    <li><%= link_to edit_usuario_registration_path(current_usuario), class: "navbar-brand" do %>
+          <i class="glyphicon glyphicon glyphicon-cog"></i>
+        <% end %></li>
     <li><%= link_to "Empresa", empresa_path(current_usuario.empresa) %></li>
 	  <li><%= link_to "Salir", destroy_usuario_session_path, method: :delete%></li>
 	<% else %>
@@ -53,7 +57,7 @@
     <%= yield %>
   </div>
 <div style="position:fixed;bottom:0;width:100%;height:5%;background-color:#2980b9;color:white;text-align:right;vertical-align:baseline;">
-  <p><b> Creado por Tegik S.A. de C.V. todos los derechos reservados.</b></p>
+  <p><b>Tegik S.A. de C.V. todos los derechos reservados.</b></p>
 </div>
 </body>
 </html>
