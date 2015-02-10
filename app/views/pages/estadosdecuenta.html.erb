@@ -147,11 +147,13 @@
 <% if usuario_signed_in? %>
   <div id="edo_cta" style="width:100%;">
     <div  align="right">
-        <button type="button" class="btn btn-default" onclick="alert('Descarga documentos dummy.');" aria-label="Left Align">
+        <button type="button" class="btn btn-default export_checked" aria-
+        label="Left Align">
             <span class="glyphicon glyphicon glyphicon-arrow-down" aria-hidden="true"></span>&nbsp;Descargar Documentos
         </button>
     </div>
       <h2>Estado de Cuenta</h2>
+      <div id="barraTotales"></div>
     </div>
   <% else %>
   <div class="jumbotron center">
@@ -170,7 +172,7 @@
             var waTable = $('#edo_cta').WATable({
             debug:false,
             dataBind: true,
-            pageSize: 50,
+            pageSize: 'todas',
             pageSizePadding: true,
             filter: true,
             sorting: true,
@@ -200,7 +202,7 @@
                 filter: true,         //If true, the filter fields can be toggled visible and hidden.
                 columnPicker: true,   //if true, the columnPicker can be toggled visible and hidden.
                 custom: [             //Add any other elements here. Here is a refresh and export example.
-                  $('<a href="#" class="refresh"><span class="glyphicon glyphicon-refresh"></span>&nbsp;Refresh</a>'),
+                  $('<a href="#" class="refresh"><span class="glyphicon glyphicon-refresh"></span>&nbsp;Refrescar</a>'),
                   $('<a href="#" class="export all"><span class="glyphicon glyphicon-share"></span>&nbsp;Exportar todas las filas</a>'),
                   $('<a href="#" class="export checked"><span class="glyphicon glyphicon-share"></span>&nbsp;Exportar filas chequeadas</a>'),
                   $('<a href="#" class="export filtered"><span class="glyphicon glyphicon-share"></span>&nbsp;Exportar filas filtradas</a>'),
@@ -208,9 +210,53 @@
                 ]
             }, 
             tableCreated: function(data) {
-                console.log('table created');
-                console.log(data);
-            },
+                console.log('Se actualizó la tabla');
+                var rowsNo = data.table.rows.length
+                var cargoTotal = 0;
+                var abonoTotal = 0;
+                var inicialTotal = 0;
+                var flagInicial = false;
+                var finalTotal = 0;
+                var tabla = '<table width="100%"><tr>';
+                if (typeof data.table.rows[2].cells[1] != 'undefined') {
+                  for (var i=2;i<rowsNo;i++){
+                    //calcula cargo
+                    if (typeof data.table.rows[i].cells[5] != 'undefined') {
+                      var cargo = data.table.rows[i].cells[5].textContent;
+                      cargo = cargo.replace("$ ", "");
+                      cargoTotal = cargoTotal + Number(cargo);
+                    }
+                    //calcula abono
+                    if (typeof data.table.rows[i].cells[6] != 'undefined') {
+                      var abono = data.table.rows[i].cells[6].textContent;
+                      abono = abono.replace("$ ", "");
+                      abonoTotal = abonoTotal + Number(abono);
+                    }
+                    //calcula s. inicial
+                    if (typeof data.table.rows[i].cells[4] != 'undefined' && flagInicial == false) {
+                      var inicial = data.table.rows[i].cells[4].textContent;
+                      inicial = inicial.replace("$ ", "");
+                      inicialTotal = Number(inicial);
+                      flagInicial = true;
+                    }
+                    //calcula s. final
+                    if (typeof data.table.rows[i].cells[7] != 'undefined') {
+                      var sfinal = data.table.rows[i].cells[7].textContent;
+                      sfinal = sfinal.replace("$ ", "");
+                      if (sfinal != " ") {
+                        finalTotal = Number(sfinal);
+                      }
+                    }
+                  }
+
+                  var tdinicial = "<td><b>Saldo Inicial: $ " + inicialTotal.toFixed(2) +"</b></td>"
+                  var tdcargo = "<td><b>Cargos: $ " + cargoTotal.toFixed(2) +"</b></td>"
+                  var tdabono = "<td><b>Abonos: $ " + abonoTotal.toFixed(2) +"</b></td>"
+                  var tdfinal = "<td><b>Saldo Final: $ " + finalTotal.toFixed(2) +"</b></td>"
+                  tabla = tabla + tdinicial + tdcargo + tdabono + tdfinal + "</tr></table><br>";
+                  document.getElementById("barraTotales").innerHTML = tabla;
+                } // inf typeof
+            }, // end tablecreated
             rowClicked: function(data) {
                 console.log('row clicked');
                 console.log(data);
@@ -254,11 +300,13 @@
             var filteredRows = waTable.getData(false, true);
             var renderedRows = waTable.getData(false, false, true);
             var pageSize = waTable.option("pageSize"); //Get option
+
             //Example event handler triggered by the custom refresh link above.
             $('#edo_cta').on('click', '.refresh', function(e) {
                 e.preventDefault();
                 var data = generateSampleData(100);
                 waTable.setData(data, true);
+
             });
             //Example event handler triggered by the custom export links above.
             $('#edo_cta').on('click', '.export', function(e) {
@@ -272,7 +320,19 @@
                 console.log(data.rows.length + ' rows returned');
                 console.log(data);
                 alert(data.rows.length + ' rows returned.\nSee data in console.');
-            });  
+            });
+            $("#edo_cta").on('click', '.export_checked', function (e) {
+                console.log("DESCARGAR DOCUMENTOS");
+                e.preventDefault();
+                var data = waTable.getData(true);
+                var strParam = "?facturaids=";
+                var checkRows = data.rows;
+                for (var i=0;i<checkRows.length;i++) {
+                  strParam = strParam + checkRows[i].FacturaID + "_";
+                }
+                console.log("url:" + strParam);
+                window.open("http://localhost:3000/api/v1/impresion_documentos" + strParam);
+            });            
           }// termina validacion elemento    
         });           
 
@@ -282,6 +342,11 @@ function jsonConstructor(json) {
     var jsonObject = json.response;
     var sinicial = 0;
     var sfinal = 0;
+    // variables para los encabezados
+    var h_saldoinicial = 0;
+    var h_saldofinal = 0;
+    var h_cargos = 0;
+    var h_abonos = 0;
     for (var i=0;i<jsonObject.totalRows;i++) {
     //for (var i=0;i<5;i++) {
         strDate = JSON.stringify(jsonObject.data[i].fecha);
@@ -292,6 +357,7 @@ function jsonConstructor(json) {
         var row = {};
 
         row.TipoDoc =   jsonObject.data[i].documento;
+        row.FacturaID = jsonObject.data[i].id;
         row.Documentno =   jsonObject.data[i].documentno;
         row.Fecha = Date.UTC(ano, mes, dia);
         row.Cargo =  jsonObject.data[i].cargo;
@@ -300,10 +366,19 @@ function jsonConstructor(json) {
         sfinal = sinicial + jsonObject.data[i].cargo - jsonObject.data[i].abono;
         row.Final = sfinal;
         sinicial = sfinal;
-
-        row["row-checkable"] = true;
-        row["row-checked"]   = false;
-        row["row-cls"]       = "";
+        // calcular valores de encabezados
+        h_saldofinal = sfinal;
+        h_cargos = h_cargos + jsonObject.data[i].cargo;
+        h_abonos = h_abonos +  jsonObject.data[i].abono;
+        if (row.TipoDoc == "Pago") {
+          row["row-checkable"] = false;
+          row["row-checked"]   = false;
+          row["row-cls"]       = "";  
+        } else {
+          row["row-checkable"] = true;
+          row["row-checked"]   = false;
+          row["row-cls"]       = "";  
+        }
 
         rows.push(row);
     } 
@@ -362,6 +437,12 @@ function jsonConstructor(json) {
             placeHolder: "",
             format: "$ {0}",
             decimals: 2
+        },
+        FacturaID: {
+            index: 8,
+            type: "string",
+            friendly: "ID",
+            hidden: true
         }
     };
     // Contruir el json de datos
