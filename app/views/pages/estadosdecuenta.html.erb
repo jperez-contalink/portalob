@@ -19,7 +19,7 @@
         }
 
         .watable.table {
-          width: auto;
+          width: 100%;
         }
 
         .watable p {
@@ -71,7 +71,7 @@
           border: none;
           width: 100%;
           float: left;
-          background-color: #F2F2F2;
+          
         }
 
         .watable .date-wrap {
@@ -145,7 +145,7 @@
 </head>
 <body>
 <% if usuario_signed_in? %>
-  <div id="edo_cta" style="width:100%;">
+  <div id="edo_cta" style="width:100%;" style="border:1px solid red;">
     <div  align="right">
         <button type="button" class="btn btn-default export_checked" aria-
         label="Left Align">
@@ -154,7 +154,8 @@
     </div>
       <h2>Estado de Cuenta</h2>
       <div id="barraTotales"></div>
-    </div>
+      <div id="dropDownMes" width="50%" style="border:0px solid red;float:left;"></div>
+      <div id="dropDownAno" style="border:0px solid blue;"></div>
   <% else %>
   <div class="jumbotron center">
   <h1>Bienvenido</h1>
@@ -166,6 +167,7 @@
   <% end %>
     <script type="text/javascript">
     var flagJQ = false;
+    var allData = new Array();
         $(document).ready( function() {  
             if (document.getElementById('edo_cta') != null && flagJQ == false) {
               flagJQ = true;
@@ -174,7 +176,7 @@
             dataBind: true,
             pageSize: 'todas',
             pageSizePadding: true,
-            filter: true,
+            filter: false,
             sorting: true,
             sortEmptyLast:true,
             columnPicker: true,
@@ -195,11 +197,11 @@
                 date: {
                   utc: true,
                   format: 'yyyy/MM/dd',
-                  datePicker: true
+                  datePicker: false
                 }
             },
            actions: {                //This generates a button where you can add elements.
-                filter: true,         //If true, the filter fields can be toggled visible and hidden.
+                filter: false,         //If true, the filter fields can be toggled visible and hidden.
                 columnPicker: true,   //if true, the columnPicker can be toggled visible and hidden.
                 custom: [             //Add any other elements here. Here is a refresh and export example.
                   $('<a href="#" class="refresh"><span class="glyphicon glyphicon-refresh"></span>&nbsp;Refrescar</a>'),
@@ -218,8 +220,8 @@
                 var flagInicial = false;
                 var finalTotal = 0;
                 var tabla = '<table width="100%"><tr>';
-                if (typeof data.table.rows[2].cells[1] != 'undefined') {
-                  for (var i=2;i<rowsNo;i++){
+                if (typeof data.table.rows[1].cells[1] != 'undefined') {
+                  for (var i=1;i<rowsNo;i++){
                     //calcula cargo
                     if (typeof data.table.rows[i].cells[5] != 'undefined') {
                       var cargo = data.table.rows[i].cells[5].textContent;
@@ -254,7 +256,11 @@
                   var tdabono = "<td><b>Abonos: $ " + abonoTotal.toFixed(2) +"</b></td>"
                   var tdfinal = "<td><b>Saldo Final: $ " + finalTotal.toFixed(2) +"</b></td>"
                   tabla = tabla + tdinicial + tdcargo + tdabono + tdfinal + "</tr></table><br>";
+                  // crear barra de totales
                   document.getElementById("barraTotales").innerHTML = tabla;
+                  // crear barra de dropdowns
+                  document.getElementById("dropDownMes").innerHTML = creaDropDowns();
+                  document.getElementById("dropDownAno").innerHTML = creaDropDownsAno();
                 } // inf typeof
             }, // end tablecreated
             rowClicked: function(data) {
@@ -286,7 +292,8 @@
                 dataType : 'json',
                 url: "http://localhost:3000/api/v1/reporte_estado_cuenta",
                 success: function(datox){
-                waTable.setData(jsonConstructor(datox));         
+                allData = jsonConstructor(datox);
+                waTable.setData(ultimosTres(allData));        
             },
                 error:  function(){
                 var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
@@ -332,7 +339,21 @@
                 }
                 console.log("url:" + strParam);
                 window.open("http://localhost:3000/api/v1/impresion_documentos" + strParam);
-            });            
+            });  
+            $("#edo_cta").on('click', '.filtrarMes', function (e) {
+                console.log("FILTRAR POR MES");
+                var valor = document.getElementById("selectMes").options[document.getElementById("selectMes").selectedIndex].value;
+                //alert(valor);
+                var datosFiltrados = filtroMesSeleccion(valor);
+                waTable.setDataCta(datosFiltrados);
+            });
+            $("#edo_cta").on('click', '.filtrarAno', function (e) {
+                console.log("FILTRAR POR AÑO");
+                var valor = document.getElementById("selectAno").options[document.getElementById("selectAno").selectedIndex].value;
+                //alert(valor);
+                var datosFiltrados = filtroAnoSeleccion(valor);
+                waTable.setDataCta(datosFiltrados);
+            });          
           }// termina validacion elemento    
         });           
 
@@ -347,6 +368,7 @@ function jsonConstructor(json) {
     var h_saldofinal = 0;
     var h_cargos = 0;
     var h_abonos = 0;
+    console.log("Historico de movimientos: ");
     for (var i=0;i<jsonObject.totalRows;i++) {
     //for (var i=0;i<5;i++) {
         strDate = JSON.stringify(jsonObject.data[i].fecha);
@@ -379,7 +401,7 @@ function jsonConstructor(json) {
           row["row-checked"]   = false;
           row["row-cls"]       = "";  
         }
-
+        console.log("$>: " + strDate + "/ " + row.Documentno + " In.: " + row.Inicial + " Cgo: " + row.Cargo + " Abn: " + row.Abono + " Fin.: " + row.Final);
         rows.push(row);
     } 
     // Definir columnas
@@ -389,12 +411,14 @@ function jsonConstructor(json) {
             type: "string",
             friendly: "No. Documento",
             format: "<a href='#' target='_blank'>{0}</a>",
+            placeHolder: "",
             unique: true
         },
         TipoDoc: {
             index: 2,
             type: "string",
-            friendly: "Tipo Doc."
+            friendly: "Tipo Doc.",
+            placeHolder: ""
         },
         Fecha: {
             index: 3,
@@ -458,6 +482,107 @@ function jsonConstructor(json) {
 }
 
 
+function ultimosTres(json) {
+  var rowsTres = [];
+  var hoy = new Date();
+  hoy.setMonth(hoy.getMonth() - 3);
+  var ayer = new Date(hoy.getFullYear(), hoy.getMonth(), 01);
+  var ayerUTC = Date.UTC(ayer.getFullYear(), ayer.getMonth(), ayer.getDate());
+  for (var i=0;i<json.rows.length;i++) {
+    if (json.rows[i].Fecha > ayerUTC) {
+      rowsTres.push(json.rows[i]);
+    }
+  }
+  var data = {
+                cols: json.cols,
+                rows: rowsTres,
+                otherStuff: {
+                    thatIMight: 1,
+                    needLater: true
+                }
+            };
+  return data;
+}
+
+function filtroMesSeleccion(fecha) {
+  var params = fecha.split("_");
+  var mes = params[0];
+  var ano = params[1];
+  var rowsNuevos = [];
+
+  // recorrer alldata
+  for (var i=0;i<allData.rows.length;i++) {
+    var fechaActual = new Date(allData.rows[i].Fecha);
+    if (fechaActual.getMonth() == mes && fechaActual.getFullYear()==ano){
+      //console.log("PARAM: MES: " + mes + " año: " + ano);
+      //console.log("JSON: MES: " + fechaActual.getMonth() + " año: " + fechaActual.getFullYear());
+      rowsNuevos.push(allData.rows[i]);
+    }
+  }
+  var rowsNuevos = {
+                cols: allData.cols,
+                rows: rowsNuevos,
+                otherStuff: {
+                    thatIMight: 1,
+                    needLater: true
+                }
+            };
+  return rowsNuevos;
+}
+function filtroAnoSeleccion(fecha) {
+  var ano = fecha;
+  var rowsNuevos = [];
+
+  // recorrer alldata
+  for (var i=0;i<allData.rows.length;i++) {
+    var fechaActual = new Date(allData.rows[i].Fecha);
+    if (fechaActual.getFullYear()==ano){
+      rowsNuevos.push(allData.rows[i]);
+    }
+  }
+  var rowsNuevos = {
+                cols: allData.cols,
+                rows: rowsNuevos,
+                otherStuff: {
+                    thatIMight: 1,
+                    needLater: true
+                }
+            };
+  return rowsNuevos;
+}
+
+function creaDropDowns(){
+  //dropdown = '<select id="selectMes" onchange="selectMonth()">';
+  dropdown = '<select class="btn btn-default dropdown-toggle filtrarMes" type="button" id="selectMes" data-toggle="dropdown" aria-expanded="true">';
+  var fecha = new Date();
+  dropdown = dropdown + '<option value="0"> seleccione una fecha </option>';
+  for (var i=0;i<48;i++) {
+      opcion = getMes(fecha.getMonth()) + " (" + fecha.getFullYear() + ")";
+      dropdown = dropdown + '<option value="'+fecha.getMonth()+'_'+fecha.getFullYear()+'">'+opcion+'</option>'; 
+      fecha.setMonth(fecha.getMonth() - 1);
+  }
+  dropdown = dropdown + "</select>";
+  return dropdown;
+}
+function creaDropDownsAno(){
+  //dropdown = '<select id="selectMes" onchange="selectMonth()">';
+  dropdown = '<select class="btn btn-default dropdown-toggle filtrarAno" type="button" id="selectAno" data-toggle="dropdown" aria-expanded="true">';
+  var fecha = new Date();
+  dropdown = dropdown + '<option value="0"> seleccione un año </option>';
+  for (var i=0;i<12;i++) {
+      opcion = fecha.getFullYear();
+      dropdown = dropdown + '<option value="'+fecha.getFullYear()+'">'+opcion+'</option>'; 
+      fecha.setYear(fecha.getFullYear() - 1);
+  }
+  dropdown = dropdown + "</select>";
+  return dropdown;
+}
+function selectMonth (waTable) { 
+  //var Index = document.selectMes.options[document.selectMes.selectedIndex].value;
+  console.log("$> ", waTable);
+  var valor = document.getElementById("selectMes").options[document.getElementById("selectMes").selectedIndex].value; 
+  alert(valor);
+}
 /*!
  * Bootstrap v3.3.1 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
