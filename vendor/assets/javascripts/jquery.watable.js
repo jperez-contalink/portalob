@@ -643,9 +643,8 @@
 
                     for (var i = 0; i < colsSorted.length; i++) {
                         var col = colsSorted[i];
-                        var props = _data.cols[col];
-
-                        if (props.type != "unique") {
+                        var props = _data.cols[col];    
+                        if (props.type != "unique" && col.substring(col.length-3) != "_ID") {
                             var li = $('<li></li>').appendTo(ul);
                             $('<input {0} type="checkbox" title="{1}" value="{1}" >&nbsp;{2}</input>'.f(props.hidden ? '' : 'checked', col, props.friendly || col)).appendTo(li);
                         }
@@ -804,8 +803,6 @@
          assigns the new data.
          */
         priv.setData = function (pData, skipCols, resetChecked) {
-            console.log("skipCols: " + skipCols);
-            console.log("resetChecked: " + resetChecked);
             var data = $.extend(true, {}, pData);
             data.meta = {};
             data.meta.fromRow = _data && _data.meta.fromRow || 0;
@@ -1374,7 +1371,9 @@
          */
         priv.checkToggleChanged = function (e) {
             var elem = $(this);
-
+            console.log("ENTRA A CHECKALLTOGGLE");
+            console.log("PAGESIZE: " + priv.options.pageSize);
+            console.log("ROWSLENGTH: " + _data.rows.length);
             if (elem.is(':checked')) {
                 var start = new priv.ext.XDate();
                 //for every row(except non checkables), add it to the checked array
@@ -1382,12 +1381,15 @@
                 $.each(_data.rows, function (index, row) {
                     if (row['row-checkable'] === false) return;
                     if (!_data.meta.rowsChecked[row[_uniqueCol]]) {
+                        if (count >= priv.options.pageSize)  return // selecciona solo visibles
                         _data.meta.rowsChecked[row[_uniqueCol]] = row;
                         count++;
                     }
                 });
+                
                 priv.log('{0} rows checked in {1}ms.'.f(count, new priv.ext.XDate() - start));
                 _checkToggleChecked = true;
+                console.log("CHK TOGG: ", _data.meta.rowsChecked);
             }
             else {
                 var start = new priv.ext.XDate();
@@ -1671,7 +1673,6 @@
             return publ;
         };
         publ.setDataCta = function (data, skipCols, resetChecked) {
-            console.log("redimensionar = true");
             redimensionar = true;
             priv.options.pageSize = _data.rows.length;
             priv.log('publ.setData called');

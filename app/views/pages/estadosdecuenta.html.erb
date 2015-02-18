@@ -3,6 +3,21 @@
 <head>
     <title>EDO CTA</title>
     <style type="text/css"> 
+      #loader-wrapper {
+          background-color:white;
+          position: fixed;
+          top: 100;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 1000;
+      }  
+      #loader-wrapper img {
+          display: block;
+          margin-top: 100px;
+          margin-left: auto;
+          margin-right: auto;
+      }      
         .watable .checkable {
             width:3%;
             text-align: center;
@@ -144,26 +159,20 @@
     </style>
 </head>
 <body>
-<!--<div class="progress">
-  <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
-    <span class="sr-only">45% Complete</span>
-  </div>
-</div>-->
-
 <% if usuario_signed_in? %>
   <div id="edo_cta" style="width:100%;" style="border:1px solid red;">
     <div  align="right">
-        <button type="button" class="btn btn-default export_checked" aria-
-        label="Left Align">
-            <span class="glyphicon glyphicon glyphicon-arrow-down" aria-hidden="true"></span>&nbsp;Descargar Documentos
-        </button>
+      <button type="button" class="btn btn-default export_checked" aria-label="Left Align">
+        <span class="glyphicon glyphicon glyphicon-arrow-down" aria-hidden="true"></span>&nbsp;Descargar Documentos
+      </button>
     </div>
-      <div id="tituloEdoCta"><h2>Estado de Cuenta</h2></div>
-      <div id="barraTotales"></div>
-      <div id="dropDownAno" style="border:0px solid blue;float:left;"></div>
-      <div id="dropDownMes" width="50%" style="border:0px solid red;"></div>
-  </div>
-  <% else %>
+    <div id="tituloEdoCta"><h2>Estado de Cuenta</h2></div>
+    <div id="barraTotales"></div>
+    <div id="dropDownAno" style="border:0px solid blue;float:left;"></div>
+    <div id="dropDownMes" width="50%" style="border:0px solid red;"></div>
+    <div id="loader-wrapper"><img src="load.gif" height="30%" width="30%"></img></div><!--Termina load-->
+  </div> <!-- Termina estado de cuenta -->
+<% else %>
   <div class="jumbotron center">
     <h1>Bienvenido</h1>
     <p><br><br>
@@ -171,7 +180,7 @@
       <%= link_to "Registrarse", new_usuario_registration_path, class: "btn btn-primary btn-lg" %>
     </p>
   </div>
-  <% end %>
+<% end %>
     <script type="text/javascript">
     var flagJQ = false;
     var allData = new Array();
@@ -184,7 +193,7 @@
             pageSize: 'todas',
             pageSizePadding: true,
             filter: false,
-            sorting: true,
+            sorting: false,
             sortEmptyLast:true,
             columnPicker: true,
             pageSizes: [1,5,8,12,200, "all"],
@@ -300,7 +309,10 @@
                 url: "http://localhost:3000/api/v1/reporte_estado_cuenta",
                 success: function(datox){
                 allData = jsonConstructor(datox);
-                waTable.setData(ultimosTres(allData));        
+                console.log("Inicia setData");
+                waTable.setData(ultimosTres(allData));
+                console.log("Termina setData");
+                document.getElementById("loader-wrapper").style.display = "none";        
             },
                 error:  function(){
                 var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
@@ -333,36 +345,56 @@
                 else if (elem.hasClass('rendered')) data = waTable.getData(false, false, true);
                 console.log(data.rows.length + ' rows returned');
                 console.log(data);
-                alert(data.rows.length + ' rows returned.\nSee data in console.');
+                //alert(data.rows.length + ' rows returned.\nSee data in console.');
             });
             $("#edo_cta").on('click', '.export_checked', function (e) {
-                console.log("DESCARGAR DOCUMENTOS");
+                console.log("DESCARGAR DOCUMENTOS JULIO");
                 e.preventDefault();
                 var data = waTable.getData(true);
                 var strParam = "?facturaids=";
                 var checkRows = data.rows;
-                for (var i=0;i<checkRows.length;i++) {
-                  strParam = strParam + checkRows[i].FacturaID + "_";
+                if (checkRows.length > 0){
+                  for (var i=0;i<checkRows.length;i++) {
+                    strParam = strParam + checkRows[i].Factura_ID + "_";
+                  }
+                  console.log("http://localhost:3000/api/v1/impresion_documentos" + strParam);
+                  window.open("http://localhost:3000/api/v1/impresion_documentos" + strParam);
+                } else {
+                  alert("No hay ningún documento seleccionado, selecciona algunos y vuelve a intentarlo.");
                 }
-                console.log("url:" + strParam);
-                window.open("http://localhost:3000/api/v1/impresion_documentos" + strParam);
             });  
             $("#edo_cta").on('click', '.filtrarMes', function (e) {
                 console.log("FILTRAR POR MES");
                 var valor = document.getElementById("selectMes").options[document.getElementById("selectMes").selectedIndex].value;
                 var anio = document.getElementById("selectAno").options[document.getElementById("selectAno").selectedIndex].value
-                //alert(valor);
+                var mesindex = document.getElementById("selectMes").selectedIndex;
+                var anoindex = document.getElementById("selectAno").selectedIndex;
+                // calcular ultimo dia del mes
+                var fechaWork = new Date(anio, valor, 1);
+               
                 var datosFiltrados = filtroMesSeleccion(valor + "_" + anio);
-                document.getElementById("tituloEdoCta").innerHTML = "<h2>Estado de Cuenta " + getMes(valor) + " de " + anio +"</h2>"
+                document.getElementById("tituloEdoCta").innerHTML = "<h3>Estado de Cuenta del 1 de " + getMes(valor) + " hasta el " + lastDayMonth(fechaWork) + " de " + getMes(valor) +" de " + anio +"</h3>"
                 waTable.setDataCta(datosFiltrados);
+                document.getElementById("selectMes").selectedIndex = mesindex;
+                document.getElementById("selectAno").selectedIndex = anoindex;
             });
             $("#edo_cta").on('click', '.filtrarAno', function (e) {
                 console.log("FILTRAR POR AÑO");
-                var valor = document.getElementById("selectAno").options[document.getElementById("selectAno").selectedIndex].value;
-                console.log("Se seleccionó el año: " + valor);
-                //alert(valor);
-                //var datosFiltrados = filtroAnoSeleccion(valor);
-                //waTable.setDataCta(datosFiltrados);
+                var anio = document.getElementById("selectAno").options[document.getElementById("selectAno").selectedIndex].value
+                console.log("Se seleccionó el año: " + anio);
+                if (document.getElementById("selectMes").selectedIndex != 0){
+                  var valor = document.getElementById("selectMes").options[document.getElementById("selectMes").selectedIndex].value;
+                var mesindex = document.getElementById("selectMes").selectedIndex;
+                var anoindex = document.getElementById("selectAno").selectedIndex;
+                // calcular ultimo dia del mes
+                var fechaWork = new Date(anio, valor, 1);
+                
+                var datosFiltrados = filtroMesSeleccion(valor + "_" + anio);
+                document.getElementById("tituloEdoCta").innerHTML = "<h3>Estado de Cuenta del 1 de " + getMes(valor) + " hasta el " + lastDayMonth(fechaWork) + " de " + getMes(valor) +" de " + anio +"</h3>"
+                waTable.setDataCta(datosFiltrados);
+                document.getElementById("selectMes").selectedIndex = mesindex;
+                document.getElementById("selectAno").selectedIndex = anoindex;                  
+                } 
             });          
           }// termina validacion elemento    
         });           
@@ -388,7 +420,7 @@ function jsonConstructor(json) {
         var ano = jsDate.getFullYear();
         var row = {};
         row.TipoDoc =   jsonObject.data[i].documento;
-        row.FacturaID = jsonObject.data[i].id;
+        row.Factura_ID = jsonObject.data[i].id;
         row.Documentno =   jsonObject.data[i].documentno;
         row.Fecha = Date.UTC(ano, mes, dia);
         row.Cargo =  jsonObject.data[i].cargo;
@@ -401,7 +433,8 @@ function jsonConstructor(json) {
         h_saldofinal = sfinal;
         h_cargos = h_cargos + jsonObject.data[i].cargo;
         h_abonos = h_abonos +  jsonObject.data[i].abono;
-        if (row.TipoDoc == "Pago") {
+        //console.log("FDS: " + row.Documentno + " file " + JSON.stringify(jsonObject.data[i].fileexist));
+        if (row.TipoDoc == "Pago" || JSON.stringify(jsonObject.data[i].fileexist) == "false") {
           row["row-checkable"] = false;
           row["row-checked"]   = false;
           row["row-cls"]       = "";  
@@ -426,7 +459,7 @@ function jsonConstructor(json) {
         TipoDoc: {
             index: 2,
             type: "string",
-            friendly: "Tipo Doc.",
+            friendly: "Tipo de Movimiento",
             placeHolder: ""
         },
         Fecha: {
@@ -438,7 +471,7 @@ function jsonConstructor(json) {
         Inicial: {
             index: 4,
             type: "number",
-            friendly: "S. Inicial",
+            friendly: "Saldo Inicial",
             cls: "montos",
             placeHolder: "",
             format: "$ {0}",
@@ -465,13 +498,13 @@ function jsonConstructor(json) {
         Final: {
             index: 7,
             type: "number",
-            friendly: "S. Final",
+            friendly: "Saldo Final",
             cls: "montos",
             placeHolder: "",
             format: "$ {0}",
             decimals: 2
         },
-        FacturaID: {
+        Factura_ID: {
             index: 8,
             type: "string",
             friendly: "ID",
@@ -536,10 +569,10 @@ function filtroMesSeleccion(fecha) {
             };
   return rowsNuevos;
 }
+
 function filtroAnoSeleccion(fecha) {
   var ano = fecha;
   var rowsNuevos = [];
-  console.log("Se seleccionó el año " + ano);
   // recorrer alldata
   for (var i=0;i<allData.rows.length;i++) {
     var fechaActual = new Date(allData.rows[i].Fecha);
@@ -581,6 +614,7 @@ function creaDropDowns(){
   dropdown = dropdown + "</select>";
   return dropdown;
 }
+
 function creaDropDownsAno(){
   //dropdown = '<select id="selectMes" onchange="selectMonth()">';
   dropdown = '<select class="btn btn-default dropdown-toggle filtrarAno" type="button" id="selectAno" data-toggle="dropdown" aria-expanded="true">';
@@ -595,6 +629,33 @@ function creaDropDownsAno(){
   return dropdown;
 }
 
+function lastDayMonth(fecha){
+  var mes = fecha.getMonth();
+  var dia = new Array();
+  var isLeap = new Date(fecha.getFullYear(), 1, 29).getMonth() == 1
+  console.log("$> Año: " + fecha.getFullYear() + " Mes: " + mes + " día: " + fecha.getDate() + " / leap: " + isLeap);
+  dia[0] = 31;
+  dia[2] = 31; // marzo
+  dia[3] = 30;
+  dia[4] = 31;
+  dia[5] = 30;
+  dia[6] = 31;
+  dia[7] = 31;
+  dia[8] = 30;
+  dia[9] = 31;
+  dia[10] = 30;
+  dia[11] = 31;  
+  if (mes != 1){
+    return dia[mes];
+  } else {
+      if (isLeap){
+        return 29;
+      } else {
+        return 28;
+      }
+  }
+
+}
 /*!
  * Bootstrap v3.3.1 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.

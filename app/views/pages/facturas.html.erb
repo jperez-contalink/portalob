@@ -171,7 +171,7 @@
             var waTable = $('#lst_fac').WATable({
             debug:false,
             dataBind: true,
-            pageSize: 9,
+            pageSize: 20,
             pageSizePadding: true,
             filter: true,
             sorting: true,
@@ -280,11 +280,15 @@
                 var data = waTable.getData(true);
                 var strParam = "?facturaids=";
                 var checkRows = data.rows;
-                for (var i=0;i<checkRows.length;i++) {
-                  strParam = strParam + checkRows[i].FacturaID + "_";
+                if (checkRows.length > 0){
+                  for (var i=0;i<checkRows.length;i++) {
+                    strParam = strParam + checkRows[i].Factura_ID + "_";
+                  }
+                  console.log("http://localhost:3000/api/v1/impresion_documentos" + strParam);
+                  window.open("http://localhost:3000/api/v1/impresion_documentos" + strParam);
+                } else {
+                  alert("No hay ningún documento seleccionado, selecciona algunos y vuelve a intentarlo.");
                 }
-                console.log("url:" + strParam);
-                window.open("http://localhost:3000/api/v1/impresion_documentos" + strParam);
             });
           }// termina validacion elemento    
         });           
@@ -308,7 +312,7 @@ function jsonConstructor(json) {
             pagado = '<input type="checkbox" disabled="disabled">';
         }
         var row = {};
-        row.FacturaID = jsonObject.data[i].id;
+        row.Factura_ID = jsonObject.data[i].id;
         row.Factura =   jsonObject.data[i].documentno;
         row.Subtotal =  jsonObject.data[i].totallines;
         row.Impuesto =  jsonObject.data[i].impuesto;
@@ -381,7 +385,7 @@ function jsonConstructor(json) {
             format: "$ {0}",
             decimals: 2,
         },
-        FacturaID: {
+        Factura_ID: {
             index: 1,
             type: "string",
             friendly: "ID",
