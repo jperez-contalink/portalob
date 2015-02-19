@@ -3,6 +3,21 @@
 <head>
     <title>LST FAC</title>
     <style type="text/css">
+      #loader-wrapper {
+          background-color:white;
+          position: fixed;
+          top: 100;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 1000;
+      }  
+      #loader-wrapper img {
+          display: block;
+          margin-top: 100px;
+          margin-left: auto;
+          margin-right: auto;
+      }    
         .watable .checkable {
             width:3%;
             text-align: center;
@@ -146,6 +161,10 @@
 <body>
 <% if usuario_signed_in? %>
   <div id="lst_fac" style="width:100%;">
+  <!--AREA DE ALERTAS-->
+  <div id="alert_limite"></div>
+  <div id="alert_sin_seleccion"></div>
+  <!--AREA DE ALERTAS-->
     <div  align="right">
         <button type="button" class="btn btn-default export_checked" aria-
         label="Left Align">
@@ -153,6 +172,7 @@
         </button>
     </div>
       <h2>Mis facturas</h2>
+      <div id="loader-wrapper"><img src="load.gif" height="10%" width="10%"></img></div><!--Termina load-->
     </div>
   <% else %>
   <div class="jumbotron center">
@@ -163,6 +183,7 @@
   </p>
   </div>
   <% end %>
+  <br>
     <script type="text/javascript">
     var flagJQ = false;
         $(document).ready( function() {
@@ -197,7 +218,7 @@
                   datePicker: true
                 }
             },
-           actions: {                //This generates a button where you can add elements.
+           /*actions: {                //This generates a button where you can add elements.
                 filter: true,         //If true, the filter fields can be toggled visible and hidden.
                 columnPicker: true,   //if true, the columnPicker can be toggled visible and hidden.
                 custom: [             //Add any other elements here. Here is a refresh and export example.
@@ -207,7 +228,7 @@
                   $('<a href="#" class="export filtered"><span class="glyphicon glyphicon-share"></span>&nbsp;Exportar filas filtradas</a>'),
                   $('<a href="#" class="export rendered"><span class="glyphicon glyphicon-share"></span>&nbsp;Exportar filas rendereadas</a>')
                 ]
-            }, 
+            }, */
             tableCreated: function(data) {
                 console.log('table created');
                 console.log(data);
@@ -217,7 +238,7 @@
                 console.log(data);
                 if (data.column) {
                     data.event.preventDefault();
-                    alert('You clicked column:' + data.column.column + ' with value:' + data.row[data.column.column]);
+                    //alert('You clicked column:' + data.column.column + ' with value:' + data.row[data.column.column]);
                 }
             },
             columnClicked: function(data) {
@@ -241,7 +262,8 @@
                 dataType : 'json',
                 url: "http://localhost:3000/api/v1/reporte_facturas",
                 success: function(datox){
-                waTable.setData(jsonConstructor(datox));         
+                waTable.setData(jsonConstructor(datox)); 
+                document.getElementById("loader-wrapper").style.display = "none";                
             },
                 error:  function(){
                 var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
@@ -280,14 +302,15 @@
                 var data = waTable.getData(true);
                 var strParam = "?facturaids=";
                 var checkRows = data.rows;
-                if (checkRows.length > 0){
+                if (checkRows.length > 0 && checkRows.length <= 50){
                   for (var i=0;i<checkRows.length;i++) {
                     strParam = strParam + checkRows[i].Factura_ID + "_";
                   }
-                  console.log("http://localhost:3000/api/v1/impresion_documentos" + strParam);
                   window.open("http://localhost:3000/api/v1/impresion_documentos" + strParam);
+                }  else if (checkRows.length > 50) {
+                  document.getElementById("alert_limite").innerHTML = buildAlert("limite");
                 } else {
-                  alert("No hay ningún documento seleccionado, selecciona algunos y vuelve a intentarlo.");
+                  document.getElementById("alert_sin_seleccion").innerHTML = buildAlert("sin_seleccion");
                 }
             });
           }// termina validacion elemento    
@@ -313,13 +336,18 @@ function jsonConstructor(json) {
         }
         var row = {};
         row.Factura_ID = jsonObject.data[i].id;
+        row.Docstatus = jsonObject.data[i].docstatus;
         row.Factura =   jsonObject.data[i].documentno;
-        row.Subtotal =  jsonObject.data[i].totallines;
-        row.Impuesto =  jsonObject.data[i].impuesto;
-        row.Total =     jsonObject.data[i].grandtotal;
+        //row.Subtotal =  jsonObject.data[i].totallines;
+        row.Subtotal = separaMiles(JSON.stringify(jsonObject.data[i].totallines));
+        //row.Impuesto =  jsonObject.data[i].impuesto;
+        row.Impuesto = separaMiles(JSON.stringify(jsonObject.data[i].impuesto));
+        //row.Total =     jsonObject.data[i].grandtotal;
+        row.Total = separaMiles(JSON.stringify(jsonObject.data[i].grandtotal));
         row.Fecha = Date.UTC(ano, mes, dia);
         row.Pagado = pagado;
-        row.Pendiente = jsonObject.data[i].pendiente;
+        //row.Pendiente = jsonObject.data[i].pendiente;
+        row.Pendiente = separaMiles(JSON.stringify(jsonObject.data[i].pendiente));
         row["row-checkable"] = true;
         row["row-checked"]   = false;
         row["row-cls"]       = "";
@@ -338,30 +366,33 @@ function jsonConstructor(json) {
         },
         Subtotal: {
             index: 2,
-            type: "number",
+            //type: "number",
+            type: "string",
             friendly: "",
             cls: "montos", //apply some css classes
             placeHolder: "",
-            format: "$ {0}",
-            decimals: 2,
+            format: "$ {0}"
+            //decimals: 2,
         },
         Impuesto: {
             index: 3,
-            type: "number",
+            //type: "number",
+            type: "string",
             friendly: "",
             cls: "montos", //apply some css classes
             placeHolder: "",
-            format: "$ {0}",
-            decimals: 2,
+            format: "$ {0}"
+            //decimals: 2,
         },
         Total: {
             index: 4,
-            type: "number",
+            //type: "number",
+            type: "string",
             friendly: "",
             cls: "montos", //apply some css classes
             placeHolder: "",
-            format: "$ {0}",
-            decimals: 2,
+            format: "$ {0}"
+            //decimals: 2,
         },
          Fecha: {
             index: 5,
@@ -370,23 +401,30 @@ function jsonConstructor(json) {
             friendly: "Fecha",
             placeHolder: "Las facturas màs antiguas se ven primero."
         },
-        Pagado: {
+        Docstatus: {
             index: 6,
+            type: "string",
+            friendly: "Estado",
+            placeHolder: ""
+        },
+        Pagado: {
+            index: 7,
             type: "string",
             friendly: "Pagado",
             placeHolder: ""
         },
         Pendiente: {
-            index: 7,
-            type: "number",
+            index: 8,
+            //type: "number",
+            type: "string",
             friendly: "",
             cls: "montos", //apply some css classes
             placeHolder: "",
-            format: "$ {0}",
-            decimals: 2,
+            format: "$ {0}"
+            //decimals: 2,
         },
         Factura_ID: {
-            index: 1,
+            index: 8,
             type: "string",
             friendly: "ID",
             hidden: true

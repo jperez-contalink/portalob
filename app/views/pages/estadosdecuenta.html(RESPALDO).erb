@@ -161,10 +161,6 @@
 <body>
 <% if usuario_signed_in? %>
   <div id="edo_cta" style="width:100%;" style="border:1px solid red;">
-  <!--AREA DE ALERTAS-->
-  <div id="alert_limite"></div>
-  <div id="alert_sin_seleccion"></div>
-  <!--AREA DE ALERTAS-->
     <div  align="right">
       <button type="button" class="btn btn-default export_checked" aria-label="Left Align">
         <span class="glyphicon glyphicon glyphicon-arrow-down" aria-hidden="true"></span>&nbsp;Descargar Documentos
@@ -252,21 +248,18 @@
                     if (typeof data.table.rows[i].cells[5] != 'undefined') {
                       var cargo = data.table.rows[i].cells[5].textContent;
                       cargo = cargo.replace("$ ", "");
-                      cargo = cargo.replace(",", "");
                       cargoTotal = cargoTotal + Number(cargo);
                     }
                     //calcula abono
                     if (typeof data.table.rows[i].cells[6] != 'undefined') {
                       var abono = data.table.rows[i].cells[6].textContent;
                       abono = abono.replace("$ ", "");
-                      abono = abono.replace(",", "");
                       abonoTotal = abonoTotal + Number(abono);
                     }
                     //calcula s. inicial
                     if (typeof data.table.rows[i].cells[4] != 'undefined' && flagInicial == false) {
                       var inicial = data.table.rows[i].cells[4].textContent;
                       inicial = inicial.replace("$ ", "");
-                      inicial = inicial.replace(",", "");
                       inicialTotal = Number(inicial);
                       flagInicial = true;
                     }
@@ -274,7 +267,6 @@
                     if (typeof data.table.rows[i].cells[7] != 'undefined') {
                       var sfinal = data.table.rows[i].cells[7].textContent;
                       sfinal = sfinal.replace("$ ", "");
-                      sfinal = sfinal.replace(",", "");
                       if (sfinal != " ") {
                         finalTotal = Number(sfinal);
                       }
@@ -376,9 +368,9 @@
                   console.log("http://localhost:3000/api/v1/impresion_documentos" + strParam);
                   window.open("http://localhost:3000/api/v1/impresion_documentos" + strParam);
                 } else if (checkRows.length > 50) {
-                  document.getElementById("alert_limite").innerHTML = buildAlert("limite");
+                  alert("Sólo es posible descarga 50 documentos a la vez.");
                 } else {
-                  document.getElementById("alert_sin_seleccion").innerHTML = buildAlert("sin_seleccion");
+                  alert("No hay ningún documento seleccionado, selecciona algunos y vuelve a intentarlo.");
                 }
             });  
             $("#edo_cta").on('click', '.filtrarMes', function (e) {
@@ -440,18 +432,14 @@ function jsonConstructor(json) {
         row.Factura_ID = jsonObject.data[i].id;
         row.Documentno =   jsonObject.data[i].documentno;
         row.Fecha = Date.UTC(ano, mes, dia);
-        //row.Cargo =  jsonObject.data[i].cargo;
-        row.Cargo = separaMiles(JSON.stringify(jsonObject.data[i].cargo));
-        //row.Abono =  jsonObject.data[i].abono;
-        row.Abono = separaMiles(JSON.stringify(jsonObject.data[i].abono));
-        //row.Inicial = sinicial;
-        row.Inicial = separaMiles(sinicial.toString());
+        row.Cargo =  jsonObject.data[i].cargo;
+        row.Abono =  jsonObject.data[i].abono;
+        row.Inicial = sinicial;
         sfinal = sinicial + jsonObject.data[i].cargo - jsonObject.data[i].abono;
-        //row.Final = sfinal;
-        row.Final = separaMiles(sfinal.toString());
+        row.Final = sfinal;
         sinicial = sfinal;
+        //console.log("$> " + separaMiles(JSON.stringify(sfinal)));
         //row.Final = separaMiles(JSON.stringify(sfinal));
-        //separaMiles(JSON.stringify(jsonObject.data[i].*))
         // calcular valores de encabezados
         h_saldofinal = sfinal;
         h_cargos = h_cargos + jsonObject.data[i].cargo;
@@ -493,44 +481,40 @@ function jsonConstructor(json) {
         },
         Inicial: {
             index: 4,
-            //type: "number",
-            type: "string",
+            type: "number",
             friendly: "Saldo Inicial",
             cls: "montos",
             placeHolder: "",
-            format: "$ {0}"
-            //decimals: 2,
+            format: "$ {0}",
+            decimals: 2,
             //hidden: true
         },
          Cargo: {
             index: 5,
-            //type: "number",
-            type: "string",
+            type: "number",
             friendly: "Cargo",
             cls: "montos",
             placeHolder: "",
-            format: "$ {0}"
-            //decimals: 2
+            format: "$ {0}",
+            decimals: 2
         },
         Abono: {
             index: 6,
-            //type: "number",
-            type: "string",
+            type: "number",
             friendly: "Abono",
             cls: "montos",
             placeHolder: "",
-            format: "$ {0}"
-            //decimals: 2
+            format: "$ {0}",
+            decimals: 2
         },
         Final: {
             index: 7,
-            //type: "number",
-            type: "string",
+            type: "number",
             friendly: "Saldo Final",
             cls: "montos",
             placeHolder: "",
-            format: "$ {0}"
-            //decimals: 2
+            format: "$ {0}",
+            decimals: 2
         },
         Factura_ID: {
             index: 8,
