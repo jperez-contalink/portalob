@@ -3,6 +3,8 @@ Rails.application.routes.draw do
  
   resources :impresion_documentos
 
+  resources :descarga_imagenes
+
   resources :empresas
 
   devise_for :usuarios
@@ -37,6 +39,12 @@ Rails.application.routes.draw do
       resources :impresion_documentos
     end  
   end
+
+  namespace :api, defaults: {format: 'xml'} do
+    namespace :v1 do
+      resources :descarga_imagenes
+    end  
+  end  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

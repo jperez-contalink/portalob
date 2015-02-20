@@ -307,6 +307,7 @@
                     strParam = strParam + checkRows[i].Factura_ID + "_";
                   }
                   window.open("http://localhost:3000/api/v1/impresion_documentos" + strParam);
+                  //window.open("http://localhost:3000/api/v1/descarga_imagenes?clientid=12312312312");
                 }  else if (checkRows.length > 50) {
                   document.getElementById("alert_limite").innerHTML = buildAlert("limite");
                 } else {
