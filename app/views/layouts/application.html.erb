@@ -21,7 +21,6 @@
       <% if usuario_signed_in? %>
         <%= link_to (image_tag current_usuario.empresa.logo.url(), class: "imglogo"), root_path, class:"navbar-brand" %>
         <%= link_to "Estado de Cuenta", estadosdecuenta_path, class:"navbar-brand" %>
-        <!--<span class="glyphicon glyphicon glyphicon-arrow-down" aria-hidden="true">-->
         <%= link_to "Mis facturas", facturas_path, class:"navbar-brand"%>
       <% else %>
         <%= link_to "Extranet", root_path, class:"navbar-brand"%> 
@@ -34,6 +33,7 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul class="nav navbar-nav navbar-right">
 	<% if usuario_signed_in? %>
+    <li><%= link_to "Contacto", contacto_path %></li>
     <li><%= link_to "Mi Cuenta", edit_usuario_registration_path(current_usuario) %></li>
     <li><%= link_to edit_usuario_registration_path(current_usuario), class: "navbar-brand" do %>
           <i class="glyphicon glyphicon glyphicon-cog"></i>

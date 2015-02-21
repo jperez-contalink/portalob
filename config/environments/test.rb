@@ -12,6 +12,20 @@ Rails.application.configure do
   # preloads Rails for running tests, you may have to set it to true.
   config.eager_load = false
 
+    # Don't care if the mailer can't send.
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+address:              'smtp.gmail.com',
+    port:                 587,
+    domain:               'tegik.com',
+    user_name:            'jperez@tegik.com',
+    password:             'rambo666',
+    authentication:       'plain',
+    enable_starttls_auto: true  
+  }
+
   # Configure static file server for tests with Cache-Control for performance.
   config.serve_static_files   = true
   config.static_cache_control = 'public, max-age=3600'

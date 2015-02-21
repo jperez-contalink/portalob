@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   root 'pages#estadosdecuenta'
   get "facturas" => "pages#facturas"
   get "estadosdecuenta" => "pages#estadosdecuenta"
-  get "demowatable" => "pages#demowatable"
+  get "contacto" => "pages#contacto"
 
 
 
