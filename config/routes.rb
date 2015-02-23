@@ -1,6 +1,8 @@
 require 'api_constraints'
 Rails.application.routes.draw do
  
+  resources :contactos
+
   resources :impresion_documentos
 
   resources :descarga_imagenes

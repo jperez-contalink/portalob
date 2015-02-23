@@ -265,7 +265,7 @@
                 waTable.setData(jsonConstructor(datox)); 
                 document.getElementById("loader-wrapper").style.display = "none";                
             },
-                error:  function(){
+                error:  function(){ 
                 var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
                 document.getElementById("lst_fac").innerHTML = mensajeError;
                 }

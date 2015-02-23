@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 <head>
     <title>CNTCTO</title>
@@ -8,8 +9,7 @@
 <body>
     <h2>Contactanos</h2>
 
-
-    <!--<div class="form-group">
+    <div class="form-group">
       <h3>Titulo</h3>
       <input id="titulo" type="text" class="form-control"/>
       <h3>Mensaje</h3>
@@ -25,12 +25,11 @@
         var cuerpo = document.getElementById('cuerpo').value;
         var correo = "<h2>" + titulo + "</h2><br>" + cuerpo + "<br>";
         var correo = correo + "responde a : <%= current_usuario.email%>";
-        //UserMailer.contacto_email(current_usuario, correo).deliver_now
+        UserMailer.contacto_email(current_usuario, 'koalas').deliver_now
         document.getElementById('titulo').value = "";
         document.getElementById('cuerpo').value = "";
       }
-    </script>-->
+    </script>
     <!--UserMailer.contacto_email(u, 'correo').deliver_now-->
-
 </body>
 </html>

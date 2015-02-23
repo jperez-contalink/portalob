@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150221000524) do
+ActiveRecord::Schema.define(version: 20150223052851) do
+
+  create_table "contactos", force: :cascade do |t|
+    t.string   "titulo"
+    t.string   "correo"
+    t.integer  "usuario_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "empresas", force: :cascade do |t|
     t.string   "dns"
@@ -50,6 +58,8 @@ ActiveRecord::Schema.define(version: 20150221000524) do
     t.integer  "empresa_id"
     t.string   "rfcempresa"
     t.string   "rfc"
+    t.string   "title"
+    t.string   "correo"
   end
 
   add_index "usuarios", ["email"], name: "index_usuarios_on_email", unique: true

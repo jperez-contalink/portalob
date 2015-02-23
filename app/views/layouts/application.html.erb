@@ -33,7 +33,8 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul class="nav navbar-nav navbar-right">
 	<% if usuario_signed_in? %>
-    <li><%= link_to "Contacto", contacto_path %></li>
+    <li><%= link_to "Contacto", new_contacto_path %></li>
+
     <li><%= link_to "Mi Cuenta", edit_usuario_registration_path(current_usuario) %></li>
     <li><%= link_to edit_usuario_registration_path(current_usuario), class: "navbar-brand" do %>
           <i class="glyphicon glyphicon glyphicon-cog"></i>
