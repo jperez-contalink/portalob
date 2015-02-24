@@ -25,7 +25,9 @@ class ContactosController < ApplicationController
   # POST /contactos.json
   def create
     @contacto = Contacto.new(contacto_params)
-    UserMailer.contacto_email(current_usuario, contacto_params[:titulo], contacto_params[:correo]).deliver_now
+    if (contacto_params[:titulo] or contacto_params[:correo])
+      UserMailer.contacto_email(current_usuario, contacto_params[:titulo], contacto_params[:correo]).deliver_now
+    end
 
     respond_to do |format|
       if @contacto.save

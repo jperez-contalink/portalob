@@ -42,6 +42,6 @@ class EmpresasController < ApplicationController
     end
 
     def empresa_params
-      params.require(:empresa).permit(:dns, :rfc, :urlwebservice, :usuariosob, :passob, :logo)
+      params.require(:empresa).permit(:dns, :rfc, :urlwebservice, :usuariosob, :passob, :logo, :email)
     end
 end

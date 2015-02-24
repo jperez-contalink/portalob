@@ -10,17 +10,42 @@
       </ul>
     </div>
   <% end %>
-
+  <div id="alert_no_datos"></div>
   <div class="form_group">
     <%= f.label :titulo %><br>
     <%= f.text_field :titulo, class: "form-control" %>
   </div><br>
   <div class="form_group">
-    <%= f.label :correo %><br>
+    <%= f.label :Comentarios %><br>
     <%= f.text_area :correo, rows: 10, class: "form-control" %>
   </div>
   <br><br>
-  <div class="actions">
-    <%= f.submit %>
+  <!--<div class="actions"><%= f.submit %></div>-->
+  <div align="right">
+    <button type="button" onclick="validarForma();" class="btn btn-default">enviar</button>
   </div>
+  <script>
+    function validarForma(){
+      var correo = document.getElementById("contacto_correo").value;
+      var titulo = document.getElementById("contacto_titulo").value;
+      var mensaje = "";
+      if (!titulo){
+        mensaje = "Es necesario escribir un título para tu comentario.<br>";
+      }
+      if (!correo){
+        mensaje = mensaje + "Es necesario escribir un mensaje para tu comentario.<br>";
+      }
+      console.log("$> ml: " + mensaje.length);
+      if (mensaje.length <= 0) {
+        document.getElementById("new_contacto").submit();
+      } else {
+        document.getElementById("alert_no_datos").innerHTML = buildAlert(mensaje);
+      }
+
+    }
+    function buildAlert(mensaje){
+    return '<div id="alert_limite" class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>Ha faltado algo.</h4><p>' + mensaje + '</p></div>';
+
+}
+  </script>
 <% end %>

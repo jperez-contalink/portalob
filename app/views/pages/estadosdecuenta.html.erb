@@ -3,6 +3,15 @@
 <head>
     <title>EDO CTA</title>
     <style type="text/css"> 
+    .tdTotal {
+      font-size: 200%;
+      font-weight: bold;
+      padding-left: 1%;
+      border-left: 1px solid grey;
+    }
+    .tdLblTotal {
+      
+    }
       #loader-wrapper {
           background-color:white;
           position: fixed;
@@ -158,7 +167,7 @@
         }        
     </style>
 </head>
-<body>
+<body><br><br><br><br>
 <% if usuario_signed_in? %>
   <div id="edo_cta" style="width:100%;" style="border:1px solid red;">
   <!--AREA DE ALERTAS-->
@@ -170,10 +179,11 @@
         <span class="glyphicon glyphicon glyphicon-arrow-down" aria-hidden="true"></span>&nbsp;Descargar Documentos
       </button>
     </div>
-    <div id="tituloEdoCta"><h2>Estado de Cuenta</h2></div>
+    <div id="tituloEdoCta" align="center"><h2>Estado de Cuenta</h2></div>
     <div id="barraTotales"></div>
     <div id="dropDownAno" style="border:0px solid blue;float:left;"></div>
-    <div id="dropDownMes" width="50%" style="border:0px solid red;"></div>
+    <div id="dropDownMes" width="50%" style="border:0px solid red;float:left;"></div>
+    <div id="tagPeriodo" style="border:0px solid green;"></div>
     <div id="loader-wrapper"><img src="load.gif" height="10%" width="10%"></img></div><!--Termina load-->
   </div> <!-- Termina estado de cuenta -->
 <% else %>
@@ -284,11 +294,11 @@
                   cargoTotal = separaMiles((cargoTotal.toFixed(2)).toString());
                   abonoTotal = separaMiles((abonoTotal.toFixed(2)).toString());
                   finalTotal = separaMiles((finalTotal.toFixed(2)).toString());
+                  var tdinicial = '<td class="tdLblTotal">Saldo Inicial: </td><td class="tdTotal">$' + inicialTotal + '</td>';
+                  var tdcargo = '<td class="tdLblTotal">Cargos: </td><td class="tdTotal">$' + cargoTotal + '</td>';
+                  var tdabono = '<td class="tdLblTotal">Abonos: </td><td class="tdTotal">$' + abonoTotal + '</td>';
+                  var tdfinal = '<td class="tdLblTotal">Saldo Final: </td><td class="tdTotal">$' + finalTotal + '</td>';
 
-                  var tdinicial = "<td><b>Saldo Inicial: $ " + inicialTotal +"</b></td>"
-                  var tdcargo = "<td><b>Cargos: $ " + cargoTotal +"</b></td>"
-                  var tdabono = "<td><b>Abonos: $ " + abonoTotal +"</b></td>"
-                  var tdfinal = "<td><b>Saldo Final: $ " + finalTotal +"</b></td>"
                   tabla = tabla + tdinicial + tdcargo + tdabono + tdfinal + "</tr></table><br>";
                   // crear barra de totales
                   document.getElementById("barraTotales").innerHTML = tabla;
@@ -391,7 +401,8 @@
                 var fechaWork = new Date(anio, valor, 1);
                
                 var datosFiltrados = filtroMesSeleccion(valor + "_" + anio);
-                document.getElementById("tituloEdoCta").innerHTML = "<h3>Estado de Cuenta del 1 de " + getMes(valor) + " hasta el " + lastDayMonth(fechaWork) + " de " + getMes(valor) +" de " + anio +"</h3>"
+                //document.getElementById("tituloEdoCta").innerHTML = "<h3>Estado de Cuenta del 1 de " + getMes(valor) + " hasta el " + lastDayMonth(fechaWork) + " de " + getMes(valor) +" de " + anio +"</h3>"
+                document.getElementById("tagPeriodo").innerHTML = "<p>&nbsp;Periodo: del 1 de " + getMes(valor) + " al " + lastDayMonth(fechaWork) + " de " + getMes(valor) +" de " + anio +"</p>"
                 waTable.setDataCta(datosFiltrados);
                 document.getElementById("selectMes").selectedIndex = mesindex;
                 document.getElementById("selectAno").selectedIndex = anoindex;
@@ -408,7 +419,8 @@
                 var fechaWork = new Date(anio, valor, 1);
                 
                 var datosFiltrados = filtroMesSeleccion(valor + "_" + anio);
-                document.getElementById("tituloEdoCta").innerHTML = "<h3>Estado de Cuenta del 1 de " + getMes(valor) + " hasta el " + lastDayMonth(fechaWork) + " de " + getMes(valor) +" de " + anio +"</h3>"
+                //document.getElementById("tituloEdoCta").innerHTML = "<h3>Estado de Cuenta del 1 de " + getMes(valor) + " hasta el " + lastDayMonth(fechaWork) + " de " + getMes(valor) +" de " + anio +"</h3>"
+                document.getElementById("tagPeriodo").innerHTML = "<p>&nbsp;Periodo: del 1 de " + getMes(valor) + " al " + lastDayMonth(fechaWork) + " de " + getMes(valor) +" de " + anio +"</p>"
                 waTable.setDataCta(datosFiltrados);
                 document.getElementById("selectMes").selectedIndex = mesindex;
                 document.getElementById("selectAno").selectedIndex = anoindex;                  

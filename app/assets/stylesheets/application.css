@@ -19,5 +19,7 @@
 *= require 'masonry/infinitescroll'
 *= require 'masonry/right-to-left'
 *= requite 'bootstrap.min.css'
+*= require 'animate.css'
+*= require 'style.css'
 *= require 'masonry/transitions'
 */
