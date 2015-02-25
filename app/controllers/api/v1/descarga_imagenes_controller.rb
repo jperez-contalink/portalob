@@ -6,7 +6,9 @@ module Api
 
       def index
         @user = current_usuario
-        order_link = "http://" + @user.empresa.usuariosob + ":" + @user.empresa.passob + "@" + @user.empresa.urlwebservice + "/openbravo/ws/com.tegik.portalob.DescargaImagenesPortal?clientid=#{params[:clientid]}"
+        order_link = "http://" + @user.empresa.usuariosob + ":" + @user.empresa.passob + "@" + @user.empresa.urlwebservice + "/openbravo/ws/com.tegik.portalob.DescargaImagenesPortal?productoids=#{params[:productoids]}"
+        #Configuración para servidor de dnk
+        #order_link = "http://dnkprueba:dnkprueba@107.21.218.104/openbravo/ws/com.tegik.dnkprod.module.DescargaImagenesPortal?productoids=#{params[:productoids]}"
         response = RestClient.get order_link
         respond_to do |format|
           format.xml {
