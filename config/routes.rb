@@ -9,19 +9,22 @@ Rails.application.routes.draw do
 
   resources :empresas
 
-  devise_for :usuarios
+  devise_for :usuarios do
+    get "/usuarios/sign_out" => "devise/sessions#destroy", :as => :destroy_usuario_session_path
+    get "/usuarios/sign_in" => "devise/sessions#new", :as => :new_usuario_session
+  end
 
   resources :reporte_estado_cuenta
 
   resources :reporte_facturas
 
 
-
-  root 'pages#estadosdecuenta'
+  root :to => 'pages#home'
+  #root 'pages#estadosdecuenta'
+  #root :to => "devise/sessions#new"
   get "facturas" => "pages#facturas"
   get "estadosdecuenta" => "pages#estadosdecuenta"
   get "contacto" => "pages#contacto"
-
 
 
   namespace :api, defaults: {format: 'json'} do

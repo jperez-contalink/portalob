@@ -103,12 +103,12 @@ hr {
 }
 
 .bg-gray {
-	background: #f8f8f8;
+	background: #fff;
 }
 
 
 .bg-dark {
-	background: #575757;
+	background: #fff;
 }
 
 /* --- section color var --- */
@@ -126,7 +126,7 @@ hr {
 		font-style: normal;
 		font-family: 'ecoicons';
 		src: url("../fonts/ecoicons/ecoicons.eot");
-		src: url("../fonts/ecoicons/ecoicons.eot?#iefix") format("embedded-opentype"), url("../fonts/ecoicons/ecoicons.woff") format("woff"), url("../fonts/ecoicons/ecoicons.ttf") format("truetype"), url("../fonts/ecoicons/ecoicons.svg#ecoicons") format("svg");
+		src: url("../fonts/ecoicons/ecoicons.eot?#iefix") format("embedded-opentype"), url("/ecoicons.woff") format("woff"), url("../fonts/ecoicons/ecoicons.ttf") format("truetype"), url("../fonts/ecoicons/ecoicons.svg#ecoicons") format("svg");
 }
 
 .gn-menu-main,
@@ -134,7 +134,7 @@ hr {
 		margin: 0;
 		padding: 0;
 		background: #fff;
-		color: #eb5d1e;
+		color: #A4A4A4;
 		list-style: none;
 		text-transform: none;
 		font-weight: 300;
@@ -155,7 +155,7 @@ hr {
 .gn-menu-main a {
 		display: block;
 		height: 100%;
-		color: #eb5d1e;
+		color: #A4A4A4;
 		text-decoration: none;
 		cursor: pointer;
 }
@@ -163,7 +163,7 @@ hr {
 .no-touch .gn-menu-main a:hover,
 .no-touch .gn-menu li.gn-search-item:hover,
 .no-touch .gn-menu li.gn-search-item:hover a {
-		background: #eb5d1e;
+		background: #A4A4A4;
 		color: white;
 }
 
@@ -186,6 +186,10 @@ hr {
 		-moz-user-select: none;
 		-ms-user-select: none;
 		user-select: none;
+}
+
+.gn-menu-main li.gn-trigger:hover {
+	background-color: transparent;
 }
 
 .gn-menu-main > li:last-child {
@@ -260,7 +264,7 @@ input.gn-search {
 		outline: none;
 		border: none;
 		background: transparent;
-		color: #eb5d1e;
+		color: #A4A4A4;
 		font-weight: 300;
 		font-family: 'Lato', Arial, sans-serif;
 		cursor: pointer;
@@ -269,19 +273,19 @@ input.gn-search {
 /* placeholder */
 
 .gn-search::-webkit-input-placeholder {
-		color: #eb5d1e
+		color: #A4A4A4
 }
 
 .gn-search:-moz-placeholder {
-		color: #eb5d1e
+		color: #A4A4A4
 }
 
 .gn-search::-moz-placeholder {
-		color: #eb5d1e
+		color: #A4A4A4
 }
 
 .gn-search:-ms-input-placeholder {
-		color: #eb5d1e
+		color: #A4A4A4
 }
 
 /* hide placeholder when active in Chrome */
@@ -396,23 +400,23 @@ input.gn-search:focus {
 		vertical-align: -2px;
 		width: 30px;
 		height: 3px;
-		background: #eb5d1e;
-		box-shadow: 0 3px white, 0 -6px #eb5d1e, 0 -9px white, 0 -12px #eb5d1e;
+		background: #A4A4A4;
+		box-shadow: 0 3px white, 0 -6px #A4A4A4, 0 -9px white, 0 -12px #A4A4A4;
 		content: '';
 }
 
 .no-touch .gn-icon-menu:hover::before,
 .no-touch .gn-icon-menu.gn-selected:hover::before {
-		background: white;
-		box-shadow: 0 3px #eb5d1e, 0 -6px white, 0 -9px #eb5d1e, 0 -12px white;
+		background: red;
+		box-shadow: 0 3px #A4A4A4, 0 -6px white, 0 -9px #A4A4A4, 0 -12px white;
 }
 
 .gn-icon-menu.gn-selected::before {
-		background: #eb5d1e;
-		box-shadow: 0 3px white, 0 -6px #eb5d1e, 0 -9px white, 0 -12px #eb5d1e;
+		background: #A4A4A4;
+		box-shadow: 0 3px white, 0 -6px #A4A4A4, 0 -9px white, 0 -12px #A4A4A4;
 }
 
-/* styles for opening menu */
+/* styles for opening menu A4A4A4*/
 
 .gn-menu-wrapper.gn-open-all,
 .gn-menu-wrapper.gn-open-part {
@@ -569,13 +573,13 @@ input.gn-search:focus {
 .team-social .social-twitter a{background: #62c6f8;}
 .team-social .social-dribble a{background: #d74980;}
 .team-social .social-deviantart a{background: #8da356;}
-.team-social .social-google a{background: #000;}
+.team-social .social-google a{background: red;}
 .team-social .social-vimeo a{background: #51a6d3;}
 .team-social .social-facebook a:hover{background: #4893ce;}
 .team-social .social-twitter a:hover{background: #82e6ff;}
 .team-social .social-dribble a:hover{background: #f769a0;}
 .team-social .social-deviantart a:hover{background: #adc376;}
-.team-social .social-google a:hover{background: #333;}
+.team-social .social-google a:hover{background: red;}
 .team-social .social-vimeo a:hover{background: #71c6f3;}
 
 
@@ -671,13 +675,13 @@ form#contact-form input:focus,form#contact-form select:focus,form#contact-form t
 .company-social .social-twitter a{background: #62c6f8;}
 .company-social .social-dribble a{background: #d74980;}
 .company-social .social-deviantart a{background: #8da356;}
-.company-social .social-google a{background: #000;}
+.company-social .social-google a{background: red;}
 .company-social .social-vimeo a{background: #51a6d3;}
 .company-social .social-facebook a:hover{background: #4893ce;}
 .company-social .social-twitter a:hover{background: #82e6ff;}
 .company-social .social-dribble a:hover{background: #f769a0;}
 .company-social .social-deviantart a:hover{background: #adc376;}
-.company-social .social-google a:hover{background: #333;}
+.company-social .social-google a:hover{background: red;}
 .company-social .social-vimeo a:hover{background: #71c6f3;}
 
 
