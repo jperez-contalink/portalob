@@ -3,6 +3,10 @@
 <head>
     <title>EDO CTA</title>
     <style type="text/css"> 
+    .hover_clean:hover {
+      background-color: #2980b9;
+      color: white;
+    }    
     .tdTotal {
       font-size: 200%;
       font-weight: bold;
@@ -19,7 +23,7 @@
           left: 0;
           width: 100%;
           height: 100%;
-          z-index: 1000;
+          z-index: 20;
       }  
       #loader-wrapper img {
           display: block;
@@ -175,7 +179,7 @@
   <div id="alert_sin_seleccion"></div>
   <!--AREA DE ALERTAS-->
     <div  align="right">
-      <button type="button" class="btn btn-default export_checked" aria-label="Left Align">
+      <button type="button" class="btn btn-default export_checked hover_clean" aria-label="Left Align">
         <span class="glyphicon glyphicon glyphicon-arrow-down" aria-hidden="true"></span>&nbsp;Descargar Documentos
       </button>
     </div>
@@ -563,17 +567,36 @@ function jsonConstructor(json) {
     return data;
 }
 
-
+/* ultimosTres retorna solo los datos del último mes*/
+/* JP D denota el último cambio si quieres deshacer borra esas lineas*/
 function ultimosTres(json) {
   var rowsTres = [];
   var hoy = new Date();
+  /* Establece el mes actual */
   hoy.setMonth(hoy.getMonth() - 1);
   var ayer = new Date(hoy.getFullYear(), hoy.getMonth(), 01);
   var ayerUTC = Date.UTC(ayer.getFullYear(), ayer.getMonth(), ayer.getDate());
+  /* Actualizar saldos //JP D */
+  mes = hoy.getMonth();
+  ano = hoy.getFullYear();
+  if (mes == 0) {
+      var mesAnterior = 11;
+      anoAnterior = ano - 1;
+  } else {
+      var mesAnterior = mes - 1;
+      var anoAnterior = ano;
+  }
+  /* //JP D */
+  var saldo = 0;
   for (var i=0;i<json.rows.length;i++) {
     if (json.rows[i].Fecha > ayerUTC) {
       rowsTres.push(json.rows[i]);
     }
+    var fechaActual = new Date(json.rows[i].Fecha);
+    fechaActual.setDate(fechaActual.getDate() + 1);
+    if (fechaActual.getMonth() <= mesAnterior && fechaActual.getFullYear()<=anoAnterior){ //JP D
+      saldo = allData.rows[i].Final; //JP D
+    }    //JP D
   }
   var data = {
                 cols: json.cols,
@@ -583,13 +606,33 @@ function ultimosTres(json) {
                     needLater: true
                 }
             };
+  /*  SET BARRA TOTALES JP D */
+  var tabla = '<table width="100%"><tr>';
+  var tdinicial = '<td class="tdLblTotal">Saldo Inicial: </td><td class="tdTotal">$'+saldo+'</td>';
+  var tdcargo = '<td class="tdLblTotal">Cargos: </td><td class="tdTotal">$0.00</td>';
+  var tdabono = '<td class="tdLblTotal">Abonos: </td><td class="tdTotal">$0.00</td>';
+  var tdfinal = '<td class="tdLblTotal">Saldo Final: </td><td class="tdTotal">$'+saldo+'</td>';
+
+  tabla = tabla + tdinicial + tdcargo + tdabono + tdfinal + "</tr></table><br>";
+  // crear barra de totales
+  document.getElementById("barraTotales").innerHTML = tabla;  
+  /*  SET BARRA TOTALES JP D */
+
   return data;
 }
-
+/* Este filtro se ejecuta al actualizar los filtros de fecha */
 function filtroMesSeleccion(fecha) {
   var params = fecha.split("_");
   var mes = params[0];
   var ano = params[1];
+  if (mes == 0) {
+      var mesAnterior = 11;
+      anoAnterior = ano - 1;
+  } else {
+      var mesAnterior = mes - 1;
+      var anoAnterior = ano;
+  }
+  var saldo = 0;
   var rowsNuevos = [];
   // recorrer alldata
   for (var i=0;i<allData.rows.length;i++) {
@@ -597,6 +640,10 @@ function filtroMesSeleccion(fecha) {
     fechaActual.setDate(fechaActual.getDate() + 1);
     if (fechaActual.getMonth() == mes && fechaActual.getFullYear()==ano){
       rowsNuevos.push(allData.rows[i]);
+    }
+    if (fechaActual.getMonth() <= mesAnterior && fechaActual.getFullYear()<=anoAnterior){
+      //rowsNuevos.push(allData.rows[i]);
+      saldo = allData.rows[i].Final;
     }
   }
   var rowsNuevos = {
@@ -607,9 +654,20 @@ function filtroMesSeleccion(fecha) {
                     needLater: true
                 }
             };
+  //  SET BARRA TOTALES
+  var tabla = '<table width="100%"><tr>';
+  var tdinicial = '<td class="tdLblTotal">Saldo Inicial: </td><td class="tdTotal">$'+saldo+'</td>';
+  var tdcargo = '<td class="tdLblTotal">Cargos: </td><td class="tdTotal">$0.00</td>';
+  var tdabono = '<td class="tdLblTotal">Abonos: </td><td class="tdTotal">$0.00</td>';
+  var tdfinal = '<td class="tdLblTotal">Saldo Final: </td><td class="tdTotal">$'+saldo+'</td>';
+
+  tabla = tabla + tdinicial + tdcargo + tdabono + tdfinal + "</tr></table><br>";
+  // crear barra de totales
+  document.getElementById("barraTotales").innerHTML = tabla;  
+  //  SET BARRA TOTALES
   return rowsNuevos;
 }
-
+/* Esta función ya no se usa pero me da miedo borrarla. */
 function filtroAnoSeleccion(fecha) {
   var ano = fecha;
   var rowsNuevos = [];
@@ -628,11 +686,21 @@ function filtroAnoSeleccion(fecha) {
                     needLater: true
                 }
             };
+//  SET BARRA TOTALES
+  var tabla = '<table width="100%"><tr>';
+  var tdinicial = '<td class="tdLblTotal">Saldo Inicial: </td><td class="tdTotal">$0.00</td>';
+  var tdcargo = '<td class="tdLblTotal">Cargos: </td><td class="tdTotal">$0.00</td>';
+  var tdabono = '<td class="tdLblTotal">Abonos: </td><td class="tdTotal">$0.00</td>';
+  var tdfinal = '<td class="tdLblTotal">Saldo Final: </td><td class="tdTotal">$0.00</td>';
+  tabla = tabla + tdinicial + tdcargo + tdabono + tdfinal + "</tr></table><br>";
+  // crear barra de totales
+  document.getElementById("barraTotales").innerHTML = tabla;  
+  //  SET BARRA TOTALES            
   return rowsNuevos;
 }
 
 function creaDropDowns(){
-  var dropdown = '<select class="btn btn-default dropdown-toggle filtrarMes" type="button" id="selectMes" data-toggle="dropdown" aria-expanded="true">';
+  var dropdown = '<select class="btn btn-default dropdown-toggle filtrarMes hover_clean" type="button" id="selectMes" data-toggle="dropdown" aria-expanded="true">';
   dropdown = dropdown + '<option value="0"> seleccione un mes </option>';
 
   for (var i=0;i<12;i++) {
@@ -645,7 +713,7 @@ function creaDropDowns(){
 
 function creaDropDownsAno(){
   //dropdown = '<select id="selectMes" onchange="selectMonth()">';
-  dropdown = '<select class="btn btn-default dropdown-toggle filtrarAno" type="button" id="selectAno" data-toggle="dropdown" aria-expanded="true">';
+  dropdown = '<select class="btn btn-default dropdown-toggle filtrarAno hover_clean" type="button" id="selectAno" data-toggle="dropdown" aria-expanded="true">';
   var fecha = new Date();
   //dropdown = dropdown + '<option value="0"> seleccione un año </option>';
   for (var i=0;i<12;i++) {

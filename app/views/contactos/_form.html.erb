@@ -1,3 +1,9 @@
+<style>
+      .hover_clean:hover {
+        background-color: #2980b9;
+        color: white;
+      }
+</style>    
 <%= form_for(@contacto) do |f| %>
   <% if @contacto.errors.any? %>
     <div id="error_explanation">
@@ -13,7 +19,7 @@
   <div id="alert_no_datos"></div>
   <div style="background-color:#E6E6E6;padding:1% 1% 1% 1%;border-radius: 10px;">
     <div class="form_group">
-      <%= f.label :titulo %><br>
+      <%= f.label :Asunto %><br>
       <%= f.text_field :titulo, class: "form-control" %>
     </div><br>
     <div class="form_group">
@@ -23,7 +29,7 @@
     <br><br>
     <!--<div class="actions"><%= f.submit %></div>-->
     <div align="right">
-      <button type="button" onclick="validarForma();" class="btn btn-default">enviar mensaje</button>
+      <button type="button" onclick="validarForma();" class="btn btn-default hover_clean">enviar mensaje</button>
     </div>
   </div>
   <script>

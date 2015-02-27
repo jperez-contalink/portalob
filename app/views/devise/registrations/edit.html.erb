@@ -1,3 +1,9 @@
+<style>
+      .hover_clean:hover {
+        background-color: #2980b9;
+        color: white;
+      }
+</style>
 <br><br><br><br><br>
 <div width="60%" style="border:0px solid orange;padding:0% 15% 0% 15%;">
   <div align="center"><h2>Mi cuenta</h2></div>
@@ -27,7 +33,7 @@
       <strong>Contraseña</strong> <i>(Deja esto en blanco si no quieres cambiarlo)</i><br />
       <%= f.password_field :password, autocomplete: "off", class: "form-control"  %>
     </div>
-
+    <br>
     <div class="form-group">
       <strong>Confirmar Contraseña</strong><br />
       <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control"  %>
@@ -39,14 +45,15 @@
     </div>
 
     <div class="actions">
-      <%= f.submit "Actualizar" %>
+      <%= f.submit "Actualizar", class: "btn btn-default hover_clean" %>
     </div>
   <% end %>
 
   <h3>Cancelar mi cuenta</h3>
 
-  <p>No te gusta? <%= button_to "Cancelar mi cuenta", registration_path(resource_name), data: { confirm: "Estas seguro?" }, method: :delete %></p>
+  <p>No te gusta? <%= button_to "Cancelar mi cuenta", registration_path(resource_name), data: { confirm: "Estas seguro?" }, class: "btn btn-default hover_clean", method: :delete %></p>
   <br>
+
 
   <%= link_to "Atrás", :back %>
 </div>

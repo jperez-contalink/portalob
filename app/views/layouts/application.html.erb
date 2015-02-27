@@ -85,14 +85,13 @@
               <div style="float:left;border:0px solid black;" class="gn-icon imgContacto"></div>
               <div style="border:1px solid transparent;padding-left:2%;"><strong>Contacto</strong></div>
             </a></li>
-            <!--s-->
             </ul> 
             </div><!-- /gn-scroller -->
           </nav>
         </li>
         <% end %>
       <% if usuario_signed_in? %>
-        <li><%= link_to (image_tag current_usuario.empresa.logo.url(), class: "imglogo"), estadosdecuenta_path, class:"navbar-brand" %></li>
+        <li style="background-color:#ecf0f1;"><%= link_to (image_tag current_usuario.empresa.logo.url(), class: "imglogo"), estadosdecuenta_path, class:"navbar-brand" %></li>
       <% else %>
         <li><a href="/usuarios/sign_in">Extranet</a></li>
       <% end %>
@@ -102,7 +101,7 @@
           <li class="social-dribble"><a href="#" target="_blank"><i class="fa fa-dribbble"></i></a></li>
           <li class="social-google"><a href="#" target="_blank"><i class="fa fa-google-plus"></i></a></li>-->
           <% if usuario_signed_in? %>
-            <li><%= link_to  destroy_usuario_session_path, class: "social-google" , method: :delete do %>
+            <li><%= link_to  destroy_usuario_session_path, class: "social-google", method: :delete do %>
               <i class="glyphicon glyphicon-log-out"></i><% end %>
             </li>
           <% end %>
@@ -110,9 +109,7 @@
       </ul>
 </div> <!--CIERRA CONTAINER-->
 <div class="container">
-  <!-- flash.each do |name, msg| >
-  <= content_tag(:div, msg, class: "alert alert-info") >
-  < end -->
+  <!--FLASH ALERT AQUI-->
   <%= yield %>
 </div>
 
@@ -127,11 +124,6 @@
   
   </div>
   </div></footer>
-
-
-
-
- 
 </body>
 <script>
 

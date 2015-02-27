@@ -598,7 +598,7 @@
                 //create pagesize dropdown
                 if (priv.options.pageSizes.length) {
                     var div = $('<div class="btn-group dropup pagesize"></div>').appendTo(footToolbar);
-                    var btn = $('<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">Filas&nbsp;</button>').appendTo(div);
+                    var btn = $('<button class="btn btn-default dropdown-toggle hover_clean" data-toggle="dropdown" href="#">Filas&nbsp;</button>').appendTo(div);
                     var span = $('<span class="caret"></span>').appendTo(btn);
                     var ul = $('<ul class="dropdown-menu">').appendTo(div);
 
@@ -636,7 +636,7 @@
                 //create columnpicker dropdown
                 if (priv.options.columnPicker) {
                     var div = $('<div class="btn-group dropup columnpicker"></div>').appendTo(footToolbar);
-                    var btn = $('<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">Columnas&nbsp;</button>').appendTo(div);
+                    var btn = $('<button class="btn btn-default dropdown-toggle hover_clean" data-toggle="dropdown" href="#">Columnas&nbsp;</button>').appendTo(div);
                     var span = $('<span class="caret"></span>').appendTo(btn);
                     var ul = $('<ul class="dropdown-menu">').appendTo(div);
 
@@ -1815,4 +1815,11 @@ function buildAlert(from){
             return '<div id="alert_limite" class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>No hay documentos seleccionados</h4><p>No documentos seleccionados para descargar, selecciona algunos documentos y vuelve a intentarlo.</p></div>';
     }    
 
+}
+function mesAnterior(mes){
+    if (mes == 0) {
+        return 11;
+    } else {
+        return mes - 1;
+    }
 }

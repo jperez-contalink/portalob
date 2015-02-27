@@ -133,7 +133,8 @@ hr {
 .gn-menu-main ul {
 		margin: 0;
 		padding: 0;
-		background: #fff;
+		/*background: #fff;  JPS Menú*/
+		background: #34495e;
 		color: #A4A4A4;
 		list-style: none;
 		text-transform: none;
@@ -218,7 +219,9 @@ hr {
 		overflow: hidden;
 		width: 60px;
 		border-top: 1px solid #c6d0da;
-		background: white;
+		/*background: white; JPS overflow*/
+		background: #2980b9;
+		opacity: 0.9;
 		-webkit-transform: translateX(-60px);
 		-moz-transform: translateX(-60px);
 		transform: translateX(-60px);
@@ -401,19 +404,19 @@ input.gn-search:focus {
 		width: 30px;
 		height: 3px;
 		background: #A4A4A4;
-		box-shadow: 0 3px white, 0 -6px #A4A4A4, 0 -9px white, 0 -12px #A4A4A4;
+		box-shadow: 0 3px transparent, 0 -6px #A4A4A4, 0 -9px transparent, 0 -12px #A4A4A4;
 		content: '';
 }
 
 .no-touch .gn-icon-menu:hover::before,
 .no-touch .gn-icon-menu.gn-selected:hover::before {
 		background: red;
-		box-shadow: 0 3px #A4A4A4, 0 -6px white, 0 -9px #A4A4A4, 0 -12px white;
+		box-shadow: 0 3px #A4A4A4, 0 -6px transparent, 0 -9px #A4A4A4, 0 -12px transparent;
 }
 
 .gn-icon-menu.gn-selected::before {
 		background: #A4A4A4;
-		box-shadow: 0 3px white, 0 -6px #A4A4A4, 0 -9px white, 0 -12px #A4A4A4;
+		box-shadow: 0 3px transparent, 0 -6px #A4A4A4, 0 -9px transparent, 0 -12px #A4A4A4;
 }
 
 /* styles for opening menu A4A4A4*/
@@ -661,7 +664,7 @@ form#contact-form input:focus,form#contact-form select:focus,form#contact-form t
     height: 40px;
     line-height: 40px;
     text-align: center;
-    background: #3bbec0;
+    background: #e74c3c;
 	color: #fff;
     -webkit-transition: background .3s ease-in-out;
     transition: background .3s ease-in-out;
@@ -714,7 +717,7 @@ footer a:hover {
 
 .btn {
 	border-radius: 0;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
     font-family: Montserrat,sans-serif;
     font-weight: 400;
     -webkit-transition: all .3s ease-in-out;

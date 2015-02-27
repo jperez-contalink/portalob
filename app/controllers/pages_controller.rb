@@ -7,6 +7,12 @@ def home
         end
 end
 
+#def salir
+#		if current_usuario
+#			redirect_to destroy_usuario_session_path
+#		end
+#end
+
   def facturas
   end
 end

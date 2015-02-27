@@ -20,11 +20,10 @@ Rails.application.routes.draw do
 
 
   root :to => 'pages#home'
-  #root 'pages#estadosdecuenta'
-  #root :to => "devise/sessions#new"
   get "facturas" => "pages#facturas"
   get "estadosdecuenta" => "pages#estadosdecuenta"
   get "contacto" => "pages#contacto"
+  #get "salir" => "pages#salir"
 
 
   namespace :api, defaults: {format: 'json'} do

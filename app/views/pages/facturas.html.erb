@@ -3,6 +3,10 @@
 <head>
     <title>LST FAC</title>
     <style type="text/css">
+      .hover_clean:hover {
+        background-color: #2980b9;
+        color: white;
+      }
       #loader-wrapper {
           background-color:white;
           position: fixed;
@@ -10,7 +14,7 @@
           left: 0;
           width: 100%;
           height: 100%;
-          z-index: 1000;
+          z-index: 20;
       }  
       #loader-wrapper img {
           display: block;
@@ -158,7 +162,7 @@
         }        
     </style>
 </head>
-<body><br><br><br><br>
+<body style="overflow:hidden;"><br><br><br><br>
 <% if usuario_signed_in? %>
   <div id="lst_fac" style="width:100%;">
   <!--AREA DE ALERTAS-->
@@ -166,7 +170,7 @@
   <div id="alert_sin_seleccion"></div>
   <!--AREA DE ALERTAS-->
     <div  align="right">
-        <button type="button" class="btn btn-default export_checked" aria-
+        <button type="button" class="btn btn-default export_checked hover_clean" aria-
         label="Left Align">
             <span class="glyphicon glyphicon glyphicon-arrow-down" aria-hidden="true"></span>&nbsp;Descargar Documentos
         </button>
@@ -263,7 +267,8 @@
                 url: "http://localhost:3000/api/v1/reporte_facturas",
                 success: function(datox){
                 waTable.setData(jsonConstructor(datox)); 
-                document.getElementById("loader-wrapper").style.display = "none";                
+                document.getElementById("loader-wrapper").style.display = "none";
+                document.body.style.overflowY = "scroll"; 
             },
                 error:  function(){ 
                 var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
@@ -410,7 +415,7 @@ function jsonConstructor(json) {
         },
         Pagado: {
             index: 7,
-            type: "string",
+            type: "bool",
             friendly: "Pagado",
             placeHolder: ""
         },

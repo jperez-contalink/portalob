@@ -16,8 +16,11 @@ $jumbotron-boder:					gray;
 $btn-default-bg:					white;
 $btn-default-color:					#2980b9;
 $btn-default-border:				#2980b9;
+$btn-default-border-radius: 		10px;
 $btn-primary-bg:					#3498db;
+$btn-primary-border-radius: 		10px;
 $font-family-sans-serif:			'Source Sans Pro';
+
 
 @import 'bootstrap-sprockets';
 @import 'bootstrap';
