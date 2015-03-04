@@ -264,7 +264,7 @@
         $.ajax({
                 type:"GET",
                 dataType : 'json',
-                url: "http://localhost:3000/api/v1/reporte_facturas",
+                url: "api/v1/reporte_facturas",
                 success: function(datox){
                 waTable.setData(jsonConstructor(datox)); 
                 document.getElementById("loader-wrapper").style.display = "none";
@@ -311,7 +311,7 @@
                   for (var i=0;i<checkRows.length;i++) {
                     strParam = strParam + checkRows[i].Factura_ID + "_";
                   }
-                  window.open("http://localhost:3000/api/v1/impresion_documentos" + strParam);
+                  window.open("api/v1/impresion_documentos" + strParam);
                   //window.open("http://localhost:3000/api/v1/descarga_imagenes?clientid=12312312312");
                 }  else if (checkRows.length > 50) {
                   document.getElementById("alert_limite").innerHTML = buildAlert("limite");

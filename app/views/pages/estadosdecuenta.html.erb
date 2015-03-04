@@ -338,7 +338,7 @@
         $.ajax({
                 type:"GET",
                 dataType : 'json',
-                url: "http://localhost:3000/api/v1/reporte_estado_cuenta",
+                url: "api/v1/reporte_estado_cuenta",
                 success: function(datox){
                 allData = jsonConstructor(datox);
                 waTable.setData(ultimosTres(allData));
@@ -387,8 +387,7 @@
                   for (var i=0;i<checkRows.length;i++) {
                     strParam = strParam + checkRows[i].Factura_ID + "_";
                   }
-                  console.log("http://localhost:3000/api/v1/impresion_documentos" + strParam);
-                  window.open("http://localhost:3000/api/v1/impresion_documentos" + strParam);
+                  window.open("api/v1/impresion_documentos" + strParam);
                 } else if (checkRows.length > 50) {
                   document.getElementById("alert_limite").innerHTML = buildAlert("limite");
                 } else {
