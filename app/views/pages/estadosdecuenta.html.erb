@@ -572,16 +572,16 @@ function jsonConstructor(json) {
 function ultimosTres(json) {
   var rowsTres = [];
   var hoy = new Date();
+  mes = hoy.getMonth();
+  ano = hoy.getFullYear();
   /* Establece el mes actual */
   hoy.setMonth(hoy.getMonth() - 1);
   var ayer = new Date(hoy.getFullYear(), hoy.getMonth(), 01);
   var ayerUTC = Date.UTC(ayer.getFullYear(), ayer.getMonth(), ayer.getDate());
   /* Actualizar saldos //JP D */
-  mes = hoy.getMonth();
-  ano = hoy.getFullYear();
   if (mes == 0) {
       var mesAnterior = 11;
-      anoAnterior = ano - 1;
+      var anoAnterior = ano - 1;
   } else {
       var mesAnterior = mes - 1;
       var anoAnterior = ano;
@@ -594,7 +594,7 @@ function ultimosTres(json) {
     }
     var fechaActual = new Date(json.rows[i].Fecha);
     fechaActual.setDate(fechaActual.getDate() + 1);
-    if (fechaActual.getMonth() <= mesAnterior && fechaActual.getFullYear()<=anoAnterior){ //JP D
+    if ((fechaActual.getMonth() <= mesAnterior && fechaActual.getFullYear()==anoAnterior+1) ||fechaActual.getFullYear()<=anoAnterior){ //JP D
       saldo = allData.rows[i].Final; //JP D
     }    //JP D
   }
@@ -627,10 +627,10 @@ function filtroMesSeleccion(fecha) {
   var ano = params[1];
   if (mes == 0) {
       var mesAnterior = 11;
-      anoAnterior = ano - 1;
+      var anoAnterior = ano - 2;
   } else {
       var mesAnterior = mes - 1;
-      var anoAnterior = ano;
+      var anoAnterior = ano - 1;
   }
   var saldo = 0;
   var rowsNuevos = [];
@@ -641,7 +641,7 @@ function filtroMesSeleccion(fecha) {
     if (fechaActual.getMonth() == mes && fechaActual.getFullYear()==ano){
       rowsNuevos.push(allData.rows[i]);
     }
-    if (fechaActual.getMonth() <= mesAnterior && fechaActual.getFullYear()<=anoAnterior){
+    if ((fechaActual.getMonth() <= mesAnterior && fechaActual.getFullYear() == anoAnterior+1) || (fechaActual.getFullYear() <= anoAnterior)){ //JP D
       //rowsNuevos.push(allData.rows[i]);
       saldo = allData.rows[i].Final;
     }
