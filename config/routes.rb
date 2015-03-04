@@ -1,6 +1,8 @@
 require 'api_constraints'
 Rails.application.routes.draw do
  
+  resources :productos
+
   resources :contactos
 
   resources :impresion_documentos
@@ -23,6 +25,7 @@ Rails.application.routes.draw do
   get "facturas" => "pages#facturas"
   get "estadosdecuenta" => "pages#estadosdecuenta"
   get "contacto" => "pages#contacto"
+  get "catalogoproductos" => "pages#catalogoproductos"
   #get "salir" => "pages#salir"
 
 
@@ -49,6 +52,12 @@ Rails.application.routes.draw do
       resources :descarga_imagenes
     end  
   end  
+
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      resources :productos
+    end  
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

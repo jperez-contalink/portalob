@@ -15,6 +15,7 @@
 //= require jquery.turbolinks
 //= require turbolinks
 //= require jquery.watable
+//= require jquery.catalogo
 //= require bootstrap-datepicker
 //= requite bootstrap.min.js
 //= require_tree .

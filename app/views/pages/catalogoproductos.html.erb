@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CAT PRO</title>
+  <style>
+  body {
+    overflow-x: hidden;
+  }
+    .item {
+    height:200px;
+    width:25%;
+    border:1px solid white;
+    background-color: #F5F6CE;
+    background-size: 30%;
+    background-repeat: no-repeat;
+    background-position: center;
+    text-align: left;
+    vertical-align: text-top;
+    padding: 2% 1% 2% 1%;
+    color:#585858;
+    font-size: 150%;
+    font-weight: bold;
+    float:left;
+    border-radius: 10px
+  }
+  .item:hover {
+    color:#424242;
+    background-color: #F5DA81;
+    background-size: 35%;
+    font-size: 175%;
+  }
+  </style>
+</head>
+<body><br><br><br><br><br><br>
+  <div align="center"><h1>Productos</h1></div>
+  <div id="cat_pro" style="width:100%;"></div>
+  <div width="100%" id="cat_tab"></div>
+
+  <script type="text/javascript">
+  var allData = {};
+  $(document).ready( function() {
+    console.log("Catalogo.");
+    var cato = $('#cat_pro').Catalogo({
+      koalas: "kaolitis"
+    }).data('Catalogo');
+
+  console.log("$> Consumir Servicio");
+  var datox = {};
+  $.ajax({
+          type:"GET",
+          dataType : 'json',
+          url: "http://localhost:3000/api/v1/productos",
+          success: function(datos){
+          console.log("Productos");
+          console.log(datos);
+          allData = jsonConstructor(datos);
+          cato.setData(allData);
+      },
+          error:  function(){ 
+          var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
+            document.getElementById("cat_pro").innerHTML = mensajeError;
+          }
+  });
+  function jsonConstructor(json) {
+    //name, value, familia, descargaimg, id
+      var rows = [];
+      var jsonObject = json.response;
+      for (var i=0;i<jsonObject.totalRows;i++) {
+          var row = {};
+          row.Producto_ID = jsonObject.data[i].id;
+          row.Nombre = jsonObject.data[i].name;
+          row.Identificador =   jsonObject.data[i].value;
+          row.Familia =   jsonObject.data[i].familia;
+          row.DescargaImg =   jsonObject.data[i].descargaimg;
+          if (jsonObject.data[i].image == "Y"){
+            row.Image = "imagenesProductos/" + jsonObject.data[i].id + ".png";
+          } else {
+            row.Image = "imagenesProductos/noimage.png";
+          }
+          rows.push(row);
+      } 
+      // Definir columnas
+      var cols = {
+          Nombre: {
+              index: 1,
+              type: "string",
+              friendly: "Nombre"
+          },
+          Identificador: {
+              index: 2,
+              type: "string",
+              friendly: "Identificador"
+          },
+          Familia: {
+              index: 3,
+              type: "string",
+              friendly: "Familia"
+          },
+          DescargaImg: {
+              index: 4,
+              type: "string",
+              hidden: true
+          },
+          Producto_ID: {
+              index: 5,
+              type: "string",
+              id: true,
+              hidden: true
+          }
+      };
+      // Contruir el json de datos
+      var data = {
+                  cols: cols,
+                  rows: rows
+              };
+      return data;
+  }  // Termina json Constructor
+});
+  </script>
+</body>
+</html>

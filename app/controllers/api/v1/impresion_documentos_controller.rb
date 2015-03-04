@@ -12,7 +12,7 @@ module Api
         respond_to do |format|
           format.xml {
               #render xml: response
-              send_data(response, :filename => 'tusarchivos.zip')
+              send_data(response, :filename => 'TusCFDIS.zip')
             }
     	  end
 

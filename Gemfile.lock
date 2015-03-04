@@ -60,6 +60,7 @@ GEM
       columnize (~> 0.8)
       debugger-linecache (~> 1.2)
       slop (~> 3.6)
+    chilkat (9.5.0.47)
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.5)
@@ -162,6 +163,7 @@ GEM
     rest-client (1.7.2)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
+    rubyzip (1.1.7)
     sass (3.4.10)
     sass-rails (5.0.1)
       railties (>= 4.0.0, < 5.0)
@@ -204,6 +206,8 @@ GEM
     will_paginate (3.0.7)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
+    zip-zip (0.3)
+      rubyzip (>= 1.0.0)
 
 PLATFORMS
   ruby
@@ -212,6 +216,7 @@ DEPENDENCIES
   aws-sdk (~> 2.0.18.pre)
   bootstrap-sass
   byebug
+  chilkat (~> 9.5.0.47)
   coffee-rails (~> 4.1.0)
   devise
   jbuilder (~> 2.0)
@@ -225,6 +230,7 @@ DEPENDENCIES
   rails (= 4.2.0)
   rails_12factor
   rest-client
+  rubyzip (>= 1.0.0)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring
@@ -234,3 +240,4 @@ DEPENDENCIES
   web-console (~> 2.0)
   will_paginate (~> 3.0.5)
   will_paginate-bootstrap
+  zip-zip
