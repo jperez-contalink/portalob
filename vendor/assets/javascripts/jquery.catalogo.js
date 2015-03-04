@@ -28,7 +28,8 @@
             console.log("DrawCat -- ");
             var jsonCols = pData.cols;
             var jsonRows = pData.rows;
-            var tabla = '<input type="text" id="txt_search"/><input type="button" class="btn_search" value="buscar"/><div width="100%">';
+            var search = '<div class="input-group"><span class="input-group-addon glyphicon glyphicon-search"></span><input type="text" class="form-control btn_search" aria-describedby="basic-addon1" id="txt_search"></div>';
+            var tabla = search + '<br><div width="100%">';
             var boton = "";
             for (var key in jsonRows) {
                 var obj = jsonRows[key]; 

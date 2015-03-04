@@ -62,12 +62,13 @@
             document.getElementById("cat_pro").innerHTML = mensajeError;
           }
   });
-  $("#cat_pro").on('click', '.btn_search', function (e) {
+  $("#cat_pro").on('keyup', '.btn_search', function (e) {
     console.log("Busqueda");
     e.preventDefault();
     var parametro = document.getElementById("txt_search").value;
     cato.setData(buscarPalabra(parametro));
     document.getElementById("txt_search").value = parametro;
+    $( "#txt_search" ).focus();
   });
 
   function jsonConstructor(json) {
