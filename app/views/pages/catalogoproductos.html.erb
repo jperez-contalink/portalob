@@ -62,6 +62,14 @@
             document.getElementById("cat_pro").innerHTML = mensajeError;
           }
   });
+  $("#cat_pro").on('click', '.btn_search', function (e) {
+    console.log("Busqueda");
+    e.preventDefault();
+    var parametro = document.getElementById("txt_search").value;
+    cato.setData(buscarPalabra(parametro));
+    document.getElementById("txt_search").value = parametro;
+  });
+
   function jsonConstructor(json) {
     //name, value, familia, descargaimg, id
       var rows = [];
@@ -116,6 +124,22 @@
               };
       return data;
   }  // Termina json Constructor
+function buscarPalabra(palabra) {
+  var rowsNuevos = [];
+  // recorrer alldata
+  for (var i=0;i<allData.rows.length;i++) {
+    var currentName = allData.rows[i].Nombre;
+    currentName = currentName.toUpperCase();
+    if (currentName.indexOf(palabra.toUpperCase()) > -1) {
+      rowsNuevos.push(allData.rows[i]);
+    }
+  }
+  var rowsNuevos = {
+                cols: allData.cols,
+                rows: rowsNuevos
+            };
+  return rowsNuevos;
+}  
 });
   </script>
 </body>
