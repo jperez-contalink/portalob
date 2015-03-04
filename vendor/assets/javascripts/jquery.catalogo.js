@@ -25,12 +25,12 @@
             priv.drawCat(pData);
         };
         priv.drawCat = function (pData) {
-            console.log("DrawCat -- ");
+            console.log("DrawCato -- ");
             var jsonCols = pData.cols;
             var jsonRows = pData.rows;
             var search = '<div class="input-group"><span class="input-group-addon glyphicon glyphicon-search"></span><input type="text" class="form-control btn_search" aria-describedby="basic-addon1" id="txt_search"></div>';
-            var tabla = search + '<br><div width="100%">';
-            var boton = "";
+            var tabla = search + '<div width="100%">';
+            console.log("$>" + tabla);
             for (var key in jsonRows) {
                 var obj = jsonRows[key]; 
                 if (obj.Nombre != undefined) {
@@ -38,7 +38,6 @@
                 }
             }
             tabla += "</div>";
-            console.log("TABLA: " + tabla);
             document.getElementById("cat_pro").innerHTML = tabla;
         };
 

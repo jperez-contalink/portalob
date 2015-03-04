@@ -4,7 +4,11 @@ class ReporteEstadoCuentaController < ApplicationController
   # GET /reporte_estado_cuenta
   # GET /reporte_estado_cuenta.json
   def index
+    puts carlos
     @reporte_estado_cuenta = ReporteEstadoCuentum.all
+    respond_to do |format|
+      format.json {render json: @reporte_estado_cuenta}
+    end    
   end
 
   # GET /reporte_estado_cuenta/1
