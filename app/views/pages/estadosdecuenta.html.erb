@@ -338,7 +338,7 @@
         $.ajax({
                 type:"GET",
                 dataType : 'json',
-                url: "api/v1/reporte_estado_cuenta",
+                url: "/api/v1/reporte_estado_cuenta",
                 success: function(datox){
                 allData = jsonConstructor(datox);
                 waTable.setData(ultimosTres(allData));
