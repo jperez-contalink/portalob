@@ -7,7 +7,8 @@ module Api
       def index
         @user = current_usuario
         #order_link = "http://" + @user.empresa.usuariosob + ":" + @user.empresa.passob + "@" + @user.empresa.urlwebservice + "POB_VistaEstadoCuenta?_where=taxid=%27" + @user.rfc + "%27&_sortBy=fecha"
-        order_link = "http://" + @user.empresa.usuariosob + ":" + @user.empresa.passob + "@" + @user.empresa.urlwebservice + "/openbravo/org.openbravo.service.json.jsonrest/POB_VistaEstadoCuenta?_where=taxid=%27" + @user.rfc + "%27&_sortBy=fecha"
+        #order_link = "http://" + @user.empresa.usuariosob + ":" + @user.empresa.passob + "@" + @user.empresa.urlwebservice + "/openbravo/org.openbravo.service.json.jsonrest/POB_VistaEstadoCuenta?_where=taxid=%27" + @user.rfc + "%27&_sortBy=fecha"
+        order_link = "http://csalinas-tegik:KopoTegik@ec2-54-163-167-242.compute-1.amazonaws.com/openbravo/org.openbravo.service.json.jsonrest/POB_VistaEstadoCuenta?_where=taxid=%27ASJ9810288T9%27&_sortBy=fecha"
         puts order_link
         response = RestClient.get order_link 
       	respond_to do |format|
