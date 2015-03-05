@@ -1,10 +1,10 @@
-class ReporteEstadoCuentaController < ApplicationController
+class ReporteEstadoCuentumController < ApplicationController
   before_action :set_reporte_estado_cuentum, only: [:show, :edit, :update, :destroy]
 
   # GET /reporte_estado_cuenta
   # GET /reporte_estado_cuenta.json
   def index
-    puts carlos
+    puts "JULIO"
     @reporte_estado_cuenta = ReporteEstadoCuentum.all
     respond_to do |format|
       format.json {render json: @reporte_estado_cuenta}
