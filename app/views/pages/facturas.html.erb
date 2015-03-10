@@ -176,14 +176,13 @@
         </button>
     </div>
       <div align="center"><h2>Mis facturas</h2></div>
-      <div id="loader-wrapper"><img src="load.gif" height="10%" width="10%"></img></div><!--Termina load-->
+      <div id="loader-wrapper"><img src="load.gif" height="9%" width="6%"></img></div><!--Termina load-->
     </div>
   <% else %>
   <div class="jumbotron center">
   <h1>Bienvenido</h1>
   <p><br><br>
       <%= link_to "Iniciar Sesion", new_usuario_session_path, class: "btn btn-primary btn-lg" %>
-      <%= link_to "Registrarse", new_usuario_registration_path, class: "btn btn-primary btn-lg" %>
   </p>
   </div>
   <% end %>
@@ -366,7 +365,6 @@ function jsonConstructor(json) {
             index: 1,
             type: "string",
             friendly: "# Factura",
-            format: "<a href='#' target='_blank'>{0}</a>",
             unique: true,
             sortOrder: "asc"
         },

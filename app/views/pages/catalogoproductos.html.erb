@@ -6,6 +6,10 @@
     body {
       overflow-x: hidden;
     }
+
+    a {
+      color:black;
+    }
       .item {
       height:200px;
       width:25%;
@@ -14,31 +18,98 @@
       background-size: 30%;
       background-repeat: no-repeat;
       background-position: center;
-      text-align: left;
-      vertical-align: text-top;
+      /*text-align: left;
+      vertical-align: text-top;*/
       padding: 2% 1% 2% 1%;
-      color:#585858;
+      /*color:#585858;
       font-size: 150%;
-      font-weight: bold;
+      font-weight: bold;*/
       float:left;
-      border-radius: 20px
+      border-radius: 20px;
+      display: inline-block;
     }
     .item:hover {
       color:#424242;
       background-color: #D0DEAB;
       background-size: 35%;
-      font-size: 175%;
+      font-size: 105%;
+    }
+    .precioExistencia {
+      border:1px solid black;
+      text-align: right;
+      vertical-align: middle;
+      /*middle: 25px;*/
+    }
+    .item h1 {
+      color:#585858;
+      font-size: 150%;
+      vertical-align: text-top;
+      text-align: left;
+    }
+    .item h2 {
+      color:#585858;
+      font-size: 100%;
+      text-align: right;
+      margin-bottom: 1cm;
+      border: 0px solid blue;
+    }    
+    .filtroAplicado {
+      color:grey;
+    }
+    #cat_fil_aplicados {
+      display:none;
+    }
+      .itemA {
+      height:200px;
+      width:25%;
+      border:15px solid white;
+      background-color: white;
+      padding: 0% 1% 1% 1%;
+      /*text-align: left;
+      vertical-align: text-top;
+      padding: 2% 1% 2% 1%;*/
+      /*color:#585858;
+      font-size: 150%;
+      font-weight: bold;*/
+      float:left;
+      border-radius: 20px;
+      display: inline-block;
+    }
+    .itemA:hover {
+      color:#424242;
+      background-color: #D0DEAB;
+      font-size: 105%;
+      border:15px solid #D0DEAB;
+    }
+    .bgImage {
+      border:0px solid black;
+      background-size: 80%;
+      background-repeat: no-repeat;
+
     }
   </style>
 </head>
 <body><br><br><br><br><br><br>
-  <div align="center"><h1>Cátalogo de Productos</h1></div>
-  <div id="cat_pro" style="width:100%;">
-    <div width="100%" id="cat_tab"></div>
+  <div align="center"><h1>Catálogo de Productos</h1></div>
+  <div>
+    <!--<div id="cat_filter" style="float:left;width:10%;"></div>-->
+    <div id="cat_side" style="float:left;width:10%;">
+      <div id="cat_fil_aplicados"><strong>Filtros Aplicados</strong><br><a class="borraFiltros">Borrar Filtros</a></div><br>
+      <div id="cat_filter"></div>
+    </div>
+    <div id="cat_pro" style="float:left;width:90%;"></div>
   </div>
 
   <script type="text/javascript">
   var allData = {};
+  var filterData = {};
+  var allPrice = {};
+  var charHead = [];
+  var charItem = [];
+  var itemsChar = {
+    heads: charHead,
+    items: charItem
+  };
   $(document).ready( function() {
     console.log("Catalogo.");
     var cato = $('#cat_pro').Catalogo({
@@ -50,18 +121,35 @@
   $.ajax({
           type:"GET",
           dataType : 'json',
+          url: "api/v1/precios",
+          success: function(datos){
+          console.log("Precios");
+          console.log(datos);
+          allPrice = jsonConstructorPrice(datos);
+          //cato.setData(allData);
+      },
+          error:  function(){ 
+          var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor [Precios].</h3></div>'
+            document.getElementById("cat_pro").innerHTML = mensajeError;
+          }
+  });  
+  $.ajax({
+          type:"GET",
+          dataType : 'json',
           url: "api/v1/productos",
           success: function(datos){
           console.log("Productos");
           console.log(datos);
-          allData = jsonConstructor(datos);
+          allData = jsonConstructor(datos, allPrice);
+          filterData = allData;
+          cato.drawFiltros(allData);
           cato.setData(allData);
       },
           error:  function(){ 
           var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
             document.getElementById("cat_pro").innerHTML = mensajeError;
           }
-  });
+  });  
   $("#cat_pro").on('keyup', '.btn_search', function (e) {
     console.log("Busqueda");
     e.preventDefault();
@@ -70,23 +158,126 @@
     document.getElementById("txt_search").value = parametro;
     $( "#txt_search" ).focus();
   });
-
-  function jsonConstructor(json) {
+  $("#cat_filter").on('click', '.fil_marca', function (e) {
+    console.log("Filtro de Marca");
+    e.preventDefault();
+    filtroMarca(e.target.innerText);
+  });
+  $("#cat_filter").on('click', '.fil_cat', function (e) {
+    console.log("Filtro de Categoria");
+    e.preventDefault();
+    filtroCat(e.target.innerText);
+  });
+  $("#cat_filter").on('click', '.fil_car', function (e) {
+    console.log("Filtro de Caracteristica");
+    e.preventDefault();
+    filtroCar(e.target.id, e.target.innerText);
+  });  
+  $("#cat_side").on('click', '.borraFiltros', function (e) {
+    console.log("Borrar Filtros");
+    e.preventDefault();
+    cato.setData(allData);
+    filterData = allData
+    document.getElementById('cat_fil_aplicados').style.display = 'none';
+    jQuery('#cat_fil_aplicados div').html('');
+  });
+  function jsonConstructor(json, allPrice) {
     //name, value, familia, descargaimg, id
       var rows = [];
       var jsonObject = json.response;
+      var jsonRows = allPrice.rows;
+      
       for (var i=0;i<jsonObject.totalRows;i++) {
           var row = {};
-          row.Producto_ID = jsonObject.data[i].id;
-          row.Nombre = jsonObject.data[i].name;
-          row.Identificador =   jsonObject.data[i].value;
-          row.Familia =   jsonObject.data[i].familia;
-          row.DescargaImg =   jsonObject.data[i].descargaimg;
+          row.Producto_ID     = jsonObject.data[i].id;
+          row.Nombre          = jsonObject.data[i].name;
+          row.Identificador   = jsonObject.data[i].value;
+          row.Familia         = jsonObject.data[i].familia;
+          row.DescargaImg     = jsonObject.data[i].descargaimg;
+          row.Inventario      = jsonObject.data[i].inventario;
+          row.Marca           = jsonObject.data[i].marca;
+          row.Categoria       = jsonObject.data[i].categoria;
+          //row.Caracteristicas = jsonObject.data[i].caracteristicas;
           if (jsonObject.data[i].image == "Y"){
             row.Image = "imagenesProductos/" + jsonObject.data[i].id + ".png";
           } else {
             row.Image = "imagenesProductos/noimage.png";
           }
+        for (var key in jsonRows) {
+          var obj = jsonRows[key]; 
+          if (obj.Producto_ID == jsonObject.data[i].id) {
+              row.Precio = obj.Precio;
+          }
+        }
+        if (typeof(row.Precio) == "undefined"){
+          row.Precio = 0;
+        }
+        // Gestionar caracteristicas
+        if (jsonObject.data[i].caracteristicas != null) {
+          var caracteristicas = (jsonObject.data[i].caracteristicas).split("_");
+            for (var j = 0; j < caracteristicas.length; j++) {
+              carItems = caracteristicas[j].split(":");
+              row[carItems[0]] = carItems[1];
+              //console.log("$> imtesChar: ", i);
+              // Si no existe agrega el encabezado
+              if (itemsChar.heads.indexOf(carItems[0]) == -1) {
+                itemsChar.heads.push(carItems[0]);
+              }
+              // Si no existe agrega el item
+              if (itemsChar.items.indexOf(carItems[0] + "_" + carItems[1]) == -1) {
+                itemsChar.items.push(carItems[0] + "_" + carItems[1]);
+              }
+            }
+        }
+        // GC 
+          rows.push(row);
+      } 
+      // Definir columnas
+      var cols = {
+          Nombre: {
+              index: 1,
+              type: "string",
+              friendly: "Nombre"
+          },
+          Identificador: {
+              index: 2,
+              type: "string",
+              friendly: "Identificador"
+          },
+          Familia: {
+              index: 3,
+              type: "string",
+              friendly: "Familia"
+          },
+          DescargaImg: {
+              index: 4,
+              type: "string",
+              hidden: true
+          },
+          Producto_ID: {
+              index: 5,
+              type: "string",
+              id: true,
+              hidden: true
+          }
+      };
+      // Contruir el json de datos
+      console.log("$> ITEMS: ", itemsChar);
+      var data = {
+                  cols: cols,
+                  rows: rows
+              };
+      return data;
+  }  // Termina json Constructor
+
+    function jsonConstructorPrice(json) {
+    //name, value, familia, descargaimg, id
+      var rows = [];
+      var jsonObject = json.response;
+      for (var i=0;i<jsonObject.totalRows;i++) {
+          var row = {};
+          row.Producto_ID = jsonObject.data[i].product;
+          row.Precio = jsonObject.data[i].pricelist11;
           rows.push(row);
       } 
       // Definir columnas
@@ -125,22 +316,107 @@
               };
       return data;
   }  // Termina json Constructor
+
 function buscarPalabra(palabra) {
   var rowsNuevos = [];
   // recorrer alldata
-  for (var i=0;i<allData.rows.length;i++) {
-    var currentName = allData.rows[i].Nombre;
+  for (var i=0;i<filterData.rows.length;i++) {
+    var currentName = filterData.rows[i].Nombre;
     currentName = currentName.toUpperCase();
     if (currentName.indexOf(palabra.toUpperCase()) > -1) {
-      rowsNuevos.push(allData.rows[i]);
+      rowsNuevos.push(filterData.rows[i]);
     }
   }
   var rowsNuevos = {
-                cols: allData.cols,
+                cols: filterData.cols,
                 rows: rowsNuevos
             };
+  
   return rowsNuevos;
-}  
+}
+/*function setDatafiltro(datos){
+  cato.setData(datos);
+*/
+  function filtroMarca(marca){
+      var jsonRows = filterData.rows;
+      var rowsNuevos = [];
+      for (var key in jsonRows) {
+          var obj = jsonRows[key]; 
+          if (obj.Marca == marca) {
+              rowsNuevos.push(obj);
+          }
+      }
+      
+      var data = {
+          cols: allData.cols,
+          rows: rowsNuevos
+      };
+      // Actualizar Filtros Aplicados
+      document.getElementById('cat_fil_aplicados').style.display = 'block';
+      var innerDiv = document.createElement('div');
+      innerDiv.innerHTML = marca;
+      innerDiv.className = 'filtroAplicado';
+      var iDiv = document.getElementById('cat_fil_aplicados');
+      iDiv.appendChild(innerDiv);
+      //
+      filterData = data;
+      cato.setData(data);
+  } 
+  function filtroCat(categoria){
+      var jsonRows = filterData.rows;
+      var rowsNuevos = [];
+      for (var key in jsonRows) {
+          var obj = jsonRows[key]; 
+          if (obj.Categoria == categoria) {
+              rowsNuevos.push(obj);
+          }
+      }
+      var data = {
+          cols: allData.cols,
+          rows: rowsNuevos
+      };
+      // Actualizar Filtros Aplicados
+      document.getElementById('cat_fil_aplicados').style.display = 'block';
+      var innerDiv = document.createElement('div');
+      innerDiv.innerHTML = categoria;
+      innerDiv.className = 'filtroAplicado';
+      var iDiv = document.getElementById('cat_fil_aplicados');
+      iDiv.appendChild(innerDiv);
+      //
+      //setDataFiltro(data);
+      filterData = data;
+      cato.setData(data);
+  }  
+  function filtroCar(caracteristica, valor){
+      console.log("Filtro CAR");
+      console.log("En la caracteristica " + caracteristica + " buscar el valor " + valor);
+      var jsonRows = filterData.rows;
+      var rowsNuevos = [];
+      for (var key in jsonRows) {
+          var obj = jsonRows[key]; 
+          //console.log("$> obj." + caracteristica + " = " + obj[caracteristica]);
+          //console.log("$> OBJ ", obj);
+          if (obj[caracteristica] == valor) {
+              rowsNuevos.push(obj);
+          }
+      }
+      var data = {
+          cols: allData.cols,
+          rows: rowsNuevos
+      };
+      // Actualizar Filtros Aplicados
+      document.getElementById('cat_fil_aplicados').style.display = 'block';
+      var innerDiv = document.createElement('div');
+      innerDiv.innerHTML = valor;
+      innerDiv.className = 'filtroAplicado';
+      var iDiv = document.getElementById('cat_fil_aplicados');
+      iDiv.appendChild(innerDiv);
+      //
+      //setDataFiltro(data);
+      filterData = data;
+      cato.setData(data);
+  } 
+//f
 });
   </script>
 </body>

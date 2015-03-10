@@ -19,32 +19,36 @@
          initialize the plugin.
          */
         priv.init = function () {
-            document.getElementById("cat_pro").innerHTML = '<div align="center"><strong> CATALOGO VACIO</strong></div>';
+            //document.getElementById("cat_pro").innerHTML = '<div align="center"><strong> CATALOGO VACIO</strong></div>';
+            document.getElementById("cat_pro").innerHTML = '<br><br><br><br><br><div align="center" id="loader-wrapper"><img src="load.gif" height="9%" width="6%"></img></div>';
         };
         priv.setData = function (pData) {
             priv.drawCat(pData);
         };
         priv.drawCat = function (pData) {
-            console.log("DrawCato -- ");
+            console.log("DrawCato -- 1Iter");
             var jsonCols = pData.cols;
             var jsonRows = pData.rows;
-            var search = '<div class="input-group"><span class="input-group-addon glyphicon glyphicon-search"></span><input type="text" class="form-control btn_search" aria-describedby="basic-addon1" id="txt_search"></div>';
-            var tabla = search + '<div width="100%">';
-            console.log("$>" + tabla);
+            var search = '<div class="input-group"><span class="input-group-addon glyphicon glyphicon-search"></span><input type="text" class="form-control btn_search" aria-describedby="basic-addon1" id="txt_search" autofocus></div>';
+            var tabla = search + '<br><div width="100%">';
+            var style="";
             for (var key in jsonRows) {
                 var obj = jsonRows[key]; 
-                if (obj.Nombre != undefined) {
-                    tabla += '<a href="javascript:agregar();"><div class="item" style="background-image: url('+obj.Image+');">' + obj.Nombre + '</div></a>';
+                if (obj.Precio != 0) {
+                    if (obj.Inventario == "0 Piezas"){ style = 'style="color:red;"';}
+                    //tabla += '<a href="javascript:agregar();"><div class="item" style="background-image: url('+obj.Image+');"><h1>' + obj.Nombre + '</h1>';
+                    //tabla += '<h2>$' + obj.Precio + '<br><div ' + style + '>' + obj.Inventario + '</div></h2></div></a>';
+                    tabla += '<a href="javascript:agregar();"><div class="itemA"><div align="center" class="bgImage"><img src="'+obj.Image+'" width="60%"></img></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
+                    style="";
                 }
             }
             tabla += "</div>";
             document.getElementById("cat_pro").innerHTML = tabla;
         };
-
         /* Public API
          *************************************************************************/
         publ.setData = function (data) {
-            console.log("pasa por aca 1");
+            console.log("PUBLIC SET DATA");
             priv.setData(data);
             return publ;
         };
@@ -55,8 +59,43 @@
             priv.init();
             return publ;
         };
+        publ.drawFiltros = function(pData){
+            console.log("Crear Filtros");
+            var jsonRows = pData.rows;
+            var arrayMarca = [];
+            var arrayCategoria = [];
+            var marcas = "<strong>MARCAS</strong><br>";
+            var categorias = "<strong>CATEGORÍA</strong><br>";
+            //var caracteriticas = "<strong>CARACTERISTICA</strong><br>";
+            var caracteriticas = "";
+            for (var key in jsonRows) {
+                var obj = jsonRows[key]; 
+                if (arrayMarca.indexOf(obj.Marca) == -1 && obj.Precio != 0) {
+                    marcas += '<a class="fil_marca">' + obj.Marca + '</a><br>';
+                    arrayMarca.push(obj.Marca);
+                }
+                if (arrayCategoria.indexOf(obj.Categoria) == -1 && obj.Precio != 0) {
+                    categorias += '<a class="fil_cat">' + obj.Categoria + '</a><br>';
+                    arrayCategoria.push(obj.Categoria);
+                }
+            }
+            console.log("Crear Filtros de caracteriticas: ", itemsChar);
+            for (var indx=0; indx<itemsChar.heads.length; indx++){
+                caracteriticas += '<br><strong>' + itemsChar.heads[indx].toUpperCase() + '</strong><br>';
+                for (var indy=0; indy<itemsChar.items.length; indy++){
+                    currentItem = itemsChar.items[indy].split("_");
+                    if (currentItem[0] == itemsChar.heads[indx]){
+                        caracteriticas += '<a class="fil_car" id="'+ currentItem[0] +'">' + currentItem[1] + '</a><br>';
+                    }
+                }
+            }
+            var filtros = marcas + "<br>" + categorias + caracteriticas;
+            document.getElementById("cat_filter").innerHTML = filtros;
+        };
+
         return publ;
     };
+
     $.fn.Catalogo = function (koalas) {
         koalas = koalas || {};
         return this.each(function () {
@@ -65,10 +104,9 @@
         });
     };
 })(jQuery);  
-   function agregar(){
+    function agregar(){
     confirmar=confirm("Agregar al carrito?");
-    if (confirmar){
-        alert("Producto agregado correctamente puedes modificar la cantidad ingresando al carrito.");
+        if (confirmar){
+            alert("Producto agregado correctamente puedes modificar la cantidad ingresando al carrito.");
+        }
     }
-
-  }

@@ -1,6 +1,10 @@
 require 'api_constraints'
 Rails.application.routes.draw do
  
+  resources :precios
+
+  resources :listaprecios
+
   resources :productos
 
   resources :contactos
@@ -55,9 +59,21 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
+      resources :precios
+    end  
+  end
+
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
       resources :productos
     end  
   end
+
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      resources :listaprecios
+    end  
+  end  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

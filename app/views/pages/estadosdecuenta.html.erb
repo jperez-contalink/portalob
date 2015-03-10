@@ -188,14 +188,13 @@
     <div id="dropDownAno" style="border:0px solid blue;float:left;"></div>
     <div id="dropDownMes" width="50%" style="border:0px solid red;float:left;"></div>
     <div id="tagPeriodo" style="border:0px solid green;"></div>
-    <div id="loader-wrapper"><img src="load.gif" height="10%" width="10%"></img></div><!--Termina load-->
+    <div id="loader-wrapper"><img src="load.gif" height="9%" width="6%"></img></div><!--Termina load-->
   </div> <!-- Termina estado de cuenta -->
 <% else %>
   <div class="jumbotron center">
     <h1>Bienvenido</h1>
     <p><br><br>
       <%= link_to "Iniciar Sesion", new_usuario_session_path, class: "btn btn-primary btn-lg" %>
-      <%= link_to "Registrarse", new_usuario_registration_path, class: "btn btn-primary btn-lg" %>
     </p>
   </div>
 <% end %>
@@ -484,13 +483,12 @@ function jsonConstructor(json) {
         //console.log("$>: " + strDate + "/ " + row.Documentno + " In.: " + row.Inicial + " Cgo: " + row.Cargo + " Abn: " + row.Abono + " Fin.: " + row.Final);
         rows.push(row);
     } 
-    // Definir columnas
+    // Definir columnas : format: "<a href='#' target='_blank'>{0}</a>",
     var cols = {
         Documentno: {
             index: 2,
             type: "string",
             friendly: "No. Documento",
-            format: "<a href='#' target='_blank'>{0}</a>",
             placeHolder: "",
             unique: true
         },

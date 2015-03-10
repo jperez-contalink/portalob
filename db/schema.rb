@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150303173724) do
+ActiveRecord::Schema.define(version: 20150309165414) do
 
   create_table "contactos", force: :cascade do |t|
     t.string   "titulo"
@@ -34,9 +34,20 @@ ActiveRecord::Schema.define(version: 20150303173724) do
     t.integer  "logo_file_size"
     t.datetime "logo_updated_at"
     t.string   "email"
+    t.string   "es_jci"
   end
 
   create_table "impresion_documentos", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "listaprecios", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "precios", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
