@@ -26,7 +26,7 @@
             priv.drawCat(pData);
         };
         priv.drawCat = function (pData) {
-            console.log("DrawCato -- 1Iter");
+            console.log("Pintar Catalogo");
             var jsonCols = pData.cols;
             var jsonRows = pData.rows;
             var search = '<div class="input-group"><span class="input-group-addon glyphicon glyphicon-search"></span><input type="text" class="form-control btn_search" aria-describedby="basic-addon1" id="txt_search" autofocus></div>';
@@ -44,11 +44,12 @@
             }
             tabla += "</div>";
             document.getElementById("cat_pro").innerHTML = tabla;
+            console.log("Termina Pintar Catalogo");
         };
         /* Public API
          *************************************************************************/
         publ.setData = function (data) {
-            console.log("PUBLIC SET DATA");
+            console.log("Public Set Data");
             priv.setData(data);
             return publ;
         };
