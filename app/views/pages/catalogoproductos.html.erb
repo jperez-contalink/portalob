@@ -120,7 +120,7 @@
           dataType : 'json',
           url: "api/v1/precios",
           success: function(datos){
-          console.log("Precios");
+          console.log("Precios", datos);
           console.log(datos);
           allPrice = jsonConstructorPrice(datos);
           console.log("$> Termina servicio de Precios");
@@ -136,7 +136,7 @@
           dataType : 'json',
           url: "api/v1/productos",
           success: function(datos){
-          console.log("Productos");
+          console.log("Productos", datos);
           console.log(datos);
           allData = jsonConstructor(datos, allPrice);
           filterData = allData;
@@ -195,6 +195,8 @@
     }
   });
   function jsonConstructor(json, allPrice) {
+    console.log("ALLPRICE: ", allPrice);
+    console.log("JSONPROD: ", json);
     //name, value, familia, descargaimg, id
       var rows = [];
       var jsonObject = json.response;
@@ -223,6 +225,7 @@
           }
         }
         if (typeof(row.Precio) == "undefined"){
+          console.log("$> Hace precio 0");
           row.Precio = 0;
         }
         // Gestionar caracteristicas
