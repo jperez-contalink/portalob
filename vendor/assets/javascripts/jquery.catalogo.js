@@ -26,7 +26,7 @@
             priv.drawCat(pData);
         };
         priv.drawCat = function (pData) {
-            console.log("Pintar Catalogo");
+            console.log("Pintar Catalogo", pData);
             var jsonCols = pData.cols;
             var jsonRows = pData.rows;
             console.log("CHK1");
