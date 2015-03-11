@@ -81,7 +81,10 @@
       background-repeat: no-repeat;
 
     }
-    .txtPrecio {
+    .txtPrecioLeft {
+      width: 100%;
+    }
+    .txtPrecioRight {
       width: 100%;
     }
   </style>
@@ -121,21 +124,17 @@
           url: "api/v1/precios",
           success: function(datos){
           console.log("Precios", datos);
-          console.log(datos);
           allPrice = jsonConstructorPrice(datos);
-          console.log("$> Termina servicio de Precios");
         $.ajax({
           type:"GET",
           dataType : 'json',
           url: "api/v1/productos",
           success: function(datos){
             console.log("Productos", datos);
-            console.log(datos);
             allData = jsonConstructor(datos, allPrice);
             filterData = allData;
             cato.drawFiltros(allData);
             cato.setData(allData);
-            console.log("$> Termina servicio de productos");
             },
           error:  function(){ 
             var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
@@ -179,16 +178,19 @@
     console.log("Filtro de Marca");
     e.preventDefault();
     filtroMarca(e.target.innerText);
+    $("body").scrollTop(0);
   });
   $("#cat_filter").on('click', '.fil_cat', function (e) {
     console.log("Filtro de Categoria");
     e.preventDefault();
     filtroCat(e.target.innerText);
+    $("body").scrollTop(0);
   });
   $("#cat_filter").on('click', '.fil_car', function (e) {
     console.log("Filtro de Caracteristica");
     e.preventDefault();
     filtroCar(e.target.id, e.target.innerText);
+    $("body").scrollTop(0);
   });  
   $("#cat_side").on('click', '.borraFiltros', function (e) {
     console.log("Borrar Filtros");
@@ -198,20 +200,30 @@
     document.getElementById('cat_fil_aplicados').style.display = 'none';
     jQuery('#cat_fil_aplicados div').html('');
   });
-  $("#cat_side").on('keypress', '.txtPrecio', function (e) {
-    console.log("Filtro Precio");
+  $("#cat_side").on('keypress', '.txtPrecioLeft', function (e) {
+    console.log("Filtro Precio Desde");
     e.preventDefault();
     //console.log("EVENT: ", e);
     var currentEnter = String.fromCharCode(e.keyCode);
     var currentContent = document.getElementById('precioDesde').value;
-    console.log("KEYCODE!!: " + currentEnter);
     document.getElementById('precioDesde').value = currentContent + currentEnter;
     var keycode = (e.keyCode ? e.keyCode : e.which);
     if (keycode == '13') {
-      console.log("ENTER");
-      filtroPrecio(precioDesde, precioHasta);
+      filtroPrecio();
     }
   });
+  $("#cat_side").on('keypress', '.txtPrecioRight', function (e) {
+    console.log("Filtro Precio Hasta");
+    e.preventDefault();
+    //console.log("EVENT: ", e);
+    var currentEnter = String.fromCharCode(e.keyCode);
+    var currentContent = document.getElementById('precioHasta').value;
+    document.getElementById('precioHasta').value = currentContent + currentEnter;
+    var keycode = (e.keyCode ? e.keyCode : e.which);
+    if (keycode == '13') {
+      filtroPrecio();
+    }
+  });  
   function jsonConstructor(json, allPrice) {
     console.log("ALLPRICE: ", allPrice);
     console.log("JSONPROD: ", json);
@@ -451,13 +463,17 @@ function buscarPalabra(palabra) {
       filterData = data;
       cato.setData(data);
   }
-  function filtroPrecio(precioDesde, precioHasta){
-    console.log("$> " + precioDesde + " - " + precioHasta);
-      /*var jsonRows = filterData.rows;
+  function filtroPrecio(){
+    console.log("$> " + document.getElementById('precioDesde').value + " - " + document.getElementById('precioHasta').value);
+      var precioDesde = document.getElementById('precioDesde').value;
+      var precioHasta = document.getElementById('precioHasta').value;
+      if (precioHasta == null) {precioHasta = 0;}
+      if (precioDesde == null) {precioDesde = 0;}
+      var jsonRows = filterData.rows;
       var rowsNuevos = [];
       for (var key in jsonRows) {
           var obj = jsonRows[key]; 
-          if (obj.Categoria == categoria) {
+          if (obj.Precio >= precioDesde && obj.Precio <= precioHasta) {
               rowsNuevos.push(obj);
           }
       }
@@ -466,16 +482,16 @@ function buscarPalabra(palabra) {
           rows: rowsNuevos
       };
       // Actualizar Filtros Aplicados
-      document.getElementById('cat_fil_aplicados').style.display = 'block';
-      var innerDiv = document.createElement('div');
-      innerDiv.innerHTML = categoria;
-      innerDiv.className = 'filtroAplicado';
-      var iDiv = document.getElementById('cat_fil_aplicados');
-      iDiv.appendChild(innerDiv);
+      //document.getElementById('cat_fil_aplicados').style.display = 'block';
+      //var innerDiv = document.createElement('div');
+      //innerDiv.innerHTML = categoria;
+      //innerDiv.className = 'filtroAplicado';
+      //var iDiv = document.getElementById('cat_fil_aplicados');
+      //iDiv.appendChild(innerDiv);
       //
       //setDataFiltro(data);
       filterData = data;
-      cato.setData(data);*/
+      cato.setData(data);
   }
 //f
 });
