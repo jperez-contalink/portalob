@@ -65,12 +65,6 @@
       border:15px solid white;
       background-color: white;
       padding: 0% 1% 1% 1%;
-      /*text-align: left;
-      vertical-align: text-top;
-      padding: 2% 1% 2% 1%;*/
-      /*color:#585858;
-      font-size: 150%;
-      font-weight: bold;*/
       float:left;
       border-radius: 20px;
       display: inline-block;
@@ -86,6 +80,9 @@
       background-size: 80%;
       background-repeat: no-repeat;
 
+    }
+    .txtPrecio {
+      width: 100%;
     }
   </style>
 </head>
@@ -126,6 +123,7 @@
           console.log("Precios");
           console.log(datos);
           allPrice = jsonConstructorPrice(datos);
+          console.log("$> Termina servicio de Precios");
           //cato.setData(allData);
       },
           error:  function(){ 
@@ -144,6 +142,7 @@
           filterData = allData;
           cato.drawFiltros(allData);
           cato.setData(allData);
+          console.log("$> Termina servicio de productos");
       },
           error:  function(){ 
           var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
@@ -180,6 +179,20 @@
     filterData = allData
     document.getElementById('cat_fil_aplicados').style.display = 'none';
     jQuery('#cat_fil_aplicados div').html('');
+  });
+  $("#cat_side").on('keypress', '.txtPrecio', function (e) {
+    console.log("Filtro Precio");
+    e.preventDefault();
+    //console.log("EVENT: ", e);
+    var currentEnter = String.fromCharCode(e.keyCode);
+    var currentContent = document.getElementById('precioDesde').value;
+    console.log("KEYCODE!!: " + currentEnter);
+    document.getElementById('precioDesde').value = currentContent + currentEnter;
+    var keycode = (e.keyCode ? e.keyCode : e.which);
+    if (keycode == '13') {
+      console.log("ENTER");
+      filtroPrecio(precioDesde, precioHasta);
+    }
   });
   function jsonConstructor(json, allPrice) {
     //name, value, familia, descargaimg, id
@@ -218,7 +231,6 @@
             for (var j = 0; j < caracteristicas.length; j++) {
               carItems = caracteristicas[j].split(":");
               row[carItems[0]] = carItems[1];
-              //console.log("$> imtesChar: ", i);
               // Si no existe agrega el encabezado
               if (itemsChar.heads.indexOf(carItems[0]) == -1) {
                 itemsChar.heads.push(carItems[0]);
@@ -267,6 +279,7 @@
                   cols: cols,
                   rows: rows
               };
+      console.log("$> Termina Construcción Productos");        
       return data;
   }  // Termina json Constructor
 
@@ -314,6 +327,7 @@
                   cols: cols,
                   rows: rows
               };
+      console.log("$> Termina Construcción Precios");              
       return data;
   }  // Termina json Constructor
 
@@ -415,7 +429,33 @@ function buscarPalabra(palabra) {
       //setDataFiltro(data);
       filterData = data;
       cato.setData(data);
-  } 
+  }
+  function filtroPrecio(precioDesde, precioHasta){
+    console.log("$> " + precioDesde + " - " + precioHasta);
+      /*var jsonRows = filterData.rows;
+      var rowsNuevos = [];
+      for (var key in jsonRows) {
+          var obj = jsonRows[key]; 
+          if (obj.Categoria == categoria) {
+              rowsNuevos.push(obj);
+          }
+      }
+      var data = {
+          cols: allData.cols,
+          rows: rowsNuevos
+      };
+      // Actualizar Filtros Aplicados
+      document.getElementById('cat_fil_aplicados').style.display = 'block';
+      var innerDiv = document.createElement('div');
+      innerDiv.innerHTML = categoria;
+      innerDiv.className = 'filtroAplicado';
+      var iDiv = document.getElementById('cat_fil_aplicados');
+      iDiv.appendChild(innerDiv);
+      //
+      //setDataFiltro(data);
+      filterData = data;
+      cato.setData(data);*/
+  }
 //f
 });
   </script>

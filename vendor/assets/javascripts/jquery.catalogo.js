@@ -89,6 +89,12 @@
                     }
                 }
             }
+            console.log("Filtro de Precios");
+            //var filPrice = '<strong>PRECIOS</strong><br>';
+            //filPrice += '<input width="3%" type="text" class="txtPrecio" id="precioDesde"/><br><input width="3%" type="text" class="txtPrecio" id="precioHasta"/><br>';
+
+            // Construir Filtros de precios
+            //var filtros = filPrice + marcas + "<br>" + categorias + caracteriticas;
             var filtros = marcas + "<br>" + categorias + caracteriticas;
             document.getElementById("cat_filter").innerHTML = filtros;
         };
