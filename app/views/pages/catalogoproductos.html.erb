@@ -118,22 +118,6 @@
   $.ajax({
           type:"GET",
           dataType : 'json',
-          url: "api/v1/precios",
-          success: function(datos){
-          console.log("Precios", datos);
-          console.log(datos);
-          allPrice = jsonConstructorPrice(datos);
-          console.log("$> Termina servicio de Precios");
-          //cato.setData(allData);
-      },
-          error:  function(){ 
-          var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor [Precios].</h3></div>'
-            document.getElementById("cat_pro").innerHTML = mensajeError;
-          }
-  });  
-  $.ajax({
-          type:"GET",
-          dataType : 'json',
           url: "api/v1/productos",
           success: function(datos){
           console.log("Productos", datos);
@@ -148,7 +132,23 @@
           var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
             document.getElementById("cat_pro").innerHTML = mensajeError;
           }
-  });  
+  }); 
+  $.ajax({
+          type:"GET",
+          dataType : 'json',
+          url: "api/v1/precios",
+          success: function(datos){
+          console.log("Precios", datos);
+          console.log(datos);
+          allPrice = jsonConstructorPrice(datos);
+          console.log("$> Termina servicio de Precios");
+          //cato.setData(allData);
+      },
+          error:  function(){ 
+          var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor [Precios].</h3></div>'
+            document.getElementById("cat_pro").innerHTML = mensajeError;
+          }
+  });   
   $("#cat_pro").on('keyup', '.btn_search', function (e) {
     console.log("Busqueda");
     e.preventDefault();
