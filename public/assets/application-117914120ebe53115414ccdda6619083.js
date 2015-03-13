@@ -11978,7 +11978,6 @@ Copyright (c) 2012-2013 Sasha Koss & Rico Sta. Cruz
                     var props = _data.cols[column];
                     tooltip = props.filterTooltip === true ? undefined : props.filterTooltip === false ? '' : props.filterTooltip;
                     placeHolder = props.placeHolder === true ? undefined : props.placeHolder === false ? '' : props.placeHolder;
-
                     if (!props.hidden) {
                         headCell = $('<th></th>').appendTo(_headFilter);
                         switch (props.type || 'string') {
@@ -13503,28 +13502,23 @@ function mesAnterior(mes){
             console.log("Pintar Catalogo", pData);
             var jsonCols = pData.cols;
             var jsonRows = pData.rows;
-            console.log("CHK1");
             var search = '<div class="input-group"><span class="input-group-addon glyphicon glyphicon-search"></span><input type="text" class="form-control btn_search" aria-describedby="basic-addon1" id="txt_search" autofocus></div>';
             var tabla = search + '<br><div width="100%">';
             var style="";
             for (var key in jsonRows) {
-                console.log("CHK6");
                 var obj = jsonRows[key]; 
                 if (obj.Precio != 0) {
-                    console.log("CHK4");;
                     if (obj.Inventario == "0 Piezas"){ style = 'style="color:red;"';}
-                    console.log("CHK3");
                     //tabla += '<a href="javascript:agregar();"><div class="item" style="background-image: url('+obj.Image+');"><h1>' + obj.Nombre + '</h1>';
                     //tabla += '<h2>$' + obj.Precio + '<br><div ' + style + '>' + obj.Inventario + '</div></h2></div></a>';
-                    tabla += '<a href="javascript:agregar();"><div class="itemA"><div align="center" class="bgImage"><img src="'+obj.Image+'" width="60%"></img></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
+                    //tabla += '<a href="javascript:agregar();"><div class="itemA"><div align="center" class="bgImage"><img src="'+obj.Image+'" width="60%"></img></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
+                    tabla += '<a href="javascript:agregar();"><div class="itemA"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
+
                     style="";
                 }
             }
-            console.log("CHK2");
             tabla += "</div>";
             document.getElementById("cat_pro").innerHTML = tabla;
-            console.log("$> TABLA: " + tabla);
-            console.log("Termina Pintar Catalogo");
         };
         /* Public API
          *************************************************************************/
@@ -13552,11 +13546,13 @@ function mesAnterior(mes){
             for (var key in jsonRows) {
                 var obj = jsonRows[key]; 
                 if (arrayMarca.indexOf(obj.Marca) == -1 && obj.Precio != 0) {
-                    marcas += '<a class="fil_marca">' + obj.Marca + '</a><br>';
+                    //marcas += '<a class="fil_marca">' + obj.Marca + '</a><br>';
+                    marcas += '<input class="fil_marca_chk" type="checkbox" id = "'+obj.Marca+'"/>&nbsp;' + obj.Marca + '<br>';
                     arrayMarca.push(obj.Marca);
                 }
                 if (arrayCategoria.indexOf(obj.Categoria) == -1 && obj.Precio != 0) {
-                    categorias += '<a class="fil_cat">' + obj.Categoria + '</a><br>';
+                    //categorias += '<a class="fil_cat">' + obj.Categoria + '</a><br>';
+                    categorias += '<input class="fil_cat_chk" type="checkbox" id = "'+obj.Categoria+'"/>&nbsp;' + obj.Categoria + '<br>';
                     arrayCategoria.push(obj.Categoria);
                 }
             }
@@ -13571,12 +13567,12 @@ function mesAnterior(mes){
                 }
             }
             console.log("Filtro de Precios");
-            //var filPrice = '<strong>PRECIOS</strong><br>';
-            //filPrice += '<input width="3%" type="text" class="txtPrecio" id="precioDesde"/><br><input width="3%" type="text" class="txtPrecio" id="precioHasta"/><br>';
+            var filPrice = '<strong>PRECIOS</strong><br>';
+            filPrice += '<input width="3%" type="text" class="txtPrecioLeft" id="precioDesde"/><br><input width="3%" type="text" class="txtPrecioRight" id="precioHasta"/><br>';
 
             // Construir Filtros de precios
-            //var filtros = filPrice + marcas + "<br>" + categorias + caracteriticas;
-            var filtros = marcas + "<br>" + categorias + caracteriticas;
+            var filtros = filPrice + marcas + "<br>" + categorias + caracteriticas;
+            //var filtros = marcas + "<br>" + categorias + caracteriticas;
             document.getElementById("cat_filter").innerHTML = filtros;
         };
 

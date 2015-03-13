@@ -331,7 +331,6 @@
                     var props = _data.cols[column];
                     tooltip = props.filterTooltip === true ? undefined : props.filterTooltip === false ? '' : props.filterTooltip;
                     placeHolder = props.placeHolder === true ? undefined : props.placeHolder === false ? '' : props.placeHolder;
-
                     if (!props.hidden) {
                         headCell = $('<th></th>').appendTo(_headFilter);
                         switch (props.type || 'string') {

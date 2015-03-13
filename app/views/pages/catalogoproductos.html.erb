@@ -77,9 +77,9 @@
     }
     .bgImage {
       border:0px solid black;
-      background-size: 80%;
+      background-size: 60%;
       background-repeat: no-repeat;
-
+      background-position: center;
     }
     .txtPrecioLeft {
       width: 100%;
@@ -93,11 +93,11 @@
   <div align="center"><h1>Catálogo de Productos</h1></div>
   <div>
     <!--<div id="cat_filter" style="float:left;width:10%;"></div>-->
-    <div id="cat_side" style="float:left;width:10%;">
+    <div id="cat_side" style="float:left;width:15%;">
       <div id="cat_fil_aplicados"><strong>Filtros Aplicados</strong><br><a class="borraFiltros">Borrar Filtros</a></div><br>
       <div id="cat_filter"></div>
     </div>
-    <div id="cat_pro" style="float:left;width:90%;"></div>
+    <div id="cat_pro" style="float:left;width:85%;"></div>
   </div>
 
   <script type="text/javascript">
@@ -197,8 +197,11 @@
     e.preventDefault();
     cato.setData(allData);
     filterData = allData
+    // limpiar la sección filtros aplicados
     document.getElementById('cat_fil_aplicados').style.display = 'none';
     jQuery('#cat_fil_aplicados div').html('');
+    // Deseleccionar los checks de marca
+    $("#cat_filter input[type=checkbox]").prop('checked', false);
   });
   $("#cat_side").on('keypress', '.txtPrecioLeft', function (e) {
     console.log("Filtro Precio Desde");
@@ -224,6 +227,31 @@
       filtroPrecio();
     }
   });  
+  // FILTRO MULTI SELECCION
+  $("#cat_filter").on('change', '.fil_marca_chk', function (e) {
+    console.log("Filtro de Categoria");
+    e.preventDefault();
+    console.log("id: " + e.target.id);
+      var selected = [];
+      $('#cat_filter input:checked').each(function() {
+          selected.push($(this).attr('id'));
+      });
+      console.log("selected: ", selected);
+      multiFiltroCategoria(selected);
+      $("body").scrollTop(0);    
+  });
+  $("#cat_filter").on('change', '.fil_multi', function (e) {
+    console.log("Filtro de Multiseleccion");
+    e.preventDefault();
+    console.log("id: " + e.target.id);
+      var selected = [];
+      $('#cat_filter input:checked').each(function() {
+          selected.push($(this).attr('id'));
+      });
+      console.log("selected: ", selected);
+      multiFiltros(selected);
+      $("body").scrollTop(0);    
+  });  
   function jsonConstructor(json, allPrice) {
     console.log("ALLPRICE: ", allPrice);
     console.log("JSONPROD: ", json);
@@ -246,7 +274,11 @@
           if (jsonObject.data[i].image == "Y"){
             row.Image = "imagenesProductos/" + jsonObject.data[i].id + ".png";
           } else {
-            row.Image = "imagenesProductos/noimage.png";
+            // Asignar una imagen por marca si no coicide la marca row.Image = "N"
+            row.Image = imagenMarca(row.Marca, row.Categoria);
+            if (row.Image == "N") {
+              row.Image = "imagenesProductos/noimage.png";
+            }
           }
         for (var key in jsonRows) {
           var obj = jsonRows[key]; 
@@ -493,7 +525,124 @@ function buscarPalabra(palabra) {
       filterData = data;
       cato.setData(data);
   }
-//f
+// FILTROS MULTISELECCIÓN
+function multiFiltroMarca(marcas){
+      var jsonRows = allData.rows;
+      var rowsNuevos = [];
+      for (var key in jsonRows) {
+          var obj = jsonRows[key]; 
+          if (marcas.indexOf(obj.Marca) > -1) {
+              rowsNuevos.push(obj);
+          }
+      }
+      
+      var data = {
+          cols: allData.cols,
+          rows: rowsNuevos
+      };
+      // Actualizar Filtros Aplicados
+      document.getElementById('cat_fil_aplicados').style.display = 'block';
+      filterData = data;
+      cato.setData(data);
+  } 
+function multiFiltros(checks){
+      var jsonRows = allData.rows;
+      var rowsNuevos = [];
+      varMar = false;
+      varCat = false;
+      varCar = false;
+      prodAdd = false;
+      // validar existencia de categorias, marcas y caracteristicas
+      console.log("ChKs: ", checks );
+      for (var key in jsonRows) {
+          var obj = jsonRows[key];
+          if (!varMar && checks.indexOf(obj.Marca)>-1){
+            console.log("la marca " + obj.Marca + " esta en mis filtros.");
+            varMar = true;
+          }
+          if (!varCat && checks.indexOf(obj.Categoria)>-1){
+            console.log("la categoria " + obj.Categoria + " esta en mis filtros.");
+            varCat = true;
+          }
+
+      }          
+      console.log("varCat: " + varCat);
+      console.log("varMar: " + varMar);
+      console.log("varCar: " + varCar);
+      for (var key in jsonRows) {
+          var obj = jsonRows[key]; 
+          if ((checks.indexOf(obj.Categoria) > -1 && checks.indexOf(obj.Marca) > -1 && varCat && varMar) || (checks.indexOf(obj.Categoria) > -1 && !varMar) || (checks.indexOf(obj.Marca) > -1 && !varCat)) {
+              rowsNuevos.push(obj);
+              prodAdd = true;
+          } else {
+            // validaciones para caracteristicas
+            for (var ch = 0;ch<checks.length;ch++) {
+              var arrayCar = checks[ch].split("_");
+              if (arrayCar.length = 2){
+                console.log("Entra a validar caracteristicas");
+                if (checks.indexOf(arrayCar[0] + '_' + obj[arrayCar[0]]) > -1 && !prodAdd){
+                  rowsNuevos.push(obj);   
+                }
+              }              
+            }
+          }
+        prodAdd = false;
+      }
+      
+      var data = {
+          cols: allData.cols,
+          rows: rowsNuevos
+      };
+      // Actualizar Filtros Aplicados
+      document.getElementById('cat_fil_aplicados').style.display = 'block';
+      if (checks.length == 0){
+        console.log("vacio");
+        data = allData;
+      }
+      filterData = data;
+      cato.setData(data);
+  }  
+// extra
+  function imagenMarca(marca, categoria){
+    imagen = "N";
+    if (marca == "11 - AGM") {
+      imagen = "imagenesProductos/imagenesMarca/agm.png";
+    }
+    if (marca == "21 - AMERICA") {
+      imagen = "imagenesProductos/imagenesMarca/america.png";
+    }
+    if (marca == "30 - CRONOS") {
+      imagen = "imagenesProductos/imagenesMarca/cronos.png";
+    }
+    if (marca == "28 - DIENER") {
+      imagen = "imagenesProductos/imagenesMarca/diener.png";
+    }
+    if (marca == "50 - FILTROS LTH") {
+      imagen = "imagenesProductos/imagenesMarca/filtros.png";
+    }
+    if (marca == "15 - HEAVY DUTY") {
+      imagen = "imagenesProductos/imagenesMarca/heavyduty.png";
+    }
+    if (marca == "12 - HI-TEC") {
+      imagen = "imagenesProductos/imagenesMarca/hitec.png";
+    }
+    if (marca == "40 - MOTOBATERIAS") {
+      imagen = "imagenesProductos/imagenesMarca/motobateria.png";
+    }
+    if (marca == "10 - OPTIMA") {
+      imagen = "imagenesProductos/imagenesMarca/optima.png";
+    }
+    if (marca == "31 - POWER CONNECTION") {
+      imagen = "imagenesProductos/imagenesMarca/powerconnection.png";
+    }
+    if (marca == "RE") {
+      imagen = "imagenesProductos/imagenesMarca/re.jpg";
+    }
+    if (categoria == "4 - LUBRICANTES") {
+      imagen = "imagenesProductos/imagenesCategoria/lubricante.png";
+    }
+    return imagen;
+  }
 });
   </script>
 </body>

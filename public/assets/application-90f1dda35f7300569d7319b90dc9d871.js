@@ -13512,7 +13512,9 @@ function mesAnterior(mes){
                     if (obj.Inventario == "0 Piezas"){ style = 'style="color:red;"';}
                     //tabla += '<a href="javascript:agregar();"><div class="item" style="background-image: url('+obj.Image+');"><h1>' + obj.Nombre + '</h1>';
                     //tabla += '<h2>$' + obj.Precio + '<br><div ' + style + '>' + obj.Inventario + '</div></h2></div></a>';
-                    tabla += '<a href="javascript:agregar();"><div class="itemA"><div align="center" class="bgImage"><img src="'+obj.Image+'" width="60%"></img></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
+                    //tabla += '<a href="javascript:agregar();"><div class="itemA"><div align="center" class="bgImage"><img src="'+obj.Image+'" width="60%"></img></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
+                    tabla += '<a href="javascript:agregar();"><div class="itemA"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
+
                     style="";
                 }
             }
@@ -13545,7 +13547,8 @@ function mesAnterior(mes){
             for (var key in jsonRows) {
                 var obj = jsonRows[key]; 
                 if (arrayMarca.indexOf(obj.Marca) == -1 && obj.Precio != 0) {
-                    marcas += '<a class="fil_marca">' + obj.Marca + '</a><br>';
+                    //marcas += '<a class="fil_marca">' + obj.Marca + '</a><br>';
+                    marcas += '<input type="checkbox" id = "fil_marca_cjk"/>&nbsp;' + obj.Marca + '<br>';
                     arrayMarca.push(obj.Marca);
                 }
                 if (arrayCategoria.indexOf(obj.Categoria) == -1 && obj.Precio != 0) {

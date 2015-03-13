@@ -38,7 +38,9 @@
                     if (obj.Inventario == "0 Piezas"){ style = 'style="color:red;"';}
                     //tabla += '<a href="javascript:agregar();"><div class="item" style="background-image: url('+obj.Image+');"><h1>' + obj.Nombre + '</h1>';
                     //tabla += '<h2>$' + obj.Precio + '<br><div ' + style + '>' + obj.Inventario + '</div></h2></div></a>';
-                    tabla += '<a href="javascript:agregar();"><div class="itemA"><div align="center" class="bgImage"><img src="'+obj.Image+'" width="60%"></img></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
+                    //tabla += '<a href="javascript:agregar();"><div class="itemA"><div align="center" class="bgImage"><img src="'+obj.Image+'" width="60%"></img></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
+                    tabla += '<a href="javascript:agregar();"><div class="itemA"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
+
                     style="";
                 }
             }
@@ -71,11 +73,13 @@
             for (var key in jsonRows) {
                 var obj = jsonRows[key]; 
                 if (arrayMarca.indexOf(obj.Marca) == -1 && obj.Precio != 0) {
-                    marcas += '<a class="fil_marca">' + obj.Marca + '</a><br>';
+                    //marcas += '<a class="fil_marca">' + obj.Marca + '</a><br>';
+                    marcas += '<input class="fil_multi" type="checkbox" id = "'+obj.Marca+'"/>&nbsp;' + obj.Marca + '<br>';
                     arrayMarca.push(obj.Marca);
                 }
                 if (arrayCategoria.indexOf(obj.Categoria) == -1 && obj.Precio != 0) {
-                    categorias += '<a class="fil_cat">' + obj.Categoria + '</a><br>';
+                    //categorias += '<a class="fil_cat">' + obj.Categoria + '</a><br>';
+                    categorias += '<input class="fil_multi" type="checkbox" id = "'+obj.Categoria+'"/>&nbsp;' + obj.Categoria + '<br>';
                     arrayCategoria.push(obj.Categoria);
                 }
             }
@@ -85,7 +89,8 @@
                 for (var indy=0; indy<itemsChar.items.length; indy++){
                     currentItem = itemsChar.items[indy].split("_");
                     if (currentItem[0] == itemsChar.heads[indx]){
-                        caracteriticas += '<a class="fil_car" id="'+ currentItem[0] +'">' + currentItem[1] + '</a><br>';
+                        //caracteriticas += '<a class="fil_car" id="'+ currentItem[0] +'">' + currentItem[1] + '</a><br>';
+                        caracteriticas += '<input class="fil_multi" type="checkbox" id = "'+currentItem[0]+'_'+currentItem[1]+'"/>&nbsp;' + currentItem[1] + '<br>';
                     }
                 }
             }

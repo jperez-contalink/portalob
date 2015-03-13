@@ -333,13 +333,13 @@ function jsonConstructor(json) {
         var dia = jsDate.getDate();
         var mes = jsDate.getMonth();
         var ano = jsDate.getFullYear()
+        var row = {};
         // validar pago
         if (strPagado == "true") {
-            pagado = '<input type="checkbox" disabled="disabled" checked="checked">';
-        } else if (strPagado == "false") {
-            pagado = '<input type="checkbox" disabled="disabled">';
+            row.Pagado = true;
+        } else {
+            row.Pagado = false;
         }
-        var row = {};
         row.Factura_ID = jsonObject.data[i].id;
         row.Docstatus = jsonObject.data[i].docstatus;
         row.Factura =   jsonObject.data[i].documentno;
@@ -350,7 +350,7 @@ function jsonConstructor(json) {
         //row.Total =     jsonObject.data[i].grandtotal;
         row.Total = separaMiles(JSON.stringify(jsonObject.data[i].grandtotal));
         row.Fecha = Date.UTC(ano, mes, dia);
-        row.Pagado = pagado;
+        //row.Pagado = pagado;
         //row.Pendiente = jsonObject.data[i].pendiente;
         row.Pendiente = separaMiles(JSON.stringify(jsonObject.data[i].pendiente));
         row["row-checkable"] = true;
@@ -366,7 +366,8 @@ function jsonConstructor(json) {
             type: "string",
             friendly: "# Factura",
             unique: true,
-            sortOrder: "asc"
+            sortOrder: "asc",
+            filter: false
         },
         Subtotal: {
             index: 2,
@@ -375,8 +376,7 @@ function jsonConstructor(json) {
             friendly: "",
             cls: "montos", //apply some css classes
             placeHolder: "",
-            format: "$ {0}"
-            //decimals: 2,
+            format: "$ {0}" 
         },
         Impuesto: {
             index: 3,
