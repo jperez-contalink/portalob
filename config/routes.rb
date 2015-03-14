@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     get "/usuarios/sign_in" => "devise/sessions#new", :as => :new_usuario_session
   end
 
+  #match 'photos', to: 'photos#show', via: [:get, :post]
+
   resources :reporte_estado_cuenta
 
   resources :reporte_facturas
@@ -30,8 +32,11 @@ Rails.application.routes.draw do
   get "estadosdecuenta" => "pages#estadosdecuenta"
   get "contacto" => "pages#contacto"
   get "catalogoproductos" => "pages#catalogoproductos"
-  #get "salir" => "pages#salir"
-
+  #get "test" => "pages#test"
+  #post "test" => "pages#test"
+  get "registro" => "pages#registro"
+  post "registro" => "pages#registro"
+  get "success" => "pages#success"
 
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do

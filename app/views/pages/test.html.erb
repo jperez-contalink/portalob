@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>CNTCTO</title>
+    <style>
+    </style>
+</head>
+<body>
+<br><br><br><br>
+<div align="center"><h2>Registro de usuarios</h2></div><br><br>
+
+ <form accept-charset="UTF-8" action="/test" method="POST">
+  <!--<input type="text" id="txtName" name="txtName" />
+  <input type="text" id="txtRFC" name="txtRFC"/>
+  <input type="text" id="txtProveedor" name="txtProveedor" autocorrect="off"/>
+  <input type="password" id="txtPass" name="txtPass" autocorrect="off" />
+  <input type="submit" value="Пароль">-->
+  <div width="50%" style="padding-left:15%;padding-right:15%;">
+	<div class="form-group">
+		<strong>Nombre</strong><br>
+		<input type="text" id="txtNombre" name="txtNombre" class="form-control"/>
+		<strong>RFC</strong><br>
+		<input type="text" id="txtRFC" name="txtRFC" class="form-control"/>
+		<strong>Correo</strong><br>
+		<input type="text" id="txtCorreo" name="txtCorreo" class="form-control"/><br><br>
+		<input type="hidden" id="hdnRFC" name="hdnRFC" value="<%= current_usuario.empresa.rfc %>"/><br><br>
+		<input type="hidden" id="hdnID" name="hdnID" value="<%= current_usuario.empresa_id %>"/><br><br>
+		<!--<strong>Contraseña</strong><br>
+		<input type="text" id="txtPass" name="txtPass" class="form-control"/><br>
+		<div align="right">
+		<strong>Confirma Contraseña</strong><br>
+		<input type="text" id="txtPassR" name="txtPassR" class="form-control"/><br>-->
+		<div align="right">			
+			<input type="submit" value="guardar" class="btn btn-default">      
+		</div>
+    </div>
+   </div>
+
+</form>
+</body>
+</html>

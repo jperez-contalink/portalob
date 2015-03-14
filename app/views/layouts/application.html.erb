@@ -67,8 +67,13 @@
           <nav class="gn-menu-wrapper">
             <div class="gn-scroller">
             <ul class="gn-menu">
-           
-            <!-- TEST -->
+            <!-- OPCIONES PARA ADMINISTRADORES-->
+            <% if current_usuario.isadmin == true %>
+              <li><a href="/registro">
+                <div style="float:left;border:0px solid black;" class="gn-icon imgTest"></div>
+                <div style="border:1px solid transparent;padding-left:2%;"><strong>Gestión de usuarios</strong></div>
+              </a></li>
+            <% end %>
             <li><a href="/usuarios/edit.<%= current_usuario.id %>">
               <div style="float:left;border:0px solid black;" class="gn-icon imgCuenta"></div>
               <div style="border:1px solid transparent;padding-left:2%;"><strong>Mi Cuenta</strong></div>
@@ -88,7 +93,7 @@
             <li><a href="/catalogoproductos">
               <div style="float:left;border:0px solid black;" class="gn-icon imgTest"></div>
               <div style="border:1px solid transparent;padding-left:2%;"><strong>Cátalogo de Productos</strong></div>
-            </a></li>
+            </a></li>            
             </ul> 
             </div><!-- /gn-scroller -->
           </nav>
