@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Pedido:</strong>
+  <%= @pedidolinea.pedido_id %>
+</p>
+
+<p>
+  <strong>Producto:</strong>
+  <%= @pedidolinea.producto %>
+</p>
+
+<p>
+  <strong>Product value:</strong>
+  <%= @pedidolinea.product_value %>
+</p>
+
+<p>
+  <strong>Product:</strong>
+  <%= @pedidolinea.product_id %>
+</p>
+
+<p>
+  <strong>Precio:</strong>
+  <%= @pedidolinea.precio %>
+</p>
+
+<p>
+  <strong>Cantidad:</strong>
+  <%= @pedidolinea.cantidad %>
+</p>
+
+<p>
+  <strong>Total:</strong>
+  <%= @pedidolinea.total %>
+</p>
+
+<p>
+  <strong>Imagen:</strong>
+  <%= @pedidolinea.imagen %>
+</p>
+
+<%= link_to 'Edit', edit_pedidolinea_path(@pedidolinea) %> |
+<%= link_to 'Back', pedidolineas_path %>

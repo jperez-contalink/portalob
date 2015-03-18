@@ -87,6 +87,55 @@
     .txtPrecioRight {
       width: 100%;
     }
+    /* CARRITO DE COMPRA*/
+    .addProductLeft{
+      padding: 1px 1px 1px 1px;
+      border:0px solid green;
+    }
+    .addProductRight {
+      padding: 1px 1px 1px 1px;
+      border:0px solid blue;
+    }
+    .cartValue {
+      padding: 1% 1% 1% 1%;
+      border:0px solid black; 
+      font-size: 160%;
+      color: black;
+    }
+    .cartPrecio {
+      padding: 1% 1% 1% 1%;
+      border:0px solid pink;
+      font-size: 250%;
+      color: #2980b9;
+      font-weight: bold;
+    }
+    .cartInventario {
+      padding: 1% 1% 1% 1%;
+      border:0px solid purple;
+      font-size: 160%;
+      color: black;
+    }
+    .cartBtn {
+      padding: 1% 1% 1% 1%;
+      border:0px solid red; 
+      font-size: 160%;
+      color: black;
+    }
+    .cartCantidad {
+      font-size: 160%;
+      color: black;
+      padding: 1% 1% 1% 1%;
+      border:0px solid black; 
+    }
+    .cartCantidad input[type=text]{
+      width: 10%;
+      height: 8%;
+      font-size: 100%;
+      color:#2980b9;
+      border-radius: 7px;
+      font-weight: bold;
+    }
+
   </style>
 </head>
 <body><br><br><br><br><br><br>
@@ -144,7 +193,7 @@
           //cato.setData(allData);
       },
           error:  function(){ 
-          var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor [Precios].</h3></div>'
+          var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor [Pricing].</h3></div>'
             document.getElementById("cat_pro").innerHTML = mensajeError;
           }
   });  
@@ -173,6 +222,61 @@
     cato.setData(buscarPalabra(parametro));
     document.getElementById("txt_search").value = parametro;
     $( "#txt_search" ).focus();
+  });
+  $("#cat_pro").on('click', '.addProduct', function (e) {
+    console.log("ADD PRODUCT HTML");
+    $("body").scrollTop(0);
+    console.log("E: ", e);
+    var productId = e.currentTarget.id;
+    document.getElementById("cat_pro").innerHTML = buildAddProduct(productId);
+  });
+  $("#cat_pro").on('click', '.submitProduct', function (e) {
+    console.log("SUBMIT PRODUCT HTML", e);
+    var productid = e.currentTarget.id;
+    var precio = document.getElementById("cartPrecio").innerHTML;
+    var cantidad = document.getElementById("cartCantidad").value;
+    var product = document.getElementById("hdnProduct").value;
+    var product_value = document.getElementById("hdnValue").value;
+    var imagenurl = document.getElementById("hdnImagen").value;
+    console.log("Crear linea: producto_id: " + productid + " - cantidad: " + cantidad + " precio: " + precio.replace("$", ""));
+    $.ajax({
+              type:"GET",
+              dataType : 'html',
+              url: "/pedidolineas?usuario_id=<%=current_usuario.id%>&producto_id=" + productid + '&cantidad=' + cantidad + '&precio=' + precio.replace("$", "") + "&producto=" + product + "&product_value=" + product_value + "&imagenurl=" + imagenurl,
+              success: function(datos){
+              console.log("$> linea añadida");     
+              // Reestablecer Catálogo
+              filterData = allData;
+              cato.drawFiltros(allData);
+              cato.setData(allData);
+              document.getElementById('cat_fil_aplicados').style.display = 'none';
+              jQuery('#cat_fil_aplicados div').html('');
+              // Deseleccionar los checks de marca
+              $("#cat_filter input[type=checkbox]").prop('checked', false);              
+          },
+              error:  function(){ 
+              var mensajeError = '<br><br><br><div align="center"><h1>ERROR ADD LINEA</h3></div>'
+                document.getElementById("cat_pro").innerHTML = mensajeError;
+              }
+      });
+    /*$.ajax({
+              type:"GET",
+              dataType : 'html',
+              url: "/pedidos?usuario_id=<%=current_usuario.id%>",
+              success: function(datos){
+              console.log("$> linea añadida?");
+                // al ser añadida la linea regresa al catalogo cat.
+                // filterData = allData;
+                // cato.drawFiltros(allData);
+                // cato.setData(allData);
+              
+          },
+              error:  function(){ 
+              var mensajeError = '<br><br><br><div align="center"><h1>ERROR ADD LINEA</h3></div>'
+                document.getElementById("cat_pro").innerHTML = mensajeError;
+              }
+      });*/
+
   });
   $("#cat_filter").on('click', '.fil_marca', function (e) {
     console.log("Filtro de Marca");
@@ -643,6 +747,39 @@ function multiFiltros(checks){
     }
     return imagen;
   }
+function buildAddProduct(productID){
+  var buildHTML = '<h3>Añadir Producto</h3><br>'
+  // Buscar el producto.
+  var jsonRows = allData.rows;
+  for (var key in jsonRows) {
+      var obj = jsonRows[key]; 
+      if (obj.Producto_ID == productID) {
+        //buildHTML += '<div style="border:1px solid orange;widht:100%;"><div class="addProductLeft">&nbsp;</div><div class="addProductRight">&nbsp;</div></div>';
+        buildHTML += '<br><div style="border:0px solid blue;width:100%;">';
+        buildHTML += '<div style="border:0px solid green;width:60%;float:left;height:100%;" align="center"><img src="'+obj.Image+'" width="70%"></img></div>';
+        // Panel Derecho Titulo
+        buildHTML += '<div style="border:0px solid red;width:40%;float:left;height:100%;padding:1% 1% 1% 1%;"><div align="left"><h2>'+obj.Nombre+'</div></h2>';
+        //buildHTML += '<p>$' + obj.Precio + '<br>' + obj.Inventario + '<br>' + obj.Identificador + '<br></p>';
+        // Identificador
+        buildHTML += '<div class="cartValue" id="cartValue">' + obj.Identificador + '</div>';
+        // Precio
+        buildHTML += '<div class="cartPrecio" id="cartPrecio">$' + obj.Precio + '</div>';
+        // Inventario
+        buildHTML += '<div class="cartInventario" id="cartInventario">' + obj.Inventario + ' disponibles.</div>';
+        // Cantidad
+        buildHTML += '<div class="cartCantidad">Cantidad: &nbsp;<input type="text" id="cartCantidad" value="10"/></div>';
+        // BtonAgregar
+        buildHTML += '<div class="cartBtn" align="right"><input id="' + obj.Producto_ID + '" type="button" value="añadir" class="btn btn-default submitProduct"> </div>';
+        // Valores ocultos para envío de parametros
+        buildHTML += '<input type="hidden" id="hdnProduct" value="'+obj.Nombre+'"/><input type="hidden" id="hdnValue" value="'+obj.Identificador+'"/><input type="hidden" id="hdnImagen" value="'+obj.Image+'"/>'
+        // Cierra panel derecho
+        buildHTML += '</div></div>';
+      }
+  }
+
+
+  return buildHTML;
+}
 });
   </script>
 </body>

@@ -110,6 +110,9 @@
           <li class="social-dribble"><a href="#" target="_blank"><i class="fa fa-dribbble"></i></a></li>
           <li class="social-google"><a href="#" target="_blank"><i class="fa fa-google-plus"></i></a></li>-->
           <% if usuario_signed_in? %>
+            <li><%= link_to  carrito_path, class: "social-twitter" do %>
+              <i class="glyphicon glyphicon-shopping-cart"></i><% end %>
+            </li>
             <li><%= link_to  destroy_usuario_session_path, class: "social-google", method: :delete do %>
               <i class="glyphicon glyphicon-log-out"></i><% end %>
             </li>

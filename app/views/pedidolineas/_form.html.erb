@@ -1,0 +1,49 @@
+<%= form_for(@pedidolinea) do |f| %>
+  <% if @pedidolinea.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@pedidolinea.errors.count, "error") %> prohibited this pedidolinea from being saved:</h2>
+
+      <ul>
+      <% @pedidolinea.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :pedido_id %><br>
+    <%= f.text_field :pedido_id %>
+  </div>
+  <div class="field">
+    <%= f.label :producto %><br>
+    <%= f.text_field :producto %>
+  </div>
+  <div class="field">
+    <%= f.label :product_value %><br>
+    <%= f.text_field :product_value %>
+  </div>
+  <div class="field">
+    <%= f.label :product_id %><br>
+    <%= f.text_field :product_id %>
+  </div>
+  <div class="field">
+    <%= f.label :precio %><br>
+    <%= f.text_field :precio %>
+  </div>
+  <div class="field">
+    <%= f.label :cantidad %><br>
+    <%= f.text_field :cantidad %>
+  </div>
+  <div class="field">
+    <%= f.label :total %><br>
+    <%= f.text_field :total %>
+  </div>
+  <div class="field">
+    <%= f.label :imagen %><br>
+    <%= f.text_field :imagen %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

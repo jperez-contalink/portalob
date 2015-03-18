@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  usuario_id: MyString
+  total: 1.5
+  subtotal: 1.5
+  abierto: false
+  activo: false
+
+two:
+  usuario_id: MyString
+  total: 1.5
+  subtotal: 1.5
+  abierto: false
+  activo: false

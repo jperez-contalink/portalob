@@ -39,7 +39,7 @@
                     //tabla += '<a href="javascript:agregar();"><div class="item" style="background-image: url('+obj.Image+');"><h1>' + obj.Nombre + '</h1>';
                     //tabla += '<h2>$' + obj.Precio + '<br><div ' + style + '>' + obj.Inventario + '</div></h2></div></a>';
                     //tabla += '<a href="javascript:agregar();"><div class="itemA"><div align="center" class="bgImage"><img src="'+obj.Image+'" width="60%"></img></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
-                    tabla += '<a href="javascript:agregar();"><div class="itemA"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
+                    tabla += '<a href="javascript:agregar();" class="addProduct" id="' + obj.Producto_ID + '"><div class="itemA"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
 
                     style="";
                 }
@@ -95,8 +95,8 @@
                 }
             }
             console.log("Filtro de Precios");
-            var filPrice = '<strong>PRECIOS</strong><br>';
-            filPrice += '<input width="3%" type="text" class="txtPrecioLeft" id="precioDesde"/><br><input width="3%" type="text" class="txtPrecioRight" id="precioHasta"/><br>';
+            var filPrice = '<div style="display:none"><strong>PRECIOS</strong><br>';
+            filPrice += '<input width="3%" type="text" class="txtPrecioLeft" id="precioDesde"/><br><input width="3%" type="text" class="txtPrecioRight" id="precioHasta"/><br></div>';
 
             // Construir Filtros de precios
             var filtros = filPrice + marcas + "<br>" + categorias + caracteriticas;
@@ -116,8 +116,5 @@
     };
 })(jQuery);  
     function agregar(){
-    confirmar=confirm("Agregar al carrito?");
-        if (confirmar){
-            alert("Producto agregado correctamente puedes modificar la cantidad ingresando al carrito.");
-        }
+        console.log("Agregar JS VENDOR");
     }

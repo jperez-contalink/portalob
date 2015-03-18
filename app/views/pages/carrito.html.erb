@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>CNTCTO</title>
+    <style>
+    .lineGrid {
+    	width: 100%;
+    	height: 100%;
+    	border: 0px solid red;
+    	padding: 1% 1% 1% 1%;
+    }
+	.imgGrid {
+    	width: 20%;
+    	height: 120px;
+    	border: 0px solid black;
+    	border-bottom: 1px solid #E6E6E6;
+    }
+    .nameGrid {
+    	width: 30%;
+    	height: 120px;
+    	border: 0px solid black;
+    	padding: 1% 1% 1% 1%;
+    	font-size: 150%;
+    	font-weight: bold;
+    	border-bottom: 1px solid #E6E6E6;
+    }
+    .priceGrid {
+    	width: 20%;
+    	height: 120px;
+    	border: 0px solid black;
+    	padding: 1% 1% 1% 1%;
+    	color: black;
+    	border-bottom: 1px solid #E6E6E6;
+    }
+    .qtyGrid {
+    	width: 10%;
+    	height: 120px;
+    	border: 0px solid black;
+    	padding: 1% 1% 1% 1%;
+    	color: black;
+    	border-bottom: 1px solid #E6E6E6;
+    }
+    .totalGrid {
+    	width: 20%;
+    	height: 120px;
+    	border: 0px solid black;
+    	padding: 1% 1% 1% 1%;
+    	font-size: 130%;
+    	font-weight: bold;
+    	border-bottom: 1px solid #E6E6E6;
+    } 
+    .netQty {
+		padding: 2% 3% 0% 4%;
+    	font-size: 110%;
+    	font-weight: bold;
+    }   
+    .netTotal {
+    	padding-top: 2%;
+    }
+    .subtotal {
+		padding: 0% 10% 0% 0%;
+    	font-size: 130%;
+    	font-weight: bold;
+    }
+    .total {
+		padding: 0% 10% 0% 0%;
+    	font-size: 160%;
+    	font-weight: bold;
+    }
+    .totalGrid a{
+    	font-weight: normal;	
+    	font-size: 80%;
+    }
+    </style>
+</head>
+<body>
+<br><br><br><br><br>
+<div align="left"><h2>Articulos en el carrito.</h2></div><br><br>
+<% qtyLinea = 0; %>
+<% totalAmount = 0 %>
+<% pedido_id = "" %>
+<% Pedido.where(usuario_id: current_usuario.id, activo: true).find_each do |ords|%>
+<% pedido_id = ords.id%>
+<div align="center" class="lineGrid">
+	<% Pedidolinea.where(pedido_id: ords.id).find_each do |lins| %>
+		<div align="center" class="imgGrid" style="float:left;"><img src="<%= lins.imagen%>" height="100px"></img></div>
+		<div align="left" class="nameGrid" style="float:left;"><%= lins.producto %></div>
+		<div align="right" class="priceGrid" style="float:left;">$<%= lins.precio %></div>
+		<div align="center" class="qtyGrid" style="float:left;"><%= lins.cantidad %></div>
+		<div align="right" class="totalGrid" style="float:left;">$<%= lins.total %><br><a href="#">Eliminar</a></div>
+		<% qtyLinea = qtyLinea + lins.cantidad %>
+		<% totalAmount = totalAmount + lins.cantidad*lins.precio %>
+	<% end %>
+</div>
+<div style="border:0px solid red;float:left;width:70%;">&nbsp;</div>
+<div class="netQty" style="border:0px solid red;float:left;width:10%;"><%= qtyLinea %></div>
+<div class="netTotal" style="border:0px solid red;float:left;width:20%;">
+	<div class="subtotal" align="right">Subtotal: $<%= totalAmount %></div><hr>
+	<div class="total"  align="right">Total: $<%= totalAmount %></div>
+</div>
+<div class="cartBtn" style="float:left;width:100%;padding:2% 1% 1% 1%;" align="right"><input type="button" value="Colocar Pedido" class="btn btn-default sbmt_pedido"> </div>
+<% end %>	
+  <script type="text/javascript">
+  $(document).ready( function() {
+  console.log("$> Consumir Servicio");
+  var datox = {};
+  $("#cartBtn").on('click', '.sbmt_pedido', function (e) {
+  	console.log("PROCESAR PEDIDO");
+	$.ajax({
+	  type:"GET",
+	  dataType : 'html',
+	  url: "/pedidos?pedido_id=<%= pedido_id%>",
+	  success: function(datos){
+	  console.log("Precios", datos);
+	  allPrice = jsonConstructorPrice(datos);
+		},
+	  error:  function(){ 
+	  var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor [Pricing].</h3></div>'
+	    document.getElementById("cat_pro").innerHTML = mensajeError;
+	  }
+  	});  	  	
+  });
+	// Termina procesa pedido
+  });
+  </script>
+</body>
+</html>

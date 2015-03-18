@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Pedidolineas</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Pedido</th>
+      <th>Producto</th>
+      <th>Product value</th>
+      <th>Product</th>
+      <th>Precio</th>
+      <th>Cantidad</th>
+      <th>Total</th>
+      <th>Imagen</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pedidolineas.each do |pedidolinea| %>
+      <tr>
+        <td><%= pedidolinea.pedido_id %></td>
+        <td><%= pedidolinea.producto %></td>
+        <td><%= pedidolinea.product_value %></td>
+        <td><%= pedidolinea.product_id %></td>
+        <td><%= pedidolinea.precio %></td>
+        <td><%= pedidolinea.cantidad %></td>
+        <td><%= pedidolinea.total %></td>
+        <td><%= pedidolinea.imagen %></td>
+        <td><%= link_to 'Show', pedidolinea %></td>
+        <td><%= link_to 'Edit', edit_pedidolinea_path(pedidolinea) %></td>
+        <td><%= link_to 'Destroy', pedidolinea, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Pedidolinea', new_pedidolinea_path %>

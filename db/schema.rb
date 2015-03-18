@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150313155607) do
+ActiveRecord::Schema.define(version: 20150317151345) do
 
   create_table "contactos", force: :cascade do |t|
     t.string   "titulo"
@@ -43,6 +43,29 @@ ActiveRecord::Schema.define(version: 20150313155607) do
   end
 
   create_table "listaprecios", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "pedidolineas", force: :cascade do |t|
+    t.string   "pedido_id"
+    t.string   "producto"
+    t.string   "product_value"
+    t.string   "product_id"
+    t.float    "precio"
+    t.float    "cantidad"
+    t.float    "total"
+    t.string   "imagen"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "pedidos", force: :cascade do |t|
+    t.string   "usuario_id"
+    t.float    "total"
+    t.float    "subtotal"
+    t.boolean  "abierto"
+    t.boolean  "activo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

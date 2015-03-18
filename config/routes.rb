@@ -1,6 +1,10 @@
 require 'api_constraints'
 Rails.application.routes.draw do
  
+  resources :pedidolineas
+
+  resources :pedidos
+
   resources :precios
 
   resources :listaprecios
@@ -32,6 +36,7 @@ Rails.application.routes.draw do
   get "estadosdecuenta" => "pages#estadosdecuenta"
   get "contacto" => "pages#contacto"
   get "catalogoproductos" => "pages#catalogoproductos"
+  get "carrito" => "pages#carrito"
   #get "test" => "pages#test"
   #post "test" => "pages#test"
   get "registro" => "pages#registro"
