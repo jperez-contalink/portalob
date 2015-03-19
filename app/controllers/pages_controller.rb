@@ -23,8 +23,68 @@ end
 	#redirect_to estadosdecuenta_path
 #end
 
-def addproducto
-	puts "add pedido PagesController"
+def carrito
+	puts "CARRITO CTRL"
+	if params[:hdn_sbmt]
+		puts "SBMT: " + params[:hdn_sbmt] + " SAVE: " + params[:hdn_save]
+		if params[:hdn_save] == "Y"	
+			puts "GUARDAR CAMBIOS"
+			puts "QUE MANDO A BORRAR: " + params[:productos_drop]
+			ids = params[:productos_drop].split("_").map(&:to_i)
+			ids.each do |linea|
+  				puts "Borrar linea con id: #{linea}"
+  				Pedidolinea.find(linea).destroy
+			end
+			puts "QUE MANDO A CAMBIAR: " + params[:productos_change]
+			ids = params[:productos_change].split(",")
+			ids.each do |linea|
+				props = linea.split("_")
+				@Change = Pedidolinea.find_by_id(props.at(0))
+				@Change.cantidad = props.at(1)
+				@Change.total = @Change.cantidad*@Change.precio
+				@Change.save
+			end
+			action = "S"
+		else
+			#ESTO DESAPARECERA YA TODO SE HACE EN VIVO
+			puts "QUE MANDO A BORRAR: " + params[:productos_drop]
+			ids = params[:productos_drop].split("_").map(&:to_i)
+			ids.each do |linea|
+  				puts "Borrar linea con id: #{linea}"
+  				#Pedidolinea.find(linea).destroy
+			end
+			puts "QUE MANDO A CAMBIAR: " + params[:productos_change]
+			ids = params[:productos_change].split(",")
+			ids.each do |linea|
+				props = linea.split("_")
+				@Change = Pedidolinea.find_by_id(props.at(0))
+				@Change.cantidad = props.at(1)
+				@Change.total = @Change.cantidad*@Change.precio
+				#@Change.save
+			end
+			puts "COLOCAR PEDIDO"
+			@Pedido = Pedido.find_by_id(params[:hdn_pedido_id])
+			@Pedido.activo = false
+			@Pedido.abierto = false
+			@Pedido.save			
+			action = "P"
+			#Rest Service que escribe el pedido.
+        	end
+		end		
+		#redirect_to success_order_path
+		redirect_to success_order_path({:from => action})
+	end
+end
+
+def cambia_linea
+	puts "ENTRA A BORRAR PRODUCTO L: " + params[:linea_id] + " + V: " + params[:valor]
+	@Change = Pedidolinea.find_by_id(params[:linea_id]);
+	@Change.cantidad = params[:valor]
+	@Change.total = @Change.cantidad*@Change.precio
+	@Change.save
+end
+def borrar_linea
+	Pedidolinea.find(params[:linea_id]).destroy
 end
 
 def registro

@@ -13,7 +13,7 @@ class PedidolineasController < ApplicationController
     end
     # Si no se encontró una orden crear  una y asignarla a @ord:
     if @ord.nil?
-      @ord = Pedido.create!({:usuario_id => params[:usuario_id], :total => 0, :subtotal => 0, :abierto => true, :activo => false})
+      @ord = Pedido.create!({:usuario_id => params[:usuario_id], :total => 0, :subtotal => 0, :abierto => true, :activo => true})
     end
     # Crear la linea en el pedido activo
     puts "CREAR LINEA"

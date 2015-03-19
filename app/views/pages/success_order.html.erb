@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SCSORD</title>
+    <style>
+    </style>
+</head>
+<body>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div align="center">
+	<%if params[:from] == "S"%>
+		<h2>Tú Carrito se guardó correctamente.</h2>
+	<% end %>
+	<%if params[:from] == "P"%>
+		<h2>Tú Pedido se completó correctamente.</h2>
+	<% end %>
+</div><br><br><br><br>
+<div align="center">
+	 <%= link_to "Carrito", carrito_path %><br />
+	 <%= link_to "Catálogo de Productos", catalogoproductos_path %><br />
+</div>
+</body>
+</html>

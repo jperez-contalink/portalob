@@ -37,9 +37,13 @@
     	width: 10%;
     	height: 120px;
     	border: 0px solid black;
-    	padding: 1% 1% 1% 1%;
+    	padding: .5% 0% 1% 0%;
     	color: black;
     	border-bottom: 1px solid #E6E6E6;
+    }
+    .qtyGrid input[type=text] {
+        width: 50%;
+        text-align:center;
     }
     .totalGrid {
     	width: 20%;
@@ -72,57 +76,249 @@
     	font-weight: normal;	
     	font-size: 80%;
     }
+    .btn-sbmt {
+        width: 20%;
+        border-radius: 5px;
+        padding: 1% 0% 1% 0%;
+    }
     </style>
 </head>
 <body>
 <br><br><br><br><br>
-<div align="left"><h2>Articulos en el carrito.</h2></div><br><br>
-<% qtyLinea = 0; %>
-<% totalAmount = 0 %>
-<% pedido_id = "" %>
-<% Pedido.where(usuario_id: current_usuario.id, activo: true).find_each do |ords|%>
-<% pedido_id = ords.id%>
-<div align="center" class="lineGrid">
-	<% Pedidolinea.where(pedido_id: ords.id).find_each do |lins| %>
-		<div align="center" class="imgGrid" style="float:left;"><img src="<%= lins.imagen%>" height="100px"></img></div>
-		<div align="left" class="nameGrid" style="float:left;"><%= lins.producto %></div>
-		<div align="right" class="priceGrid" style="float:left;">$<%= lins.precio %></div>
-		<div align="center" class="qtyGrid" style="float:left;"><%= lins.cantidad %></div>
-		<div align="right" class="totalGrid" style="float:left;">$<%= lins.total %><br><a href="#">Eliminar</a></div>
-		<% qtyLinea = qtyLinea + lins.cantidad %>
-		<% totalAmount = totalAmount + lins.cantidad*lins.precio %>
-	<% end %>
-</div>
-<div style="border:0px solid red;float:left;width:70%;">&nbsp;</div>
-<div class="netQty" style="border:0px solid red;float:left;width:10%;"><%= qtyLinea %></div>
-<div class="netTotal" style="border:0px solid red;float:left;width:20%;">
-	<div class="subtotal" align="right">Subtotal: $<%= totalAmount %></div><hr>
-	<div class="total"  align="right">Total: $<%= totalAmount %></div>
-</div>
-<div class="cartBtn" style="float:left;width:100%;padding:2% 1% 1% 1%;" align="right"><input type="button" value="Colocar Pedido" class="btn btn-default sbmt_pedido"> </div>
-<% end %>	
-  <script type="text/javascript">
-  $(document).ready( function() {
-  console.log("$> Consumir Servicio");
-  var datox = {};
-  $("#cartBtn").on('click', '.sbmt_pedido', function (e) {
-  	console.log("PROCESAR PEDIDO");
-	$.ajax({
-	  type:"GET",
-	  dataType : 'html',
-	  url: "/pedidos?pedido_id=<%= pedido_id%>",
-	  success: function(datos){
-	  console.log("Precios", datos);
-	  allPrice = jsonConstructorPrice(datos);
-		},
-	  error:  function(){ 
-	  var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor [Pricing].</h3></div>'
-	    document.getElementById("cat_pro").innerHTML = mensajeError;
-	  }
-  	});  	  	
-  });
-	// Termina procesa pedido
-  });
-  </script>
+<div align="left" id="divtitulo"><h2>Articulos en el carrito.</h2></div><br><br>
+<form accept-charset="UTF-8" id="carrito_form" action="/carrito" method="POST" onsubmit="return Validacion()">
+    <div id="div_container" width="100%" style="border:0px solid black;"/>
+    <div id="car_pro" width="100%" style="border:0px solid black;"/>
+</form>
 </body>
+  <script type="text/javascript">
+   /* window.onbeforeunload = function() { 
+        if (window.confirm("Do you really want to leave?")) { 
+            //window.open("exit.html", "Thanks for Visiting!");
+            return true;
+        } else {
+            return "Los cambios que no hayan sido guardados en su carrito se perderan.";
+        }
+    }; */ 
+  var allData = {};
+  var newData = {};
+  var dropLineas = "";
+  var changeLineas = "";
+
+  $(document).ready( function() {
+    console.log("CARRITO.");
+    var cart = $('#car_pro').Carrito({
+      koalas: "kaolitis"
+    }).data('Carrito');
+
+  console.log("$> Sigue");
+  allData = orderContructor();
+  newData = allData;
+  cart.setData(allData);
+  //keydown / change
+  $(document).on('change', '.chng_qty', function (e) {
+    e.preventDefault();
+    console.log("Cambiar Cantidad de la linea " + (e.currentTarget.id).replace("_Cantidad", "") + " a " + e.currentTarget.value);
+    var id = (e.currentTarget.id).replace("_Cantidad", "");
+    if (e.currentTarget.value > 0 && e.currentTarget.value < 10000000) {
+        var value = e.currentTarget.value;
+    } else {
+        value = 1;
+    }
+    newData = cambiaCantidad(id, value);
+    recalcularTotales();
+    cart.setData(newData);
+        // SERVICIO PRUEBAS
+    $.ajax({
+        type:"GET",
+        dataType : 'html',
+        url: "/cambia_linea?linea_id=" + id + "&valor=" + value,
+        success: function(datox){
+        console.log("$> Datos: ", datox);
+    },
+        error:  function(){ 
+            console.log("$> Ocurrio un error");
+        //var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
+        //document.getElementById("car_pro").innerHTML = mensajeError;
+        }
+    });
+    // SERVICIO PRUEBAS
+  });
+  $(document).on('click', '.drop_lin', function (e) {
+    e.preventDefault();
+    console.log("Borrar Linea " + (e.currentTarget.id).replace("_Drop", ""));
+    var id = (e.currentTarget.id).replace("_Drop", "");
+    newData = borraLinea(id);
+    recalcularTotales();
+    cart.setData(newData);
+    cart.setData(newData);
+        // SERVICIO PRUEBAS
+    $.ajax({
+        type:"GET",
+        dataType : 'html',
+        url: "/borrar_linea?linea_id=" + id,
+        success: function(datox){
+        console.log("$> Datos: ", datox);
+    },
+        error:  function(){ 
+            console.log("$> Ocurrio un error");
+        //var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
+        //document.getElementById("car_pro").innerHTML = mensajeError;
+        }
+    });
+    // SERVICIO PRUEBAS
+  });
+  $(document).on('click', '.btn_save', function (e) {
+    e.preventDefault();
+    console.log("Guardar Cambios ", e);
+    window.location="/catalogoproductos";
+    //guardarCambios();
+  });
+  $(document).on('click', '.btn_sbmt', function (e) {
+    e.preventDefault();
+    console.log("Colocar Pedido ", e);
+    Validacion();
+  });
+
+// FUNCIONES  
+function Validacion() {   
+    console.log("Submit Forma");
+    document.getElementById('hdn_sbmt').value = "Y";
+    document.getElementById('productos_drop').value = dropLineas;
+    document.getElementById('productos_change').value = changeLineas;
+    document.getElementById("carrito_form").submit();    
+}
+function guardarCambios(){
+    console.log("FNCT: Guardar cambios");
+    document.getElementById('hdn_save').value = "Y"; 
+    document.getElementById('productos_drop').value = dropLineas;
+    document.getElementById('productos_change').value = changeLineas;
+    document.getElementById("carrito_form").submit();    
+}  
+
+function orderContructor(){
+    var rows = [];
+    var rowsOrder = [];
+    var subTotal = 0;
+    var qtyProductos = 0;
+    var row = {};
+    var rowOrder = {};
+    <% Pedido.where(usuario_id: current_usuario.id, activo: true).find_each do |ords|%>
+        rowOrder.Order_id = <%= ords.id %>;
+        <% Pedidolinea.where(pedido_id: ords.id).find_each do |lins| %>
+            row.Order_id = <%= ords.id %>;
+            row.Linea_id = <%= lins.id %>;
+            row.Product_id = "<%= lins.product_id %>";
+            row.Producto = "<%= lins.producto %>";
+            row.Cantidad = (<%= lins.cantidad %>).toFixed(2);
+            row.Precio = (<%= lins.precio %>).toFixed(2);
+            row.Total = (<%= lins.total %>).toFixed(2);
+
+            row.Imagen = "<%= lins.imagen %>";
+            subTotal = subTotal + parseFloat(row.Precio) * parseFloat(row.Cantidad);
+            qtyProductos = qtyProductos + parseFloat(row.Cantidad);
+            rows.push(row);
+            var row = {};
+        <% end %>
+        rowOrder.Subtotal = (subTotal).toFixed(2);
+        rowOrder.Total = (subTotal).toFixed(2);
+        rowOrder.Productos = (qtyProductos).toFixed(2);
+        rowsOrder.push(rowOrder);
+        var rowOrder = {};
+    <% end %>
+      var data = {
+                rows: rows,
+                orders: rowsOrder,
+                otherStuff: {
+                    thatIMight: 1,
+                    needLater: true
+                }
+            };
+    return data;
+}
+function cambiaCantidad(id, value) {
+    // recorre newData y elimina la linea
+    console.log("FCNT: Modifica linea: " + id);
+    changeLineas += id + "_" + value + ",";
+
+    var nuevosDatos = [];
+    var nuevaLinea = {};
+    var jsonRows = newData.rows;
+    for (var j=0;j<jsonRows.length;j++) {  
+        if (jsonRows[j].Linea_id == id) {
+            //nuevosDatos.push(jsonRows[j]);
+            nuevaLinea.Order_id = jsonRows[j].Order_id;
+            nuevaLinea.Linea_id = jsonRows[j].Linea_id;
+            nuevaLinea.Product_id = jsonRows[j].Product_id;
+            nuevaLinea.Producto = jsonRows[j].Producto;
+            nuevaLinea.Cantidad = value;
+            nuevaLinea.Precio = jsonRows[j].Precio;
+            nuevaLinea.Total = (value*parseFloat(jsonRows[j].Precio)).toFixed(2);
+            nuevaLinea.Imagen = jsonRows[j].Imagen;
+            nuevosDatos.push(nuevaLinea);                
+        } else {
+            nuevosDatos.push(jsonRows[j]);
+        }
+    }
+    var newRows = {
+            rows: nuevosDatos,
+            orders: newData.orders,
+            otherStuff: {
+                thatIMight: 1,
+                needLater: true
+            }
+        };
+    return newRows;
+}
+function borraLinea(id) {
+    console.log("FCNT: Borrar Linea: " + id);
+    dropLineas += id + "_";
+    
+    var nuevosDatos = [];
+    var jsonRows = newData.rows;
+    for (var j=0;j<jsonRows.length;j++) {  
+        if (jsonRows[j].Linea_id != id) {
+            nuevosDatos.push(jsonRows[j]);
+        }
+    }
+    var newRows = {
+            rows: nuevosDatos,
+            orders: newData.orders,
+            otherStuff: {
+                thatIMight: 1,
+                needLater: true
+            }
+        };
+    return newRows;
+}
+function recalcularTotales() {
+    // recorre newData y asigna los nuevos totales en newData
+    var jsonOrders = newData.orders;
+    var jsonRows = newData.rows;
+    console.log("FCNT:newData: ", newData);
+    var newOrders = [];
+    var newOrder = {};
+    var ordQty = 0;
+    var ordTotal = 0;
+    var ordSubTotal = 0;
+    for (var i=0;i<jsonOrders.length;i++) {    
+        for (var j=0;j<jsonRows.length;j++) {  
+            if (jsonOrders[i].Order_id == jsonRows[j].Order_id) {
+                    ordQty = ordQty + parseFloat(jsonRows[j].Cantidad);
+                    ordSubTotal = ordSubTotal + (parseFloat(jsonRows[j].Precio)*parseFloat(jsonRows[j].Cantidad));
+                    ordTotal = ordTotal + (parseFloat(jsonRows[j].Precio)*parseFloat(jsonRows[j].Cantidad));
+            }
+        }
+        newOrder.Order_id = jsonOrders[i].Order_id;
+        newOrder.Subtotal = ordSubTotal.toFixed(2);
+        newOrder.Total = ordTotal.toFixed(2);
+        newOrder.Productos = ordQty.toFixed(2);
+        newOrders.push(newOrder);
+        var newOrder = {};
+    }
+    newData.orders = newOrders;
+}
+
+});
+</script>
 </html>

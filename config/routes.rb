@@ -42,7 +42,12 @@ Rails.application.routes.draw do
   get "registro" => "pages#registro"
   post "registro" => "pages#registro"
   get "success" => "pages#success"
-
+  post "carrito" => "pages#carrito"
+  get "success_order" => "pages#success_order"
+  #pruebas
+  get "cambia_linea" => "pages#cambia_linea"
+  get "borrar_linea" => "pages#borrar_linea"
+ 
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       resources :reporte_facturas

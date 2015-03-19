@@ -97,27 +97,27 @@
       border:0px solid blue;
     }
     .cartValue {
-      padding: 1% 1% 1% 1%;
+      padding: 2% 1% 2% 1%;
       border:0px solid black; 
       font-size: 160%;
       color: black;
     }
     .cartPrecio {
-      padding: 1% 1% 1% 1%;
+      padding: 2% 1% 2% 1%;
       border:0px solid pink;
       font-size: 250%;
       color: #2980b9;
       font-weight: bold;
     }
     .cartInventario {
-      padding: 1% 1% 1% 1%;
+      padding: 2% 1% 2% 1%;
       border:0px solid purple;
       font-size: 160%;
       color: black;
     }
     .cartBtn {
       padding: 1% 1% 1% 1%;
-      border:0px solid red; 
+      border:0px solid black; 
       font-size: 160%;
       color: black;
     }
@@ -128,11 +128,22 @@
       border:0px solid black; 
     }
     .cartCantidad input[type=text]{
-      width: 10%;
-      height: 8%;
+      text-align:center;
+      width: 15%;
       font-size: 100%;
       color:#2980b9;
       border-radius: 7px;
+      font-weight: bold;
+    }
+    .btn-anadir {
+      width: 80%;
+      padding: 3% 0% 3% 0%;
+      border-radius: 5px;
+    }
+    .btn-close {
+      border:0px solid white;
+      background-color: transparent;
+      font-size: 150%;
       font-weight: bold;
     }
 
@@ -140,6 +151,7 @@
 </head>
 <body><br><br><br><br><br><br>
   <div align="center"><h1>Catálogo de Productos</h1></div>
+  <div id="alertas" style="width:100%;border:0px solid black;"></div>
   <div>
     <!--<div id="cat_filter" style="float:left;width:10%;"></div>-->
     <div id="cat_side" style="float:left;width:15%;">
@@ -163,7 +175,7 @@
     console.log("Catalogo.");
     var cato = $('#cat_pro').Catalogo({
       koalas: "kaolitis"
-    }).data('Catalogo');
+  }).data('Catalogo');
 
   console.log("$> Consumir Servicio");
   var datox = {};
@@ -197,24 +209,6 @@
             document.getElementById("cat_pro").innerHTML = mensajeError;
           }
   });  
-  /*$.ajax({
-          type:"GET",
-          dataType : 'json',
-          url: "api/v1/productos",
-          success: function(datos){
-          console.log("Productos", datos);
-          console.log(datos);
-          allData = jsonConstructor(datos, allPrice);
-          filterData = allData;
-          cato.drawFiltros(allData);
-          cato.setData(allData);
-          console.log("$> Termina servicio de productos");
-      },
-          error:  function(){ 
-          var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
-            document.getElementById("cat_pro").innerHTML = mensajeError;
-          }
-  });  */
   $("#cat_pro").on('keyup', '.btn_search', function (e) {
     console.log("Busqueda");
     e.preventDefault();
@@ -225,6 +219,7 @@
   });
   $("#cat_pro").on('click', '.addProduct', function (e) {
     console.log("ADD PRODUCT HTML");
+    e.preventDefault();
     $("body").scrollTop(0);
     console.log("E: ", e);
     var productId = e.currentTarget.id;
@@ -232,51 +227,57 @@
   });
   $("#cat_pro").on('click', '.submitProduct', function (e) {
     console.log("SUBMIT PRODUCT HTML", e);
+    e.preventDefault();
     var productid = e.currentTarget.id;
     var precio = document.getElementById("cartPrecio").innerHTML;
+    var inventario = document.getElementById("cartInventario").innerHTML;
     var cantidad = document.getElementById("cartCantidad").value;
     var product = document.getElementById("hdnProduct").value;
     var product_value = document.getElementById("hdnValue").value;
     var imagenurl = document.getElementById("hdnImagen").value;
-    console.log("Crear linea: producto_id: " + productid + " - cantidad: " + cantidad + " precio: " + precio.replace("$", ""));
-    $.ajax({
-              type:"GET",
-              dataType : 'html',
-              url: "/pedidolineas?usuario_id=<%=current_usuario.id%>&producto_id=" + productid + '&cantidad=' + cantidad + '&precio=' + precio.replace("$", "") + "&producto=" + product + "&product_value=" + product_value + "&imagenurl=" + imagenurl,
-              success: function(datos){
-              console.log("$> linea añadida");     
-              // Reestablecer Catálogo
-              filterData = allData;
-              cato.drawFiltros(allData);
-              cato.setData(allData);
-              document.getElementById('cat_fil_aplicados').style.display = 'none';
-              jQuery('#cat_fil_aplicados div').html('');
-              // Deseleccionar los checks de marca
-              $("#cat_filter input[type=checkbox]").prop('checked', false);              
-          },
-              error:  function(){ 
-              var mensajeError = '<br><br><br><div align="center"><h1>ERROR ADD LINEA</h3></div>'
-                document.getElementById("cat_pro").innerHTML = mensajeError;
-              }
-      });
-    /*$.ajax({
-              type:"GET",
-              dataType : 'html',
-              url: "/pedidos?usuario_id=<%=current_usuario.id%>",
-              success: function(datos){
-              console.log("$> linea añadida?");
-                // al ser añadida la linea regresa al catalogo cat.
-                // filterData = allData;
-                // cato.drawFiltros(allData);
-                // cato.setData(allData);
-              
-          },
-              error:  function(){ 
-              var mensajeError = '<br><br><br><div align="center"><h1>ERROR ADD LINEA</h3></div>'
-                document.getElementById("cat_pro").innerHTML = mensajeError;
-              }
-      });*/
 
+    // Valida inventario
+    if (parseFloat(inventario.replace(" Piezas disponibles.", "")) < parseFloat(cantidad)) {
+      // No hay inventario despliega la alerta.
+      $("body").scrollTop(0);
+      document.getElementById('alertas').innerHTML = buildAlertError("Stock Insuficiente", "No hay suficiente stock para colocar tu pedido, prueba con menos producto.");
+    } else {
+      // Hay inventario Procede el submit del producto
+      $.ajax({
+                type:"GET",
+                dataType : 'html',
+                url: "/pedidolineas?usuario_id=<%=current_usuario.id%>&producto_id=" + productid + '&cantidad=' + cantidad + '&precio=' + precio.replace("$", "") + "&producto=" + product + "&product_value=" + product_value + "&imagenurl=" + imagenurl,
+                success: function(datos){
+                console.log("$> linea añadida");     
+                // Reestablecer Catálogo
+                filterData = allData;
+                cato.drawFiltros(allData);
+                cato.setData(allData);
+                document.getElementById('cat_fil_aplicados').style.display = 'none';
+                jQuery('#cat_fil_aplicados div').html('');
+                // Deseleccionar los checks de marca
+                $("#cat_filter input[type=checkbox]").prop('checked', false);
+                // Desplegar mensaje de producto agregado.
+                document.getElementById('alertas').innerHTML = buildAlertSuccess("Producto Agregado", "Se ha agregado el producto correctamente a tu carrito de compra.");
+                $("body").scrollTop(0);
+                },
+                error:  function(){ 
+                var mensajeError = '<br><br><br><div align="center"><h1>ERROR ADD LINEA</h3></div>'
+                  document.getElementById("cat_pro").innerHTML = mensajeError;
+                }
+        });      
+    }
+  });
+$("#cat_pro").on('click', '.close_cart', function (e) {
+    console.log("CANCELAR PRODUCT HTML", e);
+    e.preventDefault();
+    cato.setData(allData);
+    filterData = allData
+    // limpiar la sección filtros aplicados
+    document.getElementById('cat_fil_aplicados').style.display = 'none';
+    jQuery('#cat_fil_aplicados div').html('');
+    // Deseleccionar los checks de marca
+    $("#cat_filter input[type=checkbox]").prop('checked', false);      
   });
   $("#cat_filter").on('click', '.fil_marca', function (e) {
     console.log("Filtro de Marca");
@@ -756,9 +757,11 @@ function buildAddProduct(productID){
       if (obj.Producto_ID == productID) {
         //buildHTML += '<div style="border:1px solid orange;widht:100%;"><div class="addProductLeft">&nbsp;</div><div class="addProductRight">&nbsp;</div></div>';
         buildHTML += '<br><div style="border:0px solid blue;width:100%;">';
-        buildHTML += '<div style="border:0px solid green;width:60%;float:left;height:100%;" align="center"><img src="'+obj.Image+'" width="70%"></img></div>';
+        buildHTML += '<div style="border:0px solid green;width:60%;float:left;height:100%;" align="center"><img src="'+obj.Image+'" width="50%"></img></div>';
         // Panel Derecho Titulo
-        buildHTML += '<div style="border:0px solid red;width:40%;float:left;height:100%;padding:1% 1% 1% 1%;"><div align="left"><h2>'+obj.Nombre+'</div></h2>';
+        buildHTML += '<div style="border:0px solid red;width:40%;float:left;height:100%;padding:1% 1% 1% 1%;">';
+        buildHTML += '<div style="border:0px solid red;width:100%" align="right"><input type="button" value="x" class="btn-close close_cart"/></div>';
+        buildHTML += '<div align="left"><h2>'+obj.Nombre+'</h2></div>';
         //buildHTML += '<p>$' + obj.Precio + '<br>' + obj.Inventario + '<br>' + obj.Identificador + '<br></p>';
         // Identificador
         buildHTML += '<div class="cartValue" id="cartValue">' + obj.Identificador + '</div>';
@@ -767,18 +770,22 @@ function buildAddProduct(productID){
         // Inventario
         buildHTML += '<div class="cartInventario" id="cartInventario">' + obj.Inventario + ' disponibles.</div>';
         // Cantidad
-        buildHTML += '<div class="cartCantidad">Cantidad: &nbsp;<input type="text" id="cartCantidad" value="10"/></div>';
+        buildHTML += '<hr width="80%" align="left"><div class="cartCantidad">Cantidad: &nbsp;<input type="text" id="cartCantidad" value="1"/></div>';
         // BtonAgregar
-        buildHTML += '<div class="cartBtn" align="right"><input id="' + obj.Producto_ID + '" type="button" value="añadir" class="btn btn-default submitProduct"> </div>';
+        buildHTML += '<div class="cartBtn" align="left"><br><input id="' + obj.Producto_ID + '" type="button" value="añadir producto al carrito" class="btn btn-default btn-anadir submitProduct"> </div>';
         // Valores ocultos para envío de parametros
         buildHTML += '<input type="hidden" id="hdnProduct" value="'+obj.Nombre+'"/><input type="hidden" id="hdnValue" value="'+obj.Identificador+'"/><input type="hidden" id="hdnImagen" value="'+obj.Image+'"/>'
         // Cierra panel derecho
         buildHTML += '</div></div>';
       }
   }
-
-
   return buildHTML;
+}
+function buildAlertSuccess(titulo, mensaje){
+  return '<div id="alert_limite" class="alert alert-success alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '</p></div>';
+}
+function buildAlertError(titulo, mensaje){
+  return '<div id="alert_limite" class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '</p></div>';
 }
 });
   </script>

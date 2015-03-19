@@ -52,6 +52,9 @@
   .gn-trigger:hover{
     background-color: red;
   }
+  .social-julio {
+    background-color: green;
+  }
   </style>  
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
@@ -110,7 +113,7 @@
           <li class="social-dribble"><a href="#" target="_blank"><i class="fa fa-dribbble"></i></a></li>
           <li class="social-google"><a href="#" target="_blank"><i class="fa fa-google-plus"></i></a></li>-->
           <% if usuario_signed_in? %>
-            <li><%= link_to  carrito_path, class: "social-twitter" do %>
+            <li><%= link_to  carrito_path do %>
               <i class="glyphicon glyphicon-shopping-cart"></i><% end %>
             </li>
             <li><%= link_to  destroy_usuario_session_path, class: "social-google", method: :delete do %>
