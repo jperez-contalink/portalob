@@ -1,0 +1,2 @@
+module EscribepedidosHelper
+end

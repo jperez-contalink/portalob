@@ -68,11 +68,11 @@ def carrito
 			@Pedido.abierto = false
 			@Pedido.save			
 			action = "P"
-			#Rest Service que escribe el pedido.
-        	end
+			#Rest Service que escribe el pedido.o
+        	
 		end		
 		#redirect_to success_order_path
-		redirect_to success_order_path({:from => action})
+		redirect_to success_order_path({:pedido_id => params[:hdn_pedido_id]})
 	end
 end
 
@@ -94,8 +94,14 @@ def registro
 		Usuario.create!({:email => params[:txtCorreo], :password => params[:txtCorreo], :password_confirmation => params[:txtCorreo], :nombre => params[:txtNombre], :rfc => params[:txtRFC], :rfcempresa => params[:hdnRFC], :empresa_id => params[:hdnID], :isadmin => false})
 		redirect_to success_path
 	end
-	
 end
+
+def success_order
+	puts "ENTRA A SUCCESS ORDER" + current_usuario.email
+	@user = current_usuario
+	#order_link = "http://csalinas-tegik:KopoTegik@23.23.245.49/openbravo/ws/com.tegik.portalob.DescargaDocumentosPortal?facturaids=893B8B30D84743E69B23D574F59A81DA_"
+
+end	
 
 def facturas
 end

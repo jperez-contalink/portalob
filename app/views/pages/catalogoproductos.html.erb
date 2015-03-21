@@ -782,7 +782,7 @@ function buildAddProduct(productID){
   return buildHTML;
 }
 function buildAlertSuccess(titulo, mensaje){
-  return '<div id="alert_limite" class="alert alert-success alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '</p></div>';
+  return '<div id="alert_limite" class="alert alert-success alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '<br>Visita tu carrito de compra <a href="/carrito">aqui</a></p></div>';
 }
 function buildAlertError(titulo, mensaje){
   return '<div id="alert_limite" class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '</p></div>';

@@ -34,7 +34,8 @@
             var style="";
             for (var key in jsonRows) {
                 var obj = jsonRows[key]; 
-                if (obj.Precio != 0) {
+                var inventario = parseFloat((obj.Inventario).replace(" Piezas", ""));
+                if (obj.Precio != 0 && inventario > 0) {
                     if (obj.Inventario == "0 Piezas"){ style = 'style="color:red;"';}
                     //tabla += '<a href="javascript:agregar();"><div class="item" style="background-image: url('+obj.Image+');"><h1>' + obj.Nombre + '</h1>';
                     //tabla += '<h2>$' + obj.Precio + '<br><div ' + style + '>' + obj.Inventario + '</div></h2></div></a>';

@@ -8,16 +8,91 @@
 <body>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <div align="center">
-	<%if params[:from] == "S"%>
-		<h2>Tú Carrito se guardó correctamente.</h2>
-	<% end %>
-	<%if params[:from] == "P"%>
 		<h2>Tú Pedido se completó correctamente.</h2>
-	<% end %>
 </div><br><br><br><br>
 <div align="center">
-	 <%= link_to "Carrito", carrito_path %><br />
 	 <%= link_to "Catálogo de Productos", catalogoproductos_path %><br />
 </div>
 </body>
+<script type="text/javascript">
+	$( document ).ready(function() {
+	    console.log( "COLOCAR PEDIDO" );
+	    var pedido = "<%= params[:pedido_id]%>";
+	    var Orden = orderContructor();
+	    console.log("Este se enviará de parametro: ", Orden);
+	    if (pedido!="") {
+	    	console.log("SE EJECUTA SERVICIO");
+	    	//window.open("api/v1/escribepedidos?facturaids=893B8B30D84743E69B23D574F59A81DA_");
+	    }
+	    // Servicio
+	    $.ajax({
+	        type:"GET",
+	        dataType : 'html',
+	        //url: "/cambia_linea?linea_id=" + id + "&valor=" + value,
+	        //url: "api/v1/escribepedidos?facturaids=893B8B30D84743E69B23D574F59A81DA_",
+	        url: "api/v1/escribepedidos?pedido_id=" + pedido,
+	        success: function(datox){
+	        console.log("$> Datos: ", datox);
+	    },
+	        error:  function(){ 
+	            console.log("$> Ocurrio un error");
+	        }
+	    });	    
+	});
+/*
+    $.ajax({
+        type:"GET",
+        dataType : 'html',
+        url: "/cambia_linea?linea_id=" + id + "&valor=" + value,
+        success: function(datox){
+        console.log("$> Datos: ", datox);
+    },
+        error:  function(){ 
+            console.log("$> Ocurrio un error");
+        //var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
+        //document.getElementById("car_pro").innerHTML = mensajeError;
+        }
+    });
+*/	
+function orderContructor(){
+    var rows = [];
+    var rowsOrder = [];
+    var subTotal = 0;
+    var qtyProductos = 0;
+    var row = {};
+    var rowOrder = {};
+    <% Pedido.where(id: params[:pedido_id]).find_each do |ords|%>
+        rowOrder.Order_id = <%= ords.id %>;
+        <% Pedidolinea.where(pedido_id: ords.id).find_each do |lins| %>
+            row.Order_id = <%= ords.id %>;
+            row.Linea_id = <%= lins.id %>;
+            row.Product_id = "<%= lins.product_id %>";
+            row.Producto = "<%= lins.producto %>";
+            row.Cantidad = (<%= lins.cantidad %>).toFixed(2);
+            row.Precio = (<%= lins.precio %>).toFixed(2);
+            row.Total = (<%= lins.total %>).toFixed(2);
+
+            row.Imagen = "<%= lins.imagen %>";
+            subTotal = subTotal + parseFloat(row.Precio) * parseFloat(row.Cantidad);
+            qtyProductos = qtyProductos + parseFloat(row.Cantidad);
+            rows.push(row);
+            var row = {};
+        <% end %>
+        rowOrder.Subtotal = (subTotal).toFixed(2);
+        rowOrder.Total = (subTotal).toFixed(2);
+        rowOrder.Productos = (qtyProductos).toFixed(2);
+        rowsOrder.push(rowOrder);
+        var rowOrder = {};
+    <% end %>
+      var data = {
+                rows: rows,
+                orders: rowsOrder,
+                otherStuff: {
+                    thatIMight: 1,
+                    needLater: true
+                }
+            };
+    return data;
+}
+</script>
 </html>
