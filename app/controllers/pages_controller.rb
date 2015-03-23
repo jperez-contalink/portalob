@@ -66,7 +66,7 @@ def carrito
 			@Pedido = Pedido.find_by_id(params[:hdn_pedido_id])
 			@Pedido.activo = false
 			@Pedido.abierto = false
-			@Pedido.save			
+			#@Pedido.save			
 			action = "P"
 			#Rest Service que escribe el pedido.o
         	

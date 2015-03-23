@@ -7,12 +7,7 @@
 </head>
 <body>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<div align="center">
-		<h2>Tú Pedido se completó correctamente.</h2>
-</div><br><br><br><br>
-<div align="center">
-	 <%= link_to "Catálogo de Productos", catalogoproductos_path %><br />
-</div>
+<div align="center" id="div_message" />
 </body>
 <script type="text/javascript">
 	$( document ).ready(function() {
@@ -28,32 +23,18 @@
 	    $.ajax({
 	        type:"GET",
 	        dataType : 'html',
-	        //url: "/cambia_linea?linea_id=" + id + "&valor=" + value,
-	        //url: "api/v1/escribepedidos?facturaids=893B8B30D84743E69B23D574F59A81DA_",
 	        url: "api/v1/escribepedidos?pedido_id=" + pedido,
-	        success: function(datox){
-	        console.log("$> Datos: ", datox);
+	           success: function(datox){
+	           console.log("$> Datos: ", datox);
+                document.getElementById("div_message").innerHTML = "<h2>Tú Pedido se completó correctamente.</h2></div><br><br><br><br><a href=\"/catalogoproductos\">Cátalogo de productos.</a>";
 	    },
 	        error:  function(){ 
 	            console.log("$> Ocurrio un error");
+                document.getElementById("div_message").innerHTML = "<h2>Algo ha salido mal, contacta con tu proveedor.</h2></div><br><br><br><br><a href=\"/carrito\">Carrito de Compra.</a>";
 	        }
 	    });	    
 	});
-/*
-    $.ajax({
-        type:"GET",
-        dataType : 'html',
-        url: "/cambia_linea?linea_id=" + id + "&valor=" + value,
-        success: function(datox){
-        console.log("$> Datos: ", datox);
-    },
-        error:  function(){ 
-            console.log("$> Ocurrio un error");
-        //var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
-        //document.getElementById("car_pro").innerHTML = mensajeError;
-        }
-    });
-*/	
+	
 function orderContructor(){
     var rows = [];
     var rowsOrder = [];
