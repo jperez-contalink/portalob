@@ -235,7 +235,7 @@
     var product = document.getElementById("hdnProduct").value;
     var product_value = document.getElementById("hdnValue").value;
     var imagenurl = document.getElementById("hdnImagen").value;
-
+    var inventarioMaximo = parseFloat(inventario.replace(" Piezas disponibles.", "");
     // Valida inventario
     if (parseFloat(inventario.replace(" Piezas disponibles.", "")) < parseFloat(cantidad)) {
       // No hay inventario despliega la alerta.
@@ -246,7 +246,7 @@
       $.ajax({
                 type:"GET",
                 dataType : 'html',
-                url: "/pedidolineas?usuario_id=<%=current_usuario.id%>&producto_id=" + productid + '&cantidad=' + cantidad + '&precio=' + precio.replace("$", "") + "&producto=" + product + "&product_value=" + product_value + "&imagenurl=" + imagenurl,
+                url: "/pedidolineas?usuario_id=<%=current_usuario.id%>&producto_id=" + productid + '&cantidad=' + cantidad + '&precio=' + precio.replace("$", "") + "&producto=" + product + "&product_value=" + product_value + "&imagenurl=" + imagenurl + "&invmax=" + inventarioMaximo,
                 success: function(datos){
                 console.log("$> linea añadida");     
                 // Reestablecer Catálogo
@@ -774,7 +774,8 @@ function buildAddProduct(productID){
         // BtonAgregar
         buildHTML += '<div class="cartBtn" align="left"><br><input id="' + obj.Producto_ID + '" type="button" value="añadir producto al carrito" class="btn btn-default btn-anadir submitProduct"> </div>';
         // Valores ocultos para envío de parametros
-        buildHTML += '<input type="hidden" id="hdnProduct" value="'+obj.Nombre+'"/><input type="hidden" id="hdnValue" value="'+obj.Identificador+'"/><input type="hidden" id="hdnImagen" value="'+obj.Image+'"/>'
+        buildHTML += '<input type="hidden" id="hdnProduct" value="'+obj.Nombre+'"/><input type="hidden" id="hdnValue" value="'+obj.Identificador+'"/><input type="hidden" id="hdnImagen" value="'+obj.Image+'"/>';
+
         // Cierra panel derecho
         buildHTML += '</div></div>';
       }

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150320215609) do
+ActiveRecord::Schema.define(version: 20150324173700) do
 
   create_table "contactos", force: :cascade do |t|
     t.string   "titulo"
@@ -71,6 +71,11 @@ ActiveRecord::Schema.define(version: 20150320215609) do
     t.float    "subtotal"
     t.boolean  "abierto"
     t.boolean  "activo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "pedidosobs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

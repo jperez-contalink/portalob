@@ -2,37 +2,160 @@
 <html>
 <head>
     <title>SCSORD</title>
-    <style>
-    </style>
+<style>
+    .headRow {
+        color:#585858;
+        font-weight: bold;
+        font-size: 110%;
+        padding: 1% 1% 1% 1%;
+    }
+    .headRow h2 {
+        display: inline;
+        margin:0;
+    }
+    .lineGrid {
+        width: 100%;
+        height: 100%;
+        border: 0px solid red;
+        padding: 1% 1% 1% 1%;
+    }
+    .imgGrid {
+        width: 20%;
+        height: 120px;
+        border: 0px solid black;
+        border-bottom: 1px solid #E6E6E6;
+    }
+    .nameGrid {
+        width: 30%;
+        height: 120px;
+        border: 0px solid red;
+        padding: 1% 1% 1% 1%;
+        font-size: 150%;
+        font-weight: bold;
+        border-bottom: 1px solid #E6E6E6;
+    }
+    .priceGrid {
+        width: 20%;
+        height: 120px;
+        border: 0px solid black;
+        padding: 1% 1% 1% 1%;
+        color: black;
+        border-bottom: 1px solid #E6E6E6;
+    }
+    .qtyGrid {
+        width: 10%;
+        height: 120px;
+        border: 0px solid red;
+        padding: .5% 0% 1% 0%;
+        color: black;
+        border-bottom: 1px solid #E6E6E6;
+    }
+    .qtyGrid input[type=text] {
+        width: 50%;
+        text-align:center;
+    }
+    .totalGrid {
+        width: 20%;
+        height: 120px;
+        border: 0px solid black;
+        padding: 1% 1% 1% 1%;
+        font-size: 130%;
+        font-weight: bold;
+        border-bottom: 1px solid #E6E6E6;
+    } 
+    .netQty {
+        padding: 2% 3% 0% 4%;
+        font-size: 110%;
+        font-weight: bold;
+    }   
+    .netTotal {
+        padding-top: 2%;
+    }
+    .subtotal {
+        padding: 0% 10% 0% 0%;
+        font-size: 130%;
+        font-weight: bold;
+    }
+    .total {
+        padding: 0% 10% 0% 0%;
+        font-size: 160%;
+        font-weight: bold;
+    }
+    .totalGrid a{
+        font-weight: normal;    
+        font-size: 80%;
+    }
+    .btn-sbmt {
+        width: 20%;
+        border-radius: 5px;
+        padding: 1% 0% 1% 0%;
+    }
+</style>
 </head>
 <body>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<div align="center" id="div_message" />
+<br><br><br><br><br><br><br>
+<div align="center" id="div_message"></div>
+
 </body>
+<!-- /api/v1/pedidosobs -->
 <script type="text/javascript">
 	$( document ).ready(function() {
-	    console.log( "COLOCAR PEDIDO" );
+        console.log( "ORDER SUCCESS" );
 	    var pedido = "<%= params[:pedido_id]%>";
 	    var Orden = orderContructor();
-	    console.log("Este se enviará de parametro: ", Orden);
+        var openbravo = {};
+        var pedidoCompletadoHTML = "";
 	    if (pedido!="") {
-	    	console.log("SE EJECUTA SERVICIO");
-	    	//window.open("api/v1/escribepedidos?facturaids=893B8B30D84743E69B23D574F59A81DA_");
-	    }
-	    // Servicio
-	    $.ajax({
-	        type:"GET",
-	        dataType : 'html',
-	        url: "api/v1/escribepedidos?pedido_id=" + pedido,
-	           success: function(datox){
-	           console.log("$> Datos: ", datox);
-                document.getElementById("div_message").innerHTML = "<h2>Tú Pedido se completó correctamente.</h2></div><br><br><br><br><a href=\"/catalogoproductos\">Cátalogo de productos.</a>";
-	    },
-	        error:  function(){ 
-	            console.log("$> Ocurrio un error");
-                document.getElementById("div_message").innerHTML = "<h2>Algo ha salido mal, contacta con tu proveedor.</h2></div><br><br><br><br><a href=\"/carrito\">Carrito de Compra.</a>";
-	        }
-	    });	    
+	    	console.log("Existe el parametro de pedido, ejecutar servicio");
+            // Servicio
+            // ESCRIBIR PEDIDO
+            $.ajax({
+                type:"GET",
+                dataType : 'html',
+                url: "api/v1/escribepedidos?pedido_id=" + pedido,
+                   success: function(datox){
+                        // PINTA PEDIDOS INCLUIDO EL ULTIMO QUE SE ACABA DE ESCRIBIR
+                        $.ajax({
+                                type:"GET",
+                                dataType : 'json',
+                                url: "api/v1/pedidosobs",
+                                   success: function(datox){
+                                   document.getElementById("div_message").innerHTML = "<h2>Tú Pedido se completó correctamente.</h2></div><br><br><br><br><a href=\"/catalogoproductos\">Cátalogo de productos.</a>";
+                                   openbravo = orderOpenBravo(datox);
+                                   // Pintar Ordenes
+                                   htmlOrd = buildListaOrden(openbravo, Orden, pedido);
+                                   buildListaOrdenes(openbravo, Orden, pedido, htmlOrd);
+                            },
+                                error:  function(){ 
+                                    console.log("$> Ocurrio un error");
+                                    document.getElementById("div_message").innerHTML = "<h2>Tu Pedido se completó correctamente pero no se han podido obtener tus pedidos, contacta con tu proveedor.</h2></div><br><br><br><br><a href=\"/carrito\">Carrito de Compra.</a>";
+                                }
+                        });
+            },
+                error:  function(){ 
+                    console.log("$> Ocurrio un error");
+                    document.getElementById("div_message").innerHTML = "<h2>Algo ha salido mal, contacta con tu proveedor.</h2></div><br><br><br><br><a href=\"/carrito\">Carrito de Compra.</a>";
+                }
+            });            
+	    } else {
+            // PINTA PEDIDOS
+            $.ajax({
+                    type:"GET",
+                    dataType : 'json',
+                    url: "api/v1/pedidosobs",
+                       success: function(datox){
+                       openbravo = orderOpenBravo(datox);
+                       // Pintar Ordenes
+                       buildListaOrdenes(openbravo, Orden, pedido, "");
+                },
+                    error:  function(){ 
+                        console.log("$> Ocurrio un error");
+                        document.getElementById("div_message").innerHTML = "<h2>No se han podido obtener tus pedidos, contacta con tu proveedor.</h2></div><br><br><br><br><a href=\"/carrito\">Carrito de Compra.</a>";
+                    }
+            });            
+
+        }            
+
 	});
 	
 function orderContructor(){
@@ -42,7 +165,7 @@ function orderContructor(){
     var qtyProductos = 0;
     var row = {};
     var rowOrder = {};
-    <% Pedido.where(id: params[:pedido_id]).find_each do |ords|%>
+    <% Pedido.where(usuario_id: current_usuario.id).find_each do |ords|%>
         rowOrder.Order_id = <%= ords.id %>;
         <% Pedidolinea.where(pedido_id: ords.id).find_each do |lins| %>
             row.Order_id = <%= ords.id %>;
@@ -74,6 +197,167 @@ function orderContructor(){
                 }
             };
     return data;
+}
+function orderOpenBravo(json) {
+    var rows = [];
+    var jsonObject = json.response;
+    for (var i=0;i<jsonObject.totalRows;i++) {
+        var row = {};
+        row.Pedido_ID       = jsonObject.data[i].pobPedido;
+        row.Documentno      = jsonObject.data[i].documentno;
+        switch (jsonObject.data[i].docstatus) {
+            case "DR":
+                row.Estado  = '<p style="font-weight:bold;color:#3498db;display:inline;">POR PROCESAR</p>';
+            break
+            case "CO":
+                row.Estado  = '<p style="font-weight:bold;color:#2ecc71;display:inline;">POR ENTREGAR</p>';
+            break
+            case "CL":
+                row.Estado  = '<p style="font-weight:bold;color:#e67e22;display:inline;">CERRADO</p>';
+            break
+            default: 
+                row.Estado  = '<p style="font-weight:bold;color:#e74c3c;display:inline;">DESCONOCIDO</p>';
+            break
+        }
+        row.Accion          = jsonObject.data[i].docaction;
+        row.Procesando      = jsonObject.data[i].processing;
+        row.Procesado       = jsonObject.data[i].processed;
+        row.Entregado       = jsonObject.data[i].isdelivered;
+        row.Facturado       = jsonObject.data[i].isinvoiced;
+        row.FechaCreacion   = jsonObject.data[i].creationDate;
+        //jsDate = new Date(strDate);
+        rows.push(row);
+    }
+          var data = {
+                ordenesob: rows
+            };
+    return data;
+}
+function buildListaOrdenes(ob, ord, pedido, html){
+    if (pedido != ""){
+        console.log("Se van a imprimir todos los pedidos con excepción del " + pedido);
+        var todos = false;
+    } else {
+        console.log("Se van a imprimir todos los pedidos.");
+        var todos = true;
+    }
+    var pedidosOB = ob.ordenesob;
+    var pedidosPortal = ord.orders; 
+    var lineasPortal = ord.rows;
+    var htmlBuilder = "";
+    // Recorrer todos los pedidos existentes en Openbravo
+    for (var i=0;i<pedidosOB.length;i++) {
+        for (var j=0;j<pedidosPortal.length;j++) {
+            if (pedidosOB[i].Pedido_ID == pedidosPortal[j].Order_id && (pedidosPortal[j].Order_id != pedido || todos == true)) {
+                //htmlBuilder += '<div class="headRow">PEDIDO #2342 ESTADO: POR ENTREGAR</div>';
+                htmlBuilder += '<div align="left" class="headRow"><h2>PEDIDO # ' + pedidosPortal[j].Order_id + '</h2><br>ESTADO: ' + pedidosOB[i].Estado + '<br></div>';
+                htmlBuilder += '<div align="center" class="lineGrid" id="lineGrid">';
+                for (var k=0;k<lineasPortal.length;k++) {
+                    if (pedidosPortal[j].Order_id == lineasPortal[k].Order_id && (lineasPortal[k].Order_id != pedido || todos == true)){
+                        // PINTAR DETALLES DE LA LINEA lineasPortal[k].propiedad
+                        htmlBuilder += '<div style="border:0px solid grey;" id="' + lineasPortal[k].Product_id + '_ROW">';
+                        htmlBuilder += '<div align="center" class="imgGrid" style="float:left;"><img src="' + lineasPortal[k].Imagen + '" height="100px"></img></div>';
+                        htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + lineasPortal[k].Producto + '</div>';
+                        htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Precio) + '</div>';
+                        htmlBuilder += '<div align="center" class="qtyGrid" style="float:left;"><input class="chng_qty" type="text" value="' + separaMiles(lineasPortal[k].Cantidad) + '" id="' + lineasPortal[k].Linea_id + '_Cantidad" readonly   /></div>';
+                        htmlBuilder += '<div align="right" id="totalGrid" class="totalGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Total) + '<br></div>';
+                        htmlBuilder += '</div>';                        
+                    }
+                }
+            // PINTAR DETALLES DEL PEDIDO pedidosPortal[j].propiedad
+            htmlBuilder += '</div>';
+            htmlBuilder += '<div style="border:0px solid red;float:left;width:70%;">&nbsp;</div>';
+            htmlBuilder += '<div class="netQty" id="netQty" style="border:0px solid red;float:left;width:10%;">' + separaMiles(pedidosPortal[j].Productos) + '</div>';
+            htmlBuilder += '<div class="netTotal" style="border:0px solid red;float:left;width:20%;">';
+            htmlBuilder += '<div class="subtotal" id="idSubTotal" align="right">Subtotal: $' + separaMiles(pedidosPortal[j].Subtotal) + '</div><hr>';
+            htmlBuilder += '<div class="total"  id="idTotal" align="right">Total: $' + separaMiles(pedidosPortal[j].Total) + '</div></div>';
+            }
+        }
+    }
+    // PINTAR EN div
+    //document.getElementById("div_message").innerHTML = htmlBuilder;
+    console.log("%> " + html + htmlBuilder);
+    document.getElementById("div_message").innerHTML = html + htmlBuilder;
+}
+function buildListaOrden(ob, ord, pedido){
+    if (pedido != ""){
+        console.log("Se va a imprimir el encabezado con el pedido " + pedido);
+        // EL SIGUIENTE PASO ES QUE SOLO SE IMPRIMA ESTE PEDIDO
+    } else {
+        console.log("No se puede imprimir el encabezado por que no existe un id de pedido");
+    }
+    var pedidosOB = ob.ordenesob;
+    var pedidosPortal = ord.orders; 
+    var lineasPortal = ord.rows;
+    var htmlBuilder = "";
+    // Recorrer todos los pedidos existentes en Openbravo
+    for (var i=0;i<pedidosOB.length;i++) {
+        for (var j=0;j<pedidosPortal.length;j++) {
+            if (pedidosOB[i].Pedido_ID == pedidosPortal[j].Order_id && pedidosPortal[j].Order_id == pedido){
+                //htmlBuilder += '<div class="headRow">PEDIDO #2342 ESTADO: POR ENTREGAR</div>';
+                htmlBuilder += '<div align="left" class="headRow"><h2>PEDIDO # ' + pedidosPortal[j].Order_id + ' se completó correctamente.</h2><br>ESTADO: ' + pedidosOB[i].Estado + '<br></div>';
+                htmlBuilder += '<div align="center" class="lineGrid" id="lineGrid">';
+                for (var k=0;k<lineasPortal.length;k++) {
+                    if (pedidosPortal[j].Order_id == lineasPortal[k].Order_id && lineasPortal[k].Order_id == pedido) {
+                        // PINTAR DETALLES DE LA LINEA lineasPortal[k].propiedad
+                        htmlBuilder += '<div style="border:0px solid grey;" id="' + lineasPortal[k].Product_id + '_ROW">';
+                        htmlBuilder += '<div align="center" class="imgGrid" style="float:left;"><img src="' + lineasPortal[k].Imagen + '" height="100px"></img></div>';
+                        htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + lineasPortal[k].Producto + '</div>';
+                        htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Precio) + '</div>';
+                        htmlBuilder += '<div align="center" class="qtyGrid" style="float:left;"><input class="chng_qty" type="text" value="' + separaMiles(lineasPortal[k].Cantidad) + '" id="' + lineasPortal[k].Linea_id + '_Cantidad" readonly   /></div>';
+                        htmlBuilder += '<div align="right" id="totalGrid" class="totalGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Total) + '<br></div>';
+                        htmlBuilder += '</div>';                        
+                    }
+                }
+            // PINTAR DETALLES DEL PEDIDO pedidosPortal[j].propiedad
+            htmlBuilder += '</div>';
+            htmlBuilder += '<div style="border:0px solid red;float:left;width:70%;">&nbsp;</div>';
+            htmlBuilder += '<div class="netQty" id="netQty" style="border:0px solid red;float:left;width:10%;">' + separaMiles(pedidosPortal[j].Productos) + '</div>';
+            htmlBuilder += '<div class="netTotal" style="border:0px solid red;float:left;width:20%;">';
+            htmlBuilder += '<div class="subtotal" id="idSubTotal" align="right">Subtotal: $' + separaMiles(pedidosPortal[j].Subtotal) + '</div><hr>';
+            htmlBuilder += '<div class="total"  id="idTotal" align="right">Total: $' + separaMiles(pedidosPortal[j].Total) + '</div></div>';
+            }
+        }
+    }
+    // PINTAR EN div
+    //document.getElementById("div_message").innerHTML = htmlBuilder;
+    return htmlBuilder;
+}
+function separaMiles(numero){ 
+    // Variable que contendra el resultado final
+    var resultado = "";
+    
+    // Si el numero empieza por el valor "-" (numero negativo)
+    if(numero[0]=="-")
+    {
+        // Cogemos el numero eliminando los posibles puntos que tenga, y sin
+        // el signo negativo
+        nuevoNumero=numero.replace(/\,/g,'').substring(1);
+    }else{
+        // Cogemos el numero eliminando los posibles puntos que tenga
+        nuevoNumero=numero.replace(/\,/g,'');
+    }
+    
+    // Si tiene decimales, se los quitamos al numero
+    if(numero.indexOf(".")>=0)
+        nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
+
+    // Ponemos un punto cada 3 caracteres
+    for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++) 
+        resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado; 
+    
+    // Si tiene decimales, se lo añadimos al numero una vez forateado con 
+    // los separadores de miles
+    if(numero.indexOf(".")>=0)
+        resultado+=numero.substring(numero.indexOf("."), numero.indexOf(".")+3);
+
+    if(numero[0]=="-")
+    {
+        // Devolvemos el valor añadiendo al inicio el signo negativo
+        return "-"+resultado;
+    }else{
+        return resultado;
+    }
 }
 </script>
 </html>

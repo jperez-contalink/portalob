@@ -13626,6 +13626,7 @@ function mesAnterior(mes){
             var jsonRows = datos.rows;
             var jsonOrders = datos.orders;
             var htmlBuilder = "";
+            var listavacia = "";
             for (var i=0;i<jsonOrders.length;i++) {    
                 htmlBuilder += '<div align="center" class="lineGrid" id="lineGrid">';
                 for (var j=0;j<jsonRows.length;j++) {    
@@ -13650,7 +13651,10 @@ function mesAnterior(mes){
                 htmlBuilder += '<br><br><input type="button" id="btn_guardar" onclick="guardarCambios()" value="Catálogo de productos" class="btn btn-default btn-sbmt sbmt_pedido btn_save"/>';
                 if (j > 0) {
                     htmlBuilder += '&nbsp;&nbsp;<input type="submit" id="btn_submit" value="Colocar Pedido" class="btn btn-default btn-sbmt sbmt_pedido btn_sbmt"/></div>';
-                }    
+                }  else {
+                    listavacia = '<br><br><h3 align="center">El carrito esta vacío, agrega algunos productos desde el catálogo de productos.</h3>';
+                    listavacia += '<br><br><div align="center"><input type="button" id="btn_guardar" onclick="guardarCambios()" value="Catálogo de productos" class="btn btn-default btn-sbmt sbmt_pedido btn_save"/></div>';
+                }
                 htmlBuilder += '<input type="hidden" value="N" name="hdn_sbmt" id="hdn_sbmt"/>';
                 htmlBuilder += '<input type="hidden" value="N" name="hdn_save" id="hdn_save"/> ';
                 htmlBuilder += '<input type="hidden" value="N" name="hdn_lineas" id="hdn_save"/> ';
@@ -13659,7 +13663,13 @@ function mesAnterior(mes){
                 htmlBuilder += '<input type="hidden" value="' + jsonOrders[i].Order_id + '" name="hdn_pedido_id" id="hdn_pedido_id"/>';
             }
         //console.log("$> HTML BUILDER: ", htmlBuilder);
-        document.getElementById('div_container').innerHTML = htmlBuilder;
+        if (listavacia != "") {
+            console.log("LISTA VACIA " + listavacia);
+            document.getElementById('div_container').innerHTML = listavacia;
+        } else {
+            document.getElementById('div_container').innerHTML = htmlBuilder;
+        }
+
         };
         priv.separaMiles = function(numero) {
             numero = numero.toString();
@@ -14271,6 +14281,14 @@ function mesAnterior(mes){
 						'</div>';
 
 }( window.jQuery );
+(function() {
+
+
+}).call(this);
+(function() {
+
+
+}).call(this);
 (function() {
 
 

@@ -1,0 +1,17 @@
+<%= form_for(@pedidosob) do |f| %>
+  <% if @pedidosob.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@pedidosob.errors.count, "error") %> prohibited this pedidosob from being saved:</h2>
+
+      <ul>
+      <% @pedidosob.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
