@@ -18,7 +18,7 @@ class PedidolineasController < ApplicationController
     # Crear la linea en el pedido activo
     puts "CREAR LINEA"
     total = params[:cantidad].to_f*params[:precio].to_f
-    Pedidolinea.create!({:pedido_id => @ord.id, :producto => params[:producto], :product_value => params[:product_value], :precio => params[:precio], :total => total, :cantidad => params[:cantidad], :product_id => params[:producto_id], :imagen => params[:imagenurl]})
+    Pedidolinea.create!({:pedido_id => @ord.id, :producto => params[:producto], :product_value => params[:product_value], :precio => params[:precio], :total => total, :cantidad => params[:cantidad], :product_id => params[:producto_id], :imagen => params[:imagenurl], :maximo => params[:invmax].to_f})
     @pedidolineas = Pedidolinea.all
   end
 

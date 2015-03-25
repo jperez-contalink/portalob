@@ -85,6 +85,7 @@
 </head>
 <body>
 <br><br><br><br><br>
+<div id="alerta_carrito"></div>
 <div align="left" id="divtitulo"><h2>Carrito</h2></div><br><br>
 <form accept-charset="UTF-8" id="carrito_form" action="/carrito" method="POST" onsubmit="return Validacion()">
     <div id="div_container" width="100%" style="border:0px solid black;"/>
@@ -125,6 +126,7 @@
     } else {
         value = 1;
     }
+    console.log("%> TEST ", newData);
     newData = cambiaCantidad(id, value);
     recalcularTotales();
     cart.setData(newData);
@@ -213,7 +215,11 @@ function orderContructor(){
             row.Cantidad = (<%= lins.cantidad %>).toFixed(2);
             row.Precio = (<%= lins.precio %>).toFixed(2);
             row.Total = (<%= lins.total %>).toFixed(2);
-
+            <% if lins.maximo == nil %>
+                row.Maximo = 100;
+            <% else %>
+                row.Maximo = <%= lins.maximo %>
+            <% end %>
             row.Imagen = "<%= lins.imagen %>";
             subTotal = subTotal + parseFloat(row.Precio) * parseFloat(row.Cantidad);
             qtyProductos = qtyProductos + parseFloat(row.Cantidad);
@@ -251,8 +257,15 @@ function cambiaCantidad(id, value) {
             nuevaLinea.Linea_id = jsonRows[j].Linea_id;
             nuevaLinea.Product_id = jsonRows[j].Product_id;
             nuevaLinea.Producto = jsonRows[j].Producto;
-            nuevaLinea.Cantidad = value;
+            console.log("%> Compara " + value + " vs " + jsonRows[j].Maximo);
+            if (parseFloat(value) > parseFloat(jsonRows[j].Maximo)) {
+                nuevaLinea.Cantidad = jsonRows[j].Maximo;   
+                document.getElementById('alerta_carrito').innerHTML = buildAlertWarning("Inventario Insuficiente", "El producto " + jsonRows[j].Producto + " sólo tiene disponibles " + jsonRows[j].Maximo + " unidades, hemos cambiado la línea por ti.");
+            } else {
+                nuevaLinea.Cantidad = value;
+            }
             nuevaLinea.Precio = jsonRows[j].Precio;
+            nuevaLinea.Maximo = jsonRows[j].Maximo;
             nuevaLinea.Total = (value*parseFloat(jsonRows[j].Precio)).toFixed(2);
             nuevaLinea.Imagen = jsonRows[j].Imagen;
             nuevosDatos.push(nuevaLinea);                
@@ -317,6 +330,9 @@ function recalcularTotales() {
         var newOrder = {};
     }
     newData.orders = newOrders;
+}
+function buildAlertWarning(titulo, mensaje){
+  return '<div id="alert_limite" class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '</p></div>';
 }
 
 });

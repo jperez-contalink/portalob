@@ -146,27 +146,40 @@
       font-size: 150%;
       font-weight: bold;
     }
-
+    .txt_precio {
+      width: 90%;
+      padding: 1% 1% 1% 1%;
+      margin: 3% 4% 0% 0%;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body><br><br><br><br><br><br>
   <div align="center"><h1>Catálogo de Productos</h1></div>
   <div id="alertas" style="width:100%;border:0px solid black;"></div>
   <div>
-    <!--<div id="cat_filter" style="float:left;width:10%;"></div>-->
     <div id="cat_side" style="float:left;width:15%;">
       <div id="cat_fil_aplicados"><strong>Filtros Aplicados</strong><br><a class="borraFiltros">Borrar Filtros</a></div><br>
       <div id="cat_filter"></div>
     </div>
     <div id="cat_pro" style="float:left;width:85%;"></div>
+    <div align="center" style="border:0px solid black;padding-left:15%;" id="cat_pag"></div>
+    <!--<div style="float:left;width:85%;">
+      <div align="center" id="cat_pro"></div>
+      <div align="center" id="cat_pag"></div>
+    </div>-->
+
   </div>
 
   <script type="text/javascript">
   var allData = {};
   var filterData = {};
   var allPrice = {};
+  var searchData = {};
   var charHead = [];
   var charItem = [];
+  var countProduct = 0;
+  var actualPage = 1;
   var itemsChar = {
     heads: charHead,
     items: charItem
@@ -194,8 +207,10 @@
             console.log("Productos", datos);
             allData = jsonConstructor(datos, allPrice);
             filterData = allData;
+            searchData = allData;
             cato.drawFiltros(allData);
-            cato.setData(allData);
+            //cato.setData(allData);
+            cambiaPagina(1, 12)
             },
           error:  function(){ 
             var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
@@ -213,7 +228,11 @@
     console.log("Busqueda");
     e.preventDefault();
     var parametro = document.getElementById("txt_search").value;
-    cato.setData(buscarPalabra(parametro));
+    //cato.setData(buscarPalabra(parametro));
+    //filterData = buscarPalabra(parametro);
+    //cambiaPaginaPLUS(1, 12);
+    console.log("PALABRA: " + parametro);
+    buscarPalabra(parametro);
     document.getElementById("txt_search").value = parametro;
     $( "#txt_search" ).focus();
   });
@@ -223,6 +242,7 @@
     $("body").scrollTop(0);
     console.log("E: ", e);
     var productId = e.currentTarget.id;
+    document.getElementById('cat_pag').style.display = "none";
     document.getElementById("cat_pro").innerHTML = buildAddProduct(productId);
   });
   $("#cat_pro").on('click', '.submitProduct', function (e) {
@@ -235,7 +255,7 @@
     var product = document.getElementById("hdnProduct").value;
     var product_value = document.getElementById("hdnValue").value;
     var imagenurl = document.getElementById("hdnImagen").value;
-    var inventarioMaximo = parseFloat(inventario.replace(" Piezas disponibles.", "");
+    var inventarioMaximo = parseFloat(inventario.replace(" Piezas disponibles.", ""));
     // Valida inventario
     if (parseFloat(inventario.replace(" Piezas disponibles.", "")) < parseFloat(cantidad)) {
       // No hay inventario despliega la alerta.
@@ -252,7 +272,9 @@
                 // Reestablecer Catálogo
                 filterData = allData;
                 cato.drawFiltros(allData);
-                cato.setData(allData);
+                //cato.setData(allData);
+                cambiaPaginaPLUS(1, 12);
+                document.getElementById('cat_pag').style.display = "initial";
                 document.getElementById('cat_fil_aplicados').style.display = 'none';
                 jQuery('#cat_fil_aplicados div').html('');
                 // Deseleccionar los checks de marca
@@ -271,8 +293,11 @@
 $("#cat_pro").on('click', '.close_cart', function (e) {
     console.log("CANCELAR PRODUCT HTML", e);
     e.preventDefault();
-    cato.setData(allData);
-    filterData = allData
+    //cato.setData(allData);
+    filterData = allData;
+    searchData = allData;
+    cambiaPaginaPLUS(1, 12);
+    document.getElementById('cat_pag').style.display = "initial";
     // limpiar la sección filtros aplicados
     document.getElementById('cat_fil_aplicados').style.display = 'none';
     jQuery('#cat_fil_aplicados div').html('');
@@ -300,13 +325,19 @@ $("#cat_pro").on('click', '.close_cart', function (e) {
   $("#cat_side").on('click', '.borraFiltros', function (e) {
     console.log("Borrar Filtros");
     e.preventDefault();
-    cato.setData(allData);
-    filterData = allData
+    //cato.setData(allData);
+    filterData = allData;
+    searchData = allData;
+    cambiaPaginaPLUS(1, 12);
     // limpiar la sección filtros aplicados
     document.getElementById('cat_fil_aplicados').style.display = 'none';
     jQuery('#cat_fil_aplicados div').html('');
     // Deseleccionar los checks de marca
     $("#cat_filter input[type=checkbox]").prop('checked', false);
+    document.getElementById('precioDesde').value = "";
+    document.getElementById('precioHasta').value = "";
+    console.log("%> LEN: " + allData.rows.length);
+    countProduct = allData.rows.length;
   });
   $("#cat_side").on('keypress', '.txtPrecioLeft', function (e) {
     console.log("Filtro Precio Desde");
@@ -357,6 +388,27 @@ $("#cat_pro").on('click', '.close_cart', function (e) {
       multiFiltros(selected);
       $("body").scrollTop(0);    
   });  
+  $(document).on('click', '.pagChange', function (e) {
+    console.log("PÁGINA!");
+    e.preventDefault();
+    console.log("$> E ", e); 
+    cambiaPaginaPLUS(e.target.innerText, e.target.id); 
+    $("body").scrollTop(0); 
+  });
+  $(document).on('click', '.pagNext', function (e) {
+    console.log("PÁGINA SIGUIENTE");
+    e.preventDefault(); 
+    console.log("E: ", e);
+    cambiaPaginaPLUS(actualPage + 1, e.target.id); 
+    $("body").scrollTop(0); 
+  });
+  $(document).on('click', '.pagPrev', function (e) {
+    console.log("PÁGINA ANTERIOR");
+    e.preventDefault();
+    console.log("E: ", e);
+    cambiaPaginaPLUS(actualPage - 1, e.target.id); 
+    $("body").scrollTop(0); 
+  });
   function jsonConstructor(json, allPrice) {
     console.log("ALLPRICE: ", allPrice);
     console.log("JSONPROD: ", json);
@@ -364,7 +416,7 @@ $("#cat_pro").on('click', '.close_cart', function (e) {
       var rows = [];
       var jsonObject = json.response;
       var jsonRows = allPrice.rows;
-      
+      indiceJson = 0;
       for (var i=0;i<jsonObject.totalRows;i++) {
           var row = {};
           row.Producto_ID     = jsonObject.data[i].id;
@@ -392,10 +444,10 @@ $("#cat_pro").on('click', '.close_cart', function (e) {
           }
         }
         if (typeof(row.Precio) == "undefined"){
-          console.log("$> Hace precio 0");
           row.Precio = 0;
         }
-        // Gestionar caracteristicas
+
+        // Gestionar Caracteristicas
         if (jsonObject.data[i].caracteristicas != null) {
           var caracteristicas = (jsonObject.data[i].caracteristicas).split("_");
             for (var j = 0; j < caracteristicas.length; j++) {
@@ -412,7 +464,11 @@ $("#cat_pro").on('click', '.close_cart', function (e) {
             }
         }
         // GC 
+        if (row.Precio != 0 && row.Inventario != "0 Piezas") {
+          row.Indice = indiceJson + 1;
+          indiceJson++;
           rows.push(row);
+        }
       } 
       // Definir columnas
       var cols = {
@@ -450,6 +506,7 @@ $("#cat_pro").on('click', '.close_cart', function (e) {
                   rows: rows
               };
       console.log("$> Termina Construcción Productos");        
+      countProduct = indiceJson;
       return data;
   }  // Termina json Constructor
 
@@ -504,19 +561,89 @@ $("#cat_pro").on('click', '.close_cart', function (e) {
 function buscarPalabra(palabra) {
   var rowsNuevos = [];
   // recorrer alldata
-  for (var i=0;i<filterData.rows.length;i++) {
-    var currentName = filterData.rows[i].Nombre;
+  for (var i=0;i<searchData.rows.length;i++) {
+    var currentName = searchData.rows[i].Nombre;
     currentName = currentName.toUpperCase();
     if (currentName.indexOf(palabra.toUpperCase()) > -1) {
-      rowsNuevos.push(filterData.rows[i]);
+      rowsNuevos.push(searchData.rows[i]);
     }
   }
   var rowsNuevos = {
-                cols: filterData.cols,
+                cols: searchData.cols,
                 rows: rowsNuevos
             };
+  filterData = rowsNuevos;
+  //searchData = rowsNuevos;
+  cambiaPaginaPLUS(1, 12);
+  //return rowsNuevos;
+}
+function cambiaPagina(pagina, items){
+  // DESBORDE DE PAGINAS
+  if (items == ""){
+    items = 12;
+  } 
+  if (pagina < 1) {
+    pagina = 1;
+  }
+  var allPages = Math.ceil(countProduct / items);
+  if (pagina > allPages) {
+    pagina = allPages;
+  }
+  frst = parseFloat(pagina - 1)*parseFloat(items);
+  if (frst == 0) {
+    frst = 1;
+  }
+
+  last = frst + parseFloat(items);
+  var jsonRows = allData.rows;
+  var rowsNuevos = [];
+  for (var key in jsonRows) {
+      var obj = jsonRows[key];
+
+      if (obj.Indice >= frst && obj.Indice < last) {
+          rowsNuevos.push(obj);
+      }
+  }
   
-  return rowsNuevos;
+  var data = {
+      cols: allData.cols,
+      rows: rowsNuevos
+  };
+  actualPage = pagina;
+  //filterData = data;
+  cato.setData(data);  
+}
+
+function cambiaPaginaPLUS(pagina, items){
+  // DESBORDE DE cambiaPaginaPLUS
+  if (items == ""){
+    items = 12;
+  } 
+  if (pagina < 1) {
+    pagina = 1;
+  }
+  var allPages = Math.ceil(countProduct / items);
+  if (pagina > allPages) {
+    pagina = allPages;
+  }
+
+  frst = parseFloat(pagina - 1)*parseFloat(items);
+  var jsonRows = filterData.rows;
+  var rowsNuevos = [];
+  for (var i=0;i<items;i++) {
+    if (filterData.rows[frst] != undefined) {
+      rowsNuevos.push(filterData.rows[frst]);
+      frst++;
+    }
+  }
+  
+  var data = {
+      cols: filterData.cols,
+      rows: rowsNuevos
+  };
+  actualPage = pagina;
+  //filterData = data;
+  cato.setData(data);  
 }
 /*function setDatafiltro(datos){
   cato.setData(datos);
@@ -604,30 +731,40 @@ function buscarPalabra(palabra) {
     console.log("$> " + document.getElementById('precioDesde').value + " - " + document.getElementById('precioHasta').value);
       var precioDesde = document.getElementById('precioDesde').value;
       var precioHasta = document.getElementById('precioHasta').value;
-      if (precioHasta == null) {precioHasta = 0;}
-      if (precioDesde == null) {precioDesde = 0;}
+      /*if (precioHasta == null) {precioHasta = Infinity;}
+      if (precioDesde == null) {precioDesde = 0;}*/
       var jsonRows = filterData.rows;
       var rowsNuevos = [];
       for (var key in jsonRows) {
           var obj = jsonRows[key]; 
-          if (obj.Precio >= precioDesde && obj.Precio <= precioHasta) {
+          if (precioHasta == "" && precioDesde != "") {
+            if (parseFloat(obj.Precio) >= parseFloat(precioDesde)) {
+                rowsNuevos.push(obj);
+            }            
+          }
+          if (precioHasta != "" && precioDesde == "") {
+            if (parseFloat(obj.Precio) <= parseFloat(precioHasta)) {
+              rowsNuevos.push(obj);
+            }
+          }
+          if (precioHasta == "" && precioDesde == "") {
               rowsNuevos.push(obj);
           }
+          if (precioHasta != "" && precioDesde != "") {
+            if (parseFloat(obj.Precio) >= parseFloat(precioDesde) && parseFloat(obj.Precio) <= parseFloat(precioHasta)) {
+                rowsNuevos.push(obj);
+            }
+          }
+
       }
       var data = {
           cols: allData.cols,
           rows: rowsNuevos
       };
-      // Actualizar Filtros Aplicados
-      //document.getElementById('cat_fil_aplicados').style.display = 'block';
-      //var innerDiv = document.createElement('div');
-      //innerDiv.innerHTML = categoria;
-      //innerDiv.className = 'filtroAplicado';
-      //var iDiv = document.getElementById('cat_fil_aplicados');
-      //iDiv.appendChild(innerDiv);
-      //
-      //setDataFiltro(data);
+
+      document.getElementById('cat_fil_aplicados').style.display = 'block';
       filterData = data;
+      searchData = data;
       cato.setData(data);
   }
 // FILTROS MULTISELECCIÓN
@@ -662,18 +799,13 @@ function multiFiltros(checks){
       for (var key in jsonRows) {
           var obj = jsonRows[key];
           if (!varMar && checks.indexOf(obj.Marca)>-1){
-            console.log("la marca " + obj.Marca + " esta en mis filtros.");
             varMar = true;
           }
           if (!varCat && checks.indexOf(obj.Categoria)>-1){
-            console.log("la categoria " + obj.Categoria + " esta en mis filtros.");
             varCat = true;
           }
 
       }          
-      console.log("varCat: " + varCat);
-      console.log("varMar: " + varMar);
-      console.log("varCar: " + varCar);
       for (var key in jsonRows) {
           var obj = jsonRows[key]; 
           if ((checks.indexOf(obj.Categoria) > -1 && checks.indexOf(obj.Marca) > -1 && varCat && varMar) || (checks.indexOf(obj.Categoria) > -1 && !varMar) || (checks.indexOf(obj.Marca) > -1 && !varCat)) {
@@ -684,7 +816,6 @@ function multiFiltros(checks){
             for (var ch = 0;ch<checks.length;ch++) {
               var arrayCar = checks[ch].split("_");
               if (arrayCar.length = 2){
-                console.log("Entra a validar caracteristicas");
                 if (checks.indexOf(arrayCar[0] + '_' + obj[arrayCar[0]]) > -1 && !prodAdd){
                   rowsNuevos.push(obj);   
                 }
@@ -705,7 +836,10 @@ function multiFiltros(checks){
         data = allData;
       }
       filterData = data;
-      cato.setData(data);
+      searchData = data;
+      cambiaPaginaPLUS(1, 12);
+      //cato.setData(data);
+
   }  
 // extra
   function imagenMarca(marca, categoria){
@@ -764,13 +898,13 @@ function buildAddProduct(productID){
         buildHTML += '<div align="left"><h2>'+obj.Nombre+'</h2></div>';
         //buildHTML += '<p>$' + obj.Precio + '<br>' + obj.Inventario + '<br>' + obj.Identificador + '<br></p>';
         // Identificador
-        buildHTML += '<div class="cartValue" id="cartValue">' + obj.Identificador + '</div>';
+        buildHTML += '<div align="left" class="cartValue" id="cartValue">' + obj.Identificador + '</div>';
         // Precio
-        buildHTML += '<div class="cartPrecio" id="cartPrecio">$' + obj.Precio + '</div>';
+        buildHTML += '<div align="left" class="cartPrecio" id="cartPrecio">$' + obj.Precio + '</div>';
         // Inventario
-        buildHTML += '<div class="cartInventario" id="cartInventario">' + obj.Inventario + ' disponibles.</div>';
+        buildHTML += '<div align="left" class="cartInventario" id="cartInventario">' + obj.Inventario + ' disponibles.</div>';
         // Cantidad
-        buildHTML += '<hr width="80%" align="left"><div class="cartCantidad">Cantidad: &nbsp;<input type="text" id="cartCantidad" value="1"/></div>';
+        buildHTML += '<hr width="80%" align="left"><div  align="left" class="cartCantidad">Cantidad: &nbsp;<input type="text" id="cartCantidad" value="1"/></div>';
         // BtonAgregar
         buildHTML += '<div class="cartBtn" align="left"><br><input id="' + obj.Producto_ID + '" type="button" value="añadir producto al carrito" class="btn btn-default btn-anadir submitProduct"> </div>';
         // Valores ocultos para envío de parametros

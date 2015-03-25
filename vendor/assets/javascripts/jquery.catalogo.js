@@ -20,7 +20,7 @@
          */
         priv.init = function () {
             //document.getElementById("cat_pro").innerHTML = '<div align="center"><strong> CATALOGO VACIO</strong></div>';
-            document.getElementById("cat_pro").innerHTML = '<br><br><br><br><br><div align="center" id="loader-wrapper"><img src="load.gif" height="9%" width="6%"></img></div>';
+            document.getElementById("cat_pro").innerHTML = '<br><br><br><br><br><br><br><div align="center" id="loader-wrapper"><img src="load.gif" height="9%" width="6%"></img></div>';
         };
         priv.setData = function (pData) {
             priv.drawCat(pData);
@@ -37,16 +37,32 @@
                 var inventario = parseFloat((obj.Inventario).replace(" Piezas", ""));
                 if (obj.Precio != 0 && inventario > 0) {
                     if (obj.Inventario == "0 Piezas"){ style = 'style="color:red;"';}
-                    //tabla += '<a href="javascript:agregar();"><div class="item" style="background-image: url('+obj.Image+');"><h1>' + obj.Nombre + '</h1>';
-                    //tabla += '<h2>$' + obj.Precio + '<br><div ' + style + '>' + obj.Inventario + '</div></h2></div></a>';
-                    //tabla += '<a href="javascript:agregar();"><div class="itemA"><div align="center" class="bgImage"><img src="'+obj.Image+'" width="60%"></img></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
-                    tabla += '<a href="javascript:agregar();" class="addProduct" id="' + obj.Producto_ID + '"><div class="itemA"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
-
+                    tabla += '<a href="javascript:agregar();" class="addProduct" id="' + obj.Producto_ID + '"><div class="itemA" align="left"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
                     style="";
                 }
             }
             tabla += "</div>";
             document.getElementById("cat_pro").innerHTML = tabla;
+            // PINTAR PAGINACIÓN
+            priv.drawPagination(pData);
+            
+        };
+        priv.drawPagination = function(pData) {
+            var rows = pData.rows;
+            var lon = filterData.rows.length;
+            var items = 12; // Al cambiar este valor tambien hay que cambiar el hardcode que previene el infinity en catalogoproductos.html.erb / cambiaPagina() / cambiaPagina(1, 12);
+            var htmlPag = '<nav><ul class="pagination"><li><a class="pagPrev" aria-label="Previous"><span id="' + items + '" aria-hidden="true">&laquo;</span></a></li>';
+            for (var i=0;i<Math.ceil(lon / items);i++) {
+                indx = i + 1;
+                if (actualPage == indx) {
+                    htmlPag += '<li><a style="font-weight:bold;background-color:#2980b9;color:#ecf0f1" id="' + items + '" class="pagChange">' + indx + '</a></li>';    
+                } else {
+                    htmlPag += '<li><a id="' + items + '" class="pagChange">' + indx + '</a></li>';    
+                }
+            }
+            
+            htmlPag += '<li><a class="pagNext" aria-label="Next"><span id="' + items + '" aria-hidden="true">&raquo;</span></a></li></ul></nav>';
+            document.getElementById("cat_pag").innerHTML = htmlPag;
         };
         /* Public API
          *************************************************************************/
@@ -96,8 +112,8 @@
                 }
             }
             console.log("Filtro de Precios");
-            var filPrice = '<div style="display:none"><strong>PRECIOS</strong><br>';
-            filPrice += '<input width="3%" type="text" class="txtPrecioLeft" id="precioDesde"/><br><input width="3%" type="text" class="txtPrecioRight" id="precioHasta"/><br></div>';
+            var filPrice = '<div><strong>PRECIOS</strong><br>';
+            filPrice += '<input width="3%" type="text" class="txtPrecioLeft txt_precio" id="precioDesde"  placeholder="Precios Desde"/><br><input width="3%" type="text" class="txtPrecioRight txt_precio" id="precioHasta"  placeholder="Precios Hasta"/><br></div><br>';
 
             // Construir Filtros de precios
             var filtros = filPrice + marcas + "<br>" + categorias + caracteriticas;
