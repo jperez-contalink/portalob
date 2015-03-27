@@ -297,10 +297,12 @@ $("#cat_pro").on('click', '.close_cart', function (e) {
     filterData = allData;
     searchData = allData;
     cambiaPaginaPLUS(1, 12);
-    document.getElementById('cat_pag').style.display = "initial";
+    document.getElementById('cat_pag').style.display = "block";
     // limpiar la sección filtros aplicados
     document.getElementById('cat_fil_aplicados').style.display = 'none';
     jQuery('#cat_fil_aplicados div').html('');
+    document.getElementById('precioDesde').value = "";
+    document.getElementById('precioHasta').value = "";
     // Deseleccionar los checks de marca
     $("#cat_filter input[type=checkbox]").prop('checked', false);      
   });
@@ -399,7 +401,7 @@ $("#cat_pro").on('click', '.close_cart', function (e) {
     console.log("PÁGINA SIGUIENTE");
     e.preventDefault(); 
     console.log("E: ", e);
-    cambiaPaginaPLUS(actualPage + 1, e.target.id); 
+    cambiaPaginaPLUS(parseFloat(actualPage) + 1, e.target.id); 
     $("body").scrollTop(0); 
   });
   $(document).on('click', '.pagPrev', function (e) {
@@ -517,7 +519,7 @@ $("#cat_pro").on('click', '.close_cart', function (e) {
       for (var i=0;i<jsonObject.totalRows;i++) {
           var row = {};
           row.Producto_ID = jsonObject.data[i].product;
-          row.Precio = jsonObject.data[i].pricelist11;
+          row.Precio = (jsonObject.data[i].pricelist11).toFixed(2);
           rows.push(row);
       } 
       // Definir columnas
@@ -616,6 +618,7 @@ function cambiaPagina(pagina, items){
 
 function cambiaPaginaPLUS(pagina, items){
   // DESBORDE DE cambiaPaginaPLUS
+  
   if (items == ""){
     items = 12;
   } 
@@ -636,14 +639,15 @@ function cambiaPaginaPLUS(pagina, items){
       frst++;
     }
   }
-  
-  var data = {
+  if (rowsNuevos.length > 0) {
+    var data = {
       cols: filterData.cols,
       rows: rowsNuevos
   };
   actualPage = pagina;
   //filterData = data;
-  cato.setData(data);  
+  cato.setData(data);
+  }
 }
 /*function setDatafiltro(datos){
   cato.setData(datos);
@@ -765,7 +769,8 @@ function cambiaPaginaPLUS(pagina, items){
       document.getElementById('cat_fil_aplicados').style.display = 'block';
       filterData = data;
       searchData = data;
-      cato.setData(data);
+      //cato.setData(data);
+      cambiaPaginaPLUS(1, 12);
   }
 // FILTROS MULTISELECCIÓN
 function multiFiltroMarca(marcas){
@@ -837,6 +842,14 @@ function multiFiltros(checks){
       }
       filterData = data;
       searchData = data;
+      // AGREGADO AL FINAL
+      // Si existe algo escrito en los precios aplica el filtro primero
+      var precioDesde = document.getElementById('precioDesde').value;
+      var precioHasta = document.getElementById('precioHasta').value;
+      if (precioDesde != "" || precioHasta != "") {
+        filtroPrecio();
+      }
+      // AGREGADO AL FINAL      
       cambiaPaginaPLUS(1, 12);
       //cato.setData(data);
 

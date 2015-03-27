@@ -51,7 +51,7 @@
             var rows = pData.rows;
             var lon = filterData.rows.length;
             var items = 12; // Al cambiar este valor tambien hay que cambiar el hardcode que previene el infinity en catalogoproductos.html.erb / cambiaPagina() / cambiaPagina(1, 12);
-            var htmlPag = '<nav><ul class="pagination"><li><a class="pagPrev" aria-label="Previous"><span id="' + items + '" aria-hidden="true">&laquo;</span></a></li>';
+            var htmlPag = '<nav><ul class="pagination pagination-sm"><li><a class="pagPrev" aria-label="Previous"><span id="' + items + '" aria-hidden="true">&laquo;</span></a></li>';
             for (var i=0;i<Math.ceil(lon / items);i++) {
                 indx = i + 1;
                 if (actualPage == indx) {
@@ -60,7 +60,6 @@
                     htmlPag += '<li><a id="' + items + '" class="pagChange">' + indx + '</a></li>';    
                 }
             }
-            
             htmlPag += '<li><a class="pagNext" aria-label="Next"><span id="' + items + '" aria-hidden="true">&raquo;</span></a></li></ul></nav>';
             document.getElementById("cat_pag").innerHTML = htmlPag;
         };
