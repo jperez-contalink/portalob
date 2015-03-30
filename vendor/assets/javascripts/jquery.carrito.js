@@ -37,8 +37,13 @@
                     if (jsonOrders[i].Order_id == jsonRows[j].Order_id) {
                         htmlBuilder += '<div style="border:0px solid grey;" id="' + jsonRows[j].Product_id + '_ROW">';
                         htmlBuilder += '<div align="center" class="imgGrid" style="float:left;"><img src="' + jsonRows[j].Imagen + '" height="100px"></img></div>';
-                        htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + jsonRows[j].Producto + '</div>';
-                        htmlBuilder += '<div align="right" id="' + jsonRows[j].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + priv.separaMiles(jsonRows[j].Precio) + '</div>';
+                        if (jsonRows[j].Productoextra != "null") {
+                            htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + jsonRows[j].Producto + ' + ' + jsonRows[j].Productoextra + '</div>';
+                            htmlBuilder += '<div align="right" id="' + jsonRows[j].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + priv.separaMiles((parseFloat(jsonRows[j].Precio) - parseFloat(jsonRows[j].Precioproductoextra)).toFixed(2)) + ' + $' + priv.separaMiles(jsonRows[j].Precioproductoextra) +'</div>';
+                        } else {
+                            htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + jsonRows[j].Producto + '</div>';                            
+                            htmlBuilder += '<div align="right" id="' + jsonRows[j].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + priv.separaMiles(jsonRows[j].Precio) + '</div>';
+                        }
                         htmlBuilder += '<div align="center" class="qtyGrid" style="float:left;"><input class="chng_qty" type="text" value="' + priv.separaMiles(jsonRows[j].Cantidad) + '" id="' + jsonRows[j].Linea_id + '_Cantidad" /></div>';
                         //htmlBuilder += '<div align="right" id="' + jsonRows[j].Linea_id + '_Total" class="totalGrid" style="float:left;">$' + jsonRows[j].Total + '<br><a onclick="borraLinea(\'' + jsonRows[j].Linea_id + '\')">Eliminar</a></div>';
                         htmlBuilder += '<div align="right" id="totalGrid" class="totalGrid" style="float:left;">$' + priv.separaMiles(jsonRows[j].Total) + '<br><a id="' + jsonRows[j].Linea_id + '_Drop"class="drop_lin">Eliminar</a></div>';
@@ -49,7 +54,8 @@
                 htmlBuilder += '<div style="border:0px solid red;float:left;width:70%;">&nbsp;</div>';
                 htmlBuilder += '<div class="netQty" id="netQty" style="border:0px solid red;float:left;width:10%;">' + priv.separaMiles(jsonOrders[i].Productos) + '</div>';
                 htmlBuilder += '<div class="netTotal" style="border:0px solid red;float:left;width:20%;">';
-                htmlBuilder += '<div class="subtotal" id="idSubTotal" align="right">Subtotal: $' + priv.separaMiles(jsonOrders[i].Subtotal) + '</div><hr>';
+                htmlBuilder += '<div class="subtotal" id="idSubTotal" align="right">Subtotal: $' + priv.separaMiles(jsonOrders[i].Subtotal) + '</div>';
+                htmlBuilder += '<div class="impuestos" id="idImpuestos" align="right">Impuestos: $' + priv.separaMiles(jsonOrders[i].Impuestos) + '</div>';
                 htmlBuilder += '<div class="total"  id="idTotal" align="right">Total: $' + priv.separaMiles(jsonOrders[i].Total) + '</div></div>';
                 htmlBuilder += '<div class="cartBtn" id="cartBtn" style="float:left;width:100%;padding:2% 1% 1% 1%;border:0px solid red;" align="right">';
                 htmlBuilder += '<br><br><input type="button" id="btn_guardar" onclick="guardarCambios()" value="Catálogo de productos" class="btn btn-default btn-sbmt sbmt_pedido btn_save"/>';

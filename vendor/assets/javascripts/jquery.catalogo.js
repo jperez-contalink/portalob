@@ -25,6 +25,11 @@
         priv.setData = function (pData) {
             priv.drawCat(pData);
         };
+        priv.cleanData = function (pData) {
+            //priv.drawCat(pData);
+            document.getElementById("cat_pro").innerHTML = "";
+            document.getElementById("cat_pag").innerHTML = "";
+        };
         priv.drawCat = function (pData) {
             console.log("Pintar Catalogo", pData);
             var jsonCols = pData.cols;
@@ -36,8 +41,16 @@
                 var obj = jsonRows[key]; 
                 var inventario = parseFloat((obj.Inventario).replace(" Piezas", ""));
                 if (obj.Precio != 0 && inventario > 0) {
+                    var pextra = "";
+                    var montoextra = 0;
+                    montoextra = parseFloat(obj.Impuestoproductoextra) + parseFloat(obj.Precioproductoextra);
+                    if (montoextra > 0) {
+                        pextra = "Incluye $" + String(montoextra) + " (" + obj.Productoextra +  ")";
+                    }
+                    // Gestiona productos extra
+                    //Incluye ' + parseFloat(obj.Precioproductoextra)+parseFloat(obj.Impuestoproductoextra) + ' (' + obj.Precioproductoextra + ') 
                     if (obj.Inventario == "0 Piezas"){ style = 'style="color:red;"';}
-                    tabla += '<a href="javascript:agregar();" class="addProduct" id="' + obj.Producto_ID + '"><div class="itemA" align="left"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precio+'<br>'+obj.Inventario+'</div></a>';
+                    tabla += '<a href="javascript:agregar();" class="addProduct" id="' + obj.Producto_ID + '"><div class="itemA" align="left"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precioshow+' ' + pextra + '<br>'+obj.Inventario+'</div></a>';
                     style="";
                 }
             }
@@ -75,6 +88,11 @@
             //merge supplied options with defaults
             $.extend(priv.options, defaults, koalas);
             priv.init();
+            return publ;
+        };
+        publ.limpiarCatalogo = function (data) {
+            console.log("Limpiar Vendor");
+            priv.cleanData();
             return publ;
         };
         publ.drawFiltros = function(pData){

@@ -76,6 +76,11 @@
         font-size: 130%;
         font-weight: bold;
     }
+    .impuestos {
+        padding: 5% 10% 5% 0%;
+        font-size: 120%;
+        border-radius: 1px solid grey;
+    }
     .total {
         padding: 0% 10% 0% 0%;
         font-size: 160%;
@@ -162,29 +167,40 @@ function orderContructor(){
     var rows = [];
     var rowsOrder = [];
     var subTotal = 0;
+    var Total = 0;
+    var Impuestos = 0;
     var qtyProductos = 0;
     var row = {};
     var rowOrder = {};
     <% Pedido.where(usuario_id: current_usuario.id).find_each do |ords|%>
         rowOrder.Order_id = <%= ords.id %>;
         <% Pedidolinea.where(pedido_id: ords.id).find_each do |lins| %>
+            var strImpuesto = "<%= lins.impuesto %>";
+            if (strImpuesto == "") {
+                var impuesto = 0;
+
+            } else {
+                var impuesto = parseFloat(strImpuesto);
+            }
             row.Order_id = <%= ords.id %>;
             row.Linea_id = <%= lins.id %>;
             row.Product_id = "<%= lins.product_id %>";
             row.Producto = "<%= lins.producto %>";
             row.Cantidad = (<%= lins.cantidad %>).toFixed(2);
-            //console.log("$$> LINEA QTY: ");
             row.Precio = (<%= lins.precio %>).toFixed(2);
+            row.Impuesto = (impuesto).toFixed(2);
             row.Total = (<%= lins.total %>).toFixed(2);
-
             row.Imagen = "<%= lins.imagen %>";
-            subTotal = subTotal + parseFloat(row.Precio) * parseFloat(row.Cantidad);
+            subTotal = subTotal + parseFloat(row.Precio) * parseFloat(row.Cantidad) - parseFloat(row.Impuesto) * parseFloat(row.Cantidad);
+            Total = subTotal + parseFloat(row.Precio) * parseFloat(row.Cantidad);
+            Impuestos = Impuestos + parseFloat(row.Impuesto) * parseFloat(row.Cantidad);
             qtyProductos = qtyProductos + parseFloat(row.Cantidad);
             rows.push(row);
             var row = {};
         <% end %>
         rowOrder.Subtotal = (subTotal).toFixed(2);
-        rowOrder.Total = (subTotal).toFixed(2);
+        rowOrder.Impuestos = (Impuestos).toFixed(2);
+        rowOrder.Total = (Total).toFixed(2);
         rowOrder.Productos = (qtyProductos).toFixed(2);
         qtyProductos = 0;
         subTotal = 0;
@@ -210,12 +226,23 @@ function orderOpenBravo(json) {
         row.Pedido_ID       = jsonObject.data[i].pobPedido;
         row.Documentno      = jsonObject.data[i].documentno;
         row.Docstatus       = jsonObject.data[i].docstatus;
+        row.Delivered       = jsonObject.data[i].delivered;
+        console.log("Entregado: " + row.Delivered);
         switch (jsonObject.data[i].docstatus) {
             case "DR":
                 row.Estado  = '<p style="font-weight:bold;color:#3498db;display:inline;">POR PROCESAR</p>';
             break
             // Nada entregado => POR ENTREGAR | Entregado parcialemente X% ENTREGADO | Entragado todo => CERRADO
             case "CO":
+                if (parseFloat(row.Delivered) == 0) {
+                    row.Estado  = '<p style="font-weight:bold;color:#2ecc71;display:inline;">POR ENTREGAR</p>';
+                }
+                if (parseFloat(row.Delivered) > 0 && parseFloat(row.Delivered) < 100) {
+                    row.Estado  = '<p style="font-weight:bold;color:#2ecc71;display:inline;">' + parseFloat(row.Delivered) + '% ENTREGADO/p>';
+                }
+                if (parseFloat(row.Delivered) == 100) {
+                    row.Estado  = '<p style="font-weight:bold;color:#2ecc71;display:inline;">CERRADO</p>'; 
+                }
                 row.Estado  = '<p style="font-weight:bold;color:#2ecc71;display:inline;">POR ENTREGAR</p>';
             break
             case "CL":
@@ -255,12 +282,12 @@ function buildListaOrdenes(ob, ord, pedido, html){
     for (var i=0;i<pedidosOB.length;i++) {
         for (var j=0;j<pedidosPortal.length;j++) {
             if (pedidosOB[i].Pedido_ID == pedidosPortal[j].Order_id && (pedidosPortal[j].Order_id != pedido || todos == true)) {
-                //htmlBuilder += '<div class="headRow">PEDIDO #2342 ESTADO: POR ENTREGAR</div>';
-                //htmlBuilder += '<div align="left" class="headRow"><h2>PEDIDO # ' + pedidosPortal[j].Order_id + '</h2><br>ESTADO: ' + pedidosOB[i].Estado + '<br></div>';
+                console.log("OB: " + pedidosOB[i].Documentno + " - RR: " + pedidosPortal[j].Order_id);
                 htmlBuilder += '<div align="left" class="headRow"><h2>PEDIDO # ' + pedidosOB[i].Documentno + '</h2><br>ESTADO: ' + pedidosOB[i].Estado + '<br><a href="javascript:mostrarDetalle(\'' + pedidosOB[i].Documentno + '\')">Detalles</a></div>';
                 htmlBuilder += '<div align="center" class="lineGrid" id="lineGrid_' + pedidosOB[i].Documentno + '" style="display:none;">';
                 for (var k=0;k<lineasPortal.length;k++) {
                     if (pedidosPortal[j].Order_id == lineasPortal[k].Order_id && (lineasPortal[k].Order_id != pedido || todos == true)){
+                        console.log("%> ", lineasPortal[k]);
                         // PINTAR DETALLES DE LA LINEA lineasPortal[k].propiedad
                         htmlBuilder += '<div style="border:0px solid grey;" id="' + lineasPortal[k].Product_id + '_ROW">';
                         htmlBuilder += '<div align="center" class="imgGrid" style="float:left;"><img src="' + lineasPortal[k].Imagen + '" height="50px"></img></div>';
@@ -276,14 +303,13 @@ function buildListaOrdenes(ob, ord, pedido, html){
             htmlBuilder += '<div style="border:0px solid red;float:left;width:100%;" id="' + pedidosOB[i].Documentno + '_blank">&nbsp;</div>';
             htmlBuilder += '<div class="netQty" id="' + pedidosOB[i].Documentno + '_qty" style="border:0px solid red;float:left;width:10%;display:none">' + separaMiles(pedidosPortal[j].Productos) + ' </div>';
             htmlBuilder += '<div class="netTotal" id="' + pedidosOB[i].Documentno + '_total" style="border:0px solid blue;float:left;width:20%;display:none">';
-            htmlBuilder += '<div class="subtotal" align="right">Subtotal: $' + separaMiles(pedidosPortal[j].Subtotal) + '</div><hr>';
+            htmlBuilder += '<div class="subtotal" align="right">Subtotal: $' + separaMiles(pedidosPortal[j].Subtotal) + '</div>';
+            htmlBuilder += '<div class="impuestos" align="right">Impuestos: $' + separaMiles(pedidosPortal[j].Impuestos) + '</div>';
             htmlBuilder += '<div class="total" align="right">Total: $' + separaMiles(pedidosPortal[j].Total) + '</div></div>';
             }
         }
     }
     // PINTAR EN div
-    //document.getElementById("div_message").innerHTML = htmlBuilder;
-    console.log("%> " + html + htmlBuilder);
     document.getElementById("div_message").innerHTML = html + htmlBuilder;
 }
 function buildListaOrden(ob, ord, pedido){
@@ -329,7 +355,8 @@ function buildListaOrden(ob, ord, pedido){
             htmlBuilder += '<div style="border:0px solid red;float:left;width:100%;" id="' + pedidosOB[i].Documentno + '_blank">&nbsp;</div>';
             htmlBuilder += '<div class="netQty" id="' + pedidosOB[i].Documentno + '_qty" style="border:0px solid red;float:left;width:10%;display:none">' + separaMiles(pedidosPortal[j].Productos) + ' </div>';
             htmlBuilder += '<div class="netTotal" id="' + pedidosOB[i].Documentno + '_total" style="border:0px solid blue;float:left;width:20%;display:none">';
-            htmlBuilder += '<div class="subtotal" align="right">Subtotal: $' + separaMiles(pedidosPortal[j].Subtotal) + '</div><hr>';
+            htmlBuilder += '<div class="subtotal" align="right">Subtotal: $' + separaMiles(pedidosPortal[j].Subtotal) + '</div>';
+            htmlBuilder += '<div class="impuestos" align="right">Impuestos: $' + separaMiles(pedidosPortal[j].Impuestos) + '</div>';
             htmlBuilder += '<div class="total" align="right">Total: $' + separaMiles(pedidosPortal[j].Total) + '</div></div>';
             }
         }
@@ -386,6 +413,7 @@ function buildListaOrdenX(ob, ord, pedido){
 }
 function separaMiles(numero){ 
     // Variable que contendra el resultado final
+    numero = numero.toString();
     var resultado = "";
     
     // Si el numero empieza por el valor "-" (numero negativo)

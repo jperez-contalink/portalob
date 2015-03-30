@@ -17,8 +17,11 @@ class PedidolineasController < ApplicationController
     end
     # Crear la linea en el pedido activo
     puts "CREAR LINEA"
+    # El precio ya incluye impuesto por es no se considera.
     total = params[:cantidad].to_f*params[:precio].to_f
-    Pedidolinea.create!({:pedido_id => @ord.id, :producto => params[:producto], :product_value => params[:product_value], :precio => params[:precio], :total => total, :cantidad => params[:cantidad], :product_id => params[:producto_id], :imagen => params[:imagenurl], :maximo => params[:invmax].to_f})
+    # params[:impuesto]
+    #Pedidolinea.create!({:pedido_id => @ord.id, :producto => params[:producto], :product_value => params[:product_value], :precio => params[:precio], :total => total, :cantidad => params[:cantidad], :product_id => params[:producto_id], :imagen => params[:imagenurl], :maximo => params[:invmax].to_f})
+    Pedidolinea.create!({:pedido_id => @ord.id, :producto => params[:producto], :product_value => params[:product_value], :precio => params[:precio], :total => total, :cantidad => params[:cantidad], :product_id => params[:producto_id], :imagen => params[:imagenurl], :maximo => params[:invmax].to_f, :impuesto => params[:impuesto].to_f, :precioob => params[:precioob].to_f, :precioproductoextra => params[:precioproductoextra].to_f, :productoextra => params[:productoextra]})
     @pedidolineas = Pedidolinea.all
   end
 

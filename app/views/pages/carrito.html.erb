@@ -5,76 +5,80 @@
     <title>CNTCTO</title>
     <style>
     .lineGrid {
-    	width: 100%;
-    	height: 100%;
-    	border: 0px solid red;
-    	padding: 1% 1% 1% 1%;
+        width: 100%;
+        height: 100%;
+        border: 0px solid red;
+        padding: 1% 1% 1% 1%;
     }
-	.imgGrid {
-    	width: 20%;
-    	height: 120px;
-    	border: 0px solid black;
-    	border-bottom: 1px solid #E6E6E6;
+    .imgGrid {
+        width: 20%;
+        height: 120px;
+        border: 0px solid black;
+        border-bottom: 1px solid #E6E6E6;
     }
     .nameGrid {
-    	width: 30%;
-    	height: 120px;
-    	border: 0px solid black;
-    	padding: 1% 1% 1% 1%;
-    	font-size: 150%;
-    	font-weight: bold;
-    	border-bottom: 1px solid #E6E6E6;
+        width: 30%;
+        height: 120px;
+        border: 0px solid black;
+        padding: 1% 1% 1% 1%;
+        font-size: 150%;
+        font-weight: bold;
+        border-bottom: 1px solid #E6E6E6;
     }
     .priceGrid {
-    	width: 20%;
-    	height: 120px;
-    	border: 0px solid black;
-    	padding: 1% 1% 1% 1%;
-    	color: black;
-    	border-bottom: 1px solid #E6E6E6;
+        width: 20%;
+        height: 120px;
+        border: 0px solid black;
+        padding: 1% 1% 1% 1%;
+        color: black;
+        border-bottom: 1px solid #E6E6E6;
     }
     .qtyGrid {
-    	width: 10%;
-    	height: 120px;
-    	border: 0px solid black;
-    	padding: .5% 0% 1% 0%;
-    	color: black;
-    	border-bottom: 1px solid #E6E6E6;
+        width: 10%;
+        height: 120px;
+        border: 0px solid black;
+        padding: .5% 0% 1% 0%;
+        color: black;
+        border-bottom: 1px solid #E6E6E6;
     }
     .qtyGrid input[type=text] {
         width: 50%;
         text-align:center;
     }
     .totalGrid {
-    	width: 20%;
-    	height: 120px;
-    	border: 0px solid black;
-    	padding: 1% 1% 1% 1%;
-    	font-size: 130%;
-    	font-weight: bold;
-    	border-bottom: 1px solid #E6E6E6;
+        width: 20%;
+        height: 120px;
+        border: 0px solid black;
+        padding: 1% 1% 1% 1%;
+        font-size: 130%;
+        font-weight: bold;
+        border-bottom: 1px solid #E6E6E6;
     } 
     .netQty {
-		padding: 2% 3% 0% 4%;
-    	font-size: 110%;
-    	font-weight: bold;
+        padding: 2% 3% 0% 4%;
+        font-size: 110%;
+        font-weight: bold;
     }   
     .netTotal {
-    	padding-top: 2%;
+        padding-top: 2%;
     }
     .subtotal {
-		padding: 0% 10% 0% 0%;
-    	font-size: 130%;
-    	font-weight: bold;
+        padding: 0% 10% 0% 0%;
+        font-size: 130%;
+        font-weight: bold;
+    }
+    .impuestos {
+        padding: 5% 10% 5% 0%;
+        font-size: 130%;
     }
     .total {
-		padding: 0% 10% 0% 0%;
-    	font-size: 160%;
-    	font-weight: bold;
+        padding: 0% 10% 0% 0%;
+        font-size: 160%;
+        font-weight: bold;
     }
     .totalGrid a{
-    	font-weight: normal;	
-    	font-size: 80%;
+        font-weight: normal;    
+        font-size: 80%;
     }
     .btn-sbmt {
         width: 20%;
@@ -105,13 +109,11 @@
   var newData = {};
   var dropLineas = "";
   var changeLineas = "";
-
   $(document).ready( function() {
     console.log("CARRITO.");
     var cart = $('#car_pro').Carrito({
       koalas: "kaolitis"
     }).data('Carrito');
-
   console.log("$> Sigue");
   allData = orderContructor();
   newData = allData;
@@ -121,7 +123,7 @@
     e.preventDefault();
     console.log("Cambiar Cantidad de la linea " + (e.currentTarget.id).replace("_Cantidad", "") + " a " + e.currentTarget.value);
     var id = (e.currentTarget.id).replace("_Cantidad", "");
-    if (e.currentTarget.value > 0 && e.currentTarget.value < 10000000) {
+    if (e.currentTarget.value > 0 && e.currentTarget.value < 1000) {
         var value = e.currentTarget.value;
     } else {
         value = 1;
@@ -153,7 +155,7 @@
     newData = borraLinea(id);
     recalcularTotales();
     cart.setData(newData);
-    cart.setData(newData);
+    //cart.setData(newData);
         // SERVICIO PRUEBAS
     $.ajax({
         type:"GET",
@@ -181,7 +183,6 @@
     console.log("Colocar Pedido ", e);
     Validacion();
   });
-
 // FUNCIONES  
 function Validacion() {   
     console.log("Submit Forma");
@@ -197,12 +198,13 @@ function guardarCambios(){
     document.getElementById('productos_change').value = changeLineas;
     document.getElementById("carrito_form").submit();    
 }  
-
 function orderContructor(){
     var rows = [];
     var rowsOrder = [];
     var subTotal = 0;
     var qtyProductos = 0;
+    var Impuestos = 0;
+    var Total = 0;
     var row = {};
     var rowOrder = {};
     <% Pedido.where(usuario_id: current_usuario.id, activo: true).find_each do |ords|%>
@@ -212,8 +214,11 @@ function orderContructor(){
             row.Linea_id = <%= lins.id %>;
             row.Product_id = "<%= lins.product_id %>";
             row.Producto = "<%= lins.producto %>";
+            row.Productoextra = "<%= lins.productoextra %>";
             row.Cantidad = (<%= lins.cantidad %>).toFixed(2);
             row.Precio = (<%= lins.precio %>).toFixed(2);
+            row.Precioproductoextra = (<%= lins.precioproductoextra %>).toFixed(2);
+            row.Impuesto = (<%= lins.impuesto %>).toFixed(2);
             row.Total = (<%= lins.total %>).toFixed(2);
             <% if lins.maximo == nil %>
                 row.Maximo = 100;
@@ -221,14 +226,17 @@ function orderContructor(){
                 row.Maximo = <%= lins.maximo %>
             <% end %>
             row.Imagen = "<%= lins.imagen %>";
-            subTotal = subTotal + parseFloat(row.Precio) * parseFloat(row.Cantidad);
+            subTotal = subTotal + (parseFloat(row.Precio) * parseFloat(row.Cantidad)) - (parseFloat(row.Impuesto) * parseFloat(row.Cantidad));
+            Impuestos = Impuestos + parseFloat(row.Impuesto) * parseFloat(row.Cantidad);
+            Total = Total + parseFloat(row.Precio) * parseFloat(row.Cantidad);
             qtyProductos = qtyProductos + parseFloat(row.Cantidad);
             rows.push(row);
             var row = {};
         <% end %>
-        rowOrder.Subtotal = (subTotal).toFixed(2);
-        rowOrder.Total = (subTotal).toFixed(2);
-        rowOrder.Productos = (qtyProductos).toFixed(2);
+        rowOrder.Subtotal   = (subTotal).toFixed(2);
+        rowOrder.Impuestos  = (Impuestos).toFixed(2);
+        rowOrder.Total      = (Total).toFixed(2);
+        rowOrder.Productos  = (qtyProductos).toFixed(2);
         rowsOrder.push(rowOrder);
         var rowOrder = {};
     <% end %>
@@ -246,7 +254,6 @@ function cambiaCantidad(id, value) {
     // recorre newData y elimina la linea
     console.log("FCNT: Modifica linea: " + id);
     changeLineas += id + "_" + value + ",";
-
     var nuevosDatos = [];
     var nuevaLinea = {};
     var jsonRows = newData.rows;
@@ -257,7 +264,7 @@ function cambiaCantidad(id, value) {
             nuevaLinea.Linea_id = jsonRows[j].Linea_id;
             nuevaLinea.Product_id = jsonRows[j].Product_id;
             nuevaLinea.Producto = jsonRows[j].Producto;
-            console.log("%> Compara " + value + " vs " + jsonRows[j].Maximo);
+            nuevaLinea.Productoextra = jsonRows[j].Productoextra;
             if (parseFloat(value) > parseFloat(jsonRows[j].Maximo)) {
                 nuevaLinea.Cantidad = jsonRows[j].Maximo;   
                 document.getElementById('alerta_carrito').innerHTML = buildAlertWarning("Inventario Insuficiente", "El producto " + jsonRows[j].Producto + " sólo tiene disponibles " + jsonRows[j].Maximo + " unidades, hemos cambiado la línea por ti.");
@@ -265,6 +272,8 @@ function cambiaCantidad(id, value) {
                 nuevaLinea.Cantidad = value;
             }
             nuevaLinea.Precio = jsonRows[j].Precio;
+            nuevaLinea.Precioproductoextra = jsonRows[j].Precioproductoextra;
+            nuevaLinea.Impuesto = jsonRows[j].Impuesto;
             nuevaLinea.Maximo = jsonRows[j].Maximo;
             nuevaLinea.Total = (value*parseFloat(jsonRows[j].Precio)).toFixed(2);
             nuevaLinea.Imagen = jsonRows[j].Imagen;
@@ -314,16 +323,19 @@ function recalcularTotales() {
     var ordQty = 0;
     var ordTotal = 0;
     var ordSubTotal = 0;
+    var ordImpuestos = 0;
     for (var i=0;i<jsonOrders.length;i++) {    
         for (var j=0;j<jsonRows.length;j++) {  
             if (jsonOrders[i].Order_id == jsonRows[j].Order_id) {
                     ordQty = ordQty + parseFloat(jsonRows[j].Cantidad);
-                    ordSubTotal = ordSubTotal + (parseFloat(jsonRows[j].Precio)*parseFloat(jsonRows[j].Cantidad));
+                    ordSubTotal = ordSubTotal + (parseFloat(jsonRows[j].Precio)*parseFloat(jsonRows[j].Cantidad)) - (parseFloat(jsonRows[j].Impuesto)*parseFloat(jsonRows[j].Cantidad));
+                    ordImpuestos = ordImpuestos + (parseFloat(jsonRows[j].Impuesto)*parseFloat(jsonRows[j].Cantidad));
                     ordTotal = ordTotal + (parseFloat(jsonRows[j].Precio)*parseFloat(jsonRows[j].Cantidad));
             }
         }
         newOrder.Order_id = jsonOrders[i].Order_id;
         newOrder.Subtotal = ordSubTotal.toFixed(2);
+        newOrder.Impuestos = ordImpuestos.toFixed(2);
         newOrder.Total = ordTotal.toFixed(2);
         newOrder.Productos = ordQty.toFixed(2);
         newOrders.push(newOrder);
@@ -334,7 +346,6 @@ function recalcularTotales() {
 function buildAlertWarning(titulo, mensaje){
   return '<div id="alert_limite" class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '</p></div>';
 }
-
 });
 </script>
 </html>

@@ -76,8 +76,9 @@
       border:15px solid #D0DEAB;
     }
     .bgImage {
+      height: 90px;
       border:0px solid black;
-      background-size: 60%;
+      background-size: 50%;
       background-repeat: no-repeat;
       background-position: center;
     }
@@ -255,6 +256,10 @@
     var product = document.getElementById("hdnProduct").value;
     var product_value = document.getElementById("hdnValue").value;
     var imagenurl = document.getElementById("hdnImagen").value;
+    var impuesto = document.getElementById("hdnImpuesto").value;
+    var precioob = document.getElementById("hdnPrecioOB").value;
+    var precioproductoextra = document.getElementById("hdnprecioextra").value;
+    var productoextra = document.getElementById("hdnproductoextra").value;
     var inventarioMaximo = parseFloat(inventario.replace(" Piezas disponibles.", ""));
     // Valida inventario
     if (parseFloat(inventario.replace(" Piezas disponibles.", "")) < parseFloat(cantidad)) {
@@ -266,7 +271,7 @@
       $.ajax({
                 type:"GET",
                 dataType : 'html',
-                url: "/pedidolineas?usuario_id=<%=current_usuario.id%>&producto_id=" + productid + '&cantidad=' + cantidad + '&precio=' + precio.replace("$", "") + "&producto=" + product + "&product_value=" + product_value + "&imagenurl=" + imagenurl + "&invmax=" + inventarioMaximo,
+                url: "/pedidolineas?usuario_id=<%=current_usuario.id%>&producto_id=" + productid + '&cantidad=' + cantidad + '&precio=' + precio.replace("$", "") + "&producto=" + product + "&product_value=" + product_value + "&imagenurl=" + imagenurl + "&invmax=" + inventarioMaximo + "&impuesto=" + impuesto + "&precioob=" + precioob + "&productoextra=" + productoextra + "&precioproductoextra=" + precioproductoextra,
                 success: function(datos){
                 console.log("$> linea añadida");     
                 // Reestablecer Catálogo
@@ -290,7 +295,7 @@
         });      
     }
   });
-$("#cat_pro").on('click', '.close_cart', function (e) {
+  $("#cat_pro").on('click', '.close_cart', function (e) {
     console.log("CANCELAR PRODUCT HTML", e);
     e.preventDefault();
     //cato.setData(allData);
@@ -379,14 +384,14 @@ $("#cat_pro").on('click', '.close_cart', function (e) {
       $("body").scrollTop(0);    
   });
   $("#cat_filter").on('change', '.fil_multi', function (e) {
-    console.log("Filtro de Multiseleccion");
+    //console.log("Filtro de Multiseleccion");
     e.preventDefault();
-    console.log("id: " + e.target.id);
+    //console.log("id: " + e.target.id);
       var selected = [];
       $('#cat_filter input:checked').each(function() {
           selected.push($(this).attr('id'));
       });
-      console.log("selected: ", selected);
+      //console.log("selected: ", selected);
       multiFiltros(selected);
       $("body").scrollTop(0);    
   });  
@@ -411,155 +416,166 @@ $("#cat_pro").on('click', '.close_cart', function (e) {
     cambiaPaginaPLUS(actualPage - 1, e.target.id); 
     $("body").scrollTop(0); 
   });
-  function jsonConstructor(json, allPrice) {
-    console.log("ALLPRICE: ", allPrice);
-    console.log("JSONPROD: ", json);
-    //name, value, familia, descargaimg, id
-      var rows = [];
-      var jsonObject = json.response;
-      var jsonRows = allPrice.rows;
-      indiceJson = 0;
-      for (var i=0;i<jsonObject.totalRows;i++) {
-          var row = {};
-          row.Producto_ID     = jsonObject.data[i].id;
-          row.Nombre          = jsonObject.data[i].name;
-          row.Identificador   = jsonObject.data[i].value;
-          row.Familia         = jsonObject.data[i].familia;
-          row.DescargaImg     = jsonObject.data[i].descargaimg;
-          row.Inventario      = jsonObject.data[i].inventario;
-          row.Marca           = jsonObject.data[i].marca;
-          row.Categoria       = jsonObject.data[i].categoria;
-          //row.Caracteristicas = jsonObject.data[i].caracteristicas;
-          if (jsonObject.data[i].image == "Y"){
-            row.Image = "imagenesProductos/" + jsonObject.data[i].id + ".png";
-          } else {
-            // Asignar una imagen por marca si no coicide la marca row.Image = "N"
-            row.Image = imagenMarca(row.Marca, row.Categoria);
-            if (row.Image == "N") {
-              row.Image = "imagenesProductos/noimage.png";
+function jsonConstructor(json, allPrice) {
+  console.log("ALLPRICE: ", allPrice);
+  console.log("JSONPROD: ", json);
+  //name, value, familia, descargaimg, id
+    var rows = [];
+    var jsonObject = json.response;
+    var jsonRows = allPrice.rows;
+    indiceJson = 0;
+    for (var i=0;i<jsonObject.totalRows;i++) {
+        var row = {};
+        row.Producto_ID     = jsonObject.data[i].id;
+        row.Nombre          = jsonObject.data[i].name;
+        row.Identificador   = jsonObject.data[i].value;
+        row.Familia         = jsonObject.data[i].familia;
+        row.DescargaImg     = jsonObject.data[i].descargaimg;
+        row.Inventario      = jsonObject.data[i].inventario;
+        row.Marca           = jsonObject.data[i].marca;
+        row.Categoria       = jsonObject.data[i].categoria;
+        row.Productoextra   = jsonObject.data[i].productoextraname;
+        if (jsonObject.data[i].image == "Y"){
+          row.Image = "imagenesProductos/" + jsonObject.data[i].id + ".png";
+        } else {
+          // Asignar una imagen por marca si no coicide la marca row.Image = "N"
+          row.Image = imagenMarca(row.Marca, row.Categoria);
+          if (row.Image == "N") {
+            row.Image = "imagenesProductos/noimage.png";
+          }
+        }
+      for (var key in jsonRows) {
+        var obj = jsonRows[key]; 
+        if (obj.Producto_ID == jsonObject.data[i].id) {
+            row.Precio = (parseFloat(obj.Precio)+parseFloat(obj.Impuesto)).toFixed(2);
+            row.Impuesto = obj.Impuesto;
+        }
+        if (obj.Producto_ID == jsonObject.data[i].productextra) {
+          row.Precioproductoextra = (parseFloat(obj.Precio)+parseFloat(obj.Impuesto)).toFixed(2);
+          row.Impuestoproductoextra = obj.Impuesto;
+        }
+      }
+      if (typeof(row.Precioproductoextra) == "undefined"){
+        row.Precioproductoextra = 0;
+        row.Impuestoproductoextra = 0;
+      }
+      if (typeof(row.Precio) == "undefined"){
+        row.Precio = 0;
+        row.Impuesto = 0;
+      }
+      row.Precioshow = parseFloat(row.Precio) + parseFloat(row.Precioproductoextra) + parseFloat(row.Impuestoproductoextra);
+
+      // Gestionar Caracteristicas
+      if (jsonObject.data[i].caracteristicas != null) {
+        var caracteristicas = (jsonObject.data[i].caracteristicas).split("_");
+          for (var j = 0; j < caracteristicas.length; j++) {
+            carItems = caracteristicas[j].split(":");
+            row[carItems[0]] = carItems[1];
+            // Si no existe agrega el encabezado
+            if (itemsChar.heads.indexOf(carItems[0]) == -1) {
+              itemsChar.heads.push(carItems[0]);
+            }
+            // Si no existe agrega el item
+            if (itemsChar.items.indexOf(carItems[0] + "_" + carItems[1]) == -1) {
+              itemsChar.items.push(carItems[0] + "_" + carItems[1]);
             }
           }
-        for (var key in jsonRows) {
-          var obj = jsonRows[key]; 
-          if (obj.Producto_ID == jsonObject.data[i].id) {
-              row.Precio = obj.Precio;
-          }
+      }
+      // GC 
+      if (row.Precio != 0 && row.Inventario != "0 Piezas") {
+        row.Indice = indiceJson + 1;
+        indiceJson++;
+        rows.push(row);
+      }
+    } 
+    // Definir columnas
+    var cols = {
+        Nombre: {
+            index: 1,
+            type: "string",
+            friendly: "Nombre"
+        },
+        Identificador: {
+            index: 2,
+            type: "string",
+            friendly: "Identificador"
+        },
+        Familia: {
+            index: 3,
+            type: "string",
+            friendly: "Familia"
+        },
+        DescargaImg: {
+            index: 4,
+            type: "string",
+            hidden: true
+        },
+        Producto_ID: {
+            index: 5,
+            type: "string",
+            id: true,
+            hidden: true
         }
-        if (typeof(row.Precio) == "undefined"){
-          row.Precio = 0;
-        }
-
-        // Gestionar Caracteristicas
-        if (jsonObject.data[i].caracteristicas != null) {
-          var caracteristicas = (jsonObject.data[i].caracteristicas).split("_");
-            for (var j = 0; j < caracteristicas.length; j++) {
-              carItems = caracteristicas[j].split(":");
-              row[carItems[0]] = carItems[1];
-              // Si no existe agrega el encabezado
-              if (itemsChar.heads.indexOf(carItems[0]) == -1) {
-                itemsChar.heads.push(carItems[0]);
-              }
-              // Si no existe agrega el item
-              if (itemsChar.items.indexOf(carItems[0] + "_" + carItems[1]) == -1) {
-                itemsChar.items.push(carItems[0] + "_" + carItems[1]);
-              }
-            }
-        }
-        // GC 
-        if (row.Precio != 0 && row.Inventario != "0 Piezas") {
-          row.Indice = indiceJson + 1;
-          indiceJson++;
-          rows.push(row);
-        }
-      } 
-      // Definir columnas
-      var cols = {
-          Nombre: {
-              index: 1,
-              type: "string",
-              friendly: "Nombre"
-          },
-          Identificador: {
-              index: 2,
-              type: "string",
-              friendly: "Identificador"
-          },
-          Familia: {
-              index: 3,
-              type: "string",
-              friendly: "Familia"
-          },
-          DescargaImg: {
-              index: 4,
-              type: "string",
-              hidden: true
-          },
-          Producto_ID: {
-              index: 5,
-              type: "string",
-              id: true,
-              hidden: true
-          }
-      };
-      // Contruir el json de datos
-      console.log("$> ITEMS: ", itemsChar);
-      var data = {
-                  cols: cols,
-                  rows: rows
-              };
-      console.log("$> Termina Construcción Productos");        
-      countProduct = indiceJson;
-      return data;
-  }  // Termina json Constructor
-
-    function jsonConstructorPrice(json) {
-    //name, value, familia, descargaimg, id
-      var rows = [];
-      var jsonObject = json.response;
-      for (var i=0;i<jsonObject.totalRows;i++) {
-          var row = {};
-          row.Producto_ID = jsonObject.data[i].product;
-          row.Precio = (jsonObject.data[i].pricelist11).toFixed(2);
-          rows.push(row);
-      } 
-      // Definir columnas
-      var cols = {
-          Nombre: {
-              index: 1,
-              type: "string",
-              friendly: "Nombre"
-          },
-          Identificador: {
-              index: 2,
-              type: "string",
-              friendly: "Identificador"
-          },
-          Familia: {
-              index: 3,
-              type: "string",
-              friendly: "Familia"
-          },
-          DescargaImg: {
-              index: 4,
-              type: "string",
-              hidden: true
-          },
-          Producto_ID: {
-              index: 5,
-              type: "string",
-              id: true,
-              hidden: true
-          }
-      };
-      // Contruir el json de datos
-      var data = {
-                  cols: cols,
-                  rows: rows
-              };
-      console.log("$> Termina Construcción Precios");              
-      return data;
-  }  // Termina json Constructor
-
+    };
+    // Contruir el json de datos
+    console.log("$> ITEMS: ", itemsChar);
+    var data = {
+                cols: cols,
+                rows: rows
+            };
+    console.log("$> Termina Construcción Productos");        
+    countProduct = indiceJson;
+    return data;
+}  // Termina json Constructor
+function jsonConstructorPrice(json) {
+//name, value, familia, descargaimg, id
+  var rows = [];
+  var jsonObject = json.response;
+  for (var i=0;i<jsonObject.totalRows;i++) {
+    //console.log("$> LINEA: ", jsonObject.data[i].impuesto);
+      var row = {};
+      row.Producto_ID = jsonObject.data[i].product;
+      row.Impuesto = (jsonObject.data[i].impuesto).toFixed(2);
+      row.Precio = (jsonObject.data[i].pricelist11).toFixed(2);
+      rows.push(row);
+  } 
+  // Definir columnas
+  var cols = {
+      Nombre: {
+          index: 1,
+          type: "string",
+          friendly: "Nombre"
+      },
+      Identificador: {
+          index: 2,
+          type: "string",
+          friendly: "Identificador"
+      },
+      Familia: {
+          index: 3,
+          type: "string",
+          friendly: "Familia"
+      },
+      DescargaImg: {
+          index: 4,
+          type: "string",
+          hidden: true
+      },
+      Producto_ID: {
+          index: 5,
+          type: "string",
+          id: true,
+          hidden: true
+      }
+  };
+  // Contruir el json de datos
+  var data = {
+              cols: cols,
+              rows: rows
+          };
+  console.log("$> Termina Construcción Precios");              
+  return data;
+}  // Termina json Constructor
 function buscarPalabra(palabra) {
   var rowsNuevos = [];
   // recorrer alldata
@@ -579,7 +595,7 @@ function buscarPalabra(palabra) {
   cambiaPaginaPLUS(1, 12);
   //return rowsNuevos;
 }
-function cambiaPagina(pagina, items){
+function cambiaPagina(pagina, items) {
   // DESBORDE DE PAGINAS
   if (items == ""){
     items = 12;
@@ -615,8 +631,7 @@ function cambiaPagina(pagina, items){
   //filterData = data;
   cato.setData(data);  
 }
-
-function cambiaPaginaPLUS(pagina, items){
+function cambiaPaginaPLUS(pagina, items) {
   // DESBORDE DE cambiaPaginaPLUS
   
   if (items == ""){
@@ -649,131 +664,128 @@ function cambiaPaginaPLUS(pagina, items){
   cato.setData(data);
   }
 }
-/*function setDatafiltro(datos){
-  cato.setData(datos);
-*/
-  function filtroMarca(marca){
-      var jsonRows = filterData.rows;
-      var rowsNuevos = [];
-      for (var key in jsonRows) {
-          var obj = jsonRows[key]; 
-          if (obj.Marca == marca) {
+function filtroMarca(marca) {
+    var jsonRows = filterData.rows;
+    var rowsNuevos = [];
+    for (var key in jsonRows) {
+        var obj = jsonRows[key]; 
+        if (obj.Marca == marca) {
+            rowsNuevos.push(obj);
+        }
+    }
+    
+    var data = {
+        cols: allData.cols,
+        rows: rowsNuevos
+    };
+    // Actualizar Filtros Aplicados
+    document.getElementById('cat_fil_aplicados').style.display = 'block';
+    var innerDiv = document.createElement('div');
+    innerDiv.innerHTML = marca;
+    innerDiv.className = 'filtroAplicado';
+    var iDiv = document.getElementById('cat_fil_aplicados');
+    iDiv.appendChild(innerDiv);
+    //
+    filterData = data;
+    cato.setData(data);
+} 
+function filtroCat(categoria) {
+    var jsonRows = filterData.rows;
+    var rowsNuevos = [];
+    for (var key in jsonRows) {
+        var obj = jsonRows[key]; 
+        if (obj.Categoria == categoria) {
+            rowsNuevos.push(obj);
+        }
+    }
+    var data = {
+        cols: allData.cols,
+        rows: rowsNuevos
+    };
+    // Actualizar Filtros Aplicados
+    document.getElementById('cat_fil_aplicados').style.display = 'block';
+    var innerDiv = document.createElement('div');
+    innerDiv.innerHTML = categoria;
+    innerDiv.className = 'filtroAplicado';
+    var iDiv = document.getElementById('cat_fil_aplicados');
+    iDiv.appendChild(innerDiv);
+    //
+    //setDataFiltro(data);
+    filterData = data;
+    cato.setData(data);
+}  
+function filtroCar(caracteristica, valor) {
+    console.log("Filtro CAR");
+    console.log("En la caracteristica " + caracteristica + " buscar el valor " + valor);
+    var jsonRows = filterData.rows;
+    var rowsNuevos = [];
+    for (var key in jsonRows) {
+        var obj = jsonRows[key]; 
+        //console.log("$> obj." + caracteristica + " = " + obj[caracteristica]);
+        //console.log("$> OBJ ", obj);
+        if (obj[caracteristica] == valor) {
+            rowsNuevos.push(obj);
+        }
+    }
+    var data = {
+        cols: allData.cols,
+        rows: rowsNuevos
+    };
+    // Actualizar Filtros Aplicados
+    document.getElementById('cat_fil_aplicados').style.display = 'block';
+    var innerDiv = document.createElement('div');
+    innerDiv.innerHTML = valor;
+    innerDiv.className = 'filtroAplicado';
+    var iDiv = document.getElementById('cat_fil_aplicados');
+    iDiv.appendChild(innerDiv);
+    //
+    //setDataFiltro(data);
+    filterData = data;
+    cato.setData(data);
+}
+function filtroPrecio() {
+  console.log("$> " + document.getElementById('precioDesde').value + " - " + document.getElementById('precioHasta').value);
+    var precioDesde = document.getElementById('precioDesde').value;
+    var precioHasta = document.getElementById('precioHasta').value;
+    /*if (precioHasta == null) {precioHasta = Infinity;}
+    if (precioDesde == null) {precioDesde = 0;}*/
+    var jsonRows = filterData.rows;
+    var rowsNuevos = [];
+    for (var key in jsonRows) {
+        var obj = jsonRows[key]; 
+        if (precioHasta == "" && precioDesde != "") {
+          if (parseFloat(obj.Precio) >= parseFloat(precioDesde)) {
+              rowsNuevos.push(obj);
+          }            
+        }
+        if (precioHasta != "" && precioDesde == "") {
+          if (parseFloat(obj.Precio) <= parseFloat(precioHasta)) {
+            rowsNuevos.push(obj);
+          }
+        }
+        if (precioHasta == "" && precioDesde == "") {
+            rowsNuevos.push(obj);
+        }
+        if (precioHasta != "" && precioDesde != "") {
+          if (parseFloat(obj.Precio) >= parseFloat(precioDesde) && parseFloat(obj.Precio) <= parseFloat(precioHasta)) {
               rowsNuevos.push(obj);
           }
-      }
-      
-      var data = {
-          cols: allData.cols,
-          rows: rowsNuevos
-      };
-      // Actualizar Filtros Aplicados
-      document.getElementById('cat_fil_aplicados').style.display = 'block';
-      var innerDiv = document.createElement('div');
-      innerDiv.innerHTML = marca;
-      innerDiv.className = 'filtroAplicado';
-      var iDiv = document.getElementById('cat_fil_aplicados');
-      iDiv.appendChild(innerDiv);
-      //
-      filterData = data;
-      cato.setData(data);
-  } 
-  function filtroCat(categoria){
-      var jsonRows = filterData.rows;
-      var rowsNuevos = [];
-      for (var key in jsonRows) {
-          var obj = jsonRows[key]; 
-          if (obj.Categoria == categoria) {
-              rowsNuevos.push(obj);
-          }
-      }
-      var data = {
-          cols: allData.cols,
-          rows: rowsNuevos
-      };
-      // Actualizar Filtros Aplicados
-      document.getElementById('cat_fil_aplicados').style.display = 'block';
-      var innerDiv = document.createElement('div');
-      innerDiv.innerHTML = categoria;
-      innerDiv.className = 'filtroAplicado';
-      var iDiv = document.getElementById('cat_fil_aplicados');
-      iDiv.appendChild(innerDiv);
-      //
-      //setDataFiltro(data);
-      filterData = data;
-      cato.setData(data);
-  }  
-  function filtroCar(caracteristica, valor){
-      console.log("Filtro CAR");
-      console.log("En la caracteristica " + caracteristica + " buscar el valor " + valor);
-      var jsonRows = filterData.rows;
-      var rowsNuevos = [];
-      for (var key in jsonRows) {
-          var obj = jsonRows[key]; 
-          //console.log("$> obj." + caracteristica + " = " + obj[caracteristica]);
-          //console.log("$> OBJ ", obj);
-          if (obj[caracteristica] == valor) {
-              rowsNuevos.push(obj);
-          }
-      }
-      var data = {
-          cols: allData.cols,
-          rows: rowsNuevos
-      };
-      // Actualizar Filtros Aplicados
-      document.getElementById('cat_fil_aplicados').style.display = 'block';
-      var innerDiv = document.createElement('div');
-      innerDiv.innerHTML = valor;
-      innerDiv.className = 'filtroAplicado';
-      var iDiv = document.getElementById('cat_fil_aplicados');
-      iDiv.appendChild(innerDiv);
-      //
-      //setDataFiltro(data);
-      filterData = data;
-      cato.setData(data);
-  }
-  function filtroPrecio(){
-    console.log("$> " + document.getElementById('precioDesde').value + " - " + document.getElementById('precioHasta').value);
-      var precioDesde = document.getElementById('precioDesde').value;
-      var precioHasta = document.getElementById('precioHasta').value;
-      /*if (precioHasta == null) {precioHasta = Infinity;}
-      if (precioDesde == null) {precioDesde = 0;}*/
-      var jsonRows = filterData.rows;
-      var rowsNuevos = [];
-      for (var key in jsonRows) {
-          var obj = jsonRows[key]; 
-          if (precioHasta == "" && precioDesde != "") {
-            if (parseFloat(obj.Precio) >= parseFloat(precioDesde)) {
-                rowsNuevos.push(obj);
-            }            
-          }
-          if (precioHasta != "" && precioDesde == "") {
-            if (parseFloat(obj.Precio) <= parseFloat(precioHasta)) {
-              rowsNuevos.push(obj);
-            }
-          }
-          if (precioHasta == "" && precioDesde == "") {
-              rowsNuevos.push(obj);
-          }
-          if (precioHasta != "" && precioDesde != "") {
-            if (parseFloat(obj.Precio) >= parseFloat(precioDesde) && parseFloat(obj.Precio) <= parseFloat(precioHasta)) {
-                rowsNuevos.push(obj);
-            }
-          }
+        }
 
-      }
-      var data = {
-          cols: allData.cols,
-          rows: rowsNuevos
-      };
+    }
+    var data = {
+        cols: allData.cols,
+        rows: rowsNuevos
+    };
 
-      document.getElementById('cat_fil_aplicados').style.display = 'block';
-      filterData = data;
-      searchData = data;
-      //cato.setData(data);
-      cambiaPaginaPLUS(1, 12);
-  }
+    document.getElementById('cat_fil_aplicados').style.display = 'block';
+    filterData = data;
+    searchData = data;
+    //cato.setData(data);
+    cambiaPaginaPLUS(1, 12);
+}
 // FILTROS MULTISELECCIÓN
-function multiFiltroMarca(marcas){
+function multiFiltroMarca(marcas) {
       var jsonRows = allData.rows;
       var rowsNuevos = [];
       for (var key in jsonRows) {
@@ -791,26 +803,26 @@ function multiFiltroMarca(marcas){
       document.getElementById('cat_fil_aplicados').style.display = 'block';
       filterData = data;
       cato.setData(data);
-  } 
-function multiFiltros(checks){
-      var jsonRows = allData.rows;
-      var rowsNuevos = [];
-      varMar = false;
-      varCat = false;
-      varCar = false;
-      prodAdd = false;
-      // validar existencia de categorias, marcas y caracteristicas
-      console.log("ChKs: ", checks );
-      for (var key in jsonRows) {
-          var obj = jsonRows[key];
-          if (!varMar && checks.indexOf(obj.Marca)>-1){
-            varMar = true;
-          }
-          if (!varCat && checks.indexOf(obj.Categoria)>-1){
-            varCat = true;
-          }
+} 
+function multiFiltrosDeprecado(checks) {
+  var jsonRows = allData.rows;
+  var rowsNuevos = [];
+  varMar = false;
+  varCat = false;
+  varCar = false;
+  prodAdd = false;
+  // validar existencia de categorias, marcas y caracteristicas
+  console.log("ChKs: ", checks );
+  for (var key in jsonRows) {
+      var obj = jsonRows[key];
+      if (!varMar && checks.indexOf(obj.Marca)>-1){
+        varMar = true;
+      }
+      if (!varCat && checks.indexOf(obj.Categoria)>-1){
+        varCat = true;
+      }
 
-      }          
+  }          
       for (var key in jsonRows) {
           var obj = jsonRows[key]; 
           if ((checks.indexOf(obj.Categoria) > -1 && checks.indexOf(obj.Marca) > -1 && varCat && varMar) || (checks.indexOf(obj.Categoria) > -1 && !varMar) || (checks.indexOf(obj.Marca) > -1 && !varCat)) {
@@ -820,7 +832,7 @@ function multiFiltros(checks){
             // validaciones para caracteristicas
             for (var ch = 0;ch<checks.length;ch++) {
               var arrayCar = checks[ch].split("_");
-              if (arrayCar.length = 2){
+              if (arrayCar.length == 2){
                 if (checks.indexOf(arrayCar[0] + '_' + obj[arrayCar[0]]) > -1 && !prodAdd){
                   rowsNuevos.push(obj);   
                 }
@@ -852,68 +864,192 @@ function multiFiltros(checks){
       // AGREGADO AL FINAL      
       cambiaPaginaPLUS(1, 12);
       //cato.setData(data);
-
-  }  
-// extra
-  function imagenMarca(marca, categoria){
-    imagen = "N";
-    if (marca == "11 - AGM") {
-      imagen = "imagenesProductos/imagenesMarca/agm.png";
-    }
-    if (marca == "21 - AMERICA") {
-      imagen = "imagenesProductos/imagenesMarca/america.png";
-    }
-    if (marca == "30 - CRONOS") {
-      imagen = "imagenesProductos/imagenesMarca/cronos.png";
-    }
-    if (marca == "28 - DIENER") {
-      imagen = "imagenesProductos/imagenesMarca/diener.png";
-    }
-    if (marca == "50 - FILTROS LTH") {
-      imagen = "imagenesProductos/imagenesMarca/filtros.png";
-    }
-    if (marca == "15 - HEAVY DUTY") {
-      imagen = "imagenesProductos/imagenesMarca/heavyduty.png";
-    }
-    if (marca == "12 - HI-TEC") {
-      imagen = "imagenesProductos/imagenesMarca/hitec.png";
-    }
-    if (marca == "40 - MOTOBATERIAS") {
-      imagen = "imagenesProductos/imagenesMarca/motobateria.png";
-    }
-    if (marca == "10 - OPTIMA") {
-      imagen = "imagenesProductos/imagenesMarca/optima.png";
-    }
-    if (marca == "31 - POWER CONNECTION") {
-      imagen = "imagenesProductos/imagenesMarca/powerconnection.png";
-    }
-    if (marca == "RE") {
-      imagen = "imagenesProductos/imagenesMarca/re.jpg";
-    }
-    if (categoria == "4 - LUBRICANTES") {
-      imagen = "imagenesProductos/imagenesCategoria/lubricante.png";
-    }
-    return imagen;
+}  
+function multiFiltros(checks) {
+  console.log("NUEVO MULTIFILTROS");
+  var jsonRows = allData.rows;
+  var rowsNuevos = [];
+  var arrCat = [];
+  var arrMar = [];
+  var arrCar = [];
+  console.log("FILTROS: ", checks);
+  // Definir arreglos con parámetros seleccionados.
+  for (var key in jsonRows) {
+      var obj = jsonRows[key];
+      if (checks.indexOf(obj.Marca)>-1 && arrMar.indexOf(obj.Marca)==-1){
+        arrMar.push(obj.Marca);
+      }
+      if (checks.indexOf(obj.Categoria)>-1 && arrCat.indexOf(obj.Categoria)==-1){
+        arrCat.push(obj.Categoria);
+      }
   }
-function buildAddProduct(productID){
+  // Validar si de todas las caracteristicas que existen hay alguna seleccionada
+  for (var i=0;i<itemsChar.items.length;i++) {
+    if (checks.indexOf(itemsChar.items[i])>-1 && arrCar.indexOf(itemsChar.items[i])==-1) {
+      arrCar.push(itemsChar.items[i]);
+    }
+  }
+  var mar = arrMar.length;
+  var cat = arrCat.length;
+  var car = arrCar.length;
+  var in_mar = false;
+  var in_car = false;
+  var in_cat = false;
+  console.log("MARCAS: ", arrMar);
+  console.log("CATEGORIA: ", arrCat);
+  console.log("CARACTERISTIAS: ", arrCar);
+  // Recorrer todos los productos en busca de coincidencias
+  for (var key in jsonRows) {
+    var obj = jsonRows[key];
+    // Valida si coincide Marca
+    if (arrMar.indexOf(obj.Marca) > -1) {
+      in_mar = true;
+    }
+    // Valida si coincide Categoria
+    if (arrCat.indexOf(obj.Categoria) > -1) {
+      in_cat = true;
+    }    
+    // Valida si coincide Caracteristica
+    for (var ch = 0;ch<arrCar.length;ch++) {
+      var arrayCar = arrCar[ch].split("_");
+      if (obj[arrayCar[0]] == arrayCar[1]) {
+        in_car = true;
+      }
+    }
+    // Valida distintos casos
+    // sólo selección marca
+    //console.log("DBG: mar: " + mar + " cat: " + cat + " car: " + car + " in_cat: " + in_cat + " in_car " + in_car + " in_mar: " + in_mar);
+    if (mar > 0 && cat == 0 && car == 0 && in_mar == true && in_cat == false && in_car == false) {
+      rowsNuevos.push(obj);
+      //console.log("SM");
+    }
+    // sólo selección categoria
+    if (mar == 0 && cat > 0 && car == 0 && in_cat == true && in_car == false && in_mar == false) {
+      rowsNuevos.push(obj);
+      //console.log("SC");
+    }
+    // sólo selección caracteristica
+    if (mar == 0 && cat == 0 && car > 0 && in_car == true && in_mar == false && in_cat == false) {
+      rowsNuevos.push(obj);
+      //console.log("SR");
+    }
+    // selección marca y categoría
+    if (mar > 0 && cat > 0 && car == 0 && in_cat == true && in_mar == true && in_car == false) {
+      rowsNuevos.push(obj);
+      //console.log("MC");
+    }
+    // selección marca y caracteristica
+    if (mar > 0 && cat == 0 && car > 0 && in_mar == true && in_car == true && in_cat == false) {
+      rowsNuevos.push(obj);
+      //console.log("MR");
+    }
+    // selección categoría y caracteristica
+    if (mar == 0 && cat > 0 && car > 0 && in_cat == true && in_car == true && in_mar == false) {
+      rowsNuevos.push(obj);
+      //console.log("CR");
+    }
+    // selección categoría, caracteristica y marcas
+    if (mar > 0 && cat > 0 && car > 0 && in_cat == true && in_car == true && in_mar == true) {
+      rowsNuevos.push(obj);
+      //console.log("MCR");
+    }
+    in_mar = false;
+    in_cat = false;
+    in_car = false;
+  }
+  var data = {
+      cols: allData.cols,
+      rows: rowsNuevos
+  };
+  // Actualizar Filtros Aplicados
+  document.getElementById('cat_fil_aplicados').style.display = 'block';
+  if (checks.length == 0){
+    console.log("vacio");
+    data = allData;
+  }
+
+  filterData = data;
+  searchData = data;
+  // AGREGADO AL FINAL
+  // Si existe algo escrito en los precios aplica el filtro primero
+  var precioDesde = document.getElementById('precioDesde').value;
+  var precioHasta = document.getElementById('precioHasta').value;
+  if (precioDesde != "" || precioHasta != "") {
+    filtroPrecio();
+  }
+  // AGREGADO AL FINAL      
+  cambiaPaginaPLUS(1, 12);
+  //cato.setData(data);
+  // Si no hay resultados limpia la pagina
+    if(data.rows.length == 0) {
+      console.log("Limpiar Catalogo");
+      cato.limpiarCatalogo();
+  }
+}
+// Asigna una imagen a los productos en función de su Marca o Categoría cuando estos no tienen una asignada.
+function imagenMarca(marca, categoria) {
+  imagen = "N";
+  if (marca == "11 - AGM") {
+    imagen = "imagenesProductos/imagenesMarca/agm.png";
+  }
+  if (marca == "21 - AMERICA") {
+    imagen = "imagenesProductos/imagenesMarca/america.png";
+  }
+  if (marca == "30 - CRONOS") {
+    imagen = "imagenesProductos/imagenesMarca/cronos.png";
+  }
+  if (marca == "28 - DIENER") {
+    imagen = "imagenesProductos/imagenesMarca/diener.png";
+  }
+  if (marca == "50 - FILTROS LTH") {
+    imagen = "imagenesProductos/imagenesMarca/filtros.png";
+  }
+  if (marca == "15 - HEAVY DUTY") {
+    imagen = "imagenesProductos/imagenesMarca/heavyduty.png";
+  }
+  if (marca == "12 - HI-TEC") {
+    imagen = "imagenesProductos/imagenesMarca/hitec.png";
+  }
+  if (marca == "40 - MOTOBATERIAS") {
+    imagen = "imagenesProductos/imagenesMarca/motobateria.png";
+  }
+  if (marca == "10 - OPTIMA") {
+    imagen = "imagenesProductos/imagenesMarca/optima.png";
+  }
+  if (marca == "31 - POWER CONNECTION") {
+    imagen = "imagenesProductos/imagenesMarca/powerconnection.png";
+  }
+  if (marca == "RE") {
+    imagen = "imagenesProductos/imagenesMarca/re.jpg";
+  }
+  if (categoria == "4 - LUBRICANTES") {
+    imagen = "imagenesProductos/imagenesCategoria/lubricante.png";
+  }
+  return imagen;
+}
+function buildAddProduct(productID) {
   var buildHTML = '<h3>Añadir Producto</h3><br>'
   // Buscar el producto.
   var jsonRows = allData.rows;
   for (var key in jsonRows) {
       var obj = jsonRows[key]; 
       if (obj.Producto_ID == productID) {
-        //buildHTML += '<div style="border:1px solid orange;widht:100%;"><div class="addProductLeft">&nbsp;</div><div class="addProductRight">&nbsp;</div></div>';
+        var pextra = "";
+        var montoextra = 0;
+        montoextra = (parseFloat(obj.Impuestoproductoextra) + parseFloat(obj.Precioproductoextra)).toFixed(2);
+        if (montoextra > 0) {
+            pextra = '<div style="font-size:100%;color:grey;padding-left:1%;padding-top:1%;">Incluye $' + String(montoextra) + ' (' + obj.Productoextra +  ')</div>';
+        }
         buildHTML += '<br><div style="border:0px solid blue;width:100%;">';
         buildHTML += '<div style="border:0px solid green;width:60%;float:left;height:100%;" align="center"><img src="'+obj.Image+'" width="50%"></img></div>';
         // Panel Derecho Titulo
         buildHTML += '<div style="border:0px solid red;width:40%;float:left;height:100%;padding:1% 1% 1% 1%;">';
         buildHTML += '<div style="border:0px solid red;width:100%" align="right"><input type="button" value="x" class="btn-close close_cart"/></div>';
         buildHTML += '<div align="left"><h2>'+obj.Nombre+'</h2></div>';
-        //buildHTML += '<p>$' + obj.Precio + '<br>' + obj.Inventario + '<br>' + obj.Identificador + '<br></p>';
         // Identificador
         buildHTML += '<div align="left" class="cartValue" id="cartValue">' + obj.Identificador + '</div>';
         // Precio
-        buildHTML += '<div align="left" class="cartPrecio" id="cartPrecio">$' + obj.Precio + '</div>';
+        buildHTML += '<div align="left" class="cartPrecio" id="cartPrecio">$' + (parseFloat(obj.Precioshow)).toFixed(2) + '</div>' + pextra;
         // Inventario
         buildHTML += '<div align="left" class="cartInventario" id="cartInventario">' + obj.Inventario + ' disponibles.</div>';
         // Cantidad
@@ -921,7 +1057,7 @@ function buildAddProduct(productID){
         // BtonAgregar
         buildHTML += '<div class="cartBtn" align="left"><br><input id="' + obj.Producto_ID + '" type="button" value="añadir producto al carrito" class="btn btn-default btn-anadir submitProduct"> </div>';
         // Valores ocultos para envío de parametros
-        buildHTML += '<input type="hidden" id="hdnProduct" value="'+obj.Nombre+'"/><input type="hidden" id="hdnValue" value="'+obj.Identificador+'"/><input type="hidden" id="hdnImagen" value="'+obj.Image+'"/>';
+        buildHTML += '<input type="hidden" id="hdnProduct" value="'+obj.Nombre+'"/><input type="hidden" id="hdnValue" value="'+obj.Identificador+'"/><input type="hidden" id="hdnImagen" value="'+obj.Image+'"/><input type="hidden" id="hdnImpuesto" value="'+obj.Impuesto+'"/><input type="hidden" id="hdnPrecioOB" value="'+obj.Precio+'"/><input type="hidden" id="hdnproductoextra" value="'+obj.Productoextra+'"/><input type="hidden" id="hdnprecioextra" value="'+obj.Precioproductoextra+'"/>';
 
         // Cierra panel derecho
         buildHTML += '</div></div>';
