@@ -7,16 +7,14 @@ class PedidolineasController < ApplicationController
     puts "CREA LINEA: usr:" + params[:usuario_id]
     # Buscar el pedido activo para el usuario
     Pedido.where(usuario_id: params[:usuario_id]).find_each do |ords|
-      ords.activo = false;
-      ords.save
       if ords.activo?
         @ord = ords
       end
     end
     # Si no se encontró una orden crear  una y asignarla a @ord:
-    #if @ord.nil?
+    if @ord.nil?
       @ord = Pedido.create!({:usuario_id => params[:usuario_id], :total => 0, :subtotal => 0, :abierto => true, :activo => true})
-    #end
+    end
     # Crear la linea en el pedido activo
     puts "CREAR LINEA"
     # El precio ya incluye impuesto por es no se considera.
