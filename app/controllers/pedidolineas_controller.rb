@@ -7,6 +7,8 @@ class PedidolineasController < ApplicationController
     puts "CREA LINEA: usr:" + params[:usuario_id]
     # Buscar el pedido activo para el usuario
     Pedido.where(usuario_id: params[:usuario_id]).find_each do |ords|
+      ords.activo = false;
+      ords.save
       if ords.activo?
         @ord = ords
       end
