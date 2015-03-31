@@ -1,0 +1,1000 @@
+  626  rake secret
+  627  eb setenv SECRET_KEY_BASE="4a1171941f136999ba295588d44d7de04bfab487190bee299e8c2b396a324c7cbcfeb639ffc5f1e04896b56c0cc5bb8f3d6eb188ac33f3747eab412f99dfe1ef"
+  628  git add -A
+  629  git commit -am "Primer deploy Producción"
+  630  eb deploy
+  631  tail -1000f  /var/log/eb-activity.log 
+  632  rake assets:precompile
+  633  eb deploy
+  634  rake assets:precompile:all RAILS_ENV=production RAILS_GROUPS=assets
+  635  rake assets:precompile RAILS_ENV=production
+  636  RAILS_ENV=production bundle exec rake assets:precompile
+  637  rake assets:precompile
+  638  git add -A
+  639  git commit -am "Segundo deploy Producción"
+  640  eb deploy
+  641  git add -A
+  642  git commit -am "Commit Omite localhost"
+  643  eb deploy
+  644  find -type f | xargs grep -l jperez.fcfm@gmail.com
+  645  find -type f | xargs grep -l csalinas@tegik.com
+  646  find -type f | xargs grep -l jperez@tegik.com
+  647  git add -A
+  648  git commit -am "Commit Omite Mailer C1"
+  649  eb deploy
+  650  git commit -am "Commit Omite Mailer C2"
+  651  eb deploy
+  652  git add -A
+  653  git commit -am "Commit Omite Mailer C3"
+  654  eb deploy
+  655  git add -A
+  656  git commit -am "Commit Catalogo de Productos"
+  657  eb deploy
+  658  git add -A
+  659  git commit -am "Commit Catalogo de Productos 2"
+  660  git add -A
+  661  git commit -am "Commit Catalogo de Productos 2"
+  662  git commit -am "Commit Catalogo de Productos 3"
+  663  eb deploy
+  664  git commit -am "Commit Catalogo de Productos 4"
+  665  eb deploy
+  666  cd /home/julio/Tegik/portalob/
+  667  source ~/.rvm/scripts/rvm
+  668  rails s
+  669  git init
+  670  git add ..
+  671  git ad .
+  672  git add .
+  673  git commig -am "Mosaico Catalogo de Productos"
+  674  git commit -am "Mosaico Catalogo de Productos"
+  675  git push
+  676  ruby -v
+  677  rails s
+  678  rails c
+  679  rails
+  680  rails s
+  681  git add .
+  682  git commig -am "Catalogo de productos"
+  683  git commit -am "Catalogo de productos"
+  684  git push
+  685  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-159-177-105.compute-1.amazonaws.com
+  686  cd /home/julio/Tegik/portalob/
+  687  source ~/.rvm/scripts/rvm
+  688  rails s
+  689  rake assets:precompile
+  690  rails s
+  691  rake assets:precompile
+  692  rails s
+  693  rake assets:precompile
+  694  rails s
+  695  rake assets:precompile
+  696  rails s
+  697  rake assets:precompile
+  698  rails s
+  699  rake assets:precompile
+  700  rails s
+  701  rake assets:precompile
+  702  rails s
+  703  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-163-167-242.compute-1.amazonaws.com
+  704  source ~/.rvm/scripts/rvm
+  705  rails c
+  706  git add -A
+  707  git commit -am "EDO CTA - Test"
+  708  eb deploy
+  709  git add -A
+  710  git commit -am "EDO CTA - Test2"
+  711  eb deploy
+  712  rake routes
+  713  git add -A
+  714  git commit -am "EDO CTA - Test2"
+  715  eb deploy
+  716  rails c
+  717  git add -A
+  718  git commit -am "Mailer - Test"
+  719  eb deploy
+  720  git add -A
+  721  git commit -am "Mailer - Test2"
+  722  eb deploy
+  723  git add -A
+  724  git commit -am "Mailer - Revert"
+  725  eb deploy
+  726  git add .
+  727  git commit -am "EDO CTA Corregido"
+  728  git push
+  729  rails c
+  730  rails generate scaffold listaprecios
+  731  rake db:migrate
+  732  rails generate scaffold precio
+  733  rake db:migrate
+  734  rake assets:precompile
+  735  rails c
+  736  rake assets:precompile
+  737  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.21.222.162
+  738  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-81-113-180.compute-1.amazonaws.com
+  739  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-107-22-42-22.compute-1.amazonaws.com
+  740  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-163-167-242.compute-1.amazonaws.com
+  741  source ~/.rvm/scripts/rvm
+  742  cd /home/julio/Tegik/portalob/
+  743  rails s
+  744  rake assets:precompile
+  745  rails s
+  746  rake assets:precompile
+  747  rails s
+  748  rake assets:precompile
+  749  rails s
+  750  rails c
+  751  rails s
+  752  rake assets:precompile
+  753  rails s
+  754  rake assets:precompile
+  755  rails s
+  756  rake assets:precompile
+  757  rails s
+  758  rake assets:precompile
+  759  rails s
+  760  rake assets:precompile
+  761  rails s
+  762  rake assets:precompile
+  763  rails s
+  764  rake assets:precompile
+  765  rails s
+  766  rake assets:precompile
+  767  rails s
+  768  rake assets:precompile
+  769  rails s
+  770  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-163-167-242.compute-1.amazonaws.com
+  771  ls
+  772  cd /home/julio/Tegik/portalob/
+  773  rails s
+  774  source ~/.rvm/scripts/rvm
+  775  rails s
+  776  rake assets:precompile
+  777  rails s
+  778  cd /home/julio/Tegik/portalob/
+  779  source ~/.rvm/scripts/rvm
+  780  rails s
+  781  source ~/.rvm/scripts/rvm
+  782  cd /home/julio/Tegik/portalob/
+  783  rails s
+  784  rake assets:precompile
+  785  rails s
+  786  rake assets:precompile
+  787  rails s
+  788  rake assets:precompile
+  789  rails s
+  790  rake assets:precompile
+  791  rails s
+  792  rake assets:precompile
+  793  rails s
+  794  rake assets:precompile
+  795  rails s
+  796  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-205-241-83.compute-1.amazonaws.com
+  797  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-205-241-83.compute-1.amazonaws.com
+  798  source ~/.rvm/scripts/rvm
+  799  rails s
+  800  ent = Empresa.last
+  801  rails c
+  802  rails generate migration AddEsJciToEmpresas es_jci:string
+  803  ent = Empresa.last
+  804  rails c
+  805  rake db:migrate
+  806  rails c
+  807  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-158-179-137.compute-1.amazonaws.com
+  808  source ~/.rvm/scripts/rvm
+  809  cd /home/julio/Tegik/portalob/
+  810  rails s
+  811  rake assets:precompile
+  812  rails s
+  813  rake assets:precompile
+  814  rails s
+  815  rake assets:precompile
+  816  rails s
+  817  rake assets:precompile
+  818  rails s
+  819  rake assets:precompile
+  820  rails s
+  821  rake assets:precompile
+  822  rails s
+  823  rake assets:precompile
+  824  rails s
+  825  rake assets:precompile
+  826  rails s
+  827  rake assets:precompile
+  828  rails s
+  829  rake assets:precompile
+  830  rails s
+  831  rake assets:precompile
+  832  rails s
+  833  rake assets:precompile
+  834  rails s
+  835  rake assets:precompile
+  836  rails s
+  837  rake assets:precompile
+  838  rails s
+  839  rake assets:precompile
+  840  rails s
+  841  rake assets:precompile
+  842  rails s
+  843  rake assets:precompile
+  844  rails s
+  845  rake assets:precompile
+  846  rails s
+  847  rake assets:precompile
+  848  rails s
+  849  rake assets:precompile
+  850  rails s
+  851  rake assets:precompile
+  852  rails s
+  853  rake assets:precompile
+  854  rails s
+  855  rake assets:precompile
+  856  rails s
+  857  rake assets:precompile
+  858  rails s
+  859  rake assets:precompile
+  860  rails s
+  861  rake assets:precompile
+  862  rails s
+  863  rake assets:precompile
+  864  rails s
+  865  rake assets:precompile
+  866  rails s
+  867  rake assets:precompile
+  868  rails s
+  869  rake assets:precompile
+  870  rails s
+  871  rake assets:precompile
+  872  rails s
+  873  rake assets:precompile
+  874  rails s
+  875  rake assets:precompile
+  876  rails s
+  877  rake assets:precompile
+  878  rails s
+  879  rake assets:precompile
+  880  rails s
+  881  rake assets:precompile
+  882  rails s
+  883  rake assets:precompile
+  884  rails s
+  885  cd /home/julio/Tegik/sw/
+  886  ls
+  887  cd powhmger/
+  888  ls
+  889  cd poshw-1.0.1910/
+  890  ls
+  891  java -jar poshw.jar 
+  892  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-205-241-83.compute-1.amazonaws.com
+  893  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-205-241-83.compute-1.amazonaws.com
+  894  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@54.83.195.71
+  895  cd /home/julio/Tegik/sw/powhmger/poshw-1.0.1910/
+  896  java -jar poshw.jar 
+  897  vim /home/julio/.ssh/config 
+  898  cd /home/julio/Tegik/sw/
+  899  cd ..
+  900  cd portalob/
+  901  source ~/.rvm/scripts/rvm
+  902  rails s
+  903  rake assets:precompile
+  904  rails s
+  905  rake assets:precompile
+  906  rails s
+  907  rake assets:precompile
+  908  rails s
+  909  rake assets:precompile
+  910  rails s
+  911  rake assets:precompile
+  912  rails s
+  913  rake assets:precompile
+  914  rails s
+  915  rake assets:precompile
+  916  rails s
+  917  rake assets:precompile
+  918  rails s
+  919  rake assets:precompile
+  920  rails s
+  921  rake assets:precompile
+  922  rails s
+  923  rake assets:precompile
+  924  rails s
+  925  rake assets:precompile
+  926  rails s
+  927  rake assets:precompile
+  928  rails s
+  929  rake assets:precompile
+  930  rails s
+  931  rake assets:precompile
+  932  rails s
+  933  rake assets:precompile
+  934  rails s
+  935  rake assets:precompile
+  936  rails s
+  937  rake assets:precompile
+  938  rails s
+  939  rake assets:precompile
+  940  rails s
+  941  rake assets:precompile
+  942  rails s
+  943  rake assets:precompile
+  944  rails s
+  945  rake assets:precompile
+  946  rails s
+  947  rake assets:precompile
+  948  rails s
+  949  rake assets:precompile
+  950  rails s
+  951  rake assets:precompile
+  952  rails s
+  953  rake assets:precompile
+  954  rails s
+  955  rake assets:precompile
+  956  rails s
+  957  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
+  958  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-205-241-83.compute-1.amazonaws.com
+  959  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
+  960  source ~/.rvm/scripts/rvm
+  961  rails c
+  962  source ~/.rvm/scripts/rvm
+  963  cd /home/julio/Tegik/portalob/
+  964  git init
+  965  git add .
+  966  git commit -am "Catálogo de productos con filtro de caracteristicas"
+  967  git push
+  968  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-146-147-162.compute-1.amazonaws.com
+  969  ssh ubuntu@ec2-54-146-147-162.compute-1.amazonaws.com
+  970  ssh -i /home/julio/.ssh/keyextranet.pub ubuntu@ec2-54-146-147-162.compute-1.amazonaws.com
+  971  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+  972  cd public/assets/
+  973  ls
+  974  rm application-*
+  975  source ~/.rvm/scripts/rvm
+  976  cd /home/julio/Tegik/portalob/
+  977  rails s
+  978  rails c
+  979  rails s
+  980  rake assets:precompile
+  981  rails s
+  982  rake assets:precompile
+  983  rails s
+  984  rake assets:precompile
+  985  rails s
+  986  rake assets:precompile
+  987  rails s
+  988  rake assets:precompile
+  989  rails s
+  990  rake assets:precompile
+  991  rails s
+  992  rake assets:precompile
+  993  rails s
+  994  rake assets:precompile
+  995  rails s
+  996  rake assets:precompile
+  997  rails s
+  998  git add -A
+  999  git commit -am "Debug Productos"
+ 1000  eb deploy
+ 1001  rake assets:precompile
+ 1002  git commit -am "Debug Productos #2"
+ 1003  eb deploy
+ 1004  git add -A
+ 1005  git commit -am "Debug Productos #3"
+ 1006  eb deploy
+ 1007  rake assets:precompile
+ 1008  git commit -am "Debug Productos #4"
+ 1009  rake assets:precompile
+ 1010  git add -A"
+ 1011  git add -A
+ 1012  git commit -am "Precompile"
+ 1013  eb deploy
+ 1014  rake assets:precompile
+ 1015  git add -A
+ 1016  git commit -am "LOGS Catalogo de producto"
+ 1017  eb deploy
+ 1018  rails s
+ 1019  rake assets:precompile
+ 1020  git add -A
+ 1021  git commit -am "LOGS Catalogo de producto #2"
+ 1022  eb deploy
+ 1023  rails s
+ 1024  rake assets:precompile
+ 1025  rails s
+ 1026  rake assets:precompile
+ 1027  rails s
+ 1028  rake assets:precompile
+ 1029  rails s
+ 1030  rake assets:precompile
+ 1031  rails s
+ 1032  git add .
+ 1033  git commit -am "Inicio de 3 Sptrint"
+ 1034  git push
+ 1035  rails c
+ 1036  source ~/.rvm/scripts/rvm
+ 1037  ls
+ 1038  git add -A
+ 1039  git commit -am "Filtro de Caracteristicas"
+ 1040  eb deploy
+ 1041  rails c
+ 1042  rails s
+ 1043  rails
+ 1044  git add -A
+ 1045  rake assets:precompile
+ 1046  git add -A
+ 1047  git commit -am "Sin tmp-logs"
+ 1048  eb deploy
+ 1049  rake assets:precompile
+ 1050  git add -A
+ 1051  git commit -am "Log del servicio de precios #1"
+ 1052  eb deploy
+ 1053  rake assets:precompile
+ 1054  git add -A
+ 1055  git commit -am "Log del servicio de precios #2"
+ 1056  eb deploy
+ 1057  git add -A
+ 1058  git commit -am "Log del servicio de precios #2"
+ 1059  eb deploy
+ 1060  rails c
+ 1061  rake assets:precompile
+ 1062  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
+ 1063  ssh -i /home/julio/Tegik/sw/tegik.pem  ubuntu@23.23.245.49
+ 1064  vim /home/julio/.ssh/
+ 1065  vim /home/julio/.ssh/config 
+ 1066  ssh -i /home/julio/.ssh/tegik.pem ubuntu@ec2-54-163-113-129.compute-1.amazonaws.com
+ 1067  ssh -i /home/julio/.ssh/tegik.pem ubuntu@54.225.85.210
+ 1068  vim /home/julio/.ssh/config 
+ 1069  ssh -i /home/julio/.ssh/tegik.pem ubuntu@54.83.195.71
+ 1070  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@54.83.195.71
+ 1071  vim /home/julio/.ssh/config 
+ 1072  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@54.83.195.71
+ 1073  vim /home/julio/.ssh/config 
+ 1074  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@54.225.85.210/
+ 1075  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@54.225.85.210
+ 1076  cd /home/julio/Tegik/portalob/
+ 1077  source ~/.rvm/scripts/rvm
+ 1078  rails s
+ 1079  rake assets:precompile
+ 1080  rails s
+ 1081  rake assets:precompile
+ 1082  rails s
+ 1083  rake assets:precompile
+ 1084  rails s
+ 1085  rake assets:precompile
+ 1086  rails s
+ 1087  rake assets:precompile
+ 1088  rails s
+ 1089  rake assets:precompile
+ 1090  rails s
+ 1091  rake assets:precompile
+ 1092  rails s
+ 1093  rake assets:precompile
+ 1094  rails s
+ 1095  rake assets:precompile
+ 1096  rails s
+ 1097  rake assets:precompile
+ 1098  rails s
+ 1099  rake assets:precompile
+ 1100  rails s
+ 1101  rake assets:precompile
+ 1102  rails s
+ 1103  rake assets:precompile
+ 1104  rails s
+ 1105  rake assets:precompile
+ 1106  rails s
+ 1107  rake assets:precompile
+ 1108  rails s
+ 1109  rake assets:precompile
+ 1110  rails s
+ 1111  rake assets:precompile
+ 1112  rails s
+ 1113  rake assets:precompile
+ 1114  rails s
+ 1115  rake assets:precompile
+ 1116  rails s
+ 1117  git add .
+ 1118  git commit -am "Filtros Multiselección"
+ 1119  git push
+ 1120  source ~/.rvm/scripts/rvm
+ 1121  rails c
+ 1122  rake assets:precompile
+ 1123  rails c
+ 1124  cd public/assets/
+ 1125  ls
+ 1126  rm application-*
+ 1127  cd bootstrap/
+ 1128  ls
+ 1129  cd ..
+ 1130  ls -l
+ 1131  cd ..
+ 1132  cd /home/julio/Tegik/sw/powhmger/poshw-1.0.1910/
+ 1133  ls
+ 1134  java -jar poshw.jar 
+ 1135  ssh -i /home/julio/.ssh/tegik.pem ubuntu@54.225.85.210
+ 1136  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@54.225.85.210
+ 1137  source ~/.rvm/scripts/rvm
+ 1138  cd /home/julio/Tegik/portalob/
+ 1139  rails s
+ 1140  git init
+ 1141  git add -
+ 1142  git add .
+ 1143  git commit -am "Alta de usuarios por administrador."
+ 1144  git push
+ 1145  source ~/.rvm/scripts/rvm
+ 1146  cd /home/julio/Tegik/portalob/
+ 1147  rails c
+ 1148  rails generate migration AddIsAdminToUsuarios
+ 1149  rake db:migration
+ 1150  rake db:migrate
+ 1151  rails c
+ 1152  rails generate migration AddEsAdminToUsuarios isadmin:boolean
+ 1153  rake db:migrate
+ 1154  rails c
+ 1155  find -type f | xargs grep -l "class UsuariosController"
+ 1156  find -type f | xargs grep -l 
+ 1157  find -type f | xargs grep -l class UsuariosController
+ 1158  find -type f | xargs grep -l class "redirect_to"
+ 1159  find -type f | xargs grep -l class "redirect_to home"
+ 1160  find -type f | xargs grep -l "redirect_to home"
+ 1161  find -type f | xargs grep -l redirect_to home
+ 1162  find -type f | xargs grep -l "redirect_to home"
+ 1163  find -type f | xargs grep -l redirect_to root
+ 1164  find -type f | xargs grep -l redirect_to
+ 1165  find -type f | xargs grep -l class
+ 1166  find -type f | xargs grep -l UsersController
+ 1167  find -type f | xargs grep -l UsuarioController
+ 1168  find -type f | xargs grep -l UsuariosController
+ 1169  find -type f | xargs grep -l DeviseController
+ 1170  find -type f | xargs grep -l Devise
+ 1171  find -type f | xargs grep -l Usuarios
+ 1172  find -type f | xargs grep -l Usuario
+ 1173  find -type f | xargs grep -l root path
+ 1174  rake routs
+ 1175  rake routes
+ 1176  find -type f | xargs grep -l ajax
+ 1177  find -type f | xargs grep -l Started GET "/usuarios/sign_up" for 127.0.0.1 at 2015-03-13 11:12:49 -0600
+ 1178  Processing by Devise::RegistrationsController#new as HTML
+ 1179  Redirected to http://localhost:3000/
+ 1180  Filter chain halted as :require_no_authentication rendered or redirected
+ 1181  Completed 302 Found in 3ms (ActiveRecord: 0.2ms)
+ 1182  find -type f | xargs grep -l RegistrationsController
+ 1183  require_no_authentication
+ 1184  find -type f | xargs grep -l require_no_authentication
+ 1185  tail 1000 log/development.log 
+ 1186  tail -f 1000 log/development.log 
+ 1187  rake routes
+ 1188  rails c
+ 1189  vim /home/julio/.ssh/config 
+ 1190  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
+ 1191  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
+ 1192  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@107.21.202.181
+ 1193  cd /home/julio/Escritorio/REFACTURACION/
+ 1194  ls
+ 1195  diff vtapisoRefacturar vtapisoRefacturarOriginal 
+ 1196  source ~/.rvm/scripts/rvm
+ 1197  cd /home/julio/Tegik/portalob/
+ 1198  rails generate scaffold pedido usuario_id:string total:float subtotal:float abierto:boolean activo:boolean
+ 1199  rails generate scaffold pedidolinea pedido_id:string producto:string product_value:string product_id:string precio:float cantidad:float total:float imagen:string
+ 1200  rake db:migrate
+ 1201  rails c
+ 1202  init git
+ 1203  ssh -i /home/julio/.ssh/tegik.pem ubuntu@http://54.225.85.210/
+ 1204  ssh -i /home/julio/.ssh/tegik.pem ubuntu@http:54.225.85.210
+ 1205  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@http:54.225.85.210
+ 1206  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@54.225.85.210
+ 1207  ls
+ 1208  source ~/.rvm/scripts/rvm
+ 1209  rails s
+ 1210  cd /home/julio/Tegik/portalob/
+ 1211  rails s
+ 1212  rake assets:precompile
+ 1213  rails s
+ 1214  rake assets:precompile
+ 1215  rails s
+ 1216  rake assets:precompile
+ 1217  rails s
+ 1218  rake assets:precompile
+ 1219  rails s
+ 1220  git init
+ 1221  git add .
+ 1222  git commit -am "Carrido Primera Fase"
+ 1223  git push
+ 1224  vim /home/julio/.ssh/config 
+ 1225  ssh -i /home/julio/.ssh/tegik.pem ubuntu@107.21.202.181
+ 1226  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@107.21.202.181
+ 1227  source ~/.rvm/scripts/rvm
+ 1228  cd /home/julio/Tegik/portalob/
+ 1229  rails s
+ 1230  ssh -i /home/julio/.ssh/tegik.pem ubuntu@107.21.202.181
+ 1231  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@107.21.202.181
+ 1232  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5833:localhost:5932 ubuntu@107.21.202.181
+ 1233  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@107.21.202.181
+ 1234  cd /home/julio/Tegik/portalob/
+ 1235  source ~/.rvm/scripts/rvm
+ 1236  rails s
+ 1237  rake assets:precompile
+ 1238  rails s
+ 1239  source ~/.rvm/scripts/rvm
+ 1240  rails c
+ 1241  source ~/.rvm/scripts/rvm
+ 1242  rails s
+ 1243  cd /home/julio/Tegik/portalob/
+ 1244  ls
+ 1245  cd public/assets/
+ 1246  ls
+ 1247  rm application-*
+ 1248  ls
+ 1249  cd ..
+ 1250  rails s
+ 1251  rake assets:precompile
+ 1252  rails s
+ 1253  rake assets:precompile
+ 1254  rails s
+ 1255  rake assets:precompile
+ 1256  rails s
+ 1257  rake assets:precompile
+ 1258  rails s
+ 1259  rake assets:precompile
+ 1260  rails s
+ 1261  rake assets:precompile
+ 1262  rails s
+ 1263  rake assets:precompile
+ 1264  rails s
+ 1265  rake assets:precompile
+ 1266  rails s
+ 1267  rake assets:precompile
+ 1268  rails s
+ 1269  rake assets:precompile
+ 1270  rails s
+ 1271  rake assets:precompile
+ 1272  rails s
+ 1273  rake assets:precompile
+ 1274  rails s
+ 1275  rake assets:precompile
+ 1276  rails s
+ 1277  rake assets:precompile
+ 1278  rails s
+ 1279  rake assets:precompile
+ 1280  rails s
+ 1281  rake assets:precompile
+ 1282  rails s
+ 1283  rake assets:precompile
+ 1284  rails s
+ 1285  rake assets:precompile
+ 1286  rails s
+ 1287  rake assets:precompile
+ 1288  rails s
+ 1289  rake assets:precompile
+ 1290  rails s
+ 1291  rake assets:precompile
+ 1292  rails s
+ 1293  rake assets:precompile
+ 1294  rails s
+ 1295  rake assets:precompile
+ 1296  rails s
+ 1297  rake assets:precompile
+ 1298  rails s
+ 1299  rake assets:precompile
+ 1300  rails s
+ 1301  rake assets:precompile
+ 1302  rails s
+ 1303  rake assets:precompile
+ 1304  rails s
+ 1305  rake assets:precompile
+ 1306  rails s
+ 1307  rake assets:precompile
+ 1308  rails s
+ 1309  rake assets:precompile
+ 1310  rails s
+ 1311  rake assets:precompile
+ 1312  rails s
+ 1313  rake assets:precompile
+ 1314  rails s
+ 1315  rake assets:precompile
+ 1316  rails s
+ 1317  rake assets:precompile
+ 1318  rails s
+ 1319  rake assets:precompile
+ 1320  rails s
+ 1321  rake assets:precompile
+ 1322  rails s
+ 1323  rake assets:precompile
+ 1324  rails s
+ 1325  rake assets:precompile
+ 1326  rails s
+ 1327  rake assets:precompile
+ 1328  rails s
+ 1329  rake assets:precompile
+ 1330  rails s
+ 1331  rake assets:precompile
+ 1332  rails s
+ 1333  rake assets:precompile
+ 1334  rails s
+ 1335  rake assets:precompile
+ 1336  rails s
+ 1337  git init
+ 1338  git add .
+ 1339  git commit -am "Carrito Completo Sin Servicio"
+ 1340  git push
+ 1341  source ~/.rvm/scripts/rvm
+ 1342  cd /home/julio/Tegik/portalob/
+ 1343  rails c
+ 1344  source ~/.rvm/scripts/rvm
+ 1345  cd /home/julio/Tegik/portalob/
+ 1346  rails s
+ 1347  source ~/.rvm/scripts/rvm
+ 1348  rake assets:precompile
+ 1349  cd public/
+ 1350  ls
+ 1351  cd assets/
+ 1352  ls
+ 1353  rm application-*
+ 1354  cd ..
+ 1355  rails s
+ 1356  rake assets:precompile
+ 1357  rails s
+ 1358  rake assets:precompile
+ 1359  rails s
+ 1360  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
+ 1361  vim /home/julio/.ssh/config 
+ 1362  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@107.20.211.73
+ 1363  source ~/.rvm/scripts/rvm
+ 1364  cd /home/julio/Tegik/portalob/
+ 1365  raisl s
+ 1366  rails s
+ 1367  git init
+ 1368  git add .
+ 1369  git commit -am "Carrito de Compra Completo sin escritura"
+ 1370  git push
+ 1371  source ~/.rvm/scripts/rvm
+ 1372  cd /home/julio/Tegik/portalob/
+ 1373  rails c
+ 1374  rails generate scaffold escribepedido
+ 1375  rake db:generate
+ 1376  rake db:migrate
+ 1377  rails c
+ 1378  cat /home/julio/.ssh/config 
+ 1379  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
+ 1380  cat /home/julio/.ssh/config 
+ 1381  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
+ 1382  source ~/.rvm/scripts/rvm
+ 1383  cd /home/julio/Tegik/ṕ
+ 1384  cd /home/julio/Tegik/portalob/
+ 1385  rails s
+ 1386  git init
+ 1387  git add
+ 1388  git add .
+ 1389  git -am "Carrito de Compra con escritura a openbravo"
+ 1390  git commit -am "Carrito de Compra con escritura a openbravo"
+ 1391  git push
+ 1392  source ~/.rvm/scripts/rvm
+ 1393  rails c
+ 1394  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
+ 1395  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5833:localhost.5932 ubuntu@107.21.202.181
+ 1396  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5833:localhost:5932 ubuntu@107.21.202.181
+ 1397  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5833:localhost:5932 ubuntu@ec2-54-205-30-103.compute-1.amazonaws.com
+ 1398  vim /home/julio/.ssh/config 
+ 1399  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932  ubuntu@23.23.245.49
+ 1400  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
+ 1401  ssh -i /home/julio/Tegik/sw/tegik.pem }ubuntu@23.23.245.49
+ 1402  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
+ 1403  source ~/.rvm/scripts/rvm
+ 1404  rails c
+ 1405  source ~/.rvm/scripts/rvm
+ 1406  cd /home/julio/Tegik/portalob/
+ 1407  rails s
+ 1408  rails generate scaffold pedidos
+ 1409  rails generate scaffold pedidosob
+ 1410  rake db:migrate
+ 1411  rails s
+ 1412  rails generate scaffold pedidosob
+ 1413  rake assets:precompile
+ 1414  rails s
+ 1415  rake assets:precompile
+ 1416  rails s
+ 1417  rake assets:precompile
+ 1418  cd public/assets/
+ 1419  ls
+ 1420  rm application-*
+ 1421  cd ..
+ 1422  rails s
+ 1423  rake assets:precompile
+ 1424  rails s
+ 1425  git init
+ 1426  git add .
+ 1427  git commit -am "Segumiento de pedidos"
+ 1428  git push
+ 1429  rails generate migration addMaximoToPedidolinea maximo:decimal
+ 1430  rake db:migrate
+ 1431  rails s
+ 1432  source ~/.rvm/scripts/rvm
+ 1433  cd /opt/Oo
+ 1434  cd /home/julio/Tegik/portalob/
+ 1435  rails s
+ 1436  rake assets:precompile
+ 1437  rails s
+ 1438  rake assets:precompile
+ 1439  rails s
+ 1440  rake assets:precompile
+ 1441  rails s
+ 1442  rake assets:precompile
+ 1443  rails s
+ 1444  rake assets:precompile
+ 1445  rails s
+ 1446  rake assets:precompile
+ 1447  rails s
+ 1448  rake assets:precompile
+ 1449  rails s
+ 1450  rake assets:precompile
+ 1451  rails s
+ 1452  rake assets:precompile
+ 1453  rails s
+ 1454  rake assets:precompile
+ 1455  rails s
+ 1456  rake assets:precompile
+ 1457  rails s
+ 1458  rake assets:precompile
+ 1459  rails s
+ 1460  rake assets:precompile
+ 1461  rails s
+ 1462  rake assets:precompile
+ 1463  rails s
+ 1464  rake assets:precompile
+ 1465  rails s
+ 1466  rake assets:precompile
+ 1467  rails s
+ 1468  rake assets:precompile
+ 1469  rails s
+ 1470  rake assets:precompile
+ 1471  rails s
+ 1472  rake assets:precompile
+ 1473  rails s
+ 1474  rake assets:precompile
+ 1475  rails s
+ 1476  rake assets:precompile
+ 1477  rails s
+ 1478  rake assets:precompile
+ 1479  rails s
+ 1480  rake assets:precompile
+ 1481  rails s
+ 1482  rake assets:precompile
+ 1483  rails s
+ 1484  rake assets:precompile
+ 1485  rails s
+ 1486  rake assets:precompile
+ 1487  rails s
+ 1488  rake assets:precompile
+ 1489  rails s
+ 1490  rake assets:precompile
+ 1491  cd public/assets/
+ 1492  ls
+ 1493  rm application-*
+ 1494  cd ..
+ 1495  rails s
+ 1496  cd ..
+ 1497  rake assets:precompile
+ 1498  cd portalob/
+ 1499  ls
+ 1500  rake assets:precompile
+ 1501  rails s
+ 1502  git init
+ 1503  git add .
+ 1504  git commit -am "Paginado de Catálogo de productos"
+ 1505  git push
+ 1506  source ~/.rvm/scripts/rvm
+ 1507  rais c
+ 1508  rails s
+ 1509  rails x
+ 1510  rails c
+ 1511  cd /home/julio/
+ 1512  ls
+ 1513  mkdir android
+ 1514  mv /home/julio/Descargas/android-studio-ide-135.1740770-linux.zip /home/julio/android/
+ 1515  cd /home/julio/android/
+ 1516  ls
+ 1517  unzip android-studio-ide-135.1740770-linux.zip 
+ 1518  cd android-studio/bin/
+ 1519  ls
+ 1520  ./studio.sh 
+ 1521  sh studio.sh 
+ 1522  ./studio.sh 
+ 1523  dpkg --list | grep -i jdk
+ 1524  java -version
+ 1525  sudo add-apt-repository ppa:webupd8team/java
+ 1526  sudo apt-get update && sudo apt-get install oracle-jdk7-installer
+ 1527  update-alternatives --display java
+ 1528  java -version
+ 1529  javac -version
+ 1530  ./studio.sh 
+ 1531  ls
+ 1532  sudo apt-get install default-jdk
+ 1533  ./studio.sh 
+ 1534  mksdcard
+ 1535  sudo apt-get install lib32z1 lib32ncurses5 lib32bz2-1.0 lib32stdc++6
+ 1536  ./studio.sh 
+ 1537  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
+ 1538  source ~/.rvm/scripts/rvm
+ 1539  cd /home/julio/Tegik/portalob/
+ 1540  rails s
+ 1541  rake assets:precompile
+ 1542  rails s
+ 1543  rake assets:precompile
+ 1544  rails s
+ 1545  rake assets:precompile
+ 1546  rails s
+ 1547  ssh -i /home/julio/Tegik/sw/tegik.pem 
+ 1548  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
+ 1549  source ~/.rvm/scripts/rvm
+ 1550  rails c
+ 1551  source ~/.rvm/scripts/rvm
+ 1552  cd /home/julio/Tegik/portalob/
+ 1553  rails s
+ 1554  git init
+ 1555  git add .
+ 1556  git commit -am "Nuevo Listado de Pedidos"
+ 1557  git push
+ 1558  cd /home/julio/
+ 1559  cd android/
+ 1560  ls
+ 1561  cd android-studio/
+ 1562  ls
+ 1563  cd bin/
+ 1564  ./studio.sh 
+ 1565  cd /home/julio/
+ 1566  ls
+ 1567  cd AndroidStudioProjects/
+ 1568  ls
+ 1569  find -iname DBUsuarios
+ 1570  cd ../android/android-studio/
+ 1571  find -iname DBUsuarios
+ 1572  cd /
+ 1573  find -iname DBUsuarios
+ 1574  sudo su
+ 1575  cd /home/julio/android/
+ 1576  cd android-studio/li
+ 1577  cd android-studio/lib/
+ 1578  ls
+ 1579  cd ..
+ 1580  ls
+ 1581  cd bin/
+ 1582  ls
+ 1583  ./studio.sh 
+ 1584  cd /home/julio/Tegik/
+ 1585  ls
+ 1586  cd portalob/
+ 1587  ls
+ 1588  git init
+ 1589  git add -A
+ 1590  git commit -am "Tercer Sprint Amazon"
+ 1591  eb deploy
+ 1592  rails s
+ 1593  source ~/.rvm/scripts/rvm
+ 1594  rails s
+ 1595  rake assets:precompile
+ 1596  rails 
+ 1597  rails s
+ 1598  rails generate migration AddPartNumberToProducts impuesto:float
+ 1599  rails generate migration AddImpuestoToPedidolinea impuesto:float
+ 1600  rake db:migration
+ 1601  rake db:gener
+ 1602  rake db:migrate
+ 1603  rails s
+ 1604  rake assets:precompile
+ 1605  rails s
+ 1606  rake assets:precompile
+ 1607  rails s
+ 1608  rake assets:precompile
+ 1609  rails s
+ 1610  cd /home/julio/Tegik/portalob/
+ 1611  ls
+ 1612  source ~/.rvm/scripts/rvm
+ 1613  rail s
+ 1614  rails s
+ 1615  rake assets:precompile
+ 1616  ssh -i /home/julio/.ssh/extranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1617  rails c
+ 1618  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
+ 1619  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
+ 1620  cd /home/julio/android/android-studio/bin/
+ 1621  ./studio.sh 
+ 1622  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1623  ssh -i /home/julio/.ssh/extranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1624  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1625  history > amazonhistoryjulio
