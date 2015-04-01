@@ -20,6 +20,10 @@
 *= require 'masonry/right-to-left'
 *= requite 'bootstrap.min.css'
 *= require 'animate.css'
+*= require 'normalize'
+*= require 'demo'
+*= require 'modal'
+*= require 'font-awesome.min'
 *= require 'style.css'
 *= require 'masonry/transitions'
 */

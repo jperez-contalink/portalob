@@ -182,18 +182,30 @@ function orderContructor(){
             } else {
                 var impuesto = parseFloat(strImpuesto);
             }
+            // previene el precio del producto extra nulo
+            var strPrecioproductoextra = "<%= lins.precioproductoextra %>";
+            if (strPrecioproductoextra == "") {
+                strPrecioproductoextra = "0";
+            }
             row.Order_id = <%= ords.id %>;
             row.Linea_id = <%= lins.id %>;
             row.Product_id = "<%= lins.product_id %>";
             row.Producto = "<%= lins.producto %>";
+            row.Productoextra = "<%= lins.productoextra %>";
             row.Cantidad = (<%= lins.cantidad %>).toFixed(2);
             row.Precio = (<%= lins.precio %>).toFixed(2);
+            row.Precioproductoextra = (parseFloat(strPrecioproductoextra)).toFixed(2);
             row.Impuesto = (impuesto).toFixed(2);
+            <% if lins.impuestoextra == nil %>
+                row.Impuestoextra = 0;
+            <% else %>
+                row.Impuestoextra = <%= lins.impuestoextra %>;
+            <% end %>
             row.Total = (<%= lins.total %>).toFixed(2);
             row.Imagen = "<%= lins.imagen %>";
-            subTotal = subTotal + parseFloat(row.Precio) * parseFloat(row.Cantidad) - parseFloat(row.Impuesto) * parseFloat(row.Cantidad);
-            Total = subTotal + parseFloat(row.Precio) * parseFloat(row.Cantidad);
-            Impuestos = Impuestos + parseFloat(row.Impuesto) * parseFloat(row.Cantidad);
+            subTotal = subTotal + (parseFloat(row.Precio) * parseFloat(row.Cantidad)) - (parseFloat(row.Impuesto) * parseFloat(row.Cantidad)) - (parseFloat(row.Impuestoextra) * parseFloat(row.Cantidad));
+            Total = Total + parseFloat(row.Precio) * parseFloat(row.Cantidad);
+            Impuestos = Impuestos + parseFloat(row.Impuesto) * parseFloat(row.Cantidad) + parseFloat(row.Impuestoextra) * parseFloat(row.Cantidad);
             qtyProductos = qtyProductos + parseFloat(row.Cantidad);
             rows.push(row);
             var row = {};
@@ -205,6 +217,7 @@ function orderContructor(){
         qtyProductos = 0;
         subTotal = 0;
         Total = 0;
+        Impuestos = 0;
         rowsOrder.push(rowOrder);
         var rowOrder = {};
     <% end %>
@@ -282,17 +295,31 @@ function buildListaOrdenes(ob, ord, pedido, html){
     for (var i=0;i<pedidosOB.length;i++) {
         for (var j=0;j<pedidosPortal.length;j++) {
             if (pedidosOB[i].Pedido_ID == pedidosPortal[j].Order_id && (pedidosPortal[j].Order_id != pedido || todos == true)) {
-                console.log("OB: " + pedidosOB[i].Documentno + " - RR: " + pedidosPortal[j].Order_id);
                 htmlBuilder += '<div align="left" class="headRow"><h2>PEDIDO # ' + pedidosOB[i].Documentno + '</h2><br>ESTADO: ' + pedidosOB[i].Estado + '<br><a href="javascript:mostrarDetalle(\'' + pedidosOB[i].Documentno + '\')">Detalles</a></div>';
                 htmlBuilder += '<div align="center" class="lineGrid" id="lineGrid_' + pedidosOB[i].Documentno + '" style="display:none;">';
                 for (var k=0;k<lineasPortal.length;k++) {
                     if (pedidosPortal[j].Order_id == lineasPortal[k].Order_id && (lineasPortal[k].Order_id != pedido || todos == true)){
-                        console.log("%> ", lineasPortal[k]);
                         // PINTAR DETALLES DE LA LINEA lineasPortal[k].propiedad
                         htmlBuilder += '<div style="border:0px solid grey;" id="' + lineasPortal[k].Product_id + '_ROW">';
                         htmlBuilder += '<div align="center" class="imgGrid" style="float:left;"><img src="' + lineasPortal[k].Imagen + '" height="50px"></img></div>';
-                        htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + lineasPortal[k].Producto + '</div>';
-                        htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Precio) + '</div>';
+                        //htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + lineasPortal[k].Producto + '</div>';
+                        //htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Precio) + '</div>';
+
+
+                        if (lineasPortal[k].Productoextra != "null") {
+                            htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + lineasPortal[k].Producto + ' + ' + lineasPortal[k].Productoextra + '</div>';
+                            htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles((parseFloat(lineasPortal[k].Precio) - parseFloat(lineasPortal[k].Precioproductoextra)).toFixed(2)) + ' + $' + separaMiles(lineasPortal[k].Precioproductoextra) +'</div>';
+                        } else {
+                            htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + lineasPortal[k].Producto + '</div>';                            
+                            htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Precio) + '</div>';
+                        }
+
+
+
+
+
+
+
                         htmlBuilder += '<div align="center" class="qtyGrid" style="float:left;"><input class="chng_qty" type="text" value="' + separaMiles(lineasPortal[k].Cantidad) + '" id="' + lineasPortal[k].Linea_id + '_Cantidad" readonly   /></div>';
                         htmlBuilder += '<div align="right" id="totalGrid" class="totalGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Total) + '<br></div>';
                         htmlBuilder += '</div>';                        
@@ -343,8 +370,24 @@ function buildListaOrden(ob, ord, pedido){
                         // PINTAR DETALLES DE LA LINEA lineasPortal[k].propiedad
                         htmlBuilder += '<div style="border:0px solid grey;" id="' + lineasPortal[k].Product_id + '_ROW">';
                         htmlBuilder += '<div align="center" class="imgGrid" style="float:left;"><img src="' + lineasPortal[k].Imagen + '" height="50px"></img></div>';
-                        htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + lineasPortal[k].Producto + '</div>';
-                        htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Precio) + '</div>';
+                        //htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + lineasPortal[k].Producto + '</div>';
+                        //htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Precio) + '</div>';
+
+
+                        if (lineasPortal[k].Productoextra != "") {
+                            htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + lineasPortal[k].Producto + ' + ' + lineasPortal[k].Productoextra + '</div>';
+                            htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles((parseFloat(lineasPortal[k].Precio) - parseFloat(lineasPortal[k].Precioproductoextra)).toFixed(2)) + ' + $' + separaMiles(lineasPortal[k].Precioproductoextra) +'</div>';
+                        } else {
+                            htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + lineasPortal[k].Producto + '</div>';                            
+                            htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Precio) + '</div>';
+                        }
+
+
+
+
+
+
+                        
                         htmlBuilder += '<div align="center" class="qtyGrid" style="float:left;"><input class="chng_qty" type="text" value="' + separaMiles(lineasPortal[k].Cantidad) + '" id="' + lineasPortal[k].Linea_id + '_Cantidad" readonly   /></div>';
                         htmlBuilder += '<div align="right" id="totalGrid" class="totalGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Total) + '<br></div>';
                         htmlBuilder += '</div>';                        

@@ -21,7 +21,7 @@ class PedidolineasController < ApplicationController
     total = params[:cantidad].to_f*params[:precio].to_f
     # params[:impuesto]
     #Pedidolinea.create!({:pedido_id => @ord.id, :producto => params[:producto], :product_value => params[:product_value], :precio => params[:precio], :total => total, :cantidad => params[:cantidad], :product_id => params[:producto_id], :imagen => params[:imagenurl], :maximo => params[:invmax].to_f})
-    Pedidolinea.create!({:pedido_id => @ord.id, :producto => params[:producto], :product_value => params[:product_value], :precio => params[:precio], :total => total, :cantidad => params[:cantidad], :product_id => params[:producto_id], :imagen => params[:imagenurl], :maximo => params[:invmax].to_f, :impuesto => params[:impuesto].to_f, :precioob => params[:precioob].to_f, :precioproductoextra => params[:precioproductoextra].to_f, :productoextra => params[:productoextra]})
+    Pedidolinea.create!({:pedido_id => @ord.id, :producto => params[:producto], :product_value => params[:product_value], :precio => params[:precio], :total => total, :cantidad => params[:cantidad], :product_id => params[:producto_id], :imagen => params[:imagenurl], :maximo => params[:invmax].to_f, :impuesto => params[:impuesto].to_f, :precioob => params[:precioob].to_f, :precioproductoextra => params[:precioproductoextra].to_f, :productoextra => params[:productoextra], :impuestoextra => params[:impuestoproductoextra]})
     @pedidolineas = Pedidolinea.all
   end
 

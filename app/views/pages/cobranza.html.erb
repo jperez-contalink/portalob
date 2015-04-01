@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>CBZA</title>
+		<style>
+			.hover_clean:hover {
+        		background-color: #2980b9;
+        		color: white;
+      		}
+			/* AGREGADO PARA AREA DE PROCESADO */
+			.proc-area_cbza {
+				z-index: 110;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+			    text-align:center;
+			    background: rgba(0,0,0,0.7);
+			    display:none;
+			}
+			.listadoAgregados {
+				z-index: 111;
+				position: fixed;
+				top: 12%;
+				left: 5%;
+				width: 90%;
+				height: 80%;
+				background-color: white;
+				border-radius: 10px;
+				padding: 3% 2% 1% 2%;
+			}
+			.itemAgregado {
+				z-index: 112;
+				width: 90%;
+				margin-bottom: .2%;
+				background-color: blue;
+				color:#424242;
+				font-weight: bold;
+			}
+			.addDocno {
+				width: 30%;
+				background-color: transparent;
+				float:left;
+				padding: .4% 1% .4% 1%;
+				margin-bottom: .2%;
+				text-align: left;
+				font-weight: bold;
+				font-size: 180%;
+				border-bottom: 1px solid #7f8c8d;
+			}
+			.addFecha {
+				width: 35%;
+				background-color: transparent;
+				float:left;
+				padding: .4% 1% .4% 1%;
+				margin-bottom: .2%;
+				text-align: left;
+				font-weight: bold;
+				font-size: 180%;
+				border-bottom: 1px solid #7f8c8d;
+			}
+			.addTotal {
+				width: 10%;
+				background-color: transparent;
+				float:left;
+				padding: .4% 1% .4% 1%;
+				margin-bottom: .2%;
+				text-align: right;
+				font-weight: bold;
+				font-size: 180%;
+				border-bottom: 1px solid #7f8c8d;
+			}
+			.addPendiente {
+				width: 10%;
+				background-color: transparent;
+				float:left;
+				padding: .4% 1% .4% 1%;
+				margin-bottom: .2%;
+				text-align: right;
+				font-weight: bold;
+				font-size: 180%;
+				border-bottom: 1px solid #7f8c8d;
+			}
+			.addCaptura {
+				width: 10%;
+				background-color: transparent;
+				float:left;
+				margin-bottom: .2%;
+				text-align: right;
+				font-weight: bold;
+				border-bottom: 1px solid #7f8c8d;
+			}			
+			.addCaptura input[type=text] {
+				width: 100%;
+				height: 100%;
+			    margin: 0%;
+				background-color: #F3F781;
+				text-align: right;
+				font-size: 185%;
+			}	
+			.deleteCaptura {
+				width: 5%;
+				background-color: transparent;
+				float:left;
+				margin-bottom: .2%;
+				text-align: right;
+				font-weight: bold;
+				font-size: 180%;
+				color:red;
+			}
+			.deleteCaptura a {
+				color:red;
+			}			
+		</style>
+	</head>
+	<body class="skin-3">
+		<!-- LISTADO DE DOCUMENTOS AGREGADOS -->
+		<div id="proc-area_cbza" class="proc-area_cbza">
+			<div id="listadoAgregados" class="listadoAgregados" align="center"></div>
+		</div>
+		<!-- LISTADO DE DOCUMENTOS AGREGADOS -->
+		<input type="hidden" id="allinclused">
+		<div class="container">
+			<div class="content">
+				<br><br><br><br><br>
+				<div  align="right">
+					<button type="button" class="btn btn-default export_checked hover_clean" aria-
+					label="Left Align">
+						<span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>&nbsp;Procesar
+					</button>
+				</div><br><br><br>
+				<div id="grid" class="grid_cbza clearfix">
+					<div class="grid__item_cbza" style="width:100%;"><i>Default</i></div>					
+					<div class="grid__item_cbza" style="width:100%;"><i>Default2</i></div>					
+				</div>
+				<!-- Related demos -->
+			</div><!-- /content -->
+		</div><!-- /container -->
+		<div id="drop-area_cbza" class="drop-area_cbza">
+			<div class="drop-area__item_cbza"></div>
+		</div>
+		<div class="drop-overlay"></div>
+		<script>
+
+		$(document).ready(function() {
+			var allData = {};
+	        console.log("$> Consumir Servicio");
+	        var datox = {};
+	        $.ajax({
+	                type:"GET",
+	                dataType : 'json',
+	                url: "api/v1/documentoscobranzas",
+	                success: function(datox){
+	                console.log("SUCCESS", datox);
+	                allData = jsonConstructor(datox);
+	                buildListado(allData);
+	            },
+	                error:  function(){ 
+	                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
+	                document.getElementById("grid").innerHTML = mensajeError;
+	                }
+	        });
+			$(document).on('click', '.export_checked', function (e) {
+				console.log("PROCESAR!!");
+				e.preventDefault();
+				procesarDocumentos();
+			});
+			$(document).on('click', '.delete_item', function (e) {
+				console.log("ELIMINAR!!", e);
+				e.preventDefault();
+				var idElement = (e.target.id).replace("_dlt", "")
+				document.getElementById(idElement).style.display = "none";
+				var strDocs = document.getElementById('allinclused').value;
+				var newStrDocs = "";
+				var Docs = strDocs.split("_");
+					for (var j=0;j<Docs.length;j++) {
+						if (Docs[j] != idElement && Docs[j] != "") {
+							newStrDocs += Docs[j] + "_";
+						}
+					}
+				document.getElementById('allinclused').value = newStrDocs;
+			});
+
+			function buildListado(json){
+				var jsonObject = json.facturas;	
+				var lista = '';
+				//var lista = '<div id="grid" class="grid_cbza clearfix">';
+			    for (var i=0;i<jsonObject.length;i++) {
+			    	lista += '<div class="grid__item_cbza" id="' + jsonObject[i].Documento_ID + '" style="width:100%;position: relative;"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span><i>&nbsp;&nbsp;' + jsonObject[i].Documentno + '</i></div>';
+			    	
+			    }			
+			    //lista += "</div>";
+			    console.log("Se agregan los elementos");
+			    document.getElementById('grid').innerHTML = lista;
+			    // INICIALIZAR ELEMENTOS
+			    console.log("Se inicializan elementos");
+				var body = document.body,
+					dropArea = document.getElementById( 'drop-area_cbza' ),
+					droppableArr = [], dropAreaTimeout;
+
+				// initialize droppables
+				console.log("Inicializa Droppables");
+				[].slice.call( document.querySelectorAll( '#drop-area_cbza .drop-area__item_cbza' )).forEach( function( el ) {
+					droppableArr.push( new Droppable( el, {
+						onDrop : function( instance, draggableEl ) {
+							// show checkmark inside the droppabe element
+							classie.add( instance.el, 'drop-feedback' );
+							clearTimeout( instance.checkmarkTimeout );
+							instance.checkmarkTimeout = setTimeout( function() { 
+								classie.remove( instance.el, 'drop-feedback' );
+							}, 800 );
+							// ...
+						}
+					} ) );
+				} );
+
+				// initialize draggable(s)
+				console.log("Inicializa Draggables");
+				[].slice.call(document.querySelectorAll( '#grid .grid__item_cbza' )).forEach( function( el ) {
+					new Draggable( el, droppableArr, {
+						draggabilly : { containment: document.body },
+						onStart : function() {
+							// add class 'drag-active' to body
+							classie.add( body, 'drag-active' );
+							// clear timeout: dropAreaTimeout (toggle drop area)
+							clearTimeout( dropAreaTimeout );
+							// show dropArea
+							classie.add( dropArea, 'show' );
+						},
+						onEnd : function( wasDropped ) {
+							var afterDropFn = function() {
+								// hide dropArea
+								classie.remove( dropArea, 'show' );
+								// remove class 'drag-active' from body
+								classie.remove( body, 'drag-active' );
+							};
+
+							if( !wasDropped ) {
+								afterDropFn();
+							}
+							else {
+								// after some time hide drop area and remove class 'drag-active' from body
+								clearTimeout( dropAreaTimeout );
+								dropAreaTimeout = setTimeout( afterDropFn, 400 );
+							}
+						}
+					} );
+				} );			    
+			}
+
+
+			function jsonConstructor(json) {
+				console.log("JSON CONSTRUCTOR > ", json);
+			    var rows = [];
+			    var jsonObject = json.response;
+			    for (var i=0;i<jsonObject.totalRows;i++) {
+			        var row = {};
+			        row.Documento_ID	= jsonObject.data[i].id;
+			        row.Totallines 		= jsonObject.data[i].totallines;
+			        row.Grandtotal 		= jsonObject.data[i].grandtotal;
+			        row.Impuesto 		= jsonObject.data[i].impuesto;
+			        row.Pagado 			= jsonObject.data[i].pagado;
+			        row.Pendiente 		= jsonObject.data[i].pendiente;
+			        row.Documentno 		= jsonObject.data[i].documentno;
+			        row.Dateinvoiced 	= jsonObject.data[i].dateinvoiced;
+			        row.Docstatus 		= jsonObject.data[i].docstatus;
+			        rows.push(row);
+			    }
+			    var data = {
+			                facturas: rows
+			            };
+			    return data;
+			}  // Termina json Constructor	
+			function procesarDocumentos() {
+				console.log("DOCUMENTOS: " + document.getElementById('allinclused').value);
+				var strDocs = document.getElementById('allinclused').value;
+				var Docs = strDocs.split("_");
+				var docAdds = [];
+				for (i=0;i<allData.facturas.length;i++) {
+					for (var j=0;j<Docs.length;j++) {
+						if (Docs[j] == allData.facturas[i].Documento_ID) {
+							docAdds.push(allData.facturas[i]);
+						}
+					}
+				}
+				console.log("Documentos Agregados: ", docAdds);
+				var listaAdd = '<div class="itemAgregado"><div class="addDocno">Número de Documento</div><div class="addFecha">Fecha del Documento</div><div class="addTotal">Total</div><div class="addPendiente">Pendiente</div><div class="addPendiente">Aplicar</div></div>';
+				for (var k=0;k<docAdds.length;k++) {
+					listaAdd += '<div id="' + docAdds[k].Documento_ID + '" class="itemAgregado">';
+					// DocNo
+					listaAdd += '<div class="addDocno">' + docAdds[k].Documentno + '</div>';
+					// Fecha
+					listaAdd += '<div class="addFecha">' + docAdds[k].Dateinvoiced + '</div>';
+					// Total
+					listaAdd += '<div class="addTotal">$' + docAdds[k].Grandtotal + '</div>';
+					// Pendiente
+					listaAdd += '<div class="addPendiente">$' + docAdds[k].Pendiente + '</div>';
+					// Pendiente Captura
+					listaAdd += '<div class="addCaptura"><input type="text" value="' + docAdds[k].Pendiente + '" id="' + docAdds[k].Documento_ID + '_text"/></div>';
+					listaAdd += '<div class="deleteCaptura"><a class="delete_item"><span id="' + docAdds[k].Documento_ID + '_dlt" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></a></div>';
+					listaAdd += '</div>';
+				}
+				listaAdd += '<br><br><div  align="right" style="padding-top:30%;padding-right:5%;"><button type="button" onclick="salirDock()" class="btn btn-default hover_clean" aria-label="Left Align"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;Cancelar</button>&nbsp;&nbsp;&nbsp;<button type="button" onclick="salirDock()" class="btn btn-default hover_clean" aria-label="Left Align"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Aplicar</button></div>';
+				document.getElementById("listadoAgregados").innerHTML = listaAdd;
+				document.getElementById("proc-area_cbza").style.display = "block";
+			}
+
+			})();
+
+
+			function salirDock() {
+				document.getElementById("proc-area_cbza").style.display = "none";
+			}			
+		</script>
+	</body>
+</html>

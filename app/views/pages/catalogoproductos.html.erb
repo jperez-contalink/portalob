@@ -259,6 +259,7 @@
     var impuesto = document.getElementById("hdnImpuesto").value;
     var precioob = document.getElementById("hdnPrecioOB").value;
     var precioproductoextra = document.getElementById("hdnprecioextra").value;
+    var impuestoproductoextra = document.getElementById("hdnimpuestoextra").value;
     var productoextra = document.getElementById("hdnproductoextra").value;
     var inventarioMaximo = parseFloat(inventario.replace(" Piezas disponibles.", ""));
     // Valida inventario
@@ -271,7 +272,7 @@
       $.ajax({
                 type:"GET",
                 dataType : 'html',
-                url: "/pedidolineas?usuario_id=<%=current_usuario.id%>&producto_id=" + productid + '&cantidad=' + cantidad + '&precio=' + precio.replace("$", "") + "&producto=" + product + "&product_value=" + product_value + "&imagenurl=" + imagenurl + "&invmax=" + inventarioMaximo + "&impuesto=" + impuesto + "&precioob=" + precioob + "&productoextra=" + productoextra + "&precioproductoextra=" + precioproductoextra,
+                url: "/pedidolineas?usuario_id=<%=current_usuario.id%>&producto_id=" + productid + '&cantidad=' + cantidad + '&precio=' + precio.replace("$", "") + "&producto=" + product + "&product_value=" + product_value + "&imagenurl=" + imagenurl + "&invmax=" + inventarioMaximo + "&impuesto=" + impuesto + "&precioob=" + precioob + "&productoextra=" + productoextra + "&precioproductoextra=" + precioproductoextra + "&impuestoproductoextra=" + impuestoproductoextra,
                 success: function(datos){
                 console.log("$> linea añadida");     
                 // Reestablecer Catálogo
@@ -448,11 +449,13 @@ function jsonConstructor(json, allPrice) {
         var obj = jsonRows[key]; 
         if (obj.Producto_ID == jsonObject.data[i].id) {
             row.Precio = (parseFloat(obj.Precio)+parseFloat(obj.Impuesto)).toFixed(2);
+            if (row.Nombre == "OPTIMA AMARILLA DEEP 31 T") {console.log("%> Precio = " + obj.Precio + " (Precio) + " + obj.Impuesto + " (Imp)");}
             row.Impuesto = obj.Impuesto;
         }
         if (obj.Producto_ID == jsonObject.data[i].productextra) {
           row.Precioproductoextra = (parseFloat(obj.Precio)+parseFloat(obj.Impuesto)).toFixed(2);
           row.Impuestoproductoextra = obj.Impuesto;
+          if (row.Nombre == "OPTIMA AMARILLA DEEP 31 T") {console.log("%> Precio Extra = " + obj.Precio + " (Precio) + " + obj.Impuesto + " (Imp)");} 
         }
       }
       if (typeof(row.Precioproductoextra) == "undefined"){
@@ -463,7 +466,8 @@ function jsonConstructor(json, allPrice) {
         row.Precio = 0;
         row.Impuesto = 0;
       }
-      row.Precioshow = parseFloat(row.Precio) + parseFloat(row.Precioproductoextra) + parseFloat(row.Impuestoproductoextra);
+      if (row.Nombre == "OPTIMA AMARILLA DEEP 31 T") {console.log("%> Precioshow = " + row.Precio + " (Precio) + " + row.Precioproductoextra + " (precioextra)" + row.Impuestoproductoextra + " impX");}
+      row.Precioshow = parseFloat(row.Precio) + parseFloat(row.Precioproductoextra);
 
       // Gestionar Caracteristicas
       if (jsonObject.data[i].caracteristicas != null) {
@@ -1036,7 +1040,7 @@ function buildAddProduct(productID) {
       if (obj.Producto_ID == productID) {
         var pextra = "";
         var montoextra = 0;
-        montoextra = (parseFloat(obj.Impuestoproductoextra) + parseFloat(obj.Precioproductoextra)).toFixed(2);
+        montoextra = (parseFloat(obj.Precioproductoextra)).toFixed(2);
         if (montoextra > 0) {
             pextra = '<div style="font-size:100%;color:grey;padding-left:1%;padding-top:1%;">Incluye $' + String(montoextra) + ' (' + obj.Productoextra +  ')</div>';
         }
@@ -1057,7 +1061,7 @@ function buildAddProduct(productID) {
         // BtonAgregar
         buildHTML += '<div class="cartBtn" align="left"><br><input id="' + obj.Producto_ID + '" type="button" value="añadir producto al carrito" class="btn btn-default btn-anadir submitProduct"> </div>';
         // Valores ocultos para envío de parametros
-        buildHTML += '<input type="hidden" id="hdnProduct" value="'+obj.Nombre+'"/><input type="hidden" id="hdnValue" value="'+obj.Identificador+'"/><input type="hidden" id="hdnImagen" value="'+obj.Image+'"/><input type="hidden" id="hdnImpuesto" value="'+obj.Impuesto+'"/><input type="hidden" id="hdnPrecioOB" value="'+obj.Precio+'"/><input type="hidden" id="hdnproductoextra" value="'+obj.Productoextra+'"/><input type="hidden" id="hdnprecioextra" value="'+obj.Precioproductoextra+'"/>';
+        buildHTML += '<input type="hidden" id="hdnProduct" value="'+obj.Nombre+'"/><input type="hidden" id="hdnValue" value="'+obj.Identificador+'"/><input type="hidden" id="hdnImagen" value="'+obj.Image+'"/><input type="hidden" id="hdnImpuesto" value="'+obj.Impuesto+'"/><input type="hidden" id="hdnPrecioOB" value="'+obj.Precio+'"/><input type="hidden" id="hdnproductoextra" value="'+obj.Productoextra+'"/><input type="hidden" id="hdnprecioextra" value="'+obj.Precioproductoextra+'"/><input type="hidden" id="hdnimpuestoextra" value="'+obj.Impuestoproductoextra+'"/>';
 
         // Cierra panel derecho
         buildHTML += '</div></div>';

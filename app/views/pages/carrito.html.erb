@@ -204,6 +204,7 @@ function orderContructor(){
     var subTotal = 0;
     var qtyProductos = 0;
     var Impuestos = 0;
+    var Impuestosextra = 0;
     var Total = 0;
     var row = {};
     var rowOrder = {};
@@ -225,16 +226,23 @@ function orderContructor(){
             <% else %>
                 row.Maximo = <%= lins.maximo %>
             <% end %>
+            <% if lins.impuestoextra == nil %>
+                row.Impuestoextra = 0;
+            <% else %>
+                row.Impuestoextra = <%= lins.impuestoextra %>;
+            <% end %>
             row.Imagen = "<%= lins.imagen %>";
-            subTotal = subTotal + (parseFloat(row.Precio) * parseFloat(row.Cantidad)) - (parseFloat(row.Impuesto) * parseFloat(row.Cantidad));
+            subTotal = subTotal + (parseFloat(row.Precio) * parseFloat(row.Cantidad)) - (parseFloat(row.Impuesto) * parseFloat(row.Cantidad)) - (parseFloat(row.Impuestoextra) * parseFloat(row.Cantidad));
             Impuestos = Impuestos + parseFloat(row.Impuesto) * parseFloat(row.Cantidad);
+            Impuestosextra = Impuestosextra + parseFloat(row.Impuestoextra) * parseFloat(row.Cantidad);
             Total = Total + parseFloat(row.Precio) * parseFloat(row.Cantidad);
             qtyProductos = qtyProductos + parseFloat(row.Cantidad);
             rows.push(row);
             var row = {};
         <% end %>
         rowOrder.Subtotal   = (subTotal).toFixed(2);
-        rowOrder.Impuestos  = (Impuestos).toFixed(2);
+        console.log("IMPUESTOS: " + Impuestos + " IMPS EXTRA: " + Impuestosextra + "TOTAL: " + (Impuestos+Impuestosextra));
+        rowOrder.Impuestos = (parseFloat(Impuestos)+parseFloat(Impuestosextra)).toFixed(2);
         rowOrder.Total      = (Total).toFixed(2);
         rowOrder.Productos  = (qtyProductos).toFixed(2);
         rowsOrder.push(rowOrder);
@@ -265,6 +273,7 @@ function cambiaCantidad(id, value) {
             nuevaLinea.Product_id = jsonRows[j].Product_id;
             nuevaLinea.Producto = jsonRows[j].Producto;
             nuevaLinea.Productoextra = jsonRows[j].Productoextra;
+            nuevaLinea.Impuestoextra = jsonRows[j].Impuestoextra;
             if (parseFloat(value) > parseFloat(jsonRows[j].Maximo)) {
                 nuevaLinea.Cantidad = jsonRows[j].Maximo;   
                 document.getElementById('alerta_carrito').innerHTML = buildAlertWarning("Inventario Insuficiente", "El producto " + jsonRows[j].Producto + " sólo tiene disponibles " + jsonRows[j].Maximo + " unidades, hemos cambiado la línea por ti.");
@@ -328,8 +337,8 @@ function recalcularTotales() {
         for (var j=0;j<jsonRows.length;j++) {  
             if (jsonOrders[i].Order_id == jsonRows[j].Order_id) {
                     ordQty = ordQty + parseFloat(jsonRows[j].Cantidad);
-                    ordSubTotal = ordSubTotal + (parseFloat(jsonRows[j].Precio)*parseFloat(jsonRows[j].Cantidad)) - (parseFloat(jsonRows[j].Impuesto)*parseFloat(jsonRows[j].Cantidad));
-                    ordImpuestos = ordImpuestos + (parseFloat(jsonRows[j].Impuesto)*parseFloat(jsonRows[j].Cantidad));
+                    ordSubTotal = ordSubTotal + (parseFloat(jsonRows[j].Precio)*parseFloat(jsonRows[j].Cantidad)) - (parseFloat(jsonRows[j].Impuesto)*parseFloat(jsonRows[j].Cantidad)) - (parseFloat(jsonRows[j].Impuestoextra)*parseFloat(jsonRows[j].Cantidad));
+                    ordImpuestos = ordImpuestos + (parseFloat(jsonRows[j].Impuesto)*parseFloat(jsonRows[j].Cantidad)) + (parseFloat(jsonRows[j].Impuestoextra)*parseFloat(jsonRows[j].Cantidad));
                     ordTotal = ordTotal + (parseFloat(jsonRows[j].Precio)*parseFloat(jsonRows[j].Cantidad));
             }
         }

@@ -17,6 +17,10 @@
 //= require jquery.watable
 //= require jquery.catalogo
 //= require jquery.carrito
+//= require jquery.cobranza
+//= require modernizr.custom
+//= require draggabilly.pkgd.min
+//= require dragdrop
 //= require bootstrap-datepicker
 //= requite bootstrap.min.js
 //= require_tree .

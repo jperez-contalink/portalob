@@ -1,6 +1,8 @@
 require 'api_constraints'
 Rails.application.routes.draw do
  
+  resources :documentoscobranzas
+
   resources :pedidosobs
 
   resources :escribepedidos
@@ -41,20 +43,24 @@ Rails.application.routes.draw do
   get "contacto" => "pages#contacto"
   get "catalogoproductos" => "pages#catalogoproductos"
   get "carrito" => "pages#carrito"
-  #get "test" => "pages#test"
-  #post "test" => "pages#test"
   get "registro" => "pages#registro"
   post "registro" => "pages#registro"
   get "success" => "pages#success"
   post "carrito" => "pages#carrito"
   get "success_order" => "pages#success_order"
-  #pruebas
   get "cambia_linea" => "pages#cambia_linea"
   get "borrar_linea" => "pages#borrar_linea"
+  get "cobranza" => "pages#cobranza"
  
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       resources :reporte_facturas
+    end  
+  end
+
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      resources :documentoscobranzas
     end  
   end
 
