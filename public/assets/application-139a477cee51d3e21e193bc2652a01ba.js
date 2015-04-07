@@ -14246,7 +14246,7 @@ function mesAnterior(mes){
 		// move back the draggable element (with or without a transition)
 		this.moveBack( withAnimation );
 		// Agregar el documento a documentos incluidos
-		if (instance.element.className.indexOf("grid__item_cbza") > -1) {
+		if (instance.element.className.indexOf("grid__item") > -1) {
 			console.log("Si no ha sido agregado agrega el documento arrastrado.");
 			var vals = document.getElementById("allinclused").value;
 			console.log("El indice del documento agregado: " + vals.indexOf(instance.element.id));
@@ -14255,6 +14255,11 @@ function mesAnterior(mes){
 				document.getElementById("allinclused").value = vals;
 			}
 			console.log("ALL INC: " + document.getElementById("allinclused").value);
+			// Agregar el elemento a la lista de agregados
+			var newAdd = document.createElement("div");
+    		document.getElementById('agregados').appendChild(newAdd);
+    		newAdd.className = 'addedItem';
+    		newAdd.innerHTML = '<p>' + getDocumentNo(instance.element.id) + '</p>';
 		}
 	} // Termina liberación
 

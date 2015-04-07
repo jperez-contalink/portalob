@@ -23,6 +23,7 @@
 *= require 'normalize'
 *= require 'demo'
 *= require 'modal'
+*= require 'sidebar.css'
 *= require 'font-awesome.min'
 *= require 'style.css'
 *= require 'masonry/transitions'

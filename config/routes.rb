@@ -1,6 +1,8 @@
 require 'api_constraints'
 Rails.application.routes.draw do
  
+  resources :aplicarcobranzas
+
   resources :documentoscobranzas
 
   resources :pedidosobs
@@ -112,6 +114,11 @@ Rails.application.routes.draw do
     end  
   end
 
+  namespace :api, defaults: {format: 'xml'} do
+    namespace :v1 do
+      resources :aplicarcobranzas
+    end  
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

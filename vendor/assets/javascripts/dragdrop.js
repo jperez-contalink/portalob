@@ -250,21 +250,31 @@
 		if( this.position.left === instance.position.x && this.position.top === instance.position.y || dropped ) {
 			// in this case we will not set a transition for the item to move back
 			withAnimation = false;
+			// Agregar el documento a documentos incluidos
+			console.log("CHCK ADD");
+			if (instance.element.className.indexOf("grid__item") > -1) {
+				console.log("Si no ha sido agregado agrega el documento arrastrado.");
+				var vals = document.getElementById("allinclused").value;
+				console.log("El indice del documento agregado: " + vals.indexOf(instance.element.id));
+				if (vals.indexOf(instance.element.id) == -1){
+					vals += instance.element.id + "_";
+					document.getElementById("allinclused").value = vals;
+					// Agregar el elemento a la lista de agregados
+					var newAdd = document.createElement("div");
+		    		document.getElementById('agregados').appendChild(newAdd);
+		    		newAdd.className = 'addedItem2';
+		    		newAdd.id = instance.element.id + "_added";
+		    		//newAdd.innerHTML = '<p>' + getDocumentNo(instance.element.id) + '</p>';
+		    		newAdd.innerHTML = '<div class="addedDocNo">' + getDocumentNo(instance.element.id) + '</div><a class="delete_item"><div class="addedDelete" id="' + instance.element.id + '_tagDiv"><span id="' + instance.element.id + '_tagSpan" class="glyphicon glyphicon-remove" aria-hidden="true"></span></div></a>';
+		    		newAdd.style.display = 'block';
+				}
+				console.log("ALL INC: " + document.getElementById("allinclused").value);
+			}			
 		}
 
 		// move back the draggable element (with or without a transition)
 		this.moveBack( withAnimation );
-		// Agregar el documento a documentos incluidos
-		if (instance.element.className.indexOf("grid__item_cbza") > -1) {
-			console.log("Si no ha sido agregado agrega el documento arrastrado.");
-			var vals = document.getElementById("allinclused").value;
-			console.log("El indice del documento agregado: " + vals.indexOf(instance.element.id));
-			if (vals.indexOf(instance.element.id) == -1){
-				vals += instance.element.id + "_";
-				document.getElementById("allinclused").value = vals;
-			}
-			console.log("ALL INC: " + document.getElementById("allinclused").value);
-		}
+
 	} // Termina liberación
 
 	Draggable.prototype.highlightDroppables = function( el ) {

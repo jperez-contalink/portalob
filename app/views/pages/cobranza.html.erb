@@ -4,12 +4,71 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>CBZA</title>
+		<title>CBNZA</title>
 		<style>
-			.hover_clean:hover {
-        		background-color: #2980b9;
-        		color: white;
-      		}
+			.itemHd {
+				position: absolute;
+			    top: 0;
+			    width: 100%;
+			    padding-top: 5%;
+			    padding-bottom: 3%;
+			    font-weight: bold;
+			}
+			.itemImg {
+				font-size: 150%;
+				padding-top: 5%;
+				padding-bottom: 5%;
+				color:#1C1C1C;
+			}
+			.itemFoot {
+				padding-top: 2%;
+				padding-bottom: 4%;
+				font-size: 70%;
+			}
+			.addedItem {
+				position: relative;
+				display: inline-block;
+				margin: .2em 0 .5em .5em;
+				width: 12em;
+				height: 4em;
+				border-radius: 4px;
+				background: #6686a7;
+				text-align: center;
+				padding-top: 2%;
+				font-weight: bold;
+				-webkit-transition: -webkit-transform 0.3s, background 0.3s;
+			  transition: transform 0.3s, background 0.3s;
+			}
+			.addedItem2 {
+				position: relative;
+				display: inline-block;
+				margin: .2em 0 .5em .5em;
+				width: 12em;
+				height: 4em;
+				border-radius: 4px;
+				background: #6686a7;
+				text-align: center;
+				font-weight: bold;
+				-webkit-transition: -webkit-transform 0.3s, background 0.3s;
+			  transition: transform 0.3s, background 0.3s;
+			}
+			.addedDocNo {
+				width:80%;
+				align-text:center;
+				float:left;
+				font-weight: bold;
+				font-size: 150%;
+				padding-top: 7%;
+			}
+			.addedDelete {
+				background-color:#c0392b;
+				width:20%;
+				float:left;
+				height:100%;
+				padding-top: 7%;
+				border-top-right-radius:4px;
+				border-bottom-right-radius:4px;
+			}
 			/* AGREGADO PARA AREA DE PROCESADO */
 			.proc-area_cbza {
 				z-index: 110;
@@ -117,7 +176,7 @@
 			}			
 		</style>
 	</head>
-	<body class="skin-3">
+	<body class="skin-1" bgcolor="white">
 		<!-- LISTADO DE DOCUMENTOS AGREGADOS -->
 		<div id="proc-area_cbza" class="proc-area_cbza">
 			<div id="listadoAgregados" class="listadoAgregados" align="center"></div>
@@ -125,31 +184,43 @@
 		<!-- LISTADO DE DOCUMENTOS AGREGADOS -->
 		<input type="hidden" id="allinclused">
 		<div class="container">
-			<div class="content">
-				<br><br><br><br><br>
+			<div class="content" style="background-color:transparent;">
+				<br><br><br><br>
 				<div  align="right">
-					<button type="button" class="btn btn-default export_checked hover_clean" aria-
+					<button type="button" class="btn btn-default procesar_documento hover_clean" aria-
 					label="Left Align">
 						<span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>&nbsp;Procesar
 					</button>
-				</div><br><br><br>
-				<div id="grid" class="grid_cbza clearfix">
-					<div class="grid__item_cbza" style="width:100%;"><i>Default</i></div>					
-					<div class="grid__item_cbza" style="width:100%;"><i>Default2</i></div>					
+					<button type="button" id="btn_edit" class="btn btn-default editar_side hover_clean" aria-
+					label="Left Align">
+						<span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>&nbsp;Editar
+					</button>					
+				</div>				
+				<br><br><br>
+				<!--<div id="grid" class="grid clearfix" style="background-color:red;" width="100%">-->
+				<div id="grid" style="padding:1% 5% 1% 5%;" width="70%">
 				</div>
-				<!-- Related demos -->
+
 			</div><!-- /content -->
 		</div><!-- /container -->
-		<div id="drop-area_cbza" class="drop-area_cbza">
-			<div class="drop-area__item_cbza"></div>
+		<div id="drop-area" class="drop-area">
+			<br><br><br><br>
+			<div id="agregados">
+				<div class="drop-area__item"><div class="dummy"></div></div>
+			</div>
 		</div>
 		<div class="drop-overlay"></div>
+		<!--<script src="js/draggabilly.pkgd.min.js"></script>
+		<script src="js/dragdrop.js"></script>-->
 		<script>
-
+		allDocs = {};
+		sideShow = false;
 		$(document).ready(function() {
 			var allData = {};
 	        console.log("$> Consumir Servicio");
 	        var datox = {};
+
+	        // SERVICIO DE CONSULTA DE DOCUMENTOS DISPONIBLES
 	        $.ajax({
 	                type:"GET",
 	                dataType : 'json',
@@ -157,23 +228,39 @@
 	                success: function(datox){
 	                console.log("SUCCESS", datox);
 	                allData = jsonConstructor(datox);
+	                allDocs = allData;
 	                buildListado(allData);
 	            },
 	                error:  function(){ 
-	                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
+	                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor LECTURA 1.</h3></div>'
 	                document.getElementById("grid").innerHTML = mensajeError;
 	                }
 	        });
-			$(document).on('click', '.export_checked', function (e) {
-				console.log("PROCESAR!!");
+			$(document).on('click', '.editar_side', function (e) {
+				console.log("Editar");
 				e.preventDefault();
-				procesarDocumentos();
-			});
+				var body = document.body,
+				dropArea = document.getElementById( 'drop-area' ),
+				droppableArr = [], dropAreaTimeout;				
+				if (sideShow == false) {
+					//classie.add( body, 'drag-active' );
+					//clearTimeout( dropAreaTimeout );
+					classie.add( dropArea, 'show' );	
+					sideShow = true;
+				} else {
+					classie.remove( dropArea, 'show' );
+					classie.remove( body, 'drag-active' );					
+					sideShow = false;
+				}
+				
+			});	    
 			$(document).on('click', '.delete_item', function (e) {
-				console.log("ELIMINAR!!", e);
+				console.log("ELIMINAR SIDE!!", e);
 				e.preventDefault();
-				var idElement = (e.target.id).replace("_dlt", "")
-				document.getElementById(idElement).style.display = "none";
+				var strTarget = (e.target.id).split("_");
+				var idElement = strTarget[0];
+				//var idElement = (e.target.id).replace("_dlt", "");
+				//document.getElementById(idElement).style.display = "none";
 				var strDocs = document.getElementById('allinclused').value;
 				var newStrDocs = "";
 				var Docs = strDocs.split("_");
@@ -183,15 +270,95 @@
 						}
 					}
 				document.getElementById('allinclused').value = newStrDocs;
-			});
+				document.getElementById(idElement + "_added").style.display = "none";
+				document.getElementById(idElement + "_agregado").style.display = "none";
+			});				
 
+			$(document).on('click', '.delete_item_grid', function (e) {
+				console.log("ELIMINAR GRID!!", e);
+				e.preventDefault();
+				//var strTarget = (e.target.id).split("_");
+				//var idElement = strTarget[0];
+				var idElement = (e.target.id).replace("_dlt", "");
+				document.getElementById(idElement + "_agregado").style.display = "none";
+				document.getElementById(idElement + "_added").style.display = "none";
+				var strDocs = document.getElementById('allinclused').value;
+				var newStrDocs = "";
+				var Docs = strDocs.split("_");
+					for (var j=0;j<Docs.length;j++) {
+						if (Docs[j] != idElement && Docs[j] != "") {
+							newStrDocs += Docs[j] + "_";
+						}
+					}
+				document.getElementById('allinclused').value = newStrDocs;
+			});			
+
+			$(document).on('click', '.procesar_documento', function (e) {
+				console.log("PROCESAR!!");
+				e.preventDefault();
+				procesarDocumentos();
+			});					   
+			$(document).on('click', '.submit_documentos', function (e) {
+				console.log("SBMT DOCS!!");
+				var strDocs = document.getElementById('allinclused').value;
+				var Docs = strDocs.split("_");
+				var strLineas = "";
+				for (i=0;i<allData.facturas.length;i++) {
+					for (var j=0;j<Docs.length;j++) {
+						if (Docs[j] == allData.facturas[i].Documento_ID) {
+							var aplicar_valor = document.getElementById(allData.facturas[i].Documento_ID + "_text").value;
+							//docAdds.push(allData.facturas[i]);
+							//strLineas += allData.facturas[i].Documento_ID + "_" + allData.facturas[i].Aplicar + ":";
+							strLineas += allData.facturas[i].Documento_ID + "_" + aplicar_valor + ":";
+						}
+					}
+				}
+
+	        	// SERVICIO DE ESCRITURA DE COBRO
+		        $.ajax({
+		                type:"GET",
+		                dataType : 'json',
+		                url: "api/v1/aplicarcobranzas?lineas=" + strLineas,
+		                success: function(datox){
+		                console.log("SUCCESS", datox);	                
+		            },
+		                error:  function(){ 
+		                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. ESCRITURA</h3></div>'
+		                //document.getElementById("grid").innerHTML = mensajeError;
+		                console.log("Error - Escritura de cobro.");
+		                }
+		        });		
+
+		        document.getElementById("allinclused").value = "";
+		        document.body.style.overflowY = "scroll";
+				document.getElementById("proc-area_cbza").style.display = "none";
+				document.getElementById("agregados").innerHTML = '<div class="drop-area__item"><div class="dummy"></div></div>';
+
+				$.ajax({
+		                type:"GET",
+		                dataType : 'json',
+		                url: "api/v1/documentoscobranzas",
+		                success: function(datox){
+		                console.log("SUCCESS", datox);
+		                allData = jsonConstructor(datox);
+		                allDocs = allData;
+		                buildListado(allData);
+		            },
+		                error:  function(){ 
+		                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. LECTURA 2</h3></div>'
+		                document.getElementById("grid").innerHTML = mensajeError;
+		                }
+		        });					
+
+			});					    
+	        // CONSTRUYE EL LISTADO DE DOCUMENTOS
 			function buildListado(json){
 				var jsonObject = json.facturas;	
 				var lista = '';
 				//var lista = '<div id="grid" class="grid_cbza clearfix">';
 			    for (var i=0;i<jsonObject.length;i++) {
-			    	lista += '<div class="grid__item_cbza" id="' + jsonObject[i].Documento_ID + '" style="width:100%;position: relative;"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span><i>&nbsp;&nbsp;' + jsonObject[i].Documentno + '</i></div>';
-			    	
+			    	//lista += '<div class="grid__item" id="' + jsonObject[i].Documento_ID + '" style="position:relative;"><br><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span><i>&nbsp;&nbsp;' + jsonObject[i].Documentno + '</i></div>';
+			    	lista += '<div class="grid__item" id="' + jsonObject[i].Documento_ID + '" style="position:relative;"><div class="itemHd">' + jsonObject[i].Documentno + '</div><div class="itemImg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></div><div class="itemFoot">$' + jsonObject[i].Grandtotal + '</div></div>';
 			    }			
 			    //lista += "</div>";
 			    console.log("Se agregan los elementos");
@@ -199,12 +366,11 @@
 			    // INICIALIZAR ELEMENTOS
 			    console.log("Se inicializan elementos");
 				var body = document.body,
-					dropArea = document.getElementById( 'drop-area_cbza' ),
+					dropArea = document.getElementById( 'drop-area' ),
 					droppableArr = [], dropAreaTimeout;
 
 				// initialize droppables
-				console.log("Inicializa Droppables");
-				[].slice.call( document.querySelectorAll( '#drop-area_cbza .drop-area__item_cbza' )).forEach( function( el ) {
+				[].slice.call( document.querySelectorAll( '#drop-area .drop-area__item' )).forEach( function( el ) {
 					droppableArr.push( new Droppable( el, {
 						onDrop : function( instance, draggableEl ) {
 							// show checkmark inside the droppabe element
@@ -219,11 +385,15 @@
 				} );
 
 				// initialize draggable(s)
-				console.log("Inicializa Draggables");
-				[].slice.call(document.querySelectorAll( '#grid .grid__item_cbza' )).forEach( function( el ) {
+				[].slice.call(document.querySelectorAll( '#grid .grid__item' )).forEach( function( el ) {
 					new Draggable( el, droppableArr, {
+						scroll : true,
+						scrollable : '#drop-area',
+						scrollSpeed : 40,
+						scrollSensitivity : 50,
 						draggabilly : { containment: document.body },
 						onStart : function() {
+							sideShow = true;
 							// add class 'drag-active' to body
 							classie.add( body, 'drag-active' );
 							// clear timeout: dropAreaTimeout (toggle drop area)
@@ -232,6 +402,7 @@
 							classie.add( dropArea, 'show' );
 						},
 						onEnd : function( wasDropped ) {
+							sideShow = false;
 							var afterDropFn = function() {
 								// hide dropArea
 								classie.remove( dropArea, 'show' );
@@ -250,9 +421,10 @@
 						}
 					} );
 				} );			    
+			    
 			}
 
-
+			// CONSTRUYE EL JSON CON EL QUE SE GENERARÁ EL LISTADO DE DOCUMENTOS
 			function jsonConstructor(json) {
 				console.log("JSON CONSTRUCTOR > ", json);
 			    var rows = [];
@@ -265,6 +437,7 @@
 			        row.Impuesto 		= jsonObject.data[i].impuesto;
 			        row.Pagado 			= jsonObject.data[i].pagado;
 			        row.Pendiente 		= jsonObject.data[i].pendiente;
+			        row.Aplicar 		= jsonObject.data[i].pendiente;
 			        row.Documentno 		= jsonObject.data[i].documentno;
 			        row.Dateinvoiced 	= jsonObject.data[i].dateinvoiced;
 			        row.Docstatus 		= jsonObject.data[i].docstatus;
@@ -276,6 +449,7 @@
 			    return data;
 			}  // Termina json Constructor	
 			function procesarDocumentos() {
+				document.body.style.overflowY = "hidden";
 				console.log("DOCUMENTOS: " + document.getElementById('allinclused').value);
 				var strDocs = document.getElementById('allinclused').value;
 				var Docs = strDocs.split("_");
@@ -290,7 +464,8 @@
 				console.log("Documentos Agregados: ", docAdds);
 				var listaAdd = '<div class="itemAgregado"><div class="addDocno">Número de Documento</div><div class="addFecha">Fecha del Documento</div><div class="addTotal">Total</div><div class="addPendiente">Pendiente</div><div class="addPendiente">Aplicar</div></div>';
 				for (var k=0;k<docAdds.length;k++) {
-					listaAdd += '<div id="' + docAdds[k].Documento_ID + '" class="itemAgregado">';
+
+					listaAdd += '<div id="' + docAdds[k].Documento_ID + '_agregado" class="itemAgregado">';
 					// DocNo
 					listaAdd += '<div class="addDocno">' + docAdds[k].Documentno + '</div>';
 					// Fecha
@@ -301,20 +476,30 @@
 					listaAdd += '<div class="addPendiente">$' + docAdds[k].Pendiente + '</div>';
 					// Pendiente Captura
 					listaAdd += '<div class="addCaptura"><input type="text" value="' + docAdds[k].Pendiente + '" id="' + docAdds[k].Documento_ID + '_text"/></div>';
-					listaAdd += '<div class="deleteCaptura"><a class="delete_item"><span id="' + docAdds[k].Documento_ID + '_dlt" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></a></div>';
+					listaAdd += '<div class="deleteCaptura"><a class="delete_item_grid"><span id="' + docAdds[k].Documento_ID + '_dlt" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></a></div>';
 					listaAdd += '</div>';
 				}
-				listaAdd += '<br><br><div  align="right" style="padding-top:30%;padding-right:5%;"><button type="button" onclick="salirDock()" class="btn btn-default hover_clean" aria-label="Left Align"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;Cancelar</button>&nbsp;&nbsp;&nbsp;<button type="button" onclick="salirDock()" class="btn btn-default hover_clean" aria-label="Left Align"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Aplicar</button></div>';
+				listaAdd += '<br><br><div  align="right" style="padding-top:30%;padding-right:5%;"><button type="button" onclick="salirDock()" class="btn btn-default hover_clean" aria-label="Left Align"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;Cancelar</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-default hover_clean submit_documentos" aria-label="Left Align"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Aplicar</button></div>';
 				document.getElementById("listadoAgregados").innerHTML = listaAdd;
 				document.getElementById("proc-area_cbza").style.display = "block";
-			}
-
-			})();
-
-
-			function salirDock() {
-				document.getElementById("proc-area_cbza").style.display = "none";
 			}			
+	    })();
+			function getDocumentNo(id) {
+				console.log("GET DOC NO", allDocs);
+				var jsonObject = allDocs.facturas;	
+				var docno = "No existe el doc con id: " + id;
+				//var lista = '<div id="grid" class="grid_cbza clearfix">';
+			    for (var i=0;i<jsonObject.length;i++) {
+			    	if (id == jsonObject[i].Documento_ID) {
+			    		docno = jsonObject[i].Documentno;
+			    	}
+			    }
+			    return docno;
+			}	   
+			function salirDock() {
+				document.body.style.overflowY = "scroll";
+				document.getElementById("proc-area_cbza").style.display = "none";
+			} 		
 		</script>
 	</body>
 </html>
