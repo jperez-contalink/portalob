@@ -257,6 +257,7 @@
 				var vals = document.getElementById("allinclused").value;
 				console.log("El indice del documento agregado: " + vals.indexOf(instance.element.id));
 				if (vals.indexOf(instance.element.id) == -1){
+					// Si no se ha agregado el valor meterlo en un nuevo json 
 					vals += instance.element.id + "_";
 					document.getElementById("allinclused").value = vals;
 					// Agregar el elemento a la lista de agregados
@@ -268,6 +269,7 @@
 		    		newAdd.innerHTML = '<div class="addedDocNo">' + getDocumentNo(instance.element.id) + '</div><a class="delete_item"><div class="addedDelete" id="' + instance.element.id + '_tagDiv"><span id="' + instance.element.id + '_tagSpan" class="glyphicon glyphicon-remove" aria-hidden="true"></span></div></a>';
 		    		newAdd.style.display = 'block';
 				}
+				addDocJSON();
 				console.log("ALL INC: " + document.getElementById("allinclused").value);
 			}			
 		}

@@ -14,7 +14,7 @@
 *, *:after, *:before { -webkit-box-sizing: border-box; box-sizing: border-box; }
 .clearfix:before, .clearfix:after { content: ''; display: table; }
 .clearfix:after { clear: both; }
-
+/*
 body {
 	background: #2f3238;
 	color: #fff;
@@ -24,7 +24,7 @@ body {
 }
 
 a {
-	color: #cc6055;
+	/color: #cc6055;
 	text-decoration: none;
 	outline: none;
 }
@@ -56,7 +56,7 @@ a:hover, a:focus {
 .skin-6 { background: #fff; color: #474843; }
 .skin-6 a { color: #ff7474; }
 .skin-6 a:hover, .skin-6 a:focus { color: #474843; }
-
+*/
 .content {
 	max-width: 1290px;
 	margin: 0 auto;
