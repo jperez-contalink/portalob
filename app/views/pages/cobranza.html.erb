@@ -254,7 +254,8 @@
 				background-color: #3498db;
 			}
 			.parcialSelectedItem {
-				background-color: #f1c40f;
+				/*background-color: #f1c40f;*/
+				background-color: #f39c12;
 			}
 			.colorncc {
 				background-color: #16a085;
@@ -391,7 +392,9 @@
 				recalcularMontoAplicado();
 				document.getElementById('allinclused').value = newStrDocs;
 				document.getElementById(idElement + "_added").style.display = "none";
-				document.getElementById(idElement + "_agregado").style.display = "none";
+				if (document.getElementById(idElement + "_agregado") != null) {
+					document.getElementById(idElement + "_agregado").style.display = "none";
+				}
 			});				
 
 			$(document).on('click', '.delete_item_grid', function (e) {
@@ -401,8 +404,12 @@
 				//var idElement = strTarget[0];
 				var idElement = (e.target.id).replace("_dlt", "");
 				var newDocs = [];
-				document.getElementById(idElement + "_agregado").style.display = "none";
-				document.getElementById(idElement + "_added").style.display = "none";
+				if (document.getElementById(idElement + "_agregado") != null) {
+					document.getElementById(idElement + "_agregado").style.display = "none";
+				}
+				if (document.getElementById(idElement + "_added") != null) {
+					document.getElementById(idElement + "_added").style.display = "none";
+				}
 				var strDocs = document.getElementById('allinclused').value;
 				var newStrDocs = "";
 				var Docs = strDocs.split("_");
@@ -445,65 +452,70 @@
 	    		console.log("Nueva cantidad: " + e.currentTarget.value + " ID: " + e.currentTarget.id.replace("_text", ""));
 	    		cambiarCantidad(e.currentTarget.id.replace("_text", ""), e.currentTarget.value);
 	    		});
-				$(document).on('click', '.submit_documentos', function (e) {
-					console.log("SBMT DOCS!!");
-					var strDocs = document.getElementById('allinclused').value;
-					var Docs = strDocs.split("_");
-					var strLineas = "";
-					var totalCobranzaAplicar = 0;
-					for (i=0;i<allData.facturas.length;i++) {
-						for (var j=0;j<Docs.length;j++) {
-							if (Docs[j] == allData.rows[i].Documento_ID) {
-								var aplicar_valor = document.getElementById(allData.rows[i].Documento_ID + "_text").value;
-								//docAdds.push(allData.facturas[i]);
-								//strLineas += allData.facturas[i].Documento_ID + "_" + allData.facturas[i].Aplicar + ":";
-								strLineas += allData.rows[i].Documento_ID + "_" + aplicar_valor + ":";
-								totalCobranzaAplicar = totalCobranzaAplicar + parseFloat(allData.rows[i].Grandtotal);
-							}
+
+			$(document).on('click', '.submit_documentos', function (e) {
+				console.log("SBMT DOCS!!");
+				var strDocs = document.getElementById('allinclused').value;
+				var Docs = strDocs.split("_");
+				var strLineas = "";
+				var totalCobranzaAplicar = 0;
+				for (i=0;i<allData.facturas.length;i++) {
+					for (var j=0;j<Docs.length;j++) {
+						if (Docs[j] == allData.rows[i].Documento_ID) {
+							var aplicar_valor = document.getElementById(allData.rows[i].Documento_ID + "_text").value;
+							//docAdds.push(allData.facturas[i]);
+							//strLineas += allData.facturas[i].Documento_ID + "_" + allData.facturas[i].Aplicar + ":";
+							strLineas += allData.rows[i].Documento_ID + "_" + aplicar_valor + ":";
+							totalCobranzaAplicar = totalCobranzaAplicar + parseFloat(allData.rows[i].Grandtotal);
 						}
 					}
+				}
+				if (totalCobranzaAplicar < 0 || documentosIncluidos.documentos.length == 0) {
 					if (totalCobranzaAplicar < 0) {
 						console.log("La cobranza es negativa, no procede.");
-						// alert_div
 						document.getElementById("alert_div").innerHTML = buildAlertError("El monto a aplicar es negativo", "El monto total no puede ser negativo, realiza algunos ajustes y vuelve a intentarlo.");
+					}
+					if (documentosIncluidos.documentos.length == 0) {
+						console.log("No hay nada que procesar.");
+						document.getElementById("alert_div").innerHTML = buildAlertWarning("No hay nada que procesar", "Parece que no has agregado ningún plan de cobro, agrega algunos y vuelve a intentarlo.");
+					}					
+				} else {
+		        	// SERVICIO DE ESCRITURA DE COBRO
+			        $.ajax({
+			                type:"GET",
+			                dataType : 'json',
+			                url: "api/v1/aplicarcobranzas?lineas=" + strLineas,
+			                success: function(datox){
+			                console.log("SUCCESS", datox);	                
+			            },
+			                error:  function(){ 
+			                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. ESCRITURA</h3></div>'
+			                //document.getElementById("grid").innerHTML = mensajeError;
+			                console.log("Error - Escritura de cobro.");
+			                }
+			        });		
+			        document.getElementById("h_alert_div").innerHTML = buildAlertSuccess("Correcto!", "La preaplicación de cobro se completó correctamente, ahora debe ser aprobada para generar el cobro.");
+			        document.getElementById("allinclused").value = "";
+			        document.body.style.overflowY = "scroll";
+					document.getElementById("proc-area_cbza").style.display = "none";
+					document.getElementById("agregados").innerHTML = '<div class="drop-area__item"><div class="dummy"></div></div>';
 
-					} else {
-			        	// SERVICIO DE ESCRITURA DE COBRO
-				        $.ajax({
-				                type:"GET",
-				                dataType : 'json',
-				                url: "api/v1/aplicarcobranzas?lineas=" + strLineas,
-				                success: function(datox){
-				                console.log("SUCCESS", datox);	                
-				            },
-				                error:  function(){ 
-				                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. ESCRITURA</h3></div>'
-				                //document.getElementById("grid").innerHTML = mensajeError;
-				                console.log("Error - Escritura de cobro.");
-				                }
-				        });		
-				        document.getElementById("h_alert_div").innerHTML = buildAlertSuccess("Correcto!", "La preaplicación de cobro se completó correctamente, ahora debe ser aprobada para generar el cobro.");
-				        document.getElementById("allinclused").value = "";
-				        document.body.style.overflowY = "scroll";
-						document.getElementById("proc-area_cbza").style.display = "none";
-						document.getElementById("agregados").innerHTML = '<div class="drop-area__item"><div class="dummy"></div></div>';
-
-						$.ajax({
-				                type:"GET",
-				                dataType : 'json',
-				                url: "api/v1/documentoscobranzas",
-				                success: function(datox){
-				                console.log("SUCCESS", datox);
-				                allData = jsonConstructor(datox);
-				                allDocs = allData;
-				                buildListado(allData);
-				            },
-				                error:  function(){ 
-				                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. LECTURA 2</h3></div>'
-				                document.getElementById("grid").innerHTML = mensajeError;
-				                }
-				        });	
-					}				
+					$.ajax({
+			                type:"GET",
+			                dataType : 'json',
+			                url: "api/v1/documentoscobranzas",
+			                success: function(datox){
+			                console.log("SUCCESS", datox);
+			                allData = jsonConstructor(datox);
+			                allDocs = allData;
+			                buildListado(allData);
+			            },
+			                error:  function(){ 
+			                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. LECTURA 2</h3></div>'
+			                document.getElementById("grid").innerHTML = mensajeError;
+			                }
+			        });	
+				}				
 
 			});					    
 	        // CONSTRUYE EL LISTADO DE DOCUMENTOS
@@ -605,10 +617,6 @@
 			    var notascredito 	= [];
 			    var jsonObject = json.response;
 			    for (var i=0;i<jsonObject.totalRows;i++) {
-			    	if (jsonObject.data[i].documentno == "8656") {
-			    		var variable = 
-			    		console.log("8656!!! - >" + parseFloat(jsonObject.data[i].grandtotal).toFixed(2));
-			    	}
 			    	if (parseFloat(jsonObject.data[i].grandtotal).toFixed(2) != 0) {
 						var row = {};
 				        row.Documento_ID	= jsonObject.data[i].id;
@@ -670,7 +678,7 @@
 				}
 				listaAdd += '<div class="itemAgregado"><div class="addDocno"></div><div class="addFecha"></div><div class="addTotal"></div><div class="addPendiente"></div><div class="addPendiente" style="font-size:200%;font-weight:bold;" id="montoTotalGrid">$' + separaMiles(montoTotal.toFixed(2)) + '</div></div>';
 
-				listaAdd += '<br><br><div  align="right" style="padding-right:5%;"><button type="button" onclick="salirDock()" class="btn btn-default hover_clean" aria-label="Left Align"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;Cancelar</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-default hover_clean submit_documentos" aria-label="Left Align"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Aplicar</button></div>';
+				listaAdd += '<div  align="right" style="padding-right:11%;padding-top:10%;"><button type="button" onclick="salirDock()" class="btn btn-default hover_clean" aria-label="Left Align"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;Cancelar</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-default hover_clean submit_documentos" aria-label="Left Align"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Aplicar</button></div>';
 
 				document.getElementById("listadoAgregados").innerHTML = listaAdd;
 				document.getElementById("proc-area_cbza").style.display = "block";
@@ -736,16 +744,45 @@
 				for (i=0;i<allDocs.rows.length;i++) {
 					for (var j=0;j<Docs.length;j++) {
 						if (Docs[j] == allDocs.rows[i].Documento_ID) {
-							docAdds.push(allDocs.rows[i]);
+							var row = {};
+							//docAdds.push(allDocs.rows[i]);
+							// En lugar de empujar todo el registro recontruyelo y obten de id_text el valor de pendiente y aplicado. y ne function de la diferencia de este y grandtotal y el docbasetype puede decinir si la clase es :selectedItem o :parcialselecteditem
+							row.Documento_ID	= allDocs.rows[i].Documento_ID;
+					        row.Totallines 		= allDocs.rows[i].Totallines;
+					        // Grandtotal es el amount  de fin_payment_scheduledetail
+					        row.Grandtotal 		= allDocs.rows[i].Grandtotal;
+					        row.Impuesto 		= allDocs.rows[i].Impuesto;
+					        row.Pagado 			= allDocs.rows[i].Pagado;
+					        if (document.getElementById(row.Documento_ID + "_text") != null){
+					        	row.Pendiente 	= document.getElementById(row.Documento_ID + "_text").value;
+					        	row.Aplicar 	= document.getElementById(row.Documento_ID + "_text").value;
+					        } else {
+					        	row.Pendiente 	= allDocs.rows[i].Pendiente;
+					        	row.Aplicar 	= allDocs.rows[i].Aplicar;
+					        }
+					        row.Documentno 		= allDocs.rows[i].Documentno;
+					        row.Dateinvoiced 	= allDocs.rows[i].Dateinvoiced;
+					        row.Docstatus 		= allDocs.rows[i].Docstatus;
+					        row.Docbasetype		= allDocs.rows[i].Docbasetype;
+					        //rows.push(row);
+					        docAdds.push(row);
 							montoAplicado = montoAplicado + allDocs.rows[i].Grandtotal;
 							var gridItem = document.getElementById(allDocs.rows[i].Documento_ID);
-							gridItem.className = 'grid__item selectedItem';
+					        if (row.Docbasetype == "ARI" && (parseFloat(row.Grandtotal) > parseFloat(row.Pendiente))) {
+					        	gridItem.className = 'grid__item parcialSelectedItem';					        
+					        } else if (row.Docbasetype == "ARC" && (parseFloat(row.Grandtotal) < parseFloat(row.Pendiente))) {
+								gridItem.className = 'grid__item parcialSelectedItem';					        
+					        }  else {
+					        	gridItem.className = 'grid__item selectedItem';					        
+					        }			        
+
 						}
 					}
 				}
 			    var data = {
 			                documentos: docAdds
 			            };
+			    console.log("Reasigna Total | 3");
 				document.getElementById("cobranzaAplicada").innerHTML = 'Aplicar | <h2>$' + separaMiles(montoAplicado.toFixed(2)) + '</h2>';
 			  	documentosIncluidos = data;
 		    	// Recorrer alldocs.rows
@@ -756,11 +793,16 @@
 		    	for (var i=0;i<documentosIncluidos.documentos.length;i++) {
 		    		montoAplicado = montoAplicado + documentosIncluidos.documentos[i].Grandtotal;
 		    	}
-		    	document.getElementById("montoTotalGrid").innerHTML = '$' + separaMiles(montoAplicado.toFixed(2));
+		    	if (document.getElementById("montoTotalGrid") != null) {
+		    		document.getElementById("montoTotalGrid").innerHTML = '$' + separaMiles(montoAplicado.toFixed(2));
+		    	}
+		    	console.log("Reasigna Total | 2");
 		    	document.getElementById("cobranzaAplicada").innerHTML = 'Aplicar | <h2>$' + separaMiles(montoAplicado.toFixed(2) + "</h2>");
 		    }
 		    function cambiarCantidad(id, valor) {
 		    	console.log("Cambiar Cantidad: ", documentosIncluidos);
+		    	// ARI valor tiene que ser mayor que cero y menor o igual que grandtotal
+		    	// ARC valor tiene que ser mayor o igual que grandtotal y mayor que cero
 		    	var nuevos = [];
 		    	var total = 0;
 		    	for (var i=0;i<documentosIncluidos.documentos.length;i++) {
@@ -773,16 +815,46 @@
 				        row.Grandtotal 		= documentosIncluidos.documentos[i].Grandtotal;
 				        row.Impuesto 		= documentosIncluidos.documentos[i].Impuesto;
 				        row.Pagado 			= documentosIncluidos.documentos[i].Pagado;
-				        row.Pendiente 		= parseFloat(valor);
+		    			if (documentosIncluidos.documentos[i].Docbasetype == 'ARI') {
+		    				// FACTURAS
+		    				if (parseFloat(valor) > 0 && parseFloat(valor) <= row.Grandtotal) {
+		    					row.Pendiente 		= parseFloat(valor);	
+		    					total = total + parseFloat(valor);	
+		    				} else {
+		    					row.Pendiente = row.Grandtotal;
+		    					total = total + row.Grandtotal;
+		    					// avisar que no puede ser menor que cero ni mayor al monto total de la factura
+		    					document.getElementById("alert_div").innerHTML = buildAlertWarning("Atención", "El monto aplicado no puede ser mayor al monto de la factura ni menor que cero.");
+		    					document.getElementById(id + "_text").value = row.Grandtotal;
+		    				}
+		    			}
+		    			if (documentosIncluidos.documentos[i].Docbasetype == 'ARC') {
+		    				// NOTAS DE CRÉDITO
+		    				if (parseFloat(valor) < 0 && parseFloat(valor) >= row.Grandtotal) {
+		    					row.Pendiente 		= parseFloat(valor);	
+		    					total = total + parseFloat(valor);	
+		    				} else {
+		    					row.Pendiente = row.Grandtotal;
+		    					total = total + row.Grandtotal;
+		    					// avisar que no puede ser mayor que cero ni menor al monto total de la nota de crédito
+		    					document.getElementById("alert_div").innerHTML = buildAlertWarning("Atención", "El monto aplicado no puede ser menor al monto de la Nota de crédito ni mayor que cero.");
+		    					document.getElementById(id + "_text").value = row.Grandtotal;
+		    				}		    				
+		    			}				        
+				        //row.Pendiente 		= parseFloat(valor);
 				        row.Aplicar 		= documentosIncluidos.documentos[i].Aplicar;
 				        row.Documentno 		= documentosIncluidos.documentos[i].Documentno;
 				        row.Dateinvoiced 	= documentosIncluidos.documentos[i].Dateinvoiced;
 				        row.Docstatus 		= documentosIncluidos.documentos[i].Docstatus;
 				        row.Docbasetype		= documentosIncluidos.documentos[i].Docbasetype;
-				        total = total + parseFloat(valor);
 				        nuevos.push(row);
 				        var gridItem = document.getElementById(documentosIncluidos.documentos[i].Documento_ID);
-				        if (row.Pendiente < documentosIncluidos.documentos[i].Pendiente) {
+				        // Facturas Parciales
+				        if (row.Pendiente < documentosIncluidos.documentos[i].Pendiente && documentosIncluidos.documentos[i].Docbasetype == 'ARI') {
+				        	gridItem.className = 'grid__item parcialSelectedItem';
+				        }
+				        // Facturas Parciales
+				        if (row.Pendiente > documentosIncluidos.documentos[i].Pendiente && documentosIncluidos.documentos[i].Docbasetype == 'ARC') {
 				        	gridItem.className = 'grid__item parcialSelectedItem';
 				        }
 
@@ -800,6 +872,7 @@
 		    	total = total.toFixed(2);
 		    	//document.getElementById("montoTotalGrid").innerHTML = "$" + separaMiles(parseFloat(total));
 		    	document.getElementById("montoTotalGrid").innerHTML = "$" + separaMiles(total);
+		    	console.log("Reasigna Total | 1");
 		    	document.getElementById("cobranzaAplicada").innerHTML = 'Aplicar | <h2>$' + separaMiles(total) + "</h2>";
 
 		    }
