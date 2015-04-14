@@ -246,7 +246,7 @@
 			}			
 			h2 {
 				font-weight: bold;
-				font-size: 140%;
+				/*font-size: 140%;*/
 				display: inline;
 				color: #7f8c8d;
 			}
@@ -541,10 +541,16 @@
 
 			   	// Imprimir Totales
 			   	deudaTotal = totalFacturas + totalNotasCredito;
-			   	var montos = '<div class="totalFacturas" id="totalFacturas">Facturas | <h2>$' + separaMiles(totalFacturas.toFixed(2)) + '</h2></div>';
+			   	/*var montos = '<div class="totalFacturas" id="totalFacturas">Facturas | <h2>$' + separaMiles(totalFacturas.toFixed(2)) + '</h2></div>';
 			   	montos += '<div class="totalNotasCredito" id="totalNotasCredito">Notas de crédito | <h2>$' + separaMiles(totalNotasCredito.toFixed(2)) + '</h2></div>';
 			   	montos += '<div class="deudaTotal" id="deudaTotal">Usted debe | <h2>$' + separaMiles(deudaTotal.toFixed(2)) + '</h2></div>';
-			   	montos += '<div class="cobranzaAplicada" id="cobranzaAplicada">Aplicar | <h2>$ 0.00</h2></div>';
+			   	montos += '<div class="cobranzaAplicada" id="cobranzaAplicada">Aplicar | <h2>$ 0.00</h2></div>';*/
+
+			   	var montos = '<div class="totalFacturas" id="totalFacturas">Facturas | <br>$' + separaMiles(totalFacturas.toFixed(2)) + '</div>';
+			   	montos += '<div class="totalNotasCredito" id="totalNotasCredito">Notas de crédito | <br>$' + separaMiles(totalNotasCredito.toFixed(2)) + '</div>';
+			   	montos += '<div class="deudaTotal" id="deudaTotal">Usted debe | <br>$' + separaMiles(deudaTotal.toFixed(2)) + '</div>';
+			   	montos += '<div class="cobranzaAplicada" id="cobranzaAplicada">Aplicar | <br>$ 0.00</div>';
+
 				document.getElementById('montos_div').innerHTML = montos;	   	
 
 
