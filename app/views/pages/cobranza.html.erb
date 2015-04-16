@@ -22,7 +22,22 @@
 
 		a:hover, a:focus {
 			color: #fff;
-		}		
+		}
+			#loader-wrapper {
+			  background-color:white;
+			  position: fixed;
+			  top: 100;
+			  left: 0;
+			  width: 100%;
+			  height: 100%;
+			  z-index: 20;
+			}  
+			#loader-wrapper img {
+			  display: block;
+			  margin-top: 100px;
+			  margin-left: auto;
+			  margin-right: auto;
+			}  			
 			.itemHd {
 				position: absolute;
 			    top: 0;
@@ -246,7 +261,7 @@
 			}			
 			h2 {
 				font-weight: bold;
-				/*font-size: 140%;*/
+				font-size: 140%;
 				display: inline;
 				color: #7f8c8d;
 			}
@@ -290,6 +305,9 @@
 						<span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>&nbsp;Editar
 					</button>					
 				</div>
+				<!-- 			LOADER 				-->
+				<div id="loader-wrapper"><img src="load.gif" height="9%" width="6%"></img></div><!--Termina load-->
+				<!-- 			LOADER 				-->
 				<div id="h_alert_div" class="alert_div"></div>
 				<div id="montos_div" class="montos_div"></div>
 				<br><br><br>
@@ -466,11 +484,19 @@
 							//docAdds.push(allData.facturas[i]);
 							//strLineas += allData.facturas[i].Documento_ID + "_" + allData.facturas[i].Aplicar + ":";
 							strLineas += allData.rows[i].Documento_ID + "_" + aplicar_valor + ":";
-							totalCobranzaAplicar = totalCobranzaAplicar + parseFloat(allData.rows[i].Grandtotal);
+							totalCobranzaAplicar = totalCobranzaAplicar + parseFloat(aplicar_valor);
 						}
 					}
 				}
+
+		    	console.log("Total ZERO: " + totalCobranzaAplicar);
+		    	if (totalCobranzaAplicar > -0.01 && totalCobranzaAplicar < 0) {
+		    		totalCobranzaAplicar = 0;
+		    		console.log("Total ZERO IN : " + totalCobranzaAplicar);
+		    	}				
 				if (totalCobranzaAplicar < 0 || documentosIncluidos.documentos.length == 0) {
+
+
 					if (totalCobranzaAplicar < 0) {
 						console.log("La cobranza es negativa, no procede.");
 						document.getElementById("alert_div").innerHTML = buildAlertError("El monto a aplicar es negativo", "El monto total no puede ser negativo, realiza algunos ajustes y vuelve a intentarlo.");
@@ -524,33 +550,28 @@
 				var totalNotasCredito = 0;
 				var deudaTotal = 0;
 				var jsonObject = json.facturas;	
-				var lista = '<div id="fac_div" style="width:49%;float:left;">';
+				var lista = '<div id="fac_div" style="width:50%;float:left;">';
 			    for (var i=0;i<jsonObject.length;i++) {
-			    	lista += '<div class="grid__item colorfac" id="' + jsonObject[i].Documento_ID + '" style="position:relative;"><div class="itemHd">' + jsonObject[i].Documentno + '<br><p>' + jsonObject[i].Dateinvoiced + '</p></div><div class="itemImg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></div><div class="itemFoot">$' + separaMiles(parseFloat(jsonObject[i].Grandtotal).toFixed(2)) + '</div></div>';
-			    	totalFacturas = totalFacturas + parseFloat(jsonObject[i].Grandtotal);
+			    	lista += '<div class="grid__item colorfac" id="' + jsonObject[i].Documento_ID + '" style="position:relative;"><div class="itemHd">' + jsonObject[i].Documentno + '<br><p>' + jsonObject[i].Dateinvoiced + '</p></div><div class="itemImg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></div><div class="itemFoot">$' + separaMiles(parseFloat(jsonObject[i].Pendiente).toFixed(2)) + '</div></div>';
+			    	totalFacturas = totalFacturas + parseFloat(jsonObject[i].Pendiente);
 			    }			
 			    lista += "</div>";
 				var jsonObject = json.notascredito;	
-				lista += '<div id="ncc_div" style="width:49%;float:left;">';
+				lista += '<div id="ncc_div" style="width:50%;float:left;">';
 			    for (var i=0;i<jsonObject.length;i++) {
-			    	lista += '<div class="grid__item colorncc" id="' + jsonObject[i].Documento_ID + '" style="position:relative"><div class="itemHd">' + jsonObject[i].Documentno + '<br><p>' + jsonObject[i].Dateinvoiced + '</p></div><div class="itemImg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></div><div class="itemFoot">$' + separaMiles(parseFloat(jsonObject[i].Grandtotal).toFixed(2)) + '</div></div>';
-			    	totalNotasCredito = totalNotasCredito + parseFloat(jsonObject[i].Grandtotal);
+			    	lista += '<div class="grid__item colorncc" id="' + jsonObject[i].Documento_ID + '" style="position:relative"><div class="itemHd">' + jsonObject[i].Documentno + '<br><p>' + jsonObject[i].Dateinvoiced + '</p></div><div class="itemImg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></div><div class="itemFoot">$' + separaMiles(parseFloat(jsonObject[i].Pendiente).toFixed(2)) + '</div></div>';
+			    	totalNotasCredito = totalNotasCredito + parseFloat(jsonObject[i].Pendiente);
 			    }			
 			    lista += "</div>";			    
+			    document.getElementById('loader-wrapper').style.display = "none";
 			    document.getElementById('grid').innerHTML = lista;
 
 			   	// Imprimir Totales
 			   	deudaTotal = totalFacturas + totalNotasCredito;
-			   	/*var montos = '<div class="totalFacturas" id="totalFacturas">Facturas | <h2>$' + separaMiles(totalFacturas.toFixed(2)) + '</h2></div>';
+			   	var montos = '<div class="totalFacturas" id="totalFacturas">Facturas | <h2>$' + separaMiles(totalFacturas.toFixed(2)) + '</h2></div>';
 			   	montos += '<div class="totalNotasCredito" id="totalNotasCredito">Notas de crédito | <h2>$' + separaMiles(totalNotasCredito.toFixed(2)) + '</h2></div>';
 			   	montos += '<div class="deudaTotal" id="deudaTotal">Usted debe | <h2>$' + separaMiles(deudaTotal.toFixed(2)) + '</h2></div>';
-			   	montos += '<div class="cobranzaAplicada" id="cobranzaAplicada">Aplicar | <h2>$ 0.00</h2></div>';*/
-
-			   	var montos = '<div class="totalFacturas" id="totalFacturas">Facturas | <br>$' + separaMiles(totalFacturas.toFixed(2)) + '</div>';
-			   	montos += '<div class="totalNotasCredito" id="totalNotasCredito">Notas de crédito | <br>$' + separaMiles(totalNotasCredito.toFixed(2)) + '</div>';
-			   	montos += '<div class="deudaTotal" id="deudaTotal">Usted debe | <br>$' + separaMiles(deudaTotal.toFixed(2)) + '</div>';
-			   	montos += '<div class="cobranzaAplicada" id="cobranzaAplicada">Aplicar | <br>$ 0.00</div>';
-
+			   	montos += '<div class="cobranzaAplicada" id="cobranzaAplicada">Aplicar | <h2>$ 0.00</h2></div>';
 				document.getElementById('montos_div').innerHTML = montos;	   	
 
 
@@ -661,6 +682,10 @@
 				var indexRow = 1;
 				var montoTotal = 0;
 				var listaAdd = '<div id="alert_div" class="alert_div"></div><div class="itemAgregado" style="background-color:#3498db;color:white;"><div class="addDocno" style="background-color:#3498db;color:white;">Número de Documento</div><div class="addFecha" style="background-color:#3498db;color:white;">Fecha del Documento</div><div class="addTotal" style="background-color:#3498db;color:white;">Total</div><div class="addPendiente" style="background-color:#3498db;color:white;">Pendiente</div><div class="addPendiente" style="background-color:#3498db;color:white;">Aplicar</div></div>';
+				if (documentosIncluidos.length == undefined) {
+					console.log("No hay documentos incluidos");
+					document.getElementById('h_alert_div').innerHTML = buildAlertWarning("No hay documentos incluidos.", "Parece que no has agregado ningún documento, prueba agregando algunos y vuelve a intentarlo.");
+				}
 				for (var k=0;k<documentosIncluidos.documentos.length;k++) {
 					var style = "";
 					if (indexRow % 2 != 0) {
@@ -675,13 +700,18 @@
 					listaAdd += '<div class="addTotal" ' + style + '>$' + documentosIncluidos.documentos[k].Grandtotal + '</div>';
 					// Pendiente
 					listaAdd += '<div class="addPendiente" ' + style + '>$' + documentosIncluidos.documentos[k].Pendiente + '</div>';
-					montoTotal = montoTotal + parseFloat(documentosIncluidos.documentos[k].Pendiente);
+					montoTotal = montoTotal + parseFloat(documentosIncluidos.documentos[k].Aplicar);
 					// Pendiente Captura
-					listaAdd += '<div class="addCaptura" ' + style + '><input type="text" value="' + documentosIncluidos.documentos[k].Pendiente + '" id="' + documentosIncluidos.documentos[k].Documento_ID + '_text" class="qty_change"/></div>';
+					listaAdd += '<div class="addCaptura" ' + style + '><input type="text" value="' + documentosIncluidos.documentos[k].Aplicar + '" id="' + documentosIncluidos.documentos[k].Documento_ID + '_text" class="qty_change"/></div>';
 					listaAdd += '<div class="deleteCaptura"><a class="delete_item_grid"><span id="' + documentosIncluidos.documentos[k].Documento_ID + '_dlt" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></div>';
 					listaAdd += '</div>';
 					indexRow++;
 				}
+				console.log("Total ZERO: " + montoTotal);
+		    	if (montoTotal > -0.01 && montoTotal < 0) {
+		    		montoTotal = 0;
+		    		console.log("Total ZERO IN : " + montoTotal);
+		    	}
 				listaAdd += '<div class="itemAgregado"><div class="addDocno"></div><div class="addFecha"></div><div class="addTotal"></div><div class="addPendiente"></div><div class="addPendiente" style="font-size:200%;font-weight:bold;" id="montoTotalGrid">$' + separaMiles(montoTotal.toFixed(2)) + '</div></div>';
 
 				listaAdd += '<div  align="right" style="padding-right:11%;padding-top:10%;"><button type="button" onclick="salirDock()" class="btn btn-default hover_clean" aria-label="Left Align"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;Cancelar</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-default hover_clean submit_documentos" aria-label="Left Align"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Aplicar</button></div>';
@@ -759,11 +789,12 @@
 					        row.Grandtotal 		= allDocs.rows[i].Grandtotal;
 					        row.Impuesto 		= allDocs.rows[i].Impuesto;
 					        row.Pagado 			= allDocs.rows[i].Pagado;
+					        row.Pendiente 		= allDocs.rows[i].Pendiente;
 					        if (document.getElementById(row.Documento_ID + "_text") != null){
-					        	row.Pendiente 	= document.getElementById(row.Documento_ID + "_text").value;
+					        	//row.Pendiente 	= document.getElementById(row.Documento_ID + "_text").value;
 					        	row.Aplicar 	= document.getElementById(row.Documento_ID + "_text").value;
 					        } else {
-					        	row.Pendiente 	= allDocs.rows[i].Pendiente;
+					        	//row.Pendiente 	= allDocs.rows[i].Pendiente;
 					        	row.Aplicar 	= allDocs.rows[i].Aplicar;
 					        }
 					        row.Documentno 		= allDocs.rows[i].Documentno;
@@ -772,11 +803,13 @@
 					        row.Docbasetype		= allDocs.rows[i].Docbasetype;
 					        //rows.push(row);
 					        docAdds.push(row);
-							montoAplicado = montoAplicado + allDocs.rows[i].Grandtotal;
+							montoAplicado = montoAplicado + allDocs.rows[i].Aplicar;
 							var gridItem = document.getElementById(allDocs.rows[i].Documento_ID);
-					        if (row.Docbasetype == "ARI" && (parseFloat(row.Grandtotal) > parseFloat(row.Pendiente))) {
+//					        if (row.Docbasetype == "ARI" && (parseFloat(row.Grandtotal) > parseFloat(row.Pendiente))) {
+							if (row.Docbasetype == "ARI" && (parseFloat(row.Pendiente) > parseFloat(row.Aplicar))) {
 					        	gridItem.className = 'grid__item parcialSelectedItem';					        
-					        } else if (row.Docbasetype == "ARC" && (parseFloat(row.Grandtotal) < parseFloat(row.Pendiente))) {
+					        //} else if (row.Docbasetype == "ARC" && (parseFloat(row.Grandtotal) < parseFloat(row.Pendiente))) {
+					        } else if (row.Docbasetype == "ARC" && (parseFloat(row.Pendiente) < parseFloat(row.Aplicar))) {
 								gridItem.className = 'grid__item parcialSelectedItem';					        
 					        }  else {
 					        	gridItem.className = 'grid__item selectedItem';					        
@@ -788,7 +821,6 @@
 			    var data = {
 			                documentos: docAdds
 			            };
-			    console.log("Reasigna Total | 3");
 				document.getElementById("cobranzaAplicada").innerHTML = 'Aplicar | <h2>$' + separaMiles(montoAplicado.toFixed(2)) + '</h2>';
 			  	documentosIncluidos = data;
 		    	// Recorrer alldocs.rows
@@ -797,12 +829,11 @@
 		    function recalcularMontoAplicado() {
 		    	var montoAplicado = 0;
 		    	for (var i=0;i<documentosIncluidos.documentos.length;i++) {
-		    		montoAplicado = montoAplicado + documentosIncluidos.documentos[i].Grandtotal;
+		    		montoAplicado = montoAplicado + documentosIncluidos.documentos[i].Aplicar;
 		    	}
 		    	if (document.getElementById("montoTotalGrid") != null) {
 		    		document.getElementById("montoTotalGrid").innerHTML = '$' + separaMiles(montoAplicado.toFixed(2));
 		    	}
-		    	console.log("Reasigna Total | 2");
 		    	document.getElementById("cobranzaAplicada").innerHTML = 'Aplicar | <h2>$' + separaMiles(montoAplicado.toFixed(2) + "</h2>");
 		    }
 		    function cambiarCantidad(id, valor) {
@@ -812,43 +843,51 @@
 		    	var nuevos = [];
 		    	var total = 0;
 		    	for (var i=0;i<documentosIncluidos.documentos.length;i++) {
-		    		console.log("ID: " + id + " VS " + documentosIncluidos.documentos[i].Documento_ID);
 		    		if (id == documentosIncluidos.documentos[i].Documento_ID) {
-		    			console.log("Coincide:");
+		    			console.log("Doc: : " + documentosIncluidos.documentos[i].Documentno);
 		    			var row = {};
 				        row.Documento_ID	= documentosIncluidos.documentos[i].Documento_ID;
 				        row.Totallines 		= documentosIncluidos.documentos[i].Totallines;
 				        row.Grandtotal 		= documentosIncluidos.documentos[i].Grandtotal;
 				        row.Impuesto 		= documentosIncluidos.documentos[i].Impuesto;
 				        row.Pagado 			= documentosIncluidos.documentos[i].Pagado;
+				        row.Pendiente 		= documentosIncluidos.documentos[i].Pendiente;
+				        // 			VALIDAR QUE NO SE EXCEdAN LOS LIMITES DEL MONTO DE LOS DOCUMENTOS
 		    			if (documentosIncluidos.documentos[i].Docbasetype == 'ARI') {
 		    				// FACTURAS
-		    				if (parseFloat(valor) > 0 && parseFloat(valor) <= row.Grandtotal) {
-		    					row.Pendiente 		= parseFloat(valor);	
+		    				if (parseFloat(valor) > 0 && parseFloat(valor) <= row.Pendiente) {
+		    					//row.Pendiente 		= parseFloat(valor);	
+		    					row.Aplicar 		= parseFloat(valor);	
 		    					total = total + parseFloat(valor);	
 		    				} else {
-		    					row.Pendiente = row.Grandtotal;
-		    					total = total + row.Grandtotal;
+		    					//row.Pendiente = row.Grandtotal;
+		    					row.Aplicar = row.Pendiente;
+		    					total = total + row.Pendiente;
 		    					// avisar que no puede ser menor que cero ni mayor al monto total de la factura
 		    					document.getElementById("alert_div").innerHTML = buildAlertWarning("Atención", "El monto aplicado no puede ser mayor al monto de la factura ni menor que cero.");
-		    					document.getElementById(id + "_text").value = row.Grandtotal;
+		    					document.getElementById(id + "_text").value = row.Pendiente;
 		    				}
 		    			}
 		    			if (documentosIncluidos.documentos[i].Docbasetype == 'ARC') {
 		    				// NOTAS DE CRÉDITO
-		    				if (parseFloat(valor) < 0 && parseFloat(valor) >= row.Grandtotal) {
-		    					row.Pendiente 		= parseFloat(valor);	
+		    				if (parseFloat(valor) < 0 && parseFloat(valor) >= row.Pendiente) {
+		    					console.log("CHK#1");
+		    					//row.Pendiente 		= parseFloat(valor);	
+		    					row.Aplicar 		= parseFloat(valor);	
 		    					total = total + parseFloat(valor);	
 		    				} else {
-		    					row.Pendiente = row.Grandtotal;
-		    					total = total + row.Grandtotal;
+		    					console.log("CHK#2");
+		    					//row.Pendiente = row.Grandtotal;
+		    					row.Aplicar = row.Pendiente;
+		    					total = total + row.Pendiente;
 		    					// avisar que no puede ser mayor que cero ni menor al monto total de la nota de crédito
 		    					document.getElementById("alert_div").innerHTML = buildAlertWarning("Atención", "El monto aplicado no puede ser menor al monto de la Nota de crédito ni mayor que cero.");
-		    					document.getElementById(id + "_text").value = row.Grandtotal;
+		    					document.getElementById(id + "_text").value = row.Pendiente;
 		    				}		    				
 		    			}				        
+
 				        //row.Pendiente 		= parseFloat(valor);
-				        row.Aplicar 		= documentosIncluidos.documentos[i].Aplicar;
+				        //row.Aplicar 		= documentosIncluidos.documentos[i].Aplicar;
 				        row.Documentno 		= documentosIncluidos.documentos[i].Documentno;
 				        row.Dateinvoiced 	= documentosIncluidos.documentos[i].Dateinvoiced;
 				        row.Docstatus 		= documentosIncluidos.documentos[i].Docstatus;
@@ -856,18 +895,21 @@
 				        nuevos.push(row);
 				        var gridItem = document.getElementById(documentosIncluidos.documentos[i].Documento_ID);
 				        // Facturas Parciales
-				        if (row.Pendiente < documentosIncluidos.documentos[i].Pendiente && documentosIncluidos.documentos[i].Docbasetype == 'ARI') {
+				        //if (row.Pendiente < documentosIncluidos.documentos[i].Pendiente && documentosIncluidos.documentos[i].Docbasetype == 'ARI') {
+						if (row.Pendiente > row.Aplicar && documentosIncluidos.documentos[i].Docbasetype == 'ARI') {										        	
 				        	gridItem.className = 'grid__item parcialSelectedItem';
 				        }
 				        // Facturas Parciales
-				        if (row.Pendiente > documentosIncluidos.documentos[i].Pendiente && documentosIncluidos.documentos[i].Docbasetype == 'ARC') {
+				        //if (row.Pendiente > documentosIncluidos.documentos[i].Pendiente && documentosIncluidos.documentos[i].Docbasetype == 'ARC') {
+						if (row.Pendiente < row.Aplicar && documentosIncluidos.documentos[i].Docbasetype == 'ARC') {				        	
 				        	gridItem.className = 'grid__item parcialSelectedItem';
 				        }
 
 		    		} else {
 		    			console.log("Resto");
 		    			nuevos.push(documentosIncluidos.documentos[i]);
-		    			total = total + parseFloat(documentosIncluidos.documentos[i].Pendiente);
+		    			//total = total + parseFloat(documentosIncluidos.documentos[i].Aplicar);
+		    			total = total + parseFloat(document.getElementById(documentosIncluidos.documentos[i].Documento_ID + "_text").value);
 		    		}
 		    	}
 		    	var data = {
@@ -875,6 +917,10 @@
 		    	};
 		    	documentosIncluidos = data;
 		    	recalcularMontoAplicado();
+		    	if (total > -0.01 && total < 0) {
+		    		console.log("el total es despreciable menor a 0.01");
+		    		total = 0;
+		    	}
 		    	total = total.toFixed(2);
 		    	//document.getElementById("montoTotalGrid").innerHTML = "$" + separaMiles(parseFloat(total));
 		    	document.getElementById("montoTotalGrid").innerHTML = "$" + separaMiles(total);
