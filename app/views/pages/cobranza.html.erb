@@ -682,7 +682,7 @@
 				var indexRow = 1;
 				var montoTotal = 0;
 				var listaAdd = '<div id="alert_div" class="alert_div"></div><div class="itemAgregado" style="background-color:#3498db;color:white;"><div class="addDocno" style="background-color:#3498db;color:white;">Número de Documento</div><div class="addFecha" style="background-color:#3498db;color:white;">Fecha del Documento</div><div class="addTotal" style="background-color:#3498db;color:white;">Total</div><div class="addPendiente" style="background-color:#3498db;color:white;">Pendiente</div><div class="addPendiente" style="background-color:#3498db;color:white;">Aplicar</div></div>';
-				if (documentosIncluidos.length == undefined) {
+				if (documentosIncluidos.documentos == undefined) {
 					console.log("No hay documentos incluidos");
 					document.getElementById('h_alert_div').innerHTML = buildAlertWarning("No hay documentos incluidos.", "Parece que no has agregado ningún documento, prueba agregando algunos y vuelve a intentarlo.");
 				}
