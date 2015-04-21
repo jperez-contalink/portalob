@@ -430,7 +430,7 @@ function jsonConstructor(json, allPrice) {
         row.Producto_ID     = jsonObject.data[i].id;
         row.Nombre          = jsonObject.data[i].name;
         row.Identificador   = jsonObject.data[i].value;
-        row.Familia         = jsonObject.data[i].familia;
+        //row.Familia         = jsonObject.data[i].familia;
         row.DescargaImg     = jsonObject.data[i].descargaimg;
         row.Inventario      = jsonObject.data[i].inventario;
         row.Marca           = jsonObject.data[i].marca;
@@ -504,11 +504,11 @@ function jsonConstructor(json, allPrice) {
             type: "string",
             friendly: "Identificador"
         },
-        Familia: {
+        /*Familia: {
             index: 3,
             type: "string",
             friendly: "Familia"
-        },
+        },*/
         DescargaImg: {
             index: 4,
             type: "string",
@@ -540,7 +540,7 @@ function jsonConstructorPrice(json) {
       var row = {};
       row.Producto_ID = jsonObject.data[i].product;
       row.Impuesto = (jsonObject.data[i].impuesto).toFixed(2);
-      row.Precio = (jsonObject.data[i].pricelist11).toFixed(2);
+      row.Precio = (jsonObject.data[i].pricelista).toFixed(2);
       rows.push(row);
   } 
   // Definir columnas
@@ -555,11 +555,11 @@ function jsonConstructorPrice(json) {
           type: "string",
           friendly: "Identificador"
       },
-      Familia: {
+      /*Familia: {
           index: 3,
           type: "string",
           friendly: "Familia"
-      },
+      },*/
       DescargaImg: {
           index: 4,
           type: "string",

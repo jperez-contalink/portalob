@@ -1,0 +1,41 @@
+-- View: pob_catalogoproductos
+
+-- DROP VIEW pob_catalogoproductos;
+
+CREATE OR REPLACE VIEW pob_catalogoproductos AS 
+ SELECT p.m_product_id AS pob_catalogoproductos_id, p.ad_client_id, p.ad_org_id, p.created, p.createdby, p.updated, p.updatedby, p.isactive, p.name, p.value, p.em_dmprod_familia AS familia, m.name AS marca, c.name AS categoria, 
+        CASE
+            WHEN i.created > now() THEN 'Y'::text
+            ELSE 'N'::text
+        END AS descargaimg, 
+        CASE
+            WHEN p.ad_image_id IS NOT NULL THEN 'Y'::text
+            ELSE 'noimage'::text
+        END AS image, ch.caracteristicas, (COALESCE(sum(sd.qtyonhand), 0::numeric) - COALESCE(sum(reservas.reservado), 0::numeric)) || ' Piezas'::text AS inventario, p.em_cascos_product_id AS productextra, extra.name AS productoextraname
+   FROM m_product p
+   JOIN tmarcas_marcas m ON m.tmarcas_marcas_id::text = p.em_tmarcas_marcas_id::text
+   LEFT JOIN ad_image i ON i.ad_image_id::text = p.ad_image_id::text
+   JOIN m_product_category c ON c.m_product_category_id::text = p.m_product_category_id::text
+   JOIN m_storage_detail sd ON sd.m_product_id::text = p.m_product_id::text
+   LEFT JOIN m_locator loc ON loc.m_locator_id::text = sd.m_locator_id::text
+   LEFT JOIN m_warehouse wh ON wh.m_warehouse_id::text = loc.m_warehouse_id::text
+   LEFT JOIN ( SELECT m_product.m_product_id, m_product.name
+   FROM m_product
+  WHERE m_product.em_dmprod_iscasco = 'Y'::bpchar) extra ON extra.m_product_id::text = p.em_cascos_product_id::text
+   LEFT JOIN ( SELECT o_l.m_product_id, m_w.m_warehouse_id, sum(o_l.em_vtadist_qtyfactura - o_l.qtydelivered) AS reservado
+   FROM c_orderline o_l
+   JOIN c_order c_o ON c_o.c_order_id::text = o_l.c_order_id::text
+   JOIN m_warehouse m_w ON m_w.m_warehouse_id::text = c_o.m_warehouse_id::text
+  WHERE COALESCE(m_w.em_pob_disponibleportal, 'N'::bpchar) = 'Y'::bpchar AND c_o.docstatus::text = 'CO'::text AND (o_l.em_vtadist_qtyfactura - o_l.qtydelivered) >= 0::numeric
+  GROUP BY o_l.m_product_id, m_w.m_warehouse_id) reservas ON reservas.m_product_id::text = p.m_product_id::text AND wh.m_warehouse_id::text = reservas.m_warehouse_id::text
+   LEFT JOIN ( SELECT pch.m_product_id, array_to_string(array_agg(DISTINCT (ch.name::text || ':'::text) || vch.name::text), '_'::text) AS caracteristicas
+   FROM m_product_ch_value pch
+   JOIN m_characteristic ch ON ch.m_characteristic_id::text = pch.m_characteristic_id::text
+   JOIN m_ch_value vch ON vch.m_ch_value_id::text = pch.m_ch_value_id::text
+  GROUP BY pch.m_product_id) ch ON ch.m_product_id::text = p.m_product_id::text
+  WHERE p.em_dmprod_ajgar::text = 'N'::text AND p.em_dmprod_iscasco = 'N'::bpchar AND COALESCE(wh.em_pob_disponibleportal, 'N'::bpchar) = 'Y'::bpchar
+  GROUP BY p.m_product_id, p.ad_client_id, p.ad_org_id, p.created, p.createdby, p.updated, p.updatedby, p.isactive, p.name, p.value, p.em_dmprod_familia, m.name, c.name, ch.caracteristicas, i.created, p.ad_image_id, reservas.reservado, p.em_cascos_product_id, extra.name;
+
+ALTER TABLE pob_catalogoproductos
+  OWNER TO tad;
+

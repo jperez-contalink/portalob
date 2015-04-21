@@ -3,6 +3,21 @@
 <head>
     <title>SCSORD</title>
 <style>
+    #loader-wrapper {
+      background-color:white;
+      position: fixed;
+      top: 100;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 20;
+    }  
+    #loader-wrapper img {
+      display: block;
+      margin-top: 100px;
+      margin-left: auto;
+      margin-right: auto;
+    } 
     .headRow {
         color:#585858;
         font-weight: bold;
@@ -101,6 +116,7 @@
 <br><br><br><br><br><br><br>
 <div id="alerta_orden"></div>
 <div align="center" id="div_message"></div>
+<div id="loader-wrapper"><img src="load.gif" height="9%" width="6%"></img></div><!--Termina load-->
 </body>
 <!-- /api/v1/pedidosobs -->
 <script type="text/javascript">
@@ -130,6 +146,7 @@
                                    // Pintar Ordenes
                                    htmlOrd = buildListaOrden(openbravo, Orden, pedido);
                                    buildListaOrdenes(openbravo, Orden, pedido, htmlOrd);
+                                   document.getElementById("loader-wrapper").style.display = "none";
                             },
                                 error:  function(){ 
                                     console.log("$> Ocurrio un error");
@@ -152,6 +169,7 @@
                        openbravo = orderOpenBravo(datox);
                        // Pintar Ordenes
                        buildListaOrdenes(openbravo, Orden, pedido, "");
+                       document.getElementById("loader-wrapper").style.display = "none";
                 },
                     error:  function(){ 
                         console.log("$> Ocurrio un error");
@@ -302,10 +320,6 @@ function buildListaOrdenes(ob, ord, pedido, html){
                         // PINTAR DETALLES DE LA LINEA lineasPortal[k].propiedad
                         htmlBuilder += '<div style="border:0px solid grey;" id="' + lineasPortal[k].Product_id + '_ROW">';
                         htmlBuilder += '<div align="center" class="imgGrid" style="float:left;"><img src="' + lineasPortal[k].Imagen + '" height="50px"></img></div>';
-                        //htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + lineasPortal[k].Producto + '</div>';
-                        //htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Precio) + '</div>';
-
-
                         if (lineasPortal[k].Productoextra != "null") {
                             htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + lineasPortal[k].Producto + ' + ' + lineasPortal[k].Productoextra + '</div>';
                             htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles((parseFloat(lineasPortal[k].Precio) - parseFloat(lineasPortal[k].Precioproductoextra)).toFixed(2)) + ' + $' + separaMiles(lineasPortal[k].Precioproductoextra) +'</div>';
@@ -314,25 +328,19 @@ function buildListaOrdenes(ob, ord, pedido, html){
                             htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Precio) + '</div>';
                         }
 
-
-
-
-
-
-
                         htmlBuilder += '<div align="center" class="qtyGrid" style="float:left;"><input class="chng_qty" type="text" value="' + separaMiles(lineasPortal[k].Cantidad) + '" id="' + lineasPortal[k].Linea_id + '_Cantidad" readonly   /></div>';
                         htmlBuilder += '<div align="right" id="totalGrid" class="totalGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Total) + '<br></div>';
                         htmlBuilder += '</div>';                        
                     }
                 }
-            // PINTAR DETALLES DEL PEDIDO pedidosPortal[j].propiedad
             htmlBuilder += '</div>';
+            // Totales del pedido
             htmlBuilder += '<div style="border:0px solid red;float:left;width:100%;" id="' + pedidosOB[i].Documentno + '_blank">&nbsp;</div>';
             htmlBuilder += '<div class="netQty" id="' + pedidosOB[i].Documentno + '_qty" style="border:0px solid red;float:left;width:10%;display:none">' + separaMiles(pedidosPortal[j].Productos) + ' </div>';
             htmlBuilder += '<div class="netTotal" id="' + pedidosOB[i].Documentno + '_total" style="border:0px solid blue;float:left;width:20%;display:none">';
             htmlBuilder += '<div class="subtotal" align="right">Subtotal: $' + separaMiles(pedidosPortal[j].Subtotal) + '</div>';
             htmlBuilder += '<div class="impuestos" align="right">Impuestos: $' + separaMiles(pedidosPortal[j].Impuestos) + '</div>';
-            htmlBuilder += '<div class="total" align="right">Total: $' + separaMiles(pedidosPortal[j].Total) + '</div></div>';
+            htmlBuilder += '<div class="total" align="right">Total: $' + separaMiles(pedidosPortal[j].Total) + '</div></div><br>';
             }
         }
     }
@@ -372,9 +380,7 @@ function buildListaOrden(ob, ord, pedido){
                         htmlBuilder += '<div align="center" class="imgGrid" style="float:left;"><img src="' + lineasPortal[k].Imagen + '" height="50px"></img></div>';
                         //htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + lineasPortal[k].Producto + '</div>';
                         //htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Precio) + '</div>';
-
-
-                        if (lineasPortal[k].Productoextra != "") {
+                        if (lineasPortal[k].Productoextra != "" && lineasPortal[k].Productoextra != "null") {
                             htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + lineasPortal[k].Producto + ' + ' + lineasPortal[k].Productoextra + '</div>';
                             htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles((parseFloat(lineasPortal[k].Precio) - parseFloat(lineasPortal[k].Precioproductoextra)).toFixed(2)) + ' + $' + separaMiles(lineasPortal[k].Precioproductoextra) +'</div>';
                         } else {
@@ -400,7 +406,7 @@ function buildListaOrden(ob, ord, pedido){
             htmlBuilder += '<div class="netTotal" id="' + pedidosOB[i].Documentno + '_total" style="border:0px solid blue;float:left;width:20%;display:none">';
             htmlBuilder += '<div class="subtotal" align="right">Subtotal: $' + separaMiles(pedidosPortal[j].Subtotal) + '</div>';
             htmlBuilder += '<div class="impuestos" align="right">Impuestos: $' + separaMiles(pedidosPortal[j].Impuestos) + '</div>';
-            htmlBuilder += '<div class="total" align="right">Total: $' + separaMiles(pedidosPortal[j].Total) + '</div></div>';
+            htmlBuilder += '<div class="total" align="right">Total: $' + separaMiles(pedidosPortal[j].Total) + '</div></div><br>';
             }
         }
     }

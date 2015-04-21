@@ -1,0 +1,19 @@
+-- View: pob_listapreciosjci
+
+-- DROP VIEW pob_listapreciosjci;
+
+CREATE OR REPLACE VIEW pob_listapreciosjci AS 
+ SELECT pp.m_productprice_id AS pob_listapreciosjci_id, pp.ad_client_id, pp.ad_org_id, pp.created, pp.createdby, pp.updated, pp.updatedby, pp.isactive, bp.taxid, l.m_pricelist_id, pp.m_product_id, COALESCE(trunc(pp.pricelist * (1::numeric - COALESCE(dc.porcentaje, 0::numeric) / 100::numeric) * (1::numeric - COALESCE(dc.porc_volumen, 0::numeric) / 100::numeric) * (1::numeric - COALESCE(dc.porc_prontopago, 0::numeric) / 100::numeric) * (1::numeric - COALESCE(dc.porc_contado, 0::numeric) / 100::numeric), 2), pp.pricelist) AS pricelista, COALESCE(COALESCE(trunc(pp.pricelist * (1::numeric - COALESCE(dc.porcentaje, 0::numeric) / 100::numeric) * (1::numeric - COALESCE(dc.porc_volumen, 0::numeric) / 100::numeric) * (1::numeric - COALESCE(dc.porc_prontopago, 0::numeric) / 100::numeric) * (1::numeric - COALESCE(dc.porc_contado, 0::numeric) / 100::numeric), 2), pp.pricelist) * (tax.rate / 100::numeric), 0::numeric) AS impuesto
+   FROM m_productprice pp
+   JOIN m_pricelist_version v ON v.m_pricelist_version_id::text = pp.m_pricelist_version_id::text
+   JOIN m_pricelist l ON l.m_pricelist_id::text = v.m_pricelist_id::text
+   JOIN c_bpartner bp ON bp.m_pricelist_id::text = l.m_pricelist_id::text
+   JOIN m_product p ON p.m_product_id::text = pp.m_product_id::text
+   LEFT JOIN c_tax tax ON tax.c_taxcategory_id::text = p.c_taxcategory_id::text AND tax.isdefault = 'Y'::bpchar
+   LEFT JOIN tmarcas_marcas m ON m.tmarcas_marcas_id::text = p.m_product_id::text
+   LEFT JOIN desc_descuentos dc ON dc.tmarcas_marcas_id::text = p.em_tmarcas_marcas_id::text AND dc.c_bpartner_id::text = bp.c_bpartner_id::text
+  WHERE l.isdefault = 'Y'::bpchar;
+
+ALTER TABLE pob_listapreciosjci
+  OWNER TO tad;
+

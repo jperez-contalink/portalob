@@ -4,7 +4,6 @@ class ReporteFacturasController < ApplicationController
   # GET /reportefacturas
   # GET /reportefacturas.json
   def index
-    puts carlos
     @reportefacturas = Reportefactura.all
     respond_to do |format|
       format.json {render json: @reportefacturas}

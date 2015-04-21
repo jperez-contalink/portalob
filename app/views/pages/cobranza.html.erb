@@ -685,6 +685,12 @@
 				if (documentosIncluidos.documentos == undefined) {
 					console.log("No hay documentos incluidos");
 					document.getElementById('h_alert_div').innerHTML = buildAlertWarning("No hay documentos incluidos.", "Parece que no has agregado ningún documento, prueba agregando algunos y vuelve a intentarlo.");
+				} else {
+					if (documentosIncluidos.documentos.length == 0) {
+						console.log("No hay documentos incluidos");
+						document.getElementById('h_alert_div').innerHTML = buildAlertWarning("No hay documentos incluidos.", "Parece que no has agregado ningún documento, prueba agregando algunos y vuelve a intentarlo.");
+					}
+
 				}
 				for (var k=0;k<documentosIncluidos.documentos.length;k++) {
 					var style = "";
