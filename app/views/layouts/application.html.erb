@@ -3,7 +3,21 @@
 <head>
   <title>Extranet</title>
   <!--<link rel="shortcut icon" href="http://sstatic.net/stackoverflow/img/favicon.ico">-->
-  <link rel="shortcut icon" href="https://cdn0.iconfinder.com/data/icons/star-wars/512/death_star-256.png">
+  <% if usuario_signed_in? %>
+    <% if current_usuario.empresa.id == 1 %> 
+      <% ruta = "/jci_icono.png"%>
+    <% end %>
+    <% if current_usuario.empresa.id == 2 %>
+      <% ruta = "/rase_icono.png" %>
+    <% end %>
+      <!--ruta = "https://cdn0.iconfinder.com/data/icons/star-wars/512/death_star-256.png">-->
+  <% else %>
+    <% ruta = "http://www.business-software.com/wp-content/uploads/2015/02/extranet-icon.png" %>
+  <% end %>
+  <link rel="shortcut icon" href="<%= ruta %>" type="image/png" />
+  <!--<link rel="shortcut icon" href="/jci_icono.png" type="image/png" />
+  <link rel="shortcut icon" href="https://cdn0.iconfinder.com/data/icons/star-wars/512/death_star-256.png">-->
+
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
   <style type="text/css">
     .imglogo {
