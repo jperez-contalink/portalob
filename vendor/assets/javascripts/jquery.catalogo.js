@@ -20,7 +20,7 @@
          */
         priv.init = function () {
             //document.getElementById("cat_pro").innerHTML = '<div align="center"><strong> CATALOGO VACIO</strong></div>';
-            document.getElementById("cat_pro").innerHTML = '<br><br><br><br><br><br><br><div align="center" id="loader-wrapper"><img src="load.gif" height="9%" width="6%"></img></div>';
+            document.getElementById("cat_pro").innerHTML = '<br><br><br><br><br><br><br><div id="loader-wrapper"><img src="load.gif" height="9%" width="6%"></img></div>';
         };
         priv.setData = function (pData) {
             priv.drawCat(pData);
@@ -50,7 +50,7 @@
                     // Gestiona productos extra
                     //Incluye ' + parseFloat(obj.Precioproductoextra)+parseFloat(obj.Impuestoproductoextra) + ' (' + obj.Precioproductoextra + ') 
                     if (obj.Inventario == "0 Piezas"){ style = 'style="color:red;"';}
-                    tabla += '<a href="javascript:agregar();" class="addProduct" id="' + obj.Producto_ID + '"><div class="itemA" align="left"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+obj.Precioshow+' ' + pextra + '<br>'+obj.Inventario+'</div></a>';
+                    tabla += '<a href="javascript:agregar();" class="addProduct" id="' + obj.Producto_ID + '"><div class="itemA" align="left"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+(parseFloat(obj.Precioshow)).toFixed(2)+' ' + pextra + '<br>'+obj.Inventario+'</div></a>';
                     style="";
                 }
             }

@@ -1,0 +1,38 @@
+-- View: pob_catalogoproductos
+
+-- DROP VIEW pob_catalogoproductos;
+
+CREATE OR REPLACE VIEW pob_catalogoproductos AS 
+ SELECT p.m_product_id AS pob_catalogoproductos_id, p.ad_client_id, p.ad_org_id, p.created, p.createdby, p.updated, p.updatedby, p.isactive, p.name, p.value, NULL::unknown AS familia, m.name AS marca, c.name AS categoria, 
+        CASE
+            WHEN i.created > now() THEN 'Y'::text
+            ELSE 'N'::text
+        END AS descargaimg, 
+        CASE
+            WHEN p.ad_image_id IS NOT NULL THEN 'Y'::text
+            ELSE 'noimage'::text
+        END AS image, ch.caracteristicas, (COALESCE(sum(sd.qtyonhand), 0::numeric) - COALESCE(sum(reservas.qtyreserved), 0::numeric)) || ' Piezas'::text AS inventario, NULL::unknown AS productextra, NULL::unknown AS productoextraname
+   FROM m_product p
+   LEFT JOIN m_brand m ON m.m_brand_id::text = p.m_brand_id::text
+   LEFT JOIN ad_image i ON i.ad_image_id::text = p.ad_image_id::text
+   JOIN m_product_category c ON c.m_product_category_id::text = p.m_product_category_id::text
+   JOIN m_storage_detail sd ON sd.m_product_id::text = p.m_product_id::text
+   LEFT JOIN m_locator loc ON loc.m_locator_id::text = sd.m_locator_id::text
+   LEFT JOIN m_warehouse wh ON wh.m_warehouse_id::text = loc.m_warehouse_id::text
+   LEFT JOIN ( SELECT r.m_product_id, l.m_warehouse_id, sum(rs.quantity - rs.releasedqty) AS qtyreserved
+   FROM m_reservation r
+   JOIN m_reservation_stock rs ON r.m_reservation_id::text = rs.m_reservation_id::text
+   JOIN m_locator l ON l.m_locator_id::text = rs.m_locator_id::text
+  WHERE rs.quantity > rs.releasedqty
+  GROUP BY r.m_product_id, l.m_warehouse_id) reservas ON reservas.m_product_id::text = p.m_product_id::text AND wh.m_warehouse_id::text = reservas.m_warehouse_id::text
+   LEFT JOIN ( SELECT pch.m_product_id, array_to_string(array_agg(DISTINCT (ch.name::text || ':'::text) || vch.name::text), '_'::text) AS caracteristicas
+   FROM m_product_ch_value pch
+   JOIN m_characteristic ch ON ch.m_characteristic_id::text = pch.m_characteristic_id::text
+   JOIN m_ch_value vch ON vch.m_ch_value_id::text = pch.m_ch_value_id::text
+  GROUP BY pch.m_product_id) ch ON ch.m_product_id::text = p.m_product_id::text
+  WHERE COALESCE(wh.em_pob_disponibleportal, 'N'::bpchar) = 'Y'::bpchar
+  GROUP BY p.m_product_id, p.ad_client_id, p.ad_org_id, p.created, p.createdby, p.updated, p.updatedby, p.isactive, p.name, p.value, m.name, c.name, ch.caracteristicas, i.created, p.ad_image_id;
+
+ALTER TABLE pob_catalogoproductos
+  OWNER TO tad;
+
