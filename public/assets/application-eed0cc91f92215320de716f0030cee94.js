@@ -13493,14 +13493,14 @@ function mesAnterior(mes){
          */
         priv.init = function () {
             //document.getElementById("cat_pro").innerHTML = '<div align="center"><strong> CATALOGO VACIO</strong></div>';
-            document.getElementById("cat_pro").innerHTML = '<br><br><br><br><br><br><br><div align="center" id="loader-wrapper"><img src="load.gif" height="9%" width="6%"></img></div>';
+            document.getElementById("cat_pro").innerHTML = '<br><br><br><br><br><br><br><div id="loader-wrapper"><img src="load.gif" height="9%" width="6%"></img></div>';
         };
         priv.setData = function (pData) {
             priv.drawCat(pData);
         };
         priv.cleanData = function (pData) {
             //priv.drawCat(pData);
-            document.getElementById("cat_pro").innerHTML = "";
+            document.getElementById("cat_pro").innerHTML = '<br><br><br><br><br><br><br><h3 align="center">No hay resultados.</h3>';
             document.getElementById("cat_pag").innerHTML = "";
         };
         priv.drawCat = function (pData) {
@@ -13523,7 +13523,14 @@ function mesAnterior(mes){
                     // Gestiona productos extra
                     //Incluye ' + parseFloat(obj.Precioproductoextra)+parseFloat(obj.Impuestoproductoextra) + ' (' + obj.Precioproductoextra + ') 
                     if (obj.Inventario == "0 Piezas"){ style = 'style="color:red;"';}
-                    tabla += '<a href="javascript:agregar();" class="addProduct" id="' + obj.Producto_ID + '"><div class="itemA" align="left"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+(parseFloat(obj.Precioshow))toFixed(2)+' ' + pextra + '<br>'+obj.Inventario+'</div></a>';
+                    
+                    var inventarioShow = "";
+                    console.log("Mostrar Inventario: " + mostrarInventario);
+                    if (mostrarInventario == "true") {
+                        inventarioShow = obj.Inventario;
+                    }
+
+                    tabla += '<a href="javascript:agregar();" class="addProduct" id="' + obj.Producto_ID + '"><div class="itemA" align="left"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+(parseFloat(obj.Precioshow)).toFixed(2)+' ' + pextra + '<br>'+inventarioShow+'</div></a>';
                     style="";
                 }
             }
@@ -13573,10 +13580,13 @@ function mesAnterior(mes){
             var jsonRows = pData.rows;
             var arrayMarca = [];
             var arrayCategoria = [];
-            var marcas = "<strong>MARCAS</strong><br>";
-            var categorias = "<strong>CATEGORÍA</strong><br>";
+            //var marcas = '<strong>MARCAS<a id="btn_filtro_marcas" class="btn_filtro_marcas">+</a></strong><br>';
+            var marcas = '<strong>MARCAS<a id="btn_filtro_marcas" class="btn_filtro_marcas">&nbsp;<span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></a></strong><br>';
+            var categorias = '<strong>CATEGORÍA<a id="btn_filtro_categorias" class="btn_filtro_categorias">&nbsp;<span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></a></strong><br>';
             //var caracteriticas = "<strong>CARACTERISTICA</strong><br>";
             var caracteriticas = "";
+            marcas += '<div id="div_filtro_marcas">'
+            categorias += '<div id="div_filtro_categorias">'
             for (var key in jsonRows) {
                 var obj = jsonRows[key]; 
                 if (arrayMarca.indexOf(obj.Marca) == -1 && obj.Precio != 0) {
@@ -13590,6 +13600,8 @@ function mesAnterior(mes){
                     arrayCategoria.push(obj.Categoria);
                 }
             }
+            marcas += "</div>";
+            categorias += "</div>";
             console.log("Crear Filtros de caracteriticas: ", itemsChar);
             for (var indx=0; indx<itemsChar.heads.length; indx++){
                 caracteriticas += '<br><strong>' + itemsChar.heads[indx].toUpperCase() + '</strong><br>';

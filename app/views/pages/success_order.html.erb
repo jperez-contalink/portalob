@@ -258,7 +258,6 @@ function orderOpenBravo(json) {
         row.Documentno      = jsonObject.data[i].documentno;
         row.Docstatus       = jsonObject.data[i].docstatus;
         row.Delivered       = jsonObject.data[i].delivered;
-        console.log("Entregado: " + row.Delivered);
         switch (jsonObject.data[i].docstatus) {
             case "DR":
                 row.Estado  = '<p style="font-weight:bold;color:#3498db;display:inline;">POR PROCESAR</p>';
@@ -269,12 +268,12 @@ function orderOpenBravo(json) {
                     row.Estado  = '<p style="font-weight:bold;color:#2ecc71;display:inline;">POR ENTREGAR</p>';
                 }
                 if (parseFloat(row.Delivered) > 0 && parseFloat(row.Delivered) < 100) {
-                    row.Estado  = '<p style="font-weight:bold;color:#2ecc71;display:inline;">' + parseFloat(row.Delivered) + '% ENTREGADO/p>';
+                    row.Estado  = '<p style="font-weight:bold;color:#2ecc71;display:inline;">' + parseFloat(row.Delivered) + '% ENTREGADO</p>';
                 }
                 if (parseFloat(row.Delivered) == 100) {
-                    row.Estado  = '<p style="font-weight:bold;color:#2ecc71;display:inline;">CERRADO</p>'; 
+                    row.Estado  = '<p style="font-weight:bold;color:#e74c3c;display:inline;">CERRADO</p>'; 
                 }
-                row.Estado  = '<p style="font-weight:bold;color:#2ecc71;display:inline;">POR ENTREGAR</p>';
+                //row.Estado  = '<p style="font-weight:bold;color:#2ecc71;display:inline;">POR ENTREGAR</p>';
             break
             case "CL":
                 row.Estado  = '<p style="font-weight:bold;color:#e67e22;display:inline;">CERRADO</p>';

@@ -451,13 +451,16 @@ function jsonConstructor(json) {
         var ano = jsDate.getFullYear();
         var row = {};
         row.TipoDoc =   jsonObject.data[i].documento;
+        if (row.TipoDoc == "Deposito") {
+          row.TipoDoc = "Depósito";
+        }
         row.Factura_ID = jsonObject.data[i].id;
         row.Documentno =   jsonObject.data[i].documentno;
         row.Fecha = Date.UTC(ano, mes, dia);
         //row.Cargo =  jsonObject.data[i].cargo;
-        row.Cargo = separaMiles(JSON.stringify(jsonObject.data[i].cargo));
+        row.Cargo = separaMiles(parseFloat(JSON.stringify(jsonObject.data[i].cargo)).toFixed(2));
         //row.Abono =  jsonObject.data[i].abono;
-        row.Abono = separaMiles(JSON.stringify(jsonObject.data[i].abono));
+        row.Abono = separaMiles(parseFloat(JSON.stringify(jsonObject.data[i].abono)).toFixed(2));
         //row.Inicial = sinicial;
         row.Inicial = separaMiles(sinicial.toString());
         sfinal = sinicial + jsonObject.data[i].cargo - jsonObject.data[i].abono;
