@@ -227,7 +227,6 @@
 			}
 			/*	GRID DOCUMENTOS	*/	
 			.montos_div {
-				background-color: yellow;
 				border:0px solid black;
 				color:black;
 			}
@@ -259,6 +258,44 @@
 				padding:1% 1% 1% 1%;
 				font-size: 130%;
 			}			
+			/* Totales Mobil*/
+			.totalFacturasM {
+				width: 50%;
+				text-align: left;
+				float:left;
+				padding:1% 1% 1% 1%;
+				font-size: 130%;
+			}
+			.totalNotasCreditoM {
+				width: 50%;
+				text-align: left;
+				float:left;
+				padding:1% 1% 1% 1%;
+				font-size: 130%;
+			}
+			.deudaTotalM {
+				width: 60%;
+				text-align: left;
+				float:left;
+				padding:1% 1% 1% 1%;
+				font-size: 130%;
+			}
+			.cobranzaAplicadaM {
+				width: 40%;
+				text-align: left;
+				float:left;
+				padding:1% 1% 1% 1%;
+				font-size: 130%;
+			}	
+			.tdHM {
+				padding-left: 1%;
+				text-align: left;
+			}
+			.tdRM {
+				text-align: right;
+				font-weight: bold;
+			}
+			/* Totales Mobil*/
 			h2 {
 				font-weight: bold;
 				font-size: 140%;
@@ -331,11 +368,16 @@
 		allDocs = {};
 		documentosIncluidos = {};
 		sideShow = false;
+		movil = false;
 		$(document).ready(function() {
+			// Es móvil?
+			var mobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
+			if (mobile) {
+				movil = true;
+			}
 			var allData = {};
-	        console.log("$> Consumir Servicio");
+	        console.log("$> Consumir Servicio", movil);
 	        var datox = {};
-
 	        // SERVICIO DE CONSULTA DE DOCUMENTOS DISPONIBLES
 	        $.ajax({
 	                type:"GET",
@@ -568,10 +610,26 @@
 
 			   	// Imprimir Totales
 			   	deudaTotal = totalFacturas + totalNotasCredito;
-			   	var montos = '<div class="totalFacturas" id="totalFacturas">Facturas | <h2>$' + separaMiles(totalFacturas.toFixed(2)) + '</h2></div>';
-			   	montos += '<div class="totalNotasCredito" id="totalNotasCredito">Notas de crédito | <h2>$' + separaMiles(totalNotasCredito.toFixed(2)) + '</h2></div>';
-			   	montos += '<div class="deudaTotal" id="deudaTotal">Usted debe | <h2>$' + separaMiles(deudaTotal.toFixed(2)) + '</h2></div>';
-			   	montos += '<div class="cobranzaAplicada" id="cobranzaAplicada">Aplicar | <h2>$ 0.00</h2></div>';
+			   	if (movil) {
+			   		/*var montos = '<div class="totalFacturasM" id="totalFacturas">Facturas |<h2>$' + separaMiles(totalFacturas.toFixed(2)) + '</h2></div>';
+				   	montos += '<div class="totalNotasCreditoM" id="totalNotasCredito">Notas de crédito | <h2>$' + separaMiles(totalNotasCredito.toFixed(2)) + '</h2></div>';
+				   	montos += '<div class="deudaTotalM" id="deudaTotal">Usted debe | <h2>$' + separaMiles(deudaTotal.toFixed(2)) + '</h2></div>';
+				   	montos += '<div class="cobranzaAplicadaM" id="cobranzaAplicada">Aplicar | <h2>$ 0.00</h2></div>';	*/
+
+				   	var montos = '<br><table width="100%">';
+				   	montos += '<tr><td class="tdHM">Facturas</td><td class="tdHM">Notas de crédito</td></tr>';
+				   	montos += '<tr><td class="tdRM"><div class="totalFacturas" id="totalFacturas">$' + separaMiles(totalFacturas.toFixed(2)) + '</div></td><td class="tdRM"><div class="totalNotasCredito" id="totalNotasCredito">$' + separaMiles(totalNotasCredito.toFixed(2)) + '</div></td></tr>';
+				   	montos += '<tr><td class="tdHM">Usted debe</td><td class="tdHM">Aplicar</td></tr>';
+				   	montos += '<tr><td class="tdRM"><div class="deudaTotal" id="deudaTotal">$' + separaMiles(deudaTotal.toFixed(2)) + '</div></td><td class="tdRM"><div class="cobranzaAplicada" id="cobranzaAplicada">$0.00</div></td></tr>';
+				   	montos += '</table>';
+			   	} else {
+			   		var montos = '<div class="totalFacturas" id="totalFacturas">Facturas | <h2>$' + separaMiles(totalFacturas.toFixed(2)) + '</h2></div>';
+				   	montos += '<div class="totalNotasCredito" id="totalNotasCredito">Notas de crédito | <h2>$' + separaMiles(totalNotasCredito.toFixed(2)) + '</h2></div>';
+				   	montos += '<div class="deudaTotal" id="deudaTotal">Usted debe | <h2>$' + separaMiles(deudaTotal.toFixed(2)) + '</h2></div>';
+				   	montos += '<div class="cobranzaAplicada" id="cobranzaAplicada">Aplicar | <h2>$ 0.00</h2></div>';
+			   	}
+			   	
+
 				document.getElementById('montos_div').innerHTML = montos;	   	
 
 
