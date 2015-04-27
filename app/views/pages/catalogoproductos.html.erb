@@ -291,6 +291,20 @@
     }
   });
 
+  $("#cat_filter").on('click', '.btn_filtro_caracteristicas', function (e) {
+    e.preventDefault();
+    console.log("COLAPSE CARACTERISTICAS: ", e);
+    var idDiv = e.currentTarget.id.replace("btn", "div");
+    var idBtn = e.currentTarget.id;
+    if (document.getElementById(idDiv).style.display == "none") {
+      document.getElementById(idDiv).style.display = "block";
+      document.getElementById(idBtn).innerHTML = '&nbsp;<span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>';
+    } else {
+      document.getElementById(idDiv).style.display = "none";
+      document.getElementById(idBtn).innerHTML = '&nbsp;<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>';
+    }
+  });
+
   $("#cat_pro").on('click', '.submitProduct', function (e) {
     console.log("SUBMIT PRODUCT HTML", e);
     e.preventDefault();
@@ -524,13 +538,13 @@ function jsonConstructor(json, allPrice) {
         var obj = jsonRows[key]; 
         if (obj.Producto_ID == jsonObject.data[i].id) {
             row.Precio = (parseFloat(obj.Precio)+parseFloat(obj.Impuesto)).toFixed(2);
-            if (row.Nombre == "OPTIMA AMARILLA DEEP 31 T") {console.log("%> Precio = " + obj.Precio + " (Precio) + " + obj.Impuesto + " (Imp)");}
+            //if (row.Nombre == "OPTIMA AMARILLA DEEP 31 T") {console.log("%> Precio = " + obj.Precio + " (Precio) + " + obj.Impuesto + " (Imp)");}
             row.Impuesto = obj.Impuesto;
         }
         if (obj.Producto_ID == jsonObject.data[i].productextra) {
           row.Precioproductoextra = (parseFloat(obj.Precio)+parseFloat(obj.Impuesto)).toFixed(2);
           row.Impuestoproductoextra = obj.Impuesto;
-          if (row.Nombre == "OPTIMA AMARILLA DEEP 31 T") {console.log("%> Precio Extra = " + obj.Precio + " (Precio) + " + obj.Impuesto + " (Imp)");} 
+          //if (row.Nombre == "OPTIMA AMARILLA DEEP 31 T") {console.log("%> Precio Extra = " + obj.Precio + " (Precio) + " + obj.Impuesto + " (Imp)");} 
         }
       }
       if (typeof(row.Precioproductoextra) == "undefined"){
@@ -541,7 +555,7 @@ function jsonConstructor(json, allPrice) {
         row.Precio = 0;
         row.Impuesto = 0;
       }
-      if (row.Nombre == "OPTIMA AMARILLA DEEP 31 T") {console.log("%> Precioshow = " + row.Precio + " (Precio) + " + row.Precioproductoextra + " (precioextra)" + row.Impuestoproductoextra + " impX");}
+      /*if (row.Nombre == "OPTIMA AMARILLA DEEP 31 T") {console.log("%> Precioshow = " + row.Precio + " (Precio) + " + row.Precioproductoextra + " (precioextra)" + row.Impuestoproductoextra + " impX");}*/
       row.Precioshow = parseFloat(row.Precio) + parseFloat(row.Precioproductoextra);
 
       // Gestionar Caracteristicas

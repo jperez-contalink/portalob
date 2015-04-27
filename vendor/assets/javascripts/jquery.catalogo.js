@@ -31,7 +31,7 @@
             document.getElementById("cat_pag").innerHTML = "";
         };
         priv.drawCat = function (pData) {
-            console.log("Pintar Catalogo", pData);
+            console.log("Pintar Catalogo");
             var jsonCols = pData.cols;
             var jsonRows = pData.rows;
             var search = '<div class="input-group"><span class="input-group-addon glyphicon glyphicon-search"></span><input type="text" class="form-control btn_search" aria-describedby="basic-addon1" id="txt_search" autofocus></div>';
@@ -52,7 +52,6 @@
                     if (obj.Inventario == "0 Piezas"){ style = 'style="color:red;"';}
                     
                     var inventarioShow = "";
-                    console.log("Mostrar Inventario: " + mostrarInventario);
                     if (mostrarInventario == "true") {
                         inventarioShow = obj.Inventario;
                     }
@@ -129,17 +128,24 @@
             }
             marcas += "</div>";
             categorias += "</div>";
-            console.log("Crear Filtros de caracteriticas: ", itemsChar);
+            /*                  FILTROS CARACTERISTICAS                 */
+            console.log("Crear Filtros de caracteriticas: ", itemsChar.heads);
             for (var indx=0; indx<itemsChar.heads.length; indx++){
-                caracteriticas += '<br><strong>' + itemsChar.heads[indx].toUpperCase() + '</strong><br>';
-                for (var indy=0; indy<itemsChar.items.length; indy++){
-                    currentItem = itemsChar.items[indy].split("_");
-                    if (currentItem[0] == itemsChar.heads[indx]){
-                        //caracteriticas += '<a class="fil_car" id="'+ currentItem[0] +'">' + currentItem[1] + '</a><br>';
-                        caracteriticas += '<input class="fil_multi" type="checkbox" id = "'+currentItem[0]+'_'+currentItem[1]+'"/>&nbsp;' + currentItem[1] + '<br>';
+                if (itemsChar.heads[indx].toUpperCase().length > 0) {
+                    caracteriticas += '<br><strong>' + itemsChar.heads[indx].toUpperCase() + '<a id="btn_filtro_' + itemsChar.heads[indx].toUpperCase().replace(" ", "") + '" class="btn_filtro_caracteristicas">&nbsp;<span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></a></strong><br>';
+                    caracteriticas += '<div id="div_filtro_' + itemsChar.heads[indx].toUpperCase().replace(" ", "") + '">';
+                    for (var indy=0; indy<itemsChar.items.length; indy++){
+                        currentItem = itemsChar.items[indy].split("_");
+                        if (currentItem[0] == itemsChar.heads[indx]){
+                            //caracteriticas += '<a class="fil_car" id="'+ currentItem[0] +'">' + currentItem[1] + '</a><br>';
+                            caracteriticas += '<input class="fil_multi" type="checkbox" id = "'+currentItem[0]+'_'+currentItem[1]+'"/>&nbsp;' + currentItem[1] + '<br>';
+                        }
                     }
+                    caracteriticas += '</div>';
                 }
             }
+
+            /*                  FILTROS PRECIOS                 */
             console.log("Filtro de Precios");
             var filPrice = '<div><strong>PRECIOS</strong><br>';
             filPrice += '<input width="3%" type="text" class="txtPrecioLeft txt_precio" id="precioDesde"  placeholder="Precios Desde"/><br><input width="3%" type="text" class="txtPrecioRight txt_precio" id="precioHasta"  placeholder="Precios Hasta"/><br></div><br>';
