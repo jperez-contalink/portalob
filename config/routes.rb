@@ -53,6 +53,7 @@ Rails.application.routes.draw do
   get "cambia_linea" => "pages#cambia_linea"
   get "borrar_linea" => "pages#borrar_linea"
   get "cobranza" => "pages#cobranza"
+  get "unauthorized" => "pages#unauthorized"
  
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do

@@ -7,6 +7,11 @@ class ApplicationController < ActionController::Base
 
   before_filter :configure_permitted_parameters, if: :devise_controller?
 
+  #rescue_from CanCan::AccessDenied do |exception|
+   # flash[:error] = "Access denied."
+   # redirect_to unauthorized_path
+  #end
+
   protected
 
   def configure_permitted_parameters

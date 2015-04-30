@@ -22,6 +22,7 @@ gem 'rack-cors', :require => 'rack/cors'
 gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 gem 'chilkat', '~> 9.5.0.47'
+gem 'cancan'
 
 group :development, :test do
   gem 'sqlite3'

@@ -96,15 +96,14 @@
     <div id="car_pro" width="100%" style="border:0px solid black;"/>
 </form>
 </body>
-  <script type="text/javascript">
-   /* window.onbeforeunload = function() { 
-        if (window.confirm("Do you really want to leave?")) { 
-            //window.open("exit.html", "Thanks for Visiting!");
-            return true;
-        } else {
-            return "Los cambios que no hayan sido guardados en su carrito se perderan.";
-        }
-    }; */ 
+  <script type="text/javascript"> 
+    // ROLES
+    <% if current_usuario.role != "Cliente" %>
+    console.log("RESTRICTED");
+    document.getElementById("car_pro").remove();
+    window.location.href="/unauthorized"
+    <% end %>
+    // ROLES  
   var allData = {};
   var newData = {};
   var dropLineas = "";

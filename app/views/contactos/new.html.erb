@@ -1,5 +1,11 @@
 <br><br><br><br><br>
 <div align="center"><h2>Contactanos</h2></div>
-
+    <script type="text/javascript">
+    // ROLES
+    <% if current_usuario.role == "Administrador" %>
+    console.log("RESTRICTED");
+    window.location.href="/unauthorized"
+    <% end %>
+</script>    
 <%= render 'form' %>
 <%= link_to 'Atrás', root_path %>

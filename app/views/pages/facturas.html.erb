@@ -162,6 +162,7 @@
         }        
     </style>
 </head>
+
 <body style="overflow:hidden;"><br><br><br><br>
 <% if usuario_signed_in? %>
   <div id="lst_fac" style="width:100%;">
@@ -188,6 +189,13 @@
   <% end %>
   <br>
     <script type="text/javascript">
+    // ROLES
+    <% if current_usuario.role != "Cliente" %>
+    console.log("RESTRICTED");
+    document.getElementById("lst_fac").remove();
+    window.location.href="/unauthorized"
+    <% end %>
+    // ROLES
     var flagJQ = false;
         $(document).ready( function() {
             if (document.getElementById('lst_fac') != null && flagJQ == false) {

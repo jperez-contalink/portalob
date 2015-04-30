@@ -20,7 +20,7 @@
 <div id="alert_limite"></div><div id="alert_correo"></div>
  <form accept-charset="UTF-8" action="/registro" method="POST" onsubmit="return Validacion()">
   <div width="50%" style="padding-left:18%;padding-right:18%;">
-	<div class="form-group">
+	<div class="form-group" id="form_registro">
 		<br><strong>Nombre</strong><br>
 		<input type="text" id="txtNombre" name="txtNombre" class="form-control"/>
 		<br><strong>RFC</strong><br>
@@ -37,6 +37,13 @@
 </form>
 </body>
 <script>
+// ROLES
+<% if current_usuario.isadmin != true %>
+	console.log("RESTRICTED");
+	document.getElementById("form_registro").remove(); 
+	window.location.href="/unauthorized"
+<% end %>
+// ROLES        
 function Validacion() {
 	document.getElementById("alert_limite").innerHTML = "";
 	var nombre = document.getElementById("txtNombre").value;

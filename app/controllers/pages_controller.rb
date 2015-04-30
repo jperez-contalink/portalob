@@ -1,4 +1,8 @@
 class PagesController < ApplicationController
+	  #alias_method :current_user, :current_usuario
+	  #load_and_authorize_resource
+	  #authorize_resource :class => true
+
 def home
         if current_usuario
             redirect_to estadosdecuenta_path
@@ -94,6 +98,12 @@ def success_order
 end	
 
 def facturas
+	# cancan lo necesita?
+end	
+
+def cobranza
+	# cancan lo necesita?	
 end
+
 end
 

@@ -91,30 +91,56 @@
                 <div style="border:1px solid transparent;padding-left:2%;"><strong>Gestión de usuarios</strong></div>
               </a></li>
             <% end %>
-            <li><a href="/usuarios/edit.<%= current_usuario.id %>">
-              <div style="float:left;border:0px solid black;" class="gn-icon imgCuenta"></div>
-              <div style="border:1px solid transparent;padding-left:2%;"><strong>Mi Cuenta</strong></div>
-            </a></li>
-            <li><a href="/estadosdecuenta">
-              <div style="float:left;border:0px solid black;" class="gn-icon imgEdoCta"></div>
-              <div style="border:1px solid transparent;padding-left:2%;"><strong>Estado de Cuenta</strong></div>
-            </a></li>
-            <li><a href="/facturas">
-              <div style="float:left;border:0px solid black;" class="gn-icon imgFacturas"></div>
-              <div style="border:1px solid transparent;padding-left:2%;"><strong>Mis Facturas</strong></div>
-            </a></li>
-            <li><a href="/catalogoproductos">
-              <div style="float:left;border:0px solid black;" class="gn-icon imgTest"></div>
-              <div style="border:1px solid transparent;padding-left:2%;"><strong>Cátalogo de Productos</strong></div>
-            </a></li>            
-            <li><a href="/success_order">
-              <div style="float:left;border:0px solid black;" class="gn-icon imgTest"></div>
-              <div style="border:1px solid transparent;padding-left:2%;"><strong>Mis Pedidos</strong></div>
-            </a></li>    
-            <li><a href="/contactos/new">
-              <div style="float:left;border:0px solid black;" class="gn-icon imgContacto"></div>
-              <div style="border:1px solid transparent;padding-left:2%;"><strong>Contacto</strong></div>
-            </a></li>                                
+            <% if current_usuario.role == "Administrador" %>
+              <li><a href="/usuarios/edit.<%= current_usuario.id %>">
+                <div style="float:left;border:0px solid black;" class="gn-icon imgCuenta"></div>
+                <div style="border:1px solid transparent;padding-left:2%;"><strong>Mi Cuenta</strong></div>
+              </a></li>              
+            <% end %>
+            <!-- OPCIONES PARA USUARIOS -->
+            <% if current_usuario.role == "Cliente" %>
+              <li><a href="/usuarios/edit.<%= current_usuario.id %>">
+                <div style="float:left;border:0px solid black;" class="gn-icon imgCuenta"></div>
+                <div style="border:1px solid transparent;padding-left:2%;"><strong>Mi Cuenta</strong></div>
+              </a></li>
+              <li><a href="/estadosdecuenta">
+                <div style="float:left;border:0px solid black;" class="gn-icon imgEdoCta"></div>
+                <div style="border:1px solid transparent;padding-left:2%;"><strong>Estado de Cuenta</strong></div>
+              </a></li>
+              <li><a href="/facturas">
+                <div style="float:left;border:0px solid black;" class="gn-icon imgFacturas"></div>
+                <div style="border:1px solid transparent;padding-left:2%;"><strong>Mis Facturas</strong></div>
+              </a></li>
+              <li><a href="/catalogoproductos">
+                <div style="float:left;border:0px solid black;" class="gn-icon imgTest"></div>
+                <div style="border:1px solid transparent;padding-left:2%;"><strong>Cátalogo de Productos</strong></div>
+              </a></li>            
+              <li><a href="/success_order">
+                <div style="float:left;border:0px solid black;" class="gn-icon imgTest"></div>
+                <div style="border:1px solid transparent;padding-left:2%;"><strong>Mis Pedidos</strong></div>
+              </a></li>    
+              <li><a href="/contactos/new">
+                <div style="float:left;border:0px solid black;" class="gn-icon imgContacto"></div>
+                <div style="border:1px solid transparent;padding-left:2%;"><strong>Contacto</strong></div>
+              </a></li>                            
+            <% end %>    
+            <!-- OPCIONES PARA VENDEDORES -->
+            <% if current_usuario.role == "Vendedor" %>
+              <li><a href="/usuarios/edit.<%= current_usuario.id %>">
+                <div style="float:left;border:0px solid black;" class="gn-icon imgCuenta"></div>
+                <div style="border:1px solid transparent;padding-left:2%;"><strong>Mi Cuenta</strong></div>
+              </a></li>
+              <!-- NUEVA VENTANA DE CREAR PEDIDOS VENDEDOR-->            
+              <li><a href="/facturas">
+                <div style="float:left;border:0px solid black;" class="gn-icon imgFacturas"></div>
+                <div style="border:1px solid transparent;padding-left:2%;"><strong>Crear Pedido</strong></div>
+              </a></li>
+              <!-- NUEVA VENTANA DE COBRANZA VENDEDOR-->            
+              <li><a href="/cobranza">
+                <div style="float:left;border:0px solid black;" class="gn-icon imgFacturas"></div>
+                <div style="border:1px solid transparent;padding-left:2%;"><strong>Cobranza</strong></div>
+              </a></li>
+            <% end %>
             </ul> 
             </div><!-- /gn-scroller -->
           </nav>
@@ -126,14 +152,12 @@
         <li><a href="/usuarios/sign_in">Extranet</a></li>
       <% end %>
         <li><ul class="company-social">
-          <!--<li class="social-facebook"><a href="#" target="_blank"><i class="fa fa-facebook"></i></a></li>
-          <li class="social-twitter"><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
-          <li class="social-dribble"><a href="#" target="_blank"><i class="fa fa-dribbble"></i></a></li>
-          <li class="social-google"><a href="#" target="_blank"><i class="fa fa-google-plus"></i></a></li>-->
           <% if usuario_signed_in? %>
-            <li><%= link_to  carrito_path do %>
-              <i class="glyphicon glyphicon-shopping-cart"></i><% end %>
-            </li>
+            <% if current_usuario.role == "Cliente" %>
+              <li><%= link_to  carrito_path do %>
+                <i class="glyphicon glyphicon-shopping-cart"></i><% end %>
+              </li>              
+            <% end %>
             <li><%= link_to  destroy_usuario_session_path, class: "social-google", method: :delete do %>
               <i class="glyphicon glyphicon-log-out"></i><% end %>
             </li>

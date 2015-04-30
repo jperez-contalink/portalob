@@ -121,6 +121,13 @@
 <!-- /api/v1/pedidosobs -->
 <script type="text/javascript">
 	$( document ).ready(function() {
+        // ROLES
+        <% if current_usuario.role != "Cliente" %>
+        console.log("RESTRICTED");
+        document.getElementById("loader-wrapper").remove(); 
+        window.location.href="/unauthorized"
+        <% end %>
+        // ROLES        
         console.log( "ORDER SUCCESS" );
 	    var pedido = "<%= params[:pedido_id]%>";
 	    var Orden = orderContructor();

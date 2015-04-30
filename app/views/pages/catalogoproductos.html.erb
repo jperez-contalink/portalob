@@ -176,6 +176,13 @@
   </div>
 
   <script type="text/javascript">
+  // ROLES
+  <% if current_usuario.role != "Cliente" %>
+  console.log("RESTRICTED");
+  document.getElementById("cat_pro").remove();
+  window.location.href="/unauthorized"
+  <% end %>
+  // ROLES  
   var allData = {};
   var filterData = {};
   var allPrice = {};

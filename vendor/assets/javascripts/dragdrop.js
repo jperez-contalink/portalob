@@ -179,6 +179,8 @@
 	Draggable.prototype.onDragStart = function( instance, event, pointer ) {
 		// Click inicial
 		this.options.onStart();
+		console.log("$> STARJULIO");
+		$("body").scrollTop(0);
 
 		// save left & top
 		this.position = { left : instance.position.x, top : instance.position.y };
@@ -196,7 +198,6 @@
 		// Arrastrando
 		//callback
 		this.options.onDrag();
-
 		// scroll page if at viewport's edge
 		if( this.options.scroll ) {
 			this.scrollPage( instance.element );
@@ -252,6 +253,7 @@
 			withAnimation = false;
 			// Agregar el documento a documentos incluidos
 			console.log("CHCK ADD");
+
 			if (instance.element.className.indexOf("grid__item") > -1) {
 				console.log("Si no ha sido agregado agrega el documento arrastrado.");
 				var vals = document.getElementById("allinclused").value;

@@ -6,23 +6,25 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>CBNZA</title>
 		<style>
-		body {
-			/*background: #2f3238;*/
-			color: #fff;
-			font-weight: 400;
-			font-size: 1em;
-			/*font-family: 'Raleway', Arial, sans-serif;*/
-		}
+			body {
+				/*background: #2f3238;*/
+				color: #fff;
+				color:black;
+				font-weight: 400;
+				font-size: 1em;
+				/*font-family: 'Raleway', Arial, sans-serif;*/
+			}
 
-		a {
-			/color: #cc6055;
-			text-decoration: none;
-			outline: none;
-		}
+			a {
+				color:white;
+				text-decoration: none;
+				outline: none;
+			}
 
-		a:hover, a:focus {
-			color: #fff;
-		}
+			a:hover, a:focus {
+				color: #fff;
+				color:black;
+			}
 			#loader-wrapper {
 			  background-color:white;
 			  position: fixed;
@@ -225,6 +227,72 @@
 			.deleteCaptura a {
 				color:#c0392b;
 			}
+			/* MOVIL */
+			.addDocnoM {
+				width: 100%;
+				background-color: transparent;
+				float:left;
+				padding: .4% 1% .4% 1%;
+				margin-bottom: .2%;
+				text-align: left;
+				font-weight: bold;
+				font-size: 180%;
+				border-bottom: 0px solid #7f8c8d;
+			}
+
+			.addTotalM {
+				width: 100%;
+				background-color: transparent;
+				float:left;
+				padding: .4% 1% .4% 1%;
+				margin-bottom: .2%;
+				text-align: right;
+				font-weight: bold;
+				font-size: 180%;
+				border-bottom: 0px solid #7f8c8d;
+			}
+			.addPendienteM {
+				width: 100%;
+				background-color: transparent;
+				float:left;
+				padding: .4% 1% .4% 1%;
+				margin-bottom: .2%;
+				text-align: right;
+				font-weight: bold;
+				font-size: 180%;
+				border-bottom: 0px solid #7f8c8d;
+			}
+			.addCapturaM {
+				width: 100%;
+				background-color: transparent;
+				float:left;
+				margin-bottom: .2%;
+				text-align: right;
+				font-weight: bold;
+				border-bottom: 0px solid #7f8c8d;
+			}			
+			.addCapturaM input[type=text] {
+				width: 100%;
+				height: 100%;
+			    margin: 0%;
+				background-color: #ecf0f1;
+				text-align: right;
+				font-size: 100%;
+				border-radius: 5%;
+			}	
+			.deleteCapturaM {
+				width: 1%;
+				background-color: transparent;
+				float:left;
+				margin-bottom: .2%;
+				text-align: right;
+				font-weight: bold;
+				font-size: 180%;
+				color:red;
+			}
+			.deleteCapturaM a {
+				color:#c0392b;
+			}
 			/*	GRID DOCUMENTOS	*/	
 			.montos_div {
 				border:0px solid black;
@@ -320,16 +388,31 @@
 				width: 100%;
 				color:white;
 			}
+			/*			METODOS DE PAGO 		 */
+			.listadoAgregadosMetodos a {
+				color:red;
+			}
+			.listadoAgregadosMetodos input[type=text] {
+				color:red;
+				width: 100%;
+				box-sizing: border-box;
+				-webkit-box-sizing:border-box;
+				-moz-box-sizing: border-box;
+			}
+			.listadoAgregadosMetodos input[type=button] {
+				width: 100%;
+			}
 		</style>
 	</head>
 	<body bgcolor="white">
 		<!-- LISTADO DE DOCUMENTOS AGREGADOS -->
 		<div id="proc-area_cbza" class="proc-area_cbza">
 			<div id="listadoAgregados" class="listadoAgregados" align="center"></div>
+			<div id="listadoAgregadosMetodos" class="listadoAgregados" style="display:none;" align="center"></div>
 		</div>
 		<!-- LISTADO DE DOCUMENTOS AGREGADOS -->
 		<input type="hidden" id="allinclused">
-		<div class="container">
+		<div class="container" id="container">
 			<div class="content" style="background-color:transparent;">
 				<br><br><br><br>
 				<div  align="right">
@@ -365,6 +448,13 @@
 		<!--<script src="js/draggabilly.pkgd.min.js"></script>
 		<script src="js/dragdrop.js"></script>-->
 		<script>
+		// ROLES
+		<% if current_usuario.role  != "Vendedor" %>
+			console.log("RESTRICTED");
+			document.getElementById("container").remove(); 
+			window.location.href="/unauthorized"
+		<% end %>
+		// ROLES     		
 		allDocs = {};
 		documentosIncluidos = {};
 		sideShow = false;
@@ -458,7 +548,7 @@
 			});				
 
 			$(document).on('click', '.delete_item_grid', function (e) {
-				console.log("ELIMINAR GRID!!", e);
+				console.log("ELIMINAR GRID!!", (e.target.id).replace("_dlt", ""));
 				e.preventDefault();
 				//var strTarget = (e.target.id).split("_");
 				//var idElement = strTarget[0];
@@ -466,6 +556,13 @@
 				var newDocs = [];
 				if (document.getElementById(idElement + "_agregado") != null) {
 					document.getElementById(idElement + "_agregado").style.display = "none";
+
+
+
+				if (movil) {
+					var row = document.getElementById('tab_agregados').rows[idElement + "_tr_ad"]; // idx passed
+					if (row) row.style.display=(row.style.display=='none')?'':'none'; 
+				}
 				}
 				if (document.getElementById(idElement + "_added") != null) {
 					document.getElementById(idElement + "_added").style.display = "none";
@@ -473,11 +570,11 @@
 				var strDocs = document.getElementById('allinclused').value;
 				var newStrDocs = "";
 				var Docs = strDocs.split("_");
-					for (var j=0;j<Docs.length;j++) {
-						if (Docs[j] != idElement && Docs[j] != "") {
-							newStrDocs += Docs[j] + "_";
-						}
+				for (var j=0;j<Docs.length;j++) {
+					if (Docs[j] != idElement && Docs[j] != "") {
+						newStrDocs += Docs[j] + "_";
 					}
+				}
 				// Eliminear del json
 				for (var k=0;k<documentosIncluidos.documentos.length;k++) {
 					if (documentosIncluidos.documentos[k].Documento_ID != idElement) {
@@ -505,7 +602,11 @@
 			$(document).on('click', '.procesar_documento', function (e) {
 				console.log("PROCESAR!!");
 				e.preventDefault();
-				procesarDocumentos();
+				if (movil) {
+					procesarDocumentosM();
+				} else {
+					procesarDocumentos();
+				}
 			});			
 			$(document).on('change', '.qty_change', function (e) {
 	    		e.preventDefault();		   
@@ -537,8 +638,6 @@
 		    		console.log("Total ZERO IN : " + totalCobranzaAplicar);
 		    	}				
 				if (totalCobranzaAplicar < 0 || documentosIncluidos.documentos.length == 0) {
-
-
 					if (totalCobranzaAplicar < 0) {
 						console.log("La cobranza es negativa, no procede.");
 						document.getElementById("alert_div").innerHTML = buildAlertError("El monto a aplicar es negativo", "El monto total no puede ser negativo, realiza algunos ajustes y vuelve a intentarlo.");
@@ -548,6 +647,23 @@
 						document.getElementById("alert_div").innerHTML = buildAlertWarning("No hay nada que procesar", "Parece que no has agregado ningún plan de cobro, agrega algunos y vuelve a intentarlo.");
 					}					
 				} else {
+					// Métodos de pago
+					// Ocultar panel de documentos
+					document.getElementById("listadoAgregados").style.display = "none";
+					document.getElementById("listadoAgregadosMetodos").style.display = "block";
+					var metodosdepago = '<h2 id="metodoMontoAplicar" style="font-size:350%;font-weight:bold;">Monto a aplicar: $' + separaMiles(totalCobranzaAplicar.toFixed(2)) + '</h2><br><br>';
+					metodosdepago += '<table id="tabMetodosPago" width="60%" align="center" style="border:0px solid black;">';
+					// Dropdown metodos de pago
+					metodosdepago += '<tr><td width="33%"><select style="width:100%;" class="btn btn-default dropdown-toggle hover_clean" type="button" id="dropdown_metodo" data-toggle="dropdown" aria-expanded="true"><option value="1">EFECTIVO</option><option value="2">TARJETA</option></select></td>';
+					// Input text cantidad
+					metodosdepago += '<td width="33%"><input type="text" value="' + totalCobranzaAplicar.toFixed(2) + '" id="monto_metodo" style="width:100%;height:100%;margin:0;align-text:right;"/></td>';
+					// botón agregar
+					metodosdepago += '<td width="33%"><input type="button" onclick="agregarMetodoPago();"  style="width:100%;height:100%;margin:0;" value="agregar"/></td></tr>';
+					metodosdepago += '</table><br>';
+					document.getElementById("listadoAgregadosMetodos").innerHTML = metodosdepago;
+					// Mostrr Dropdown de Métodos
+
+					/*
 		        	// SERVICIO DE ESCRITURA DE COBRO
 			        $.ajax({
 			                type:"GET",
@@ -583,6 +699,7 @@
 			                document.getElementById("grid").innerHTML = mensajeError;
 			                }
 			        });	
+					*/
 				}				
 
 			});					    
@@ -593,15 +710,25 @@
 				var deudaTotal = 0;
 				var jsonObject = json.facturas;	
 				var lista = '<div id="fac_div" style="width:50%;float:left;">';
+				// FACTURAS
 			    for (var i=0;i<jsonObject.length;i++) {
-			    	lista += '<div class="grid__item colorfac" id="' + jsonObject[i].Documento_ID + '" style="position:relative;"><div class="itemHd">' + jsonObject[i].Documentno + '<br><p>' + jsonObject[i].Dateinvoiced + '</p></div><div class="itemImg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></div><div class="itemFoot">$' + separaMiles(parseFloat(jsonObject[i].Pendiente).toFixed(2)) + '</div></div>';
+			    	if (movil) {
+			    		lista += '<div class="grid__item colorfac" id="' + jsonObject[i].Documento_ID + '" style="position:relative;"><div class="itemHd" style="font-size:130%;">' + jsonObject[i].Documentno + '<br><p>' + jsonObject[i].Dateinvoiced + '</p></div><div class="itemImg"></div><div class="itemFoot" style="font-size:110%;padding-top:15%;">$' + separaMiles(parseFloat(jsonObject[i].Pendiente).toFixed(2)) + '</div></div>';
+			    	} else {
+			    		lista += '<div class="grid__item colorfac" id="' + jsonObject[i].Documento_ID + '" style="position:relative;"><div class="itemHd">' + jsonObject[i].Documentno + '<br><p>' + jsonObject[i].Dateinvoiced + '</p></div><div class="itemImg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></div><div class="itemFoot">$' + separaMiles(parseFloat(jsonObject[i].Pendiente).toFixed(2)) + '</div></div>';
+			    	}
 			    	totalFacturas = totalFacturas + parseFloat(jsonObject[i].Pendiente);
 			    }			
+			    // NC
 			    lista += "</div>";
 				var jsonObject = json.notascredito;	
 				lista += '<div id="ncc_div" style="width:50%;float:left;">';
 			    for (var i=0;i<jsonObject.length;i++) {
-			    	lista += '<div class="grid__item colorncc" id="' + jsonObject[i].Documento_ID + '" style="position:relative"><div class="itemHd">' + jsonObject[i].Documentno + '<br><p>' + jsonObject[i].Dateinvoiced + '</p></div><div class="itemImg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></div><div class="itemFoot">$' + separaMiles(parseFloat(jsonObject[i].Pendiente).toFixed(2)) + '</div></div>';
+			    	if (movil) {
+			    		lista += '<div class="grid__item colorncc" id="' + jsonObject[i].Documento_ID + '" style="position:relative"><div class="itemHd" style="font-size:120%;">' + jsonObject[i].Documentno + '<br><p>' + jsonObject[i].Dateinvoiced + '</p></div><div class="itemImg"></div><div class="itemFoot"  style="font-size:100%;padding-top:15%;">$' + separaMiles(parseFloat(jsonObject[i].Pendiente).toFixed(2)) + '</div></div>';
+			    	} else {
+			    		lista += '<div class="grid__item colorncc" id="' + jsonObject[i].Documento_ID + '" style="position:relative"><div class="itemHd">' + jsonObject[i].Documentno + '<br><p>' + jsonObject[i].Dateinvoiced + '</p></div><div class="itemImg"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></div><div class="itemFoot">$' + separaMiles(parseFloat(jsonObject[i].Pendiente).toFixed(2)) + '</div></div>';
+			    	}
 			    	totalNotasCredito = totalNotasCredito + parseFloat(jsonObject[i].Pendiente);
 			    }			
 			    lista += "</div>";			    
@@ -611,11 +738,6 @@
 			   	// Imprimir Totales
 			   	deudaTotal = totalFacturas + totalNotasCredito;
 			   	if (movil) {
-			   		/*var montos = '<div class="totalFacturasM" id="totalFacturas">Facturas |<h2>$' + separaMiles(totalFacturas.toFixed(2)) + '</h2></div>';
-				   	montos += '<div class="totalNotasCreditoM" id="totalNotasCredito">Notas de crédito | <h2>$' + separaMiles(totalNotasCredito.toFixed(2)) + '</h2></div>';
-				   	montos += '<div class="deudaTotalM" id="deudaTotal">Usted debe | <h2>$' + separaMiles(deudaTotal.toFixed(2)) + '</h2></div>';
-				   	montos += '<div class="cobranzaAplicadaM" id="cobranzaAplicada">Aplicar | <h2>$ 0.00</h2></div>';	*/
-
 				   	var montos = '<br><table width="100%">';
 				   	montos += '<tr><td class="tdHM">Facturas</td><td class="tdHM">Notas de crédito</td></tr>';
 				   	montos += '<tr><td class="tdRM"><div class="totalFacturas" id="totalFacturas">$' + separaMiles(totalFacturas.toFixed(2)) + '</div></td><td class="tdRM"><div class="totalNotasCredito" id="totalNotasCredito">$' + separaMiles(totalNotasCredito.toFixed(2)) + '</div></td></tr>';
@@ -782,7 +904,61 @@
 
 				document.getElementById("listadoAgregados").innerHTML = listaAdd;
 				document.getElementById("proc-area_cbza").style.display = "block";
-			}			
+			}	
+			function procesarDocumentosM() {
+				console.log("PROCESAR > ", documentosIncluidos);
+				document.body.style.overflowY = "hidden";
+				var indexRow = 1;
+				var montoTotal = 0;
+				var listaAdd = '<div id="alert_div" class="alert_div"></div><table id="tab_agregados" width="100%"><tr><td class="tdHM" style="width:25%;"><div class="addDocnoM" style="background-color:#3498db;color:white;font-size:100%;">Doc.</div></td><td class="tdHM" style="width:25%;"><div class="addTotalM" style="background-color:#3498db;color:white;font-size:100%;">Total</div></td><td class="tdHM" style="width:25%;"><div class="addPendienteM" style="background-color:#3498db;color:white;font-size:100%;">Pend.</div></td><td class="tdHM" style="width:25%;"><div class="addPendienteM" style="background-color:#3498db;color:white;font-size:100%;">Aplicar</div></td></tr>';
+				if (documentosIncluidos.documentos == undefined) {
+					console.log("No hay documentos incluidos");
+					document.getElementById('h_alert_div').innerHTML = buildAlertWarning("No hay documentos incluidos.", "Parece que no has agregado ningún documento, prueba agregando algunos y vuelve a intentarlo.");
+				} else {
+					if (documentosIncluidos.documentos.length == 0) {
+						console.log("No hay documentos incluidos");
+						document.getElementById('h_alert_div').innerHTML = buildAlertWarning("No hay documentos incluidos.", "Parece que no has agregado ningún documento, prueba agregando algunos y vuelve a intentarlo.");
+					}
+
+				}
+				for (var k=0;k<documentosIncluidos.documentos.length;k++) {
+					var style = "";
+					if (indexRow % 2 != 0) {
+						style = 'style="font-size:100%;color:black;background-color:#ecf0f1;"';
+					} else {
+						style = 'style="font-size:100%;color:black;"';
+					}
+					listaAdd += '<div id="' + documentosIncluidos.documentos[k].Documento_ID + '_agregado" class="itemAgregado">';
+					// DocNo
+					listaAdd += '<tr id="' + documentosIncluidos.documentos[k].Documento_ID + '_tr_ad" ><td id="' + documentosIncluidos.documentos[k].Documento_ID + '_td_doc" class="tdHM" style="width:25%;"><div class="addDocnoM" ' + style + '>' + documentosIncluidos.documentos[k].Documentno + '</div></td>';
+					// Fecha
+					//listaAdd += '<div class="addFecha" ' + style + '>' + documentosIncluidos.documentos[k].Dateinvoiced + '</div>';
+					// Total
+					listaAdd += '<td id="' + documentosIncluidos.documentos[k].Documento_ID + '_td_tot" class="tdHM" style="width:25%;"><div class="addTotalM" ' + style + '>$' + documentosIncluidos.documentos[k].Grandtotal + '</div></td>';
+					// Pendiente
+					listaAdd += '<td id="' + documentosIncluidos.documentos[k].Documento_ID + '_td_pen" class="tdHM" style="width:25%;"><div class="addPendienteM" ' + style + '>$' + documentosIncluidos.documentos[k].Pendiente + '</div></td>';
+					montoTotal = montoTotal + parseFloat(documentosIncluidos.documentos[k].Aplicar);
+					// Pendiente Captura
+					listaAdd += '<td id="' + documentosIncluidos.documentos[k].Documento_ID + '_td_cap" class="tdHM" style="width:20%;"><div class="addCapturaM" ' + style + '><input type="text" value="' + documentosIncluidos.documentos[k].Aplicar + '" id="' + documentosIncluidos.documentos[k].Documento_ID + '_text" class="qty_change"/></div></td>';
+					// Agregar el siguiente para botón de eliminar
+					listaAdd += '<td id="' + documentosIncluidos.documentos[k].Documento_ID + '_td_del" class="tdHM" style="width:5%;><div class="deleteCaptura"><a class="delete_item_grid"><span id="' + documentosIncluidos.documentos[k].Documento_ID + '_dlt" class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></div></td></tr>';
+					listaAdd += '</div>';
+					indexRow++;
+				}
+
+		    	if (montoTotal > -0.01 && montoTotal < 0) {
+		    		montoTotal = 0;
+		    	}
+		    	// totales
+				listaAdd += '<tr align="right"><td  colspan="4" style="100%;"><div class="addPendiente" style="padding-top:5%;font-size:250%;font-weight:bold;color:black;width:100%;" id="montoTotalGrid">$' + separaMiles(montoTotal.toFixed(2)) + '</div></td></tr>';
+
+				listaAdd += '</table>';
+				// botones
+				listaAdd += '<div  align="right" style="padding-right:11%;padding-top:10%;"><button type="button" onclick="salirDock()" class="btn btn-default hover_clean" aria-label="Left Align"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;Cancelar</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-default hover_clean submit_documentos" aria-label="Left Align"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Aplicar</button></div>';
+
+				document.getElementById("listadoAgregados").innerHTML = listaAdd;
+				document.getElementById("proc-area_cbza").style.display = "block";
+			}					
 	    })();
 			function getDocumentNo(id) {
 				console.log("GET DOC NO", allDocs);
@@ -845,8 +1021,6 @@
 					for (var j=0;j<Docs.length;j++) {
 						if (Docs[j] == allDocs.rows[i].Documento_ID) {
 							var row = {};
-							//docAdds.push(allDocs.rows[i]);
-							// En lugar de empujar todo el registro recontruyelo y obten de id_text el valor de pendiente y aplicado. y ne function de la diferencia de este y grandtotal y el docbasetype puede decinir si la clase es :selectedItem o :parcialselecteditem
 							row.Documento_ID	= allDocs.rows[i].Documento_ID;
 					        row.Totallines 		= allDocs.rows[i].Totallines;
 					        // Grandtotal es el amount  de fin_payment_scheduledetail
@@ -869,10 +1043,8 @@
 					        docAdds.push(row);
 							montoAplicado = montoAplicado + allDocs.rows[i].Aplicar;
 							var gridItem = document.getElementById(allDocs.rows[i].Documento_ID);
-//					        if (row.Docbasetype == "ARI" && (parseFloat(row.Grandtotal) > parseFloat(row.Pendiente))) {
 							if (row.Docbasetype == "ARI" && (parseFloat(row.Pendiente) > parseFloat(row.Aplicar))) {
 					        	gridItem.className = 'grid__item parcialSelectedItem';					        
-					        //} else if (row.Docbasetype == "ARC" && (parseFloat(row.Grandtotal) < parseFloat(row.Pendiente))) {
 					        } else if (row.Docbasetype == "ARC" && (parseFloat(row.Pendiente) < parseFloat(row.Aplicar))) {
 								gridItem.className = 'grid__item parcialSelectedItem';					        
 					        }  else {
@@ -885,7 +1057,11 @@
 			    var data = {
 			                documentos: docAdds
 			            };
-				document.getElementById("cobranzaAplicada").innerHTML = 'Aplicar | <h2>$' + separaMiles(montoAplicado.toFixed(2)) + '</h2>';
+			    if (movil) {
+			    	document.getElementById("cobranzaAplicada").innerHTML = '$' + separaMiles(montoAplicado.toFixed(2));
+			    } else {
+					document.getElementById("cobranzaAplicada").innerHTML = 'Aplicar | <h2>$' + separaMiles(montoAplicado.toFixed(2)) + '</h2>';
+				}
 			  	documentosIncluidos = data;
 		    	// Recorrer alldocs.rows
 		    	// encontrar el id y meterlo a un nuevo json
@@ -898,7 +1074,11 @@
 		    	if (document.getElementById("montoTotalGrid") != null) {
 		    		document.getElementById("montoTotalGrid").innerHTML = '$' + separaMiles(montoAplicado.toFixed(2));
 		    	}
-		    	document.getElementById("cobranzaAplicada").innerHTML = 'Aplicar | <h2>$' + separaMiles(montoAplicado.toFixed(2) + "</h2>");
+		    	if (movil) {
+		    		document.getElementById("cobranzaAplicada").innerHTML = '$' + separaMiles(montoAplicado.toFixed(2));
+		    	} else {
+		    		document.getElementById("cobranzaAplicada").innerHTML = 'Aplicar | <h2>$' + separaMiles(montoAplicado.toFixed(2) + "</h2>");
+		    	}
 		    }
 		    function cambiarCantidad(id, valor) {
 		    	console.log("Cambiar Cantidad: ", documentosIncluidos);
@@ -989,7 +1169,53 @@
 		    	//document.getElementById("montoTotalGrid").innerHTML = "$" + separaMiles(parseFloat(total));
 		    	document.getElementById("montoTotalGrid").innerHTML = "$" + separaMiles(total);
 		    	console.log("Reasigna Total | 1");
-		    	document.getElementById("cobranzaAplicada").innerHTML = 'Aplicar | <h2>$' + separaMiles(total) + "</h2>";
+		    	if (movil) {
+		    		document.getElementById("cobranzaAplicada").innerHTML = '$' + separaMiles(total);
+		    	} else {
+		    		document.getElementById("cobranzaAplicada").innerHTML = 'Aplicar | <h2>$' + separaMiles(total) + "</h2>";
+		    	}
+
+		    }
+		    function agregarMetodoPago() {
+		    	console.log("Agregar Método de pago.");
+		    	// leer metodo de pago (id/nombre) y cantidad ($ cantidad)
+		    	var metodo = document.getElementById('dropdown_metodo').value;
+		    	var monto = document.getElementById('monto_metodo').value;
+		    	var length = document.getElementById("tabMetodosPago").rows.length;
+		    	console.log("$> Agregar $" + monto + " del método " + metodo);		    	
+		    	console.log(monto);
+		    	if (monto != "") {
+			    	// Agregar los valores seleccionados a la tabla
+					var tabla = document.getElementById("tabMetodosPago");
+					var row = tabla.insertRow(length);
+					var tdMetodo = row.insertCell(0);
+					var tdMonto = row.insertCell(1);
+					var tdDrop = row.insertCell(2);
+					tdMetodo.innerHTML = "M: " + metodo;
+					tdMonto.innerHTML = "$" + monto;
+					tdDrop.innerHTML = '<a style="color:red;" class="eliminar-metodo">Eliminar</a>';
+					// Estilizar
+					tdMetodo.style.fontSize = "200%";
+					tdMetodo.style.fontWeight = "bold";
+					tdMetodo.style.color = "#2c3e50";
+					tdMonto.style.fontSize = "200%";
+					tdMonto.style.fontWeight = "bold";
+					tdMonto.style.color = "#2c3e50";
+					tdMonto.style.textAlign = "right";
+					tdDrop.style.textAlign = "right";
+					tdMonto.style.paddingTop = "1%";
+					tdMetodo.style.paddingTop = "1%";
+					tdDrop.style.paddingTop = "1%";
+					// actualizar el monto a aplicar
+					var montoAplicar = document.getElementById("metodoMontoAplicar").innerHTML;
+					montoAplicar = montoAplicar.replace("Monto a aplicar: $", "");
+					montoAplicar = montoAplicar.replace(",", "");
+					console.log("Restar " + montoAplicar + " - " + monto);
+					var nuevoMonto = parseFloat(montoAplicar) - parseFloat(monto);
+					console.log("%> Nuevo monto: " + nuevoMonto);
+					document.getElementById("metodoMontoAplicar").innerHTML = "Monto a aplicar: $" + separaMiles(nuevoMonto.toFixed(2));
+					document.getElementById('monto_metodo').value = nuevoMonto.toFixed(2);
+		    	}
 
 		    }
 			function buildAlertWarning(titulo, mensaje){

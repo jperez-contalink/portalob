@@ -60,6 +60,7 @@ GEM
       columnize (~> 0.8)
       debugger-linecache (~> 1.2)
       slop (~> 3.6)
+    cancan (1.6.10)
     chilkat (9.5.0.47)
     climate_control (0.0.3)
       activesupport (>= 3.0)
@@ -216,6 +217,7 @@ DEPENDENCIES
   aws-sdk (~> 2.0.18.pre)
   bootstrap-sass
   byebug
+  cancan
   chilkat (~> 9.5.0.47)
   coffee-rails (~> 4.1.0)
   devise

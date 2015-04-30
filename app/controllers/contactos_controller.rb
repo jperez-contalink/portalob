@@ -1,4 +1,7 @@
 class ContactosController < ApplicationController
+  #alias_method :current_user, :current_usuario
+  #load_and_authorize_resource
+  
   before_action :set_contacto, only: [:show, :edit, :update, :destroy]
 
   # GET /contactos
