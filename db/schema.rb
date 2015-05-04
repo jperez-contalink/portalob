@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150428212348) do
+ActiveRecord::Schema.define(version: 20150430202750) do
 
   create_table "aplicarcobranzas", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -128,6 +128,7 @@ ActiveRecord::Schema.define(version: 20150428212348) do
     t.string   "correo"
     t.boolean  "isadmin"
     t.string   "role"
+    t.string   "partner_id"
   end
 
   add_index "usuarios", ["email"], name: "index_usuarios_on_email", unique: true

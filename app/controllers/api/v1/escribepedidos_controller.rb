@@ -18,7 +18,8 @@ module Api
           end
           puts lineas
           @user = current_usuario
-          order_link = "http://" + @user.empresa.usuariosob + ":" + @user.empresa.passob + "@" + @user.empresa.urlwebservice + "/openbravo/ws/com.tegik.portalob.EscribePedidosPortal?orden_json=" + lineas + "&rfc=" + @user.rfc + "&pedidoid=" +  params[:pedido_id]
+          #order_link = "http://" + @user.empresa.usuariosob + ":" + @user.empresa.passob + "@" + @user.empresa.urlwebservice + "/openbravo/ws/com.tegik.portalob.EscribePedidosPortal?orden_json=" + lineas + "&rfc=" + @user.rfc + "&pedidoid=" +  params[:pedido_id]
+          order_link = "http://" + @user.empresa.usuariosob + ":" + @user.empresa.passob + "@" + @user.empresa.urlwebservice + "/openbravo/ws/com.tegik.portalob.EscribePedidosPortal?orden_json=" + lineas + "&bpuid=" + @user.partner_id + "&pedidoid=" +  params[:pedido_id]
           puts order_link 
           response = RestClient.get order_link
           puts "Actualizar Pedido"

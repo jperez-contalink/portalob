@@ -62,7 +62,29 @@
     padding-top: 3%;
     padding-bottom: 3%;
     content:url(/clip.png);
-  }        
+  }   
+  .imgPedidos {
+    padding-left: 2%;
+    padding-right: 4%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    content:url(/pedidos.png);
+  }   
+  .imgCobranza {
+    padding-left: 2%;
+    padding-right: 4%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    content:url(/cobranza.png);
+  }     
+  .imgUsuarios {
+    padding-left: 2%;
+    padding-right: 4%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    content:url(/usuarios.png);
+  }   
+  /* */     
   .gn-trigger:hover{
     background-color: red;
   }
@@ -87,7 +109,7 @@
             <!-- OPCIONES PARA ADMINISTRADORES-->
             <% if current_usuario.isadmin == true %>
               <li><a href="/registro">
-                <div style="float:left;border:0px solid black;" class="gn-icon imgTest"></div>
+                <div style="float:left;border:0px solid black;" class="gn-icon imgUsuarios"></div>
                 <div style="border:1px solid transparent;padding-left:2%;"><strong>Gestión de usuarios</strong></div>
               </a></li>
             <% end %>
@@ -116,7 +138,7 @@
                 <div style="border:1px solid transparent;padding-left:2%;"><strong>Cátalogo de Productos</strong></div>
               </a></li>            
               <li><a href="/success_order">
-                <div style="float:left;border:0px solid black;" class="gn-icon imgTest"></div>
+                <div style="float:left;border:0px solid black;" class="gn-icon imgPedidos"></div>
                 <div style="border:1px solid transparent;padding-left:2%;"><strong>Mis Pedidos</strong></div>
               </a></li>    
               <li><a href="/contactos/new">
@@ -137,7 +159,7 @@
               </a></li>
               <!-- NUEVA VENTANA DE COBRANZA VENDEDOR-->            
               <li><a href="/cobranza">
-                <div style="float:left;border:0px solid black;" class="gn-icon imgFacturas"></div>
+                <div style="float:left;border:0px solid black;" class="gn-icon imgCobranza"></div>
                 <div style="border:1px solid transparent;padding-left:2%;"><strong>Cobranza</strong></div>
               </a></li>
             <% end %>
