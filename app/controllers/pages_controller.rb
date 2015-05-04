@@ -5,7 +5,12 @@ class PagesController < ApplicationController
 
 def home
         if current_usuario
-            redirect_to estadosdecuenta_path
+        	if current_usuario.role != "Cliente"
+        		redirect_to registro_path
+        	else
+            	redirect_to estadosdecuenta_path
+            end
+            #redirect_to estadosdecuenta_path
         else
         	redirect_to new_usuario_session_path
         end
