@@ -83,7 +83,7 @@ def registro
 			puts "EL CORREO YA EXISTE!"
 			redirect_to registro_path({:estado => "error"})
 		else
-			Usuario.create!({:email => params[:txtCorreo], :password => params[:txtCorreo], :password_confirmation => params[:txtCorreo], :nombre => params[:txtNombre], :rfc => params[:txtRFC], :rfcempresa => params[:hdnRFC], :empresa_id => params[:hdnID], :isadmin => false})
+			Usuario.create!({:email => params[:txtCorreo], :password => params[:txtCorreo], :password_confirmation => params[:txtCorreo], :nombre => params[:txtNombre], :rfc => params[:txtRFC], :rfcempresa => params[:hdnRFC], :empresa_id => params[:hdnID], :isadmin => false, :role => "Cliente"})
 			#redirect_to success_path
 			redirect_to registro_path({:estado => "success"})
 		end
