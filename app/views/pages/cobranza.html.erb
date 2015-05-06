@@ -459,6 +459,15 @@
 		documentosIncluidos = {};
 		sideShow = false;
 		movil = false;
+		metodoTotalAplicar = 0;
+		metodoPagoID = [];
+		metodoPagoName = [];
+		metodoPagoAplicado = [];
+		metodos_pago = {
+			ids: metodoPagoID,
+			nombres: metodoPagoName,
+			aplicados: metodoPagoAplicado
+		};
 		$(document).ready(function() {
 			// Es móvil?
 			var mobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
@@ -478,12 +487,29 @@
 	                allData = jsonConstructor(datox);
 	                allDocs = allData;
 	                buildListado(allData);
+			        $.ajax({
+			                type:"GET",
+			                dataType : 'json',
+			                url: "api/v1/metodopagos",
+			                success: function(datoz){
+			                console.log("SUCCESSMETODOS", datoz);
+			                buildMetodosPago(datoz);
+			            },
+			                error:  function(){ 
+			                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor MÉTODOS DE PAGO.</h3></div>'
+			                document.getElementById("grid").innerHTML = mensajeError;
+			                }
+			        });	                
 	            },
 	                error:  function(){ 
 	                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor LECTURA 1.</h3></div>'
 	                document.getElementById("grid").innerHTML = mensajeError;
 	                }
 	        });
+			$(document).on('click', '.eliminar-metodo', function (e) {
+				console.log("Eliminar método de pago.", e.target.id);
+				eliminarMetodoPago(e.target.id);
+			});
 			$(document).on('click', '.editar_side', function (e) {
 				console.log("Editar");
 				e.preventDefault();
@@ -602,11 +628,22 @@
 			$(document).on('click', '.procesar_documento', function (e) {
 				console.log("PROCESAR!!");
 				e.preventDefault();
-				if (movil) {
-					procesarDocumentosM();
+				console.log("$> " + documentosIncluidos.documentos);
+				if (documentosIncluidos.documentos == undefined) {
+					console.log("No hay nada que procesar2.");
+					document.getElementById("h_alert_div").innerHTML = buildAlertWarning("No hay nada que procesar", "Parece que no has agregado ningún plan de cobro, agrega algunos y vuelve a intentarlo.");
 				} else {
-					procesarDocumentos();
+					if (documentosIncluidos.documentos.length <= 0) {
+						document.getElementById("h_alert_div").innerHTML = buildAlertWarning("No hay nada que procesar", "Parece que no has agregado ningún plan de cobro, agrega algunos y vuelve a intentarlo.");
+					} else {
+						if (movil) {
+							procesarDocumentosM();
+						} else {
+							procesarDocumentos();
+						}											
+					}
 				}
+
 			});			
 			$(document).on('change', '.qty_change', function (e) {
 	    		e.preventDefault();		   
@@ -632,10 +669,8 @@
 					}
 				}
 
-		    	console.log("Total ZERO: " + totalCobranzaAplicar);
 		    	if (totalCobranzaAplicar > -0.01 && totalCobranzaAplicar < 0) {
 		    		totalCobranzaAplicar = 0;
-		    		console.log("Total ZERO IN : " + totalCobranzaAplicar);
 		    	}				
 				if (totalCobranzaAplicar < 0 || documentosIncluidos.documentos.length == 0) {
 					if (totalCobranzaAplicar < 0) {
@@ -643,26 +678,59 @@
 						document.getElementById("alert_div").innerHTML = buildAlertError("El monto a aplicar es negativo", "El monto total no puede ser negativo, realiza algunos ajustes y vuelve a intentarlo.");
 					}
 					if (documentosIncluidos.documentos.length == 0) {
-						console.log("No hay nada que procesar.");
-						document.getElementById("alert_div").innerHTML = buildAlertWarning("No hay nada que procesar", "Parece que no has agregado ningún plan de cobro, agrega algunos y vuelve a intentarlo.");
+							console.log("No hay nada que procesar. open");
+							document.getElementById("alert_div").innerHTML = buildAlertWarning("No hay nada que procesar", "Parece que no has agregado ningún plan de cobro, agrega algunos y vuelve a intentarlo.");							
 					}					
 				} else {
 					// Métodos de pago
 					// Ocultar panel de documentos
 					document.getElementById("listadoAgregados").style.display = "none";
 					document.getElementById("listadoAgregadosMetodos").style.display = "block";
-					var metodosdepago = '<h2 id="metodoMontoAplicar" style="font-size:350%;font-weight:bold;">Monto a aplicar: $' + separaMiles(totalCobranzaAplicar.toFixed(2)) + '</h2><br><br>';
+					// CONSTRUIR LISTADO METODOS DE PAGO
+					var metodosIncluidos = [];
+					var metodosdepago = '<div id="alert_div_m" class="alert_div"></div><h2 style="font-size:350%;font-weight:bold;">Pendiente de aplicar: <h2>';
+					metodosdepago +='<h2 style="font-size:350%;font-weight:bold;color:#c0392b;" id="metodoMontoAplicar" >$' + separaMiles(metodoTotalAplicar.toFixed(2)) + '</h2><br><br>';
 					metodosdepago += '<table id="tabMetodosPago" width="60%" align="center" style="border:0px solid black;">';
 					// Dropdown metodos de pago
-					metodosdepago += '<tr><td width="33%"><select style="width:100%;" class="btn btn-default dropdown-toggle hover_clean" type="button" id="dropdown_metodo" data-toggle="dropdown" aria-expanded="true"><option value="1">EFECTIVO</option><option value="2">TARJETA</option></select></td>';
+					// validar metodos ya agregados para no invluirlos en el dropdown
+					for (var iw = 0;iw<metodos_pago.aplicados.length;iw++) {
+						if (metodos_pago.aplicados[iw] != undefined) {
+							var metodo_v = metodos_pago.aplicados[iw].split("_");
+							if (metodo_v.length > 0) {
+								metodosIncluidos.push(metodo_v[0]);
+							}							
+						}
+					}
+					metodosdepago += '<tr><td width="33%"><select style="width:100%;" class="btn btn-default dropdown-toggle hover_clean" type="button" id="dropdown_metodo" data-toggle="dropdown" aria-expanded="true">';
+					for (var mpi = 0; mpi < metodos_pago.ids.length; mpi++) {
+						if (metodosIncluidos.indexOf(metodos_pago.ids[mpi]) == -1) {
+							metodosdepago += '<option value="' + metodos_pago.ids[mpi] + '">' + metodos_pago.nombres[mpi] + '</option>';
+						}
+					}
+					metodosdepago += '</select></td>';
 					// Input text cantidad
-					metodosdepago += '<td width="33%"><input type="text" value="' + totalCobranzaAplicar.toFixed(2) + '" id="monto_metodo" style="width:100%;height:100%;margin:0;align-text:right;"/></td>';
+					metodosdepago += '<td width="33%"><input type="text" value="' + metodoTotalAplicar.toFixed(2) + '" id="monto_metodo" style="width:100%;height:100%;margin:0;align-text:right;"/></td>';
 					// botón agregar
 					metodosdepago += '<td width="33%"><input type="button" onclick="agregarMetodoPago();"  style="width:100%;height:100%;margin:0;" value="agregar"/></td></tr>';
+					// Si existen rows agregados aca se apintan
+					console.log("Agregar existentes: ", metodos_pago);
+					for (var ix = 0;ix<metodos_pago.aplicados.length;ix++) {
+						//var metodo = listadoAgregadosMetodos.aplicados[ix].split("_");
+						if (metodos_pago.aplicados[ix] != undefined) {
+							var metodo = metodos_pago.aplicados[ix].split("_");
+							if (metodo.length > 0) {
+								var id = metodo[0];
+								var monto = metodo[1];
+								metodosdepago += '<tr id="row_' + id + '"><td width="33%" style="font-size:200%;font-weight:bold;color:#2c3e50;padding-top:1%">' + metodos_pago.nombres[metodos_pago.ids.indexOf(id)] + '</td><td style="font-size:200%;font-weight:bold;color:#2c3e50;padding-top:1%;text-align:right" width="33%">$' + monto + '</td><td width="33%" style="padding-top:1%;text-align:right"><a id="' + id + '" style="color:red;" class="eliminar-metodo">Eliminar</a></td></tr>';
+							}
+						}
+					}
 					metodosdepago += '</table><br>';
+					//  Botones
+					metodosdepago += '<table width="60%;"><tr><td width="33%"></td>';
+					metodosdepago += '<td width="33%"><input type="button" onclick="salirDock();"  style="width:90%;padding:9px 3px 9px 3px;margin:0;" value="cancelar"/></td>';
+					metodosdepago += '<td width="33%"><input type="button" onclick="submit_documentos_cobranza(\'' + strLineas +'\')"  style="width:90%;padding:9px 3px 9px 3px;margin:0;" value="procesar"/></td></tr></table>';
 					document.getElementById("listadoAgregadosMetodos").innerHTML = metodosdepago;
-					// Mostrr Dropdown de Métodos
-
 					/*
 		        	// SERVICIO DE ESCRITURA DE COBRO
 			        $.ajax({
@@ -702,7 +770,8 @@
 					*/
 				}				
 
-			});					    
+			});		
+		    
 	        // CONSTRUYE EL LISTADO DE DOCUMENTOS
 			function buildListado(json){
 				var totalFacturas = 0;
@@ -756,7 +825,6 @@
 
 
 			    // INICIALIZAR ELEMENTOS
-			    console.log("Se inicializan elementos");
 				var body = document.body,
 					dropArea = document.getElementById( 'drop-area' ),
 					droppableArr = [], dropAreaTimeout;
@@ -818,7 +886,6 @@
 
 			// CONSTRUYE EL JSON CON EL QUE SE GENERARÁ EL LISTADO DE DOCUMENTOS
 			function jsonConstructor(json) {
-				console.log("JSON CONSTRUCTOR > ", json);
 			    var rows 			= [];
 			    var facturas 		= [];
 			    var notascredito 	= [];
@@ -856,18 +923,25 @@
 			    return data;
 			}  // Termina json Constructor	
 
+			function buildMetodosPago(json) {
+			    var jsonObject = json.response;
+			    for (var i=0;i<jsonObject.totalRows;i++) {
+			    	metodos_pago.nombres.push(jsonObject.data[i].name);
+			    	metodos_pago.ids.push(jsonObject.data[i].id);
+			    }
+			}
+
 			function procesarDocumentos() {
-				console.log("PROCESAR > ", documentosIncluidos);
+				document.getElementById("listadoAgregados").style.display = "block";
+				document.getElementById("listadoAgregadosMetodos").style.display = "none";
 				document.body.style.overflowY = "hidden";
 				var indexRow = 1;
 				var montoTotal = 0;
 				var listaAdd = '<div id="alert_div" class="alert_div"></div><div class="itemAgregado" style="background-color:#3498db;color:white;"><div class="addDocno" style="background-color:#3498db;color:white;">Número de Documento</div><div class="addFecha" style="background-color:#3498db;color:white;">Fecha del Documento</div><div class="addTotal" style="background-color:#3498db;color:white;">Total</div><div class="addPendiente" style="background-color:#3498db;color:white;">Pendiente</div><div class="addPendiente" style="background-color:#3498db;color:white;">Aplicar</div></div>';
 				if (documentosIncluidos.documentos == undefined) {
-					console.log("No hay documentos incluidos");
 					document.getElementById('h_alert_div').innerHTML = buildAlertWarning("No hay documentos incluidos.", "Parece que no has agregado ningún documento, prueba agregando algunos y vuelve a intentarlo.");
 				} else {
 					if (documentosIncluidos.documentos.length == 0) {
-						console.log("No hay documentos incluidos");
 						document.getElementById('h_alert_div').innerHTML = buildAlertWarning("No hay documentos incluidos.", "Parece que no has agregado ningún documento, prueba agregando algunos y vuelve a intentarlo.");
 					}
 
@@ -893,10 +967,8 @@
 					listaAdd += '</div>';
 					indexRow++;
 				}
-				console.log("Total ZERO: " + montoTotal);
 		    	if (montoTotal > -0.01 && montoTotal < 0) {
 		    		montoTotal = 0;
-		    		console.log("Total ZERO IN : " + montoTotal);
 		    	}
 				listaAdd += '<div class="itemAgregado"><div class="addDocno"></div><div class="addFecha"></div><div class="addTotal"></div><div class="addPendiente"></div><div class="addPendiente" style="font-size:200%;font-weight:bold;" id="montoTotalGrid">$' + separaMiles(montoTotal.toFixed(2)) + '</div></div>';
 
@@ -906,17 +978,16 @@
 				document.getElementById("proc-area_cbza").style.display = "block";
 			}	
 			function procesarDocumentosM() {
-				console.log("PROCESAR > ", documentosIncluidos);
+				document.getElementById("listadoAgregados").style.display = "block";
+				document.getElementById("listadoAgregadosMetodos").style.display = "none";				
 				document.body.style.overflowY = "hidden";
 				var indexRow = 1;
 				var montoTotal = 0;
 				var listaAdd = '<div id="alert_div" class="alert_div"></div><table id="tab_agregados" width="100%"><tr><td class="tdHM" style="width:25%;"><div class="addDocnoM" style="background-color:#3498db;color:white;font-size:100%;">Doc.</div></td><td class="tdHM" style="width:25%;"><div class="addTotalM" style="background-color:#3498db;color:white;font-size:100%;">Total</div></td><td class="tdHM" style="width:25%;"><div class="addPendienteM" style="background-color:#3498db;color:white;font-size:100%;">Pend.</div></td><td class="tdHM" style="width:25%;"><div class="addPendienteM" style="background-color:#3498db;color:white;font-size:100%;">Aplicar</div></td></tr>';
 				if (documentosIncluidos.documentos == undefined) {
-					console.log("No hay documentos incluidos");
 					document.getElementById('h_alert_div').innerHTML = buildAlertWarning("No hay documentos incluidos.", "Parece que no has agregado ningún documento, prueba agregando algunos y vuelve a intentarlo.");
 				} else {
 					if (documentosIncluidos.documentos.length == 0) {
-						console.log("No hay documentos incluidos");
 						document.getElementById('h_alert_div').innerHTML = buildAlertWarning("No hay documentos incluidos.", "Parece que no has agregado ningún documento, prueba agregando algunos y vuelve a intentarlo.");
 					}
 
@@ -961,7 +1032,6 @@
 			}					
 	    })();
 			function getDocumentNo(id) {
-				console.log("GET DOC NO", allDocs);
 				var jsonObject = allDocs.rows;	
 				var docno = "No existe el doc con id: " + id;
 			    for (var i=0;i<jsonObject.length;i++) {
@@ -1012,7 +1082,6 @@
 		        }
 		    }
 		    function addDocJSON() {
-		    	console.log("Agregar documento a json");
 		    	var montoAplicado = 0;
 				var strDocs = document.getElementById('allinclused').value;
 				var Docs = strDocs.split("_");
@@ -1041,7 +1110,7 @@
 					        row.Docbasetype		= allDocs.rows[i].Docbasetype;
 					        //rows.push(row);
 					        docAdds.push(row);
-							montoAplicado = montoAplicado + allDocs.rows[i].Aplicar;
+							montoAplicado = parseFloat(montoAplicado) + parseFloat(allDocs.rows[i].Aplicar);
 							var gridItem = document.getElementById(allDocs.rows[i].Documento_ID);
 							if (row.Docbasetype == "ARI" && (parseFloat(row.Pendiente) > parseFloat(row.Aplicar))) {
 					        	gridItem.className = 'grid__item parcialSelectedItem';					        
@@ -1065,30 +1134,65 @@
 			  	documentosIncluidos = data;
 		    	// Recorrer alldocs.rows
 		    	// encontrar el id y meterlo a un nuevo json
+
+		    	// Recalcular métodos de pago
+		    	console.log("RECALCULAR MONTO METOOS");
+		    	metodoMontoAplicado = 0;
+		    	for (j=0;j<metodos_pago.aplicados.length;j++) {
+		    		if (metodos_pago.aplicados.length > 0) {
+		    			var montoActual = metodos_pago.aplicados[j].split("_");
+		    			metodoMontoAplicado = parseFloat(metodoMontoAplicado) + parseFloat(montoActual[1]);
+		    		}
+		    	}
+		    	console.log("PAGOS DE METODOS: " + metodoMontoAplicado);
+		    	console.log("MONTO APLICADO: " + montoAplicado);
+		    	metodoTotalAplicar = parseFloat(montoAplicado) - parseFloat(metodoMontoAplicado);
+		    	/*document.getElementById("metodoMontoAplicar").innerHTML = "$" + separaMiles(metodoTotalAplicar.toFixed(2));*/
+		    	if (document.getElementById('monto_metodo') != null) {
+		    		document.getElementById('monto_metodo').readOnly = false
+					document.getElementById('metodoMontoAplicar').style.color = "#c0392b";					    	
+		    	}
+
 		    }			
 		    function recalcularMontoAplicado() {
 		    	var montoAplicado = 0;
 		    	for (var i=0;i<documentosIncluidos.documentos.length;i++) {
-		    		montoAplicado = montoAplicado + documentosIncluidos.documentos[i].Aplicar;
+		    		montoAplicado = parseFloat(montoAplicado) + parseFloat(documentosIncluidos.documentos[i].Aplicar);
 		    	}
 		    	if (document.getElementById("montoTotalGrid") != null) {
-		    		document.getElementById("montoTotalGrid").innerHTML = '$' + separaMiles(montoAplicado.toFixed(2));
+		    		document.getElementById("montoTotalGrid").innerHTML = '$' + separaMiles(parseFloat(montoAplicado).toFixed(2));
 		    	}
 		    	if (movil) {
-		    		document.getElementById("cobranzaAplicada").innerHTML = '$' + separaMiles(montoAplicado.toFixed(2));
+		    		document.getElementById("cobranzaAplicada").innerHTML = '$' + separaMiles(parseFloat(montoAplicado).toFixed(2));
 		    	} else {
-		    		document.getElementById("cobranzaAplicada").innerHTML = 'Aplicar | <h2>$' + separaMiles(montoAplicado.toFixed(2) + "</h2>");
+		    		document.getElementById("cobranzaAplicada").innerHTML = 'Aplicar | <h2>$' + separaMiles(parseFloat(montoAplicado).toFixed(2) + "</h2>");
 		    	}
+		    	// Recalcular métodos de pago
+		    	console.log("RECALCULAR MONTO METOOS");
+		    	metodoMontoAplicado = 0;
+		    	for (j=0;j<metodos_pago.aplicados.length;j++) {
+		    		if (metodos_pago.aplicados.length > 0) {
+		    			var montoActual = metodos_pago.aplicados[j].split("_");
+		    			metodoMontoAplicado = parseFloat(metodoMontoAplicado) + parseFloat(montoActual[1]);
+		    		}
+		    	}
+		    	console.log("PAGOS DE METODOS: " + metodoMontoAplicado);
+		    	console.log("MONTO APLICADO: " + montoAplicado);
+		    	metodoTotalAplicar = parseFloat(montoAplicado) - parseFloat(metodoMontoAplicado);
+		    	/*document.getElementById("metodoMontoAplicar").innerHTML = "$" + separaMiles(metodoTotalAplicar.toFixed(2));*/
+		    	if (document.getElementById('monto_metodo') != null) {
+		    		document.getElementById('monto_metodo').readOnly = false
+					document.getElementById('metodoMontoAplicar').style.color = "#c0392b";					    	
+		    	}
+
 		    }
 		    function cambiarCantidad(id, valor) {
-		    	console.log("Cambiar Cantidad: ", documentosIncluidos);
 		    	// ARI valor tiene que ser mayor que cero y menor o igual que grandtotal
 		    	// ARC valor tiene que ser mayor o igual que grandtotal y mayor que cero
 		    	var nuevos = [];
 		    	var total = 0;
 		    	for (var i=0;i<documentosIncluidos.documentos.length;i++) {
 		    		if (id == documentosIncluidos.documentos[i].Documento_ID) {
-		    			console.log("Doc: : " + documentosIncluidos.documentos[i].Documentno);
 		    			var row = {};
 				        row.Documento_ID	= documentosIncluidos.documentos[i].Documento_ID;
 				        row.Totallines 		= documentosIncluidos.documentos[i].Totallines;
@@ -1115,12 +1219,10 @@
 		    			if (documentosIncluidos.documentos[i].Docbasetype == 'ARC') {
 		    				// NOTAS DE CRÉDITO
 		    				if (parseFloat(valor) < 0 && parseFloat(valor) >= row.Pendiente) {
-		    					console.log("CHK#1");
 		    					//row.Pendiente 		= parseFloat(valor);	
 		    					row.Aplicar 		= parseFloat(valor);	
 		    					total = total + parseFloat(valor);	
 		    				} else {
-		    					console.log("CHK#2");
 		    					//row.Pendiente = row.Grandtotal;
 		    					row.Aplicar = row.Pendiente;
 		    					total = total + row.Pendiente;
@@ -1150,7 +1252,6 @@
 				        }
 
 		    		} else {
-		    			console.log("Resto");
 		    			nuevos.push(documentosIncluidos.documentos[i]);
 		    			//total = total + parseFloat(documentosIncluidos.documentos[i].Aplicar);
 		    			total = total + parseFloat(document.getElementById(documentosIncluidos.documentos[i].Documento_ID + "_text").value);
@@ -1162,13 +1263,11 @@
 		    	documentosIncluidos = data;
 		    	recalcularMontoAplicado();
 		    	if (total > -0.01 && total < 0) {
-		    		console.log("el total es despreciable menor a 0.01");
 		    		total = 0;
 		    	}
 		    	total = total.toFixed(2);
 		    	//document.getElementById("montoTotalGrid").innerHTML = "$" + separaMiles(parseFloat(total));
 		    	document.getElementById("montoTotalGrid").innerHTML = "$" + separaMiles(total);
-		    	console.log("Reasigna Total | 1");
 		    	if (movil) {
 		    		document.getElementById("cobranzaAplicada").innerHTML = '$' + separaMiles(total);
 		    	} else {
@@ -1177,23 +1276,29 @@
 
 		    }
 		    function agregarMetodoPago() {
-		    	console.log("Agregar Método de pago.");
+		    	// alertas 
+		    	if (metodos_pago.aplicados.length >= 3) {
+					document.getElementById('alert_div_m').innerHTML = buildAlertWarning("Ya existen 3 métodos de pago aplicados.", "Sólo se permite aplicar 3 tipos de métodos de pago en la cobranza.");		    		
+		    	}		    	
 		    	// leer metodo de pago (id/nombre) y cantidad ($ cantidad)
 		    	var metodo = document.getElementById('dropdown_metodo').value;
 		    	var monto = document.getElementById('monto_metodo').value;
 		    	var length = document.getElementById("tabMetodosPago").rows.length;
-		    	console.log("$> Agregar $" + monto + " del método " + metodo);		    	
-		    	console.log(monto);
-		    	if (monto != "") {
+				var montoAplicar = document.getElementById("metodoMontoAplicar").innerHTML;
+				montoAplicar = montoAplicar.replace("$", "");
+				montoAplicar = montoAplicar.replace(",", "");		    	
+		    	if (monto != "" && parseFloat(monto) > 0 && parseFloat(monto) <= parseFloat(montoAplicar) && metodos_pago.aplicados.length < 3) {
 			    	// Agregar los valores seleccionados a la tabla
 					var tabla = document.getElementById("tabMetodosPago");
 					var row = tabla.insertRow(length);
+					row.id = "row_" + metodo;
 					var tdMetodo = row.insertCell(0);
 					var tdMonto = row.insertCell(1);
 					var tdDrop = row.insertCell(2);
-					tdMetodo.innerHTML = "M: " + metodo;
-					tdMonto.innerHTML = "$" + monto;
-					tdDrop.innerHTML = '<a style="color:red;" class="eliminar-metodo">Eliminar</a>';
+					tdMetodo.innerHTML = metodos_pago.nombres[metodos_pago.ids.indexOf(metodo)];
+					tdMonto.innerHTML = "$" + separaMiles(parseFloat(monto).toFixed(2));
+					metodos_pago.aplicados.push(metodo + '_' + monto);
+					tdDrop.innerHTML = '<a id="' + metodo + '" style="color:red;" class="eliminar-metodo">Eliminar</a>';
 					// Estilizar
 					tdMetodo.style.fontSize = "200%";
 					tdMetodo.style.fontWeight = "bold";
@@ -1207,17 +1312,116 @@
 					tdMetodo.style.paddingTop = "1%";
 					tdDrop.style.paddingTop = "1%";
 					// actualizar el monto a aplicar
-					var montoAplicar = document.getElementById("metodoMontoAplicar").innerHTML;
-					montoAplicar = montoAplicar.replace("Monto a aplicar: $", "");
-					montoAplicar = montoAplicar.replace(",", "");
-					console.log("Restar " + montoAplicar + " - " + monto);
 					var nuevoMonto = parseFloat(montoAplicar) - parseFloat(monto);
-					console.log("%> Nuevo monto: " + nuevoMonto);
-					document.getElementById("metodoMontoAplicar").innerHTML = "Monto a aplicar: $" + separaMiles(nuevoMonto.toFixed(2));
+					metodoTotalAplicar = nuevoMonto;
+					// reasigna el total
+					document.getElementById("metodoMontoAplicar").innerHTML = "$" + separaMiles(nuevoMonto.toFixed(2));
 					document.getElementById('monto_metodo').value = nuevoMonto.toFixed(2);
-		    	}
+					console.log("Total: "+ nuevoMonto);
+					if (nuevoMonto == 0) {
+						document.getElementById('monto_metodo').readOnly = true
+						document.getElementById('metodoMontoAplicar').style.color = "#2ecc71";
 
+					}
+					// Eliminar la opción del dropdown
+   					var x = document.getElementById("dropdown_metodo");
+					x.remove(x.selectedIndex);
+		    	}
 		    }
+
+		    function eliminarMetodoPago(id) {
+		    	// Eliminar de la tabla
+		    	var table = document.getElementById("tabMetodosPago"); 
+		    	for (var i = 0, row; row = table.rows[i]; i++) {
+		    		console.log("#> ROW: " + row.id);
+		    		if (row.id.replace("row_", "") == id) {
+		    			document.getElementById("tabMetodosPago").deleteRow(i);
+		    		}
+		    	}
+		    	// Eliminar del json
+		    	var metodosAplicados = metodos_pago.aplicados;
+		    	var metodosNuevos = [];
+		    	for (var i=0;i<metodosAplicados.length;i++) {
+		    		var metodo = metodosAplicados[i].split("_");
+		    		if (metodo[0] != id) {
+		    			metodosNuevos.push(metodosAplicados[i]);
+		    		} else {
+		    			var monto = metodo[1];
+		    		}
+		    	}
+		    	// Recalcular totales
+				var montoAplicar = document.getElementById("metodoMontoAplicar").innerHTML;
+				montoAplicar = montoAplicar.replace("$", "");
+				montoAplicar = montoAplicar.replace(",", "");		    	
+				nuevoMonto = parseFloat(montoAplicar) + parseFloat(monto);
+				console.log("MA: " + montoAplicar + " MN: " + monto);
+				document.getElementById("metodoMontoAplicar").innerHTML = "$" + separaMiles(nuevoMonto.toFixed(2));
+				metodoTotalAplicar = nuevoMonto;
+				document.getElementById('monto_metodo').value = nuevoMonto.toFixed(2);
+		    	metodos_pago.aplicados = metodosNuevos;
+		    	// volver a habilitar la opción del método de pago en el select
+				for (var mpi = 0; mpi < metodos_pago.ids.length; mpi++) {
+					if (metodos_pago.ids[mpi] == id) {
+						//metodosdepago += '<option value="' + metodos_pago.ids[mpi] + '">' + metodos_pago.nombres[mpi] + '</option>';
+						var select = document.getElementById("dropdown_metodo");
+						var option = document.createElement("option");
+						option.text = metodos_pago.nombres[mpi];
+						option.value = metodos_pago.ids[mpi];
+						select.add(option);						
+					}
+				}
+				// reactivar el textbox y pintar total
+				document.getElementById('monto_metodo').readOnly = false
+				document.getElementById('metodoMontoAplicar').style.color = "#c0392b";					    	
+		    }
+function submit_documentos_cobranza(lineas) {
+		    	var pendiente = parseFloat((document.getElementById('metodoMontoAplicar').innerHTML).replace("$", ""));
+		    	if (pendiente != 0) {
+					document.getElementById('alert_div_m').innerHTML = buildAlertError("Saldo Pendiente", "Al parecer aún existe una cantidad cuyo método de pago aún no ha sido definido, realiza los cambios necesarios y vuelve a intentarlo.");		    		
+		    	} else {
+		    		// METODOS DE PAGO A STRING
+		    		var strMetodos = "";
+					for (var i = 0;i<metodos_pago.aplicados.length;i++) {
+							strMetodos += metodos_pago.aplicados[i] + ":";
+					}		    		
+		        	// SERVICIO DE ESCRITURA DE COBRO
+		        	console.log("api/v1/aplicarcobranzas?lineas=" + lineas + "&metodos=" + strMetodos);
+			        $.ajax({
+			                type:"GET",
+			                dataType : 'json',
+			                url: "api/v1/aplicarcobranzas?lineas=" + lineas + "&metodos=" + strMetodos,
+			                success: function(datox){
+			                console.log("SUCCESS", datox);	                
+			            },
+			                error:  function(){ 
+			                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. ESCRITURA</h3></div>'
+			                //document.getElementById("grid").innerHTML = mensajeError;
+			                console.log("Error - Escritura de cobro.");
+			                }
+			        });		
+			        document.getElementById("h_alert_div").innerHTML = buildAlertSuccess("Correcto!", "La preaplicación de cobro se completó correctamente, ahora debe ser aprobada para generar el cobro.");
+			        document.getElementById("allinclused").value = "";
+			        document.body.style.overflowY = "scroll";
+					document.getElementById("proc-area_cbza").style.display = "none";
+					document.getElementById("agregados").innerHTML = '<div class="drop-area__item"><div class="dummy"></div></div>';
+
+					$.ajax({
+			                type:"GET",
+			                dataType : 'json',
+			                url: "api/v1/documentoscobranzas",
+			                success: function(datox){
+			                console.log("SUCCESS", datox);
+			                allData = jsonConstructor(datox);
+			                allDocs = allData;
+			                buildListado(allData);
+			            },
+			                error:  function(){ 
+			                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. LECTURA 2</h3></div>'
+			                document.getElementById("grid").innerHTML = mensajeError;
+			                }
+			        });	
+		    	}	    	
+		    }						    
 			function buildAlertWarning(titulo, mensaje){
 			  return '<div id="alert_limite" class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '</p></div>';
 			}

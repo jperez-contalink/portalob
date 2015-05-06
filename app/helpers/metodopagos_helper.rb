@@ -1,0 +1,2 @@
+module MetodopagosHelper
+end

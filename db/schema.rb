@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150430202750) do
+ActiveRecord::Schema.define(version: 20150504214510) do
 
   create_table "aplicarcobranzas", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -59,6 +59,11 @@ ActiveRecord::Schema.define(version: 20150430202750) do
   end
 
   create_table "listaprecios", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "metodopagos", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

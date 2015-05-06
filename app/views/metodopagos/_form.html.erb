@@ -1,0 +1,17 @@
+<%= form_for(@metodopago) do |f| %>
+  <% if @metodopago.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@metodopago.errors.count, "error") %> prohibited this metodopago from being saved:</h2>
+
+      <ul>
+      <% @metodopago.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

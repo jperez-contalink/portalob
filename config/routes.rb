@@ -1,6 +1,8 @@
 require 'api_constraints'
 Rails.application.routes.draw do
  
+  resources :metodopagos
+
   resources :aplicarcobranzas
 
   resources :documentoscobranzas
@@ -71,6 +73,12 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       resources :pedidosobs
+    end  
+  end
+
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      resources :metodopagos
     end  
   end
 
