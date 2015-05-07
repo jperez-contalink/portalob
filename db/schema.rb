@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150504214510) do
+ActiveRecord::Schema.define(version: 20150507162818) do
 
   create_table "aplicarcobranzas", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(version: 20150504214510) do
     t.string   "email"
     t.string   "es_jci"
     t.boolean  "inventario"
+    t.boolean  "filtromarca"
+    t.boolean  "filtrocategoria"
   end
 
   create_table "escribepedidos", force: :cascade do |t|

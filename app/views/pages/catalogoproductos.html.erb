@@ -192,6 +192,8 @@
   var countProduct = 0;
   var actualPage = 1;
   var mostrarInventario = "<%= current_usuario.empresa.inventario %>";
+  var mostrarMarca = "<%= current_usuario.empresa.filtromarca %>";
+  var mostrarCategoria = "<%= current_usuario.empresa.filtrocategoria %>";
   var itemsChar = {
     heads: charHead,
     items: charItem
@@ -332,7 +334,7 @@
     if (parseFloat(inventario.replace(" Piezas disponibles.", "")) < parseFloat(cantidad)) {
       // No hay inventario despliega la alerta.
       $("body").scrollTop(0);
-      document.getElementById('alertas').innerHTML = buildAlertError("Stock Insuficiente", "No hay suficiente stock para colocar tu pedido, prueba con menos producto.");
+      document.getElementById('alertas').innerHTML = buildAlertError("Stock Insuficiente", "No hay suficiente stock este producto sólo tiene disponibles " + inventario.replace(" Piezas disponibles.", "") + " piezas.");
     } else {
       // Hay inventario Procede el submit del producto
       $.ajax({
@@ -1129,12 +1131,13 @@ function multiFiltros(checks) {
                   rows: rowsNuevos
               };
     filterData = newData;
-    cambiaPaginaPLUS(1, 12);
 
     if(rowsNuevos.length == 0) {
         console.log("Limpiar Catalogo");
-        cato.limpiarCatalogo();
+        cato.limpiarCatalogo()
     }
+
+    cambiaPaginaPLUS(1, 12);
 
 }
 
@@ -1256,7 +1259,8 @@ function multiFiltros_RESPALDO(checks) {
   // Si no hay resultados limpia la pagina
     if(data.rows.length == 0) {
       console.log("Limpiar Catalogo");
-      cato.limpiarCatalogo();
+      //cato.limpiarCatalogo();
+
   }
 }
 
@@ -1329,7 +1333,8 @@ function buildAddProduct(productID) {
         if (mostrarInventario == "true") {
             buildHTML += '<div align="left" class="cartInventario" id="cartInventario">' + obj.Inventario + ' disponibles.</div>';
         } else {
-            buildHTML += '<div align="left" class="cartInventario" id="cartInventario"></div>';
+            //buildHTML += '<div align="left" class="cartInventario" id="cartInventario"></div>';
+            buildHTML += '<div align="left" style="display:none;" class="cartInventario" id="cartInventario">' + obj.Inventario + ' disponibles.</div>';
         }
         // Cantidad
         buildHTML += '<hr width="80%" align="left"><div  align="left" class="cartCantidad">Cantidad: &nbsp;<input type="text" id="cartCantidad" value="1"/></div>';

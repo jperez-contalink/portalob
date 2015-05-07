@@ -26,13 +26,15 @@
             priv.drawCat(pData);
         };
         priv.cleanData = function (pData) {
-            //priv.drawCat(pData);
-            document.getElementById("cat_pro").innerHTML = '<br><br><br><br><br><br><br><h3 align="center">No hay resultados.</h3>';
-            document.getElementById("cat_pag").innerHTML = "";
+            console.log("Limpiar Catalogo");
+            var search = '<div class="input-group"><span class="input-group-addon glyphicon glyphicon-search"></span><input type="text" class="form-control btn_search" aria-describedby="basic-addon1" id="txt_search" autofocus></div>';
+            var tabla = search + '<br><div width="100%">';
+            tabla += "</div>";
+            document.getElementById("cat_pro").innerHTML = tabla;
         };
         priv.drawCat = function (pData) {
             console.log("Pintar Catalogo");
-            var jsonCols = pData.cols;
+            //var jsonCols = pData.cols;
             var jsonRows = pData.rows;
             var search = '<div class="input-group"><span class="input-group-addon glyphicon glyphicon-search"></span><input type="text" class="form-control btn_search" aria-describedby="basic-addon1" id="txt_search" autofocus></div>';
             var tabla = search + '<br><div width="100%">';
@@ -151,6 +153,13 @@
             filPrice += '<input width="3%" type="text" class="txtPrecioLeft txt_precio" id="precioDesde"  placeholder="Precios Desde"/><br><input width="3%" type="text" class="txtPrecioRight txt_precio" id="precioHasta"  placeholder="Precios Hasta"/><br></div><br>';
 
             // Construir Filtros de precios
+            if (mostrarMarca != "true") {
+                marcas = "";
+            }
+            if (mostrarCategoria != "true") {
+                categorias = "";
+            }            
+            // Que filtros mostrar? :
             var filtros = filPrice + marcas + "<br>" + categorias + caracteriticas;
             //var filtros = marcas + "<br>" + categorias + caracteriticas;
             document.getElementById("cat_filter").innerHTML = filtros;

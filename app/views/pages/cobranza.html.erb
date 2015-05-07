@@ -1374,7 +1374,7 @@
 				document.getElementById('monto_metodo').readOnly = false
 				document.getElementById('metodoMontoAplicar').style.color = "#c0392b";					    	
 		    }
-function submit_documentos_cobranza(lineas) {
+			function submit_documentos_cobranza(lineas) {
 		    	var pendiente = parseFloat((document.getElementById('metodoMontoAplicar').innerHTML).replace("$", ""));
 		    	if (pendiente != 0) {
 					document.getElementById('alert_div_m').innerHTML = buildAlertError("Saldo Pendiente", "Al parecer aún existe una cantidad cuyo método de pago aún no ha sido definido, realiza los cambios necesarios y vuelve a intentarlo.");		    		
@@ -1421,7 +1421,7 @@ function submit_documentos_cobranza(lineas) {
 			                }
 			        });	
 		    	}	    	
-		    }						    
+		    }							    
 			function buildAlertWarning(titulo, mensaje){
 			  return '<div id="alert_limite" class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '</p></div>';
 			}
