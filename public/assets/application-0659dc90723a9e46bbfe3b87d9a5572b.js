@@ -13499,42 +13499,11 @@ function mesAnterior(mes){
             priv.drawCat(pData);
         };
         priv.cleanData = function (pData) {
-            //priv.drawCat(pData);
-            //document.getElementById("cat_pro").innerHTML = '<br><br><br><br><br><br><br><h3 align="center">No hay resultados.</h3>';
-            //document.getElementById("cat_pag").innerHTML = "";
             console.log("Limpiar Catalogo");
-            //var jsonCols = pData.cols;
-            //var jsonRows = pData.rows;
             var search = '<div class="input-group"><span class="input-group-addon glyphicon glyphicon-search"></span><input type="text" class="form-control btn_search" aria-describedby="basic-addon1" id="txt_search" autofocus></div>';
             var tabla = search + '<br><div width="100%">';
-            /*var style="";
-            for (var key in jsonRows) {
-                var obj = jsonRows[key]; 
-                var inventario = parseFloat((obj.Inventario).replace(" Piezas", ""));
-                if (obj.Precio != 0 && inventario > 0) {
-                    var pextra = "";
-                    var montoextra = 0;
-                    montoextra = parseFloat(obj.Impuestoproductoextra) + parseFloat(obj.Precioproductoextra);
-                    if (montoextra > 0) {
-                        pextra = "Incluye $" + String(montoextra) + " (" + obj.Productoextra +  ")";
-                    }
-                    // Gestiona productos extra
-                    //Incluye ' + parseFloat(obj.Precioproductoextra)+parseFloat(obj.Impuestoproductoextra) + ' (' + obj.Precioproductoextra + ') 
-                    if (obj.Inventario == "0 Piezas"){ style = 'style="color:red;"';}
-                    
-                    var inventarioShow = "";
-                    if (mostrarInventario == "true") {
-                        inventarioShow = obj.Inventario;
-                    }
-
-                    //tabla += '<a href="javascript:agregar();" class="addProduct" id="' + obj.Producto_ID + '"><div class="itemA" align="left"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+(parseFloat(obj.Precioshow)).toFixed(2)+' ' + pextra + '<br>'+inventarioShow+'</div></a>';
-                    style="";
-                }
-            }*/
             tabla += "</div>";
             document.getElementById("cat_pro").innerHTML = tabla;
-            // PINTAR PAGINACIÓN
-            priv.drawPagination(pData);            
         };
         priv.drawCat = function (pData) {
             console.log("Pintar Catalogo");
@@ -13609,31 +13578,70 @@ function mesAnterior(mes){
         };
         publ.drawFiltros = function(pData){
             console.log("Crear Filtros");
+            var filAutoMarca = false;
+            var filAutoModelo = false;
+            var filAutoAno = false;
             var jsonRows = pData.rows;
             var arrayMarca = [];
             var arrayCategoria = [];
-            //var marcas = '<strong>MARCAS<a id="btn_filtro_marcas" class="btn_filtro_marcas">+</a></strong><br>';
+            var arrAutoMarca = [];
+            var arrAutoModelo = [];
+            var arrAutoAno = [];
             var marcas = '<strong>MARCAS<a id="btn_filtro_marcas" class="btn_filtro_marcas">&nbsp;<span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></a></strong><br>';
             var categorias = '<strong>CATEGORÍA<a id="btn_filtro_categorias" class="btn_filtro_categorias">&nbsp;<span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span></a></strong><br>';
-            //var caracteriticas = "<strong>CARACTERISTICA</strong><br>";
+            // Filtro Automotriz
+            var auto_marcas = '<strong>MARCA</strong><br><select class="selectAuto selectAutoMarca" id="selectAutoMarca"><option value="0">elige una marca</option>';
+            var auto_modelo = '<strong>MODELO</strong><br><select class="selectAuto selectAutoModelo" id="selectAutoModelo"><option value="0">elige un modelo</option>';
+            var auto_ano    = '<strong>AÑO</strong><br><select class="selectAuto selectAutoAno" id="selectAutoAno"><option value="0">elige un año</option>';
+
+
             var caracteriticas = "";
             marcas += '<div id="div_filtro_marcas">'
             categorias += '<div id="div_filtro_categorias">'
             for (var key in jsonRows) {
                 var obj = jsonRows[key]; 
                 if (arrayMarca.indexOf(obj.Marca) == -1 && obj.Precio != 0) {
-                    //marcas += '<a class="fil_marca">' + obj.Marca + '</a><br>';
                     marcas += '<input class="fil_multi" type="checkbox" id = "'+obj.Marca+'"/>&nbsp;' + obj.Marca + '<br>';
                     arrayMarca.push(obj.Marca);
                 }
                 if (arrayCategoria.indexOf(obj.Categoria) == -1 && obj.Precio != 0) {
-                    //categorias += '<a class="fil_cat">' + obj.Categoria + '</a><br>';
                     categorias += '<input class="fil_multi" type="checkbox" id = "'+obj.Categoria+'"/>&nbsp;' + obj.Categoria + '<br>';
                     arrayCategoria.push(obj.Categoria);
                 }
+                // Gestión para empresas con el módulo de automotrices instalada
+                if (arrAutoMarca.indexOf(obj.autoMarca) == -1 && obj.Precio != 0 && obj.autoMarca != null) {
+                    auto_marcas += '<option value = "'+obj.autoMarca+'">' + obj.autoMarca + '</option>';
+                    arrAutoMarca.push(obj.autoMarca);
+                    arrayAutoMarca.push(obj.autoMarca);
+                    filAutoMarca = true;
+                }
+                if (arrAutoModelo.indexOf(obj.autoModelo) == -1 && obj.Precio != 0 && obj.autoModelo != null) {
+                    //auto_modelo += '<option value = "'+obj.autoModelo+'">' + obj.autoModelo + '</option>';
+                    //arrAutoModelo.push(obj.autoModelo);
+                    arrayAutoModelo.push(obj.autoModelo);
+                    filAutoModelo = true;
+                }
+                if (arrAutoAno.indexOf(obj.autoAno) == -1 && obj.Precio != 0 && obj.autoAno != null) {
+                    //auto_ano += '<option value = "'+obj.autoAno+'">' + obj.autoAno + '</option>';
+                    //arrAutoAno.push(obj.autoAno);
+                    arrayAutoAno.push(obj.autoAno);
+                    filAutoAno = true;
+                }        
+                if (obj.autoAno != null || obj.autoModelo != null || obj.autoAno != null) {
+                    var nuevoItem = {
+                        marca: obj.autoMarca,
+                        modelo: obj.autoModelo,
+                        ano: obj.autoAno
+                    };
+                    arrayFiltrosAuto.push(nuevoItem);
+                }                                           
+                // Termina - Gestión para empresas con el módulo de automotrices instalada
             }
             marcas += "</div>";
             categorias += "</div>";
+            auto_marcas += "</select><br>";
+            auto_modelo += "</select><br>";
+            auto_ano    += "</select><br>";
             /*                  FILTROS CARACTERISTICAS                 */
             console.log("Crear Filtros de caracteriticas: ", itemsChar.heads);
             for (var indx=0; indx<itemsChar.heads.length; indx++){
@@ -13657,7 +13665,24 @@ function mesAnterior(mes){
             filPrice += '<input width="3%" type="text" class="txtPrecioLeft txt_precio" id="precioDesde"  placeholder="Precios Desde"/><br><input width="3%" type="text" class="txtPrecioRight txt_precio" id="precioHasta"  placeholder="Precios Hasta"/><br></div><br>';
 
             // Construir Filtros de precios
-            var filtros = filPrice + marcas + "<br>" + categorias + caracteriticas;
+            if (mostrarMarca != "true") {
+                marcas = "";
+            }
+            if (mostrarCategoria != "true") {
+                categorias = "";
+            }            
+            if (filAutoMarca != true) {
+                auto_marcas = "";                   
+            }
+            if (filAutoModelo != true) {
+                auto_modelo = "";                   
+            }            
+            if (filAutoAno != true) {
+                auto_ano = "";                   
+            }            
+            // Que filtros mostrar? :
+            console.log("Escribe Filtros: ", arrayFiltrosAuto);
+            var filtros = filPrice + marcas + "<br>" + categorias + caracteriticas + auto_marcas + auto_modelo + auto_ano;
             //var filtros = marcas + "<br>" + categorias + caracteriticas;
             document.getElementById("cat_filter").innerHTML = filtros;
         };

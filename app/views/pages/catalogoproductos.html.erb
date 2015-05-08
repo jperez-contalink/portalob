@@ -10,6 +10,10 @@
     a {
       color:black;
     }
+    .selectAuto {
+      width: 90%;
+      border-radius: 4px;
+    }
     #loader-wrapper {
       margin-left: 40%;                                                                                                                                                                                                                                                                                                                     
     }
@@ -198,6 +202,10 @@
     heads: charHead,
     items: charItem
   };
+  arrayFiltrosAuto = [];
+  arrayAutoMarca = [];
+  arrayAutoModelo = [];
+  arrayAutoAno    = [];
   var displayFiltroMarca = true;
   var displayFiltroCategoria = true;
 
@@ -388,6 +396,24 @@
     // Deseleccionar los checks de marca
     //$("#cat_filter input[type=checkbox]").prop('checked', false);      
   });
+  $(document).on('change', '.selectAuto', function (e) {
+    e.preventDefault();
+    console.log("Cambia: ", e.currentTarget.id);
+    filterHereda(e.currentTarget.id);
+    if (document.getElementById("txt_search") != undefined) {
+      var parametro = document.getElementById("txt_search").value;
+    }
+      var selected = [];
+      $('#cat_filter input:checked').each(function() {
+          selected.push($(this).attr('id'));
+      });
+      multiFiltros(selected);
+      if (document.getElementById("txt_search") != undefined) {
+        document.getElementById("txt_search").value = parametro;
+      }
+      $("body").scrollTop(0);    
+
+  });
   $("#cat_filter").on('click', '.fil_marca', function (e) {
     console.log("Filtro de Marca");
     e.preventDefault();
@@ -533,6 +559,13 @@ function jsonConstructor(json, allPrice) {
         row.Inventario      = jsonObject.data[i].inventario;
         row.Marca           = jsonObject.data[i].marca;
         row.Categoria       = jsonObject.data[i].categoria;
+        // PROXIMAMENTE
+        //row.Video           = "https://www.youtube.com/watch?v=qKqnOlx8Okk";
+        row.Video           =  jsonObject.data[i].video;
+        row.autoMarca       =  jsonObject.data[i].autoMarca;
+        row.autoModelo       =  jsonObject.data[i].autoModelo;
+        row.autoAno        =  jsonObject.data[i].autoAno;
+
         row.Productoextra   = jsonObject.data[i].productoextraname;
         if (jsonObject.data[i].image == "Y"){
           row.Image = "imagenesProductos/" + jsonObject.data[i].id + ".png";
@@ -981,6 +1014,53 @@ function multiFiltrosDeprecado(checks) {
 }  
 function multiFiltros(checks) {
   console.log("APLICAR FILTROS!!");
+
+  // Filtro automotriz
+  actualMarca = "";
+  actualModelo = "";
+  actualAno = "";
+  var rowsNuevos = [];
+  if (document.getElementById("selectAutoMarca") != undefined) {
+    var ddm = document.getElementById("selectAutoMarca");
+    actualMarca = ddm.options[ddm.selectedIndex].value;      
+  }
+  if (document.getElementById("selectAutoModelo") != undefined) {
+    var ddd = document.getElementById("selectAutoModelo");
+    actualModelo = ddd.options[ddd.selectedIndex].value;  
+  }
+  if (document.getElementById("selectAutoAno") != undefined) {
+    var dda = document.getElementById("selectAutoAno");
+    actualAno = dda.options[dda.selectedIndex].value;  
+  }
+
+  if (actualMarca != 0 || actualAno != 0 || actualModelo != 0) {
+    for (var ix=0;ix<allData.rows.length;ix++) {
+      // Auto Marca
+      var add = false;
+      if (allData.rows[ix].autoMarca == actualMarca) {
+        //rowsNuevos.push(allData.rows[ix]);
+        add = true;
+      }
+      if (allData.rows[ix].autoModelo == actualModelo) {
+        //rowsNuevos.push(allData.rows[ix]);
+        add = true;
+      }
+      if (allData.rows[ix].autoAno == actualAno) {
+        //rowsNuevos.push(allData.rows[ix]);
+        add = true;
+      }        
+      if (add == true) {
+        rowsNuevos.push(allData.rows[ix]);
+      }
+    }  
+    var jsonRows = rowsNuevos;
+  } else {
+    console.log("ss");
+    jsonRows = allData.rows;
+  }
+
+    var rowsNuevos = [];
+
   // Aplicar filtros de búsqueda por palabras clave
   var palabra = "";
   if (document.getElementById("txt_search") != undefined) {
@@ -988,11 +1068,11 @@ function multiFiltros(checks) {
   }
   console.log("$> Filtrar por palabras clave: " + palabra);
     var rowsNuevos = [];
-    for (var i=0;i<allData.rows.length;i++) {
-      var currentName = allData.rows[i].Nombre;
+    for (var i=0;i<jsonRows.length;i++) {
+      var currentName = jsonRows[i].Nombre;
       currentName = currentName.toUpperCase();
       if (currentName.indexOf(palabra.toUpperCase()) > -1) {
-        rowsNuevos.push(allData.rows[i]);
+        rowsNuevos.push(jsonRows[i]);
       }
     }
     // Filtrar por precio
@@ -1264,7 +1344,6 @@ function multiFiltros_RESPALDO(checks) {
   }
 }
 
-
 // Asigna una imagen a los productos en función de su Marca o Categoría cuando estos no tienen una asignada.
 function imagenMarca(marca, categoria) {
   imagen = "N";
@@ -1320,7 +1399,18 @@ function buildAddProduct(productID) {
             pextra = '<div style="font-size:100%;color:grey;padding-left:1%;padding-top:1%;">Incluye $' + String(montoextra) + ' (' + obj.Productoextra +  ')</div>';
         }
         buildHTML += '<br><div style="border:0px solid blue;width:100%;">';
-        buildHTML += '<div style="border:0px solid green;width:60%;float:left;height:100%;" align="center"><img src="'+obj.Image+'" width="50%"></img></div>';
+        //buildHTML += '<div style="border:0px solid green;width:60%;float:left;height:100%;" align="center"><img src="'+obj.Image+'" width="50%"></img></div>';
+        //buildHTML += '<div style="border:0px solid green;width:60%;float:left;height:100%;" align="center"><iframe width="100%" height="350px" src="http://www.youtube.com/embed/qKqnOlx8Okk?autoplay=0"></iframe></div>';
+        //buildHTML += '<div style="border:0px solid green;width:60%;float:left;height:100%;" align="center"><iframe width="100%" height="350px" src="http://www.youtube.com/embed/qKqnOlx8Okk?autoplay=0"></iframe></div>';
+
+        // Gestionar videos
+        
+        if (obj.Video != null && obj.Video != "") {
+          buildHTML += '<div style="border:0px solid green;width:60%;float:left;height:100%;" align="center"><iframe width="100%" height="350px" src="http://www.youtube.com/embed/' + obj.Video.replace("https://www.youtube.com/watch?v=", "") +'?autoplay=0"></iframe></div>';          
+        } else {
+          buildHTML += '<div style="border:0px solid green;width:60%;float:left;height:100%;" align="center"><img src="'+obj.Image+'" width="50%"></img></div>';
+        }
+
         // Panel Derecho Titulo
         buildHTML += '<div style="border:0px solid red;width:40%;float:left;height:100%;padding:1% 1% 1% 1%;">';
         buildHTML += '<div style="border:0px solid red;width:100%" align="right"><input type="button" value="x" class="btn-close close_cart"/></div>';
@@ -1342,13 +1432,55 @@ function buildAddProduct(productID) {
         buildHTML += '<div class="cartBtn" align="left"><br><input id="' + obj.Producto_ID + '" type="button" value="añadir producto al carrito" class="btn btn-default btn-anadir submitProduct"> </div>';
         // Valores ocultos para envío de parametros
         buildHTML += '<input type="hidden" id="hdnProduct" value="'+obj.Nombre+'"/><input type="hidden" id="hdnValue" value="'+obj.Identificador+'"/><input type="hidden" id="hdnImagen" value="'+obj.Image+'"/><input type="hidden" id="hdnImpuesto" value="'+obj.Impuesto+'"/><input type="hidden" id="hdnPrecioOB" value="'+obj.Precio+'"/><input type="hidden" id="hdnproductoextra" value="'+obj.Productoextra+'"/><input type="hidden" id="hdnprecioextra" value="'+obj.Precioproductoextra+'"/><input type="hidden" id="hdnimpuestoextra" value="'+obj.Impuestoproductoextra+'"/>';
-
         // Cierra panel derecho
         buildHTML += '</div></div>';
       }
   }
   return buildHTML;
 }
+
+function filterHereda(id) {
+  // selectAutoMarca selectAutoModelo selectAutoAno
+  console.log("FILTROS: " + id);
+
+
+  auto_modelo = '<option value="0">elige un modelo</option>';
+  auto_ano = '<option value="0">elige un año</option>';
+  if (id == "selectAutoMarca") {
+    var ddm = document.getElementById("selectAutoMarca");
+    var actualMarca = ddm.options[ddm.selectedIndex].value;
+    console.log(": Marca actual: " + actualMarca);
+    for (var m=0;m<arrayFiltrosAuto.length;m++) {
+      console.log(": Marca iter: " + arrayFiltrosAuto[m].marca);
+      if (arrayFiltrosAuto[m].marca == actualMarca) {
+        auto_modelo += '<option value = "'+arrayFiltrosAuto[m].modelo+'">' + arrayFiltrosAuto[m].modelo + '</option>';
+      }
+    }
+    console.log("$$> " + auto_modelo);
+    //document.getElementById("selectAutoModelo").innerHTML = auto_modelo;
+  }
+    if (id == "selectAutoModelo") {
+    var ddm = document.getElementById("selectAutoModelo");
+    var actualModelo = ddm.options[ddm.selectedIndex].value;
+    console.log(": Modelo actual: " + actualModelo);
+    for (var m=0;m<arrayFiltrosAuto.length;m++) {
+      console.log(": Modelo iter: " + arrayFiltrosAuto[m].modelo);
+      if (arrayFiltrosAuto[m].modelo == actualModelo) {
+        auto_ano += '<option value = "'+arrayFiltrosAuto[m].ano+'">' + arrayFiltrosAuto[m].ano + '</option>';
+      }
+    }
+  }
+  console.log("$$> " + auto_modelo);
+  console.log("$$> " + auto_ano);
+  if (id == "selectAutoMarca") {
+    document.getElementById("selectAutoModelo").innerHTML = auto_modelo;
+    document.getElementById("selectAutoAno").innerHTML = '<option value="0">elige un año</option>';
+  }
+  if (id == "selectAutoModelo") {
+    document.getElementById("selectAutoAno").innerHTML = auto_ano;
+  }  
+}
+
 function buildAlertSuccess(titulo, mensaje){
   return '<div id="alert_limite" class="alert alert-success alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '<br>Visita tu carrito de compra <a href="/carrito">aqui</a></p></div>';
 }
