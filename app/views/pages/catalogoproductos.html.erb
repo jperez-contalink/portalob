@@ -1036,22 +1036,60 @@ function multiFiltros(checks) {
   if (actualMarca != 0 || actualAno != 0 || actualModelo != 0) {
     for (var ix=0;ix<allData.rows.length;ix++) {
       // Auto Marca
-      var add = false;
+      var marca_equal = false;
+      var modelo_equal = false;
+      var ano_equal = false;
       if (allData.rows[ix].autoMarca == actualMarca) {
         //rowsNuevos.push(allData.rows[ix]);
-        add = true;
+        marca_equal = true;
+        //add = true;
       }
       if (allData.rows[ix].autoModelo == actualModelo) {
         //rowsNuevos.push(allData.rows[ix]);
-        add = true;
+        //add = true;
+        modelo_equal = true;
       }
       if (allData.rows[ix].autoAno == actualAno) {
         //rowsNuevos.push(allData.rows[ix]);
-        add = true;
+        //add = true;
+        ano_equal = true;
       }        
-      if (add == true) {
+      console.log("anoequal:" + ano_equal + " marcaequal:" + marca_equal + " modeloequal:" + modelo_equal + " / actualMarca:" + actualMarca + " actualAno:" + actualAno + " actualModelo:" + actualModelo);
+      //if (add == true) {
+      if (ano_equal && modelo_equal && marca_equal && actualMarca != 0 && actualAno != 0 && actualModelo != 0) {
         rowsNuevos.push(allData.rows[ix]);
-      }
+        console.log(">>>1");
+      }  
+      if (ano_equal && modelo_equal && !marca_equal && actualMarca == 0 && actualAno != 0 && actualModelo != 0) {
+        rowsNuevos.push(allData.rows[ix]);
+        console.log(">>>2");
+      }  
+      if (ano_equal && !modelo_equal && marca_equal && actualMarca != 0 && actualAno != 0 && actualModelo == 0) {
+        rowsNuevos.push(allData.rows[ix]);
+        console.log(">>>3");
+      }  
+      if (!ano_equal && modelo_equal && marca_equal && actualMarca != 0 && actualAno == 0 && actualModelo != 0) {
+        rowsNuevos.push(allData.rows[ix]);
+        console.log(">>>4");
+      }  
+      if (ano_equal && !modelo_equal && !marca_equal && actualMarca == 0 && actualAno != 0 && actualModelo == 0) {
+        rowsNuevos.push(allData.rows[ix]);
+        console.log(">>>5");
+      }        
+      if (!ano_equal && modelo_equal && !marca_equal && actualMarca == 0 && actualAno == 0 && actualModelo != 0) {
+        rowsNuevos.push(allData.rows[ix]);
+        console.log(">>>6");
+      }  
+      if (!ano_equal && !modelo_equal && marca_equal && actualMarca != 0 && actualAno == 0 && actualModelo == 0) {
+        rowsNuevos.push(allData.rows[ix]);
+        console.log(">>>7");
+      }  
+
+
+
+
+        
+      //}
     }  
     var jsonRows = rowsNuevos;
   } else {
@@ -1446,14 +1484,19 @@ function filterHereda(id) {
 
   auto_modelo = '<option value="0">elige un modelo</option>';
   auto_ano = '<option value="0">elige un año</option>';
+  var ano_auto = [];
+  var modelo_auto = [];
+  var ind_add = [];
   if (id == "selectAutoMarca") {
     var ddm = document.getElementById("selectAutoMarca");
     var actualMarca = ddm.options[ddm.selectedIndex].value;
     console.log(": Marca actual: " + actualMarca);
     for (var m=0;m<arrayFiltrosAuto.length;m++) {
       console.log(": Marca iter: " + arrayFiltrosAuto[m].marca);
-      if (arrayFiltrosAuto[m].marca == actualMarca) {
+      if (arrayFiltrosAuto[m].marca == actualMarca && modelo_auto.indexOf(arrayFiltrosAuto[m].modelo) == -1 && ind_add.indexOf(m) == -1) {
         auto_modelo += '<option value = "'+arrayFiltrosAuto[m].modelo+'">' + arrayFiltrosAuto[m].modelo + '</option>';
+        modelo_auto.push(arrayFiltrosAuto[m].modelo);
+        ind_add.push(m);
       }
     }
     console.log("$$> " + auto_modelo);
@@ -1465,8 +1508,10 @@ function filterHereda(id) {
     console.log(": Modelo actual: " + actualModelo);
     for (var m=0;m<arrayFiltrosAuto.length;m++) {
       console.log(": Modelo iter: " + arrayFiltrosAuto[m].modelo);
-      if (arrayFiltrosAuto[m].modelo == actualModelo) {
+      if (arrayFiltrosAuto[m].modelo == actualModelo && ano_auto.indexOf(arrayFiltrosAuto[m].ano) == -1 && ind_add.indexOf(m) == -1) {
         auto_ano += '<option value = "'+arrayFiltrosAuto[m].ano+'">' + arrayFiltrosAuto[m].ano + '</option>';
+        ano_auto.push(arrayFiltrosAuto[m].ano);
+        ind_add.push(m);
       }
     }
   }
