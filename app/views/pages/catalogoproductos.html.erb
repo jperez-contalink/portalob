@@ -330,6 +330,7 @@
     var inventario = document.getElementById("cartInventario").innerHTML;
     var cantidad = document.getElementById("cartCantidad").value;
     var product = document.getElementById("hdnProduct").value;
+    product = product.replace("%", "%25");
     var product_value = document.getElementById("hdnValue").value;
     var imagenurl = document.getElementById("hdnImagen").value;
     var impuesto = document.getElementById("hdnImpuesto").value;

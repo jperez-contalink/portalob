@@ -706,7 +706,7 @@
 							}							
 						}
 					}
-					metodosdepago += '<tr><td width="33%"><select style="width:100%;" class="btn btn-default dropdown-toggle hover_clean" type="button" id="dropdown_metodo" data-toggle="dropdown" aria-expanded="true">';
+					metodosdepago += '<tr><td width="33%" style="padding:3px 0 3px 0;"><select style="width:100%;" class="btn btn-default dropdown-toggle hover_clean" type="button" id="dropdown_metodo" data-toggle="dropdown" aria-expanded="true">';
 					for (var mpi = 0; mpi < metodos_pago.ids.length; mpi++) {
 						if (metodosIncluidos.indexOf(metodos_pago.ids[mpi]) == -1) {
 							metodosdepago += '<option value="' + metodos_pago.ids[mpi] + '">' + metodos_pago.nombres[mpi] + '</option>';
@@ -714,7 +714,7 @@
 					}
 					metodosdepago += '</select></td>';
 					// Input text cantidad
-					metodosdepago += '<td width="33%"><input type="text" value="' + metodoTotalAplicar.toFixed(2) + '" id="monto_metodo" style="width:100%;height:100%;margin:0;align-text:right;"/></td>';
+					metodosdepago += '<td width="33%"><input type="text" style="text-align:right;width:100%;height:100%;" value="' + metodoTotalAplicar.toFixed(2) + '" id="monto_metodo" style="width:100%;height:100%;margin:0;align-text:right;"/></td>';
 					// botón agregar
 					metodosdepago += '<td width="33%"><input type="button" onclick="agregarMetodoPago();"  style="width:100%;height:100%;margin:0;" value="agregar"/></td></tr>';
 					// Si existen rows agregados aca se apintan
@@ -858,18 +858,20 @@
 			                document.getElementById("grid").innerHTML = mensajeError;
 			                }
 			        });	*/
-		    	}	    	
+		    	}	    
+				metodoTotalAplicar = 0;
+				//metodoPagoID = [];
+				//metodoPagoName = [];
+				metodoPagoAplicado = [];
+				metodos_pago = {
+					ids: metodoPagoID,
+					nombres: metodoPagoName,
+					aplicados: metodoPagoAplicado
+				};				
+
 		    }							    
 
-
-
-
-
-
-
-
-
-		    
+    
 	        // CONSTRUYE EL LISTADO DE DOCUMENTOS
 			function buildListado(json){
 				var totalFacturas = 0;

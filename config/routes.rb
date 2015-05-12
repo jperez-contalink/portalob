@@ -56,6 +56,7 @@ Rails.application.routes.draw do
   get "borrar_linea" => "pages#borrar_linea"
   get "cobranza" => "pages#cobranza"
   get "unauthorized" => "pages#unauthorized"
+  get "imagenes" => "pages#importar_imagenes"
 
  
   namespace :api, defaults: {format: 'json'} do
