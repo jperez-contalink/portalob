@@ -15,7 +15,8 @@ module Api
         response = RestClient.get order_link
         respond_to do |format|
           format.xml {
-              send_data(response, :filename => 'A.zip')
+              #send_data(response, :filename => 'A.zip')
+              puts "XML"
            }
         end
       end

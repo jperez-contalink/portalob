@@ -527,7 +527,12 @@
 					sideShow = false;
 				}
 				
-			});	    
+			});	  
+			
+			$(document).on('click', '.submit_documentos_cobranza  ', function (e) {
+				//var valores = document.getElementById("strLineas_hidden").value;
+				submit_documentos_cobranza(e.currentTarget.id);
+			});
 			$(document).on('click', '.delete_item', function (e) {
 				console.log("ELIMINAR SIDE!!", e);
 				e.preventDefault();
@@ -729,7 +734,9 @@
 					//  Botones
 					metodosdepago += '<table width="60%;"><tr><td width="33%"></td>';
 					metodosdepago += '<td width="33%"><input type="button" onclick="salirDock();"  style="width:90%;padding:9px 3px 9px 3px;margin:0;" value="cancelar"/></td>';
-					metodosdepago += '<td width="33%"><input type="button" onclick="submit_documentos_cobranza(\'' + strLineas +'\')"  style="width:90%;padding:9px 3px 9px 3px;margin:0;" value="procesar"/></td></tr></table>';
+					/*metodosdepago += '<td width="33%"><input type="button" onclick="submit_documentos_cobranza(\'' + strLineas +'\')"  style="width:90%;padding:9px 3px 9px 3px;margin:0;" value="procesar"/></td></tr></table>';*/
+					metodosdepago += '<td width="33%"><input id="' + strLineas + '" type="button" class="submit_documentos_cobranza"  style="width:90%;padding:9px 3px 9px 3px;margin:0;" value="procesar"/><input type="hidden" value="' + strLineas +'" id="strLineas_hidden"/></td></tr></table>';
+
 					document.getElementById("listadoAgregadosMetodos").innerHTML = metodosdepago;
 					/*
 		        	// SERVICIO DE ESCRITURA DE COBRO
@@ -771,6 +778,97 @@
 				}				
 
 			});		
+
+
+
+
+			function submit_documentos_cobranza(lineas) {
+		    	var pendiente = parseFloat((document.getElementById('metodoMontoAplicar').innerHTML).replace("$", ""));
+		    	if (pendiente != 0) {
+					document.getElementById('alert_div_m').innerHTML = buildAlertError("Saldo Pendiente", "Al parecer aún existe una cantidad cuyo método de pago aún no ha sido definido, realiza los cambios necesarios y vuelve a intentarlo.");		    		
+		    	} else {
+		    		// METODOS DE PAGO A STRING
+		    		var strMetodos = "";
+					for (var i = 0;i<metodos_pago.aplicados.length;i++) {
+							strMetodos += metodos_pago.aplicados[i] + ":";
+					}		    		
+		        	// SERVICIO DE ESCRITURA DE COBRO
+		        	console.log("api/v1/aplicarcobranzas?lineas=" + lineas + "&metodos=" + strMetodos);
+			        $.ajax({
+			                type:"GET",
+			                dataType : 'json',
+			                url: "api/v1/aplicarcobranzas?lineas=" + lineas + "&metodos=" + strMetodos,
+			                success: function(datox){
+			                console.log("SUCCESS", datox);
+							$.ajax({
+					                type:"GET",
+					                dataType : 'json',
+					                url: "api/v1/documentoscobranzas",
+					                success: function(datox){
+					                console.log("SUCCESS", datox);
+					                allData = jsonConstructor(datox);
+					                allDocs = allData;
+					                buildListado(allData);
+					            },
+					                error:  function(){ 
+					                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. LECTURA 2</h3></div>'
+					                document.getElementById("grid").innerHTML = mensajeError;
+					                }
+					        });				                
+			            },
+			                error:  function(){ 
+			                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. ESCRITURA</h3></div>'
+			                //document.getElementById("grid").innerHTML = mensajeError;
+			                console.log("ERROR");
+							$.ajax({
+					                type:"GET",
+					                dataType : 'json',
+					                url: "api/v1/documentoscobranzas",
+					                success: function(datox){
+					                console.log("SUCCESS", datox);
+					                allData = jsonConstructor(datox);
+					                allDocs = allData;
+					                buildListado(allData);
+					            },
+					                error:  function(){ 
+					                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. LECTURA 2</h3></div>'
+					                document.getElementById("grid").innerHTML = mensajeError;
+					                }
+					        });			                
+			                }
+			        });		
+			        document.getElementById("h_alert_div").innerHTML = buildAlertSuccess("Correcto!", "La preaplicación de cobro se completó correctamente, ahora debe ser aprobada para generar el cobro.");
+			        document.getElementById("allinclused").value = "";
+			        document.body.style.overflowY = "scroll";
+					document.getElementById("proc-area_cbza").style.display = "none";
+					document.getElementById("agregados").innerHTML = '<div class="drop-area__item"><div class="dummy"></div></div>';
+
+					/*$.ajax({
+			                type:"GET",
+			                dataType : 'json',
+			                url: "api/v1/documentoscobranzas",
+			                success: function(datox){
+			                console.log("SUCCESS", datox);
+			                allData = jsonConstructor(datox);
+			                allDocs = allData;
+			                buildListado(allData);
+			            },
+			                error:  function(){ 
+			                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. LECTURA 2</h3></div>'
+			                document.getElementById("grid").innerHTML = mensajeError;
+			                }
+			        });	*/
+		    	}	    	
+		    }							    
+
+
+
+
+
+
+
+
+
 		    
 	        // CONSTRUYE EL LISTADO DE DOCUMENTOS
 			function buildListado(json){
@@ -1374,54 +1472,7 @@
 				document.getElementById('monto_metodo').readOnly = false
 				document.getElementById('metodoMontoAplicar').style.color = "#c0392b";					    	
 		    }
-			function submit_documentos_cobranza(lineas) {
-		    	var pendiente = parseFloat((document.getElementById('metodoMontoAplicar').innerHTML).replace("$", ""));
-		    	if (pendiente != 0) {
-					document.getElementById('alert_div_m').innerHTML = buildAlertError("Saldo Pendiente", "Al parecer aún existe una cantidad cuyo método de pago aún no ha sido definido, realiza los cambios necesarios y vuelve a intentarlo.");		    		
-		    	} else {
-		    		// METODOS DE PAGO A STRING
-		    		var strMetodos = "";
-					for (var i = 0;i<metodos_pago.aplicados.length;i++) {
-							strMetodos += metodos_pago.aplicados[i] + ":";
-					}		    		
-		        	// SERVICIO DE ESCRITURA DE COBRO
-		        	console.log("api/v1/aplicarcobranzas?lineas=" + lineas + "&metodos=" + strMetodos);
-			        $.ajax({
-			                type:"GET",
-			                dataType : 'json',
-			                url: "api/v1/aplicarcobranzas?lineas=" + lineas + "&metodos=" + strMetodos,
-			                success: function(datox){
-			                console.log("SUCCESS", datox);	                
-			            },
-			                error:  function(){ 
-			                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. ESCRITURA</h3></div>'
-			                //document.getElementById("grid").innerHTML = mensajeError;
-			                console.log("Error - Escritura de cobro.");
-			                }
-			        });		
-			        document.getElementById("h_alert_div").innerHTML = buildAlertSuccess("Correcto!", "La preaplicación de cobro se completó correctamente, ahora debe ser aprobada para generar el cobro.");
-			        document.getElementById("allinclused").value = "";
-			        document.body.style.overflowY = "scroll";
-					document.getElementById("proc-area_cbza").style.display = "none";
-					document.getElementById("agregados").innerHTML = '<div class="drop-area__item"><div class="dummy"></div></div>';
 
-					$.ajax({
-			                type:"GET",
-			                dataType : 'json',
-			                url: "api/v1/documentoscobranzas",
-			                success: function(datox){
-			                console.log("SUCCESS", datox);
-			                allData = jsonConstructor(datox);
-			                allDocs = allData;
-			                buildListado(allData);
-			            },
-			                error:  function(){ 
-			                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. LECTURA 2</h3></div>'
-			                document.getElementById("grid").innerHTML = mensajeError;
-			                }
-			        });	
-		    	}	    	
-		    }							    
 			function buildAlertWarning(titulo, mensaje){
 			  return '<div id="alert_limite" class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '</p></div>';
 			}

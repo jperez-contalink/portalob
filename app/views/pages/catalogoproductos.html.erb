@@ -559,8 +559,7 @@ function jsonConstructor(json, allPrice) {
         row.Inventario      = jsonObject.data[i].inventario;
         row.Marca           = jsonObject.data[i].marca;
         row.Categoria       = jsonObject.data[i].categoria;
-        // PROXIMAMENTE
-        //row.Video           = "https://www.youtube.com/watch?v=qKqnOlx8Okk";
+        row.Busqueda        = jsonObject.data[i].busqueda;
         row.Video           =  jsonObject.data[i].video;
         row.autoMarca       =  jsonObject.data[i].autoMarca;
         row.autoModelo       =  jsonObject.data[i].autoModelo;
@@ -1040,60 +1039,40 @@ function multiFiltros(checks) {
       var modelo_equal = false;
       var ano_equal = false;
       if (allData.rows[ix].autoMarca == actualMarca) {
-        //rowsNuevos.push(allData.rows[ix]);
         marca_equal = true;
-        //add = true;
       }
       if (allData.rows[ix].autoModelo == actualModelo) {
-        //rowsNuevos.push(allData.rows[ix]);
-        //add = true;
         modelo_equal = true;
       }
       if (allData.rows[ix].autoAno == actualAno) {
-        //rowsNuevos.push(allData.rows[ix]);
-        //add = true;
         ano_equal = true;
       }        
-      console.log("anoequal:" + ano_equal + " marcaequal:" + marca_equal + " modeloequal:" + modelo_equal + " / actualMarca:" + actualMarca + " actualAno:" + actualAno + " actualModelo:" + actualModelo);
-      //if (add == true) {
+      
       if (ano_equal && modelo_equal && marca_equal && actualMarca != 0 && actualAno != 0 && actualModelo != 0) {
         rowsNuevos.push(allData.rows[ix]);
-        console.log(">>>1");
       }  
       if (ano_equal && modelo_equal && !marca_equal && actualMarca == 0 && actualAno != 0 && actualModelo != 0) {
         rowsNuevos.push(allData.rows[ix]);
-        console.log(">>>2");
       }  
       if (ano_equal && !modelo_equal && marca_equal && actualMarca != 0 && actualAno != 0 && actualModelo == 0) {
         rowsNuevos.push(allData.rows[ix]);
-        console.log(">>>3");
       }  
       if (!ano_equal && modelo_equal && marca_equal && actualMarca != 0 && actualAno == 0 && actualModelo != 0) {
         rowsNuevos.push(allData.rows[ix]);
-        console.log(">>>4");
       }  
       if (ano_equal && !modelo_equal && !marca_equal && actualMarca == 0 && actualAno != 0 && actualModelo == 0) {
         rowsNuevos.push(allData.rows[ix]);
-        console.log(">>>5");
       }        
       if (!ano_equal && modelo_equal && !marca_equal && actualMarca == 0 && actualAno == 0 && actualModelo != 0) {
         rowsNuevos.push(allData.rows[ix]);
-        console.log(">>>6");
       }  
       if (!ano_equal && !modelo_equal && marca_equal && actualMarca != 0 && actualAno == 0 && actualModelo == 0) {
         rowsNuevos.push(allData.rows[ix]);
-        console.log(">>>7");
       }  
 
-
-
-
-        
-      //}
     }  
     var jsonRows = rowsNuevos;
   } else {
-    console.log("ss");
     jsonRows = allData.rows;
   }
 
@@ -1104,15 +1083,19 @@ function multiFiltros(checks) {
   if (document.getElementById("txt_search") != undefined) {
     palabra = document.getElementById("txt_search").value;
   }
-  console.log("$> Filtrar por palabras clave: " + palabra);
     var rowsNuevos = [];
     for (var i=0;i<jsonRows.length;i++) {
       var currentName = jsonRows[i].Nombre;
+      var currentSearch = jsonRows[i].Busqueda;
+      //console.log("$>>>>> " + currentSearch);
       currentName = currentName.toUpperCase();
-      if (currentName.indexOf(palabra.toUpperCase()) > -1) {
+      currentSearch = currentSearch.toUpperCase();
+      if (currentName.indexOf(palabra.toUpperCase()) > -1 || currentSearch.indexOf(palabra.toUpperCase()) > -1) {
         rowsNuevos.push(jsonRows[i]);
       }
     }
+
+
     // Filtrar por precio
     console.log("$> " + document.getElementById('precioDesde').value + " - " + document.getElementById('precioHasta').value);
     var precioDesde = document.getElementById('precioDesde').value;
@@ -1534,5 +1517,10 @@ function buildAlertError(titulo, mensaje){
 }
 });
   </script>
+
+
+
+
+
 </body>
 </html>
