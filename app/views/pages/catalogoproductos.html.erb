@@ -560,7 +560,7 @@ function jsonConstructor(json, allPrice) {
         row.Inventario      = jsonObject.data[i].inventario;
         row.Marca           = jsonObject.data[i].marca;
         row.Categoria       = jsonObject.data[i].categoria;
-        row.Busqueda        = jsonObject.data[i].busqueda;
+        //row.Busqueda        = jsonObject.data[i].busqueda;
         row.Video           =  jsonObject.data[i].video;
         row.autoMarca       =  jsonObject.data[i].autoMarca;
         row.autoModelo       =  jsonObject.data[i].autoModelo;
@@ -1087,11 +1087,11 @@ function multiFiltros(checks) {
     var rowsNuevos = [];
     for (var i=0;i<jsonRows.length;i++) {
       var currentName = jsonRows[i].Nombre;
-      var currentSearch = jsonRows[i].Busqueda;
-      //console.log("$>>>>> " + currentSearch);
+      //var currentSearch = jsonRows[i].Busqueda;
       currentName = currentName.toUpperCase();
-      currentSearch = currentSearch.toUpperCase();
-      if (currentName.indexOf(palabra.toUpperCase()) > -1 || currentSearch.indexOf(palabra.toUpperCase()) > -1) {
+      //currentSearch = currentSearch.toUpperCase();
+      //if (currentName.indexOf(palabra.toUpperCase()) > -1 || currentSearch.indexOf(palabra.toUpperCase()) > -1) {
+      if (currentName.indexOf(palabra.toUpperCase()) > -1) {
         rowsNuevos.push(jsonRows[i]);
       }
     }

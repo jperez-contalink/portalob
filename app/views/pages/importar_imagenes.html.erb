@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>CNTCTO</title>
+    <style>
+    </style>
+</head>
+<body>
+<br><br><br><br>
+<div align="center"><h2>Carga de imagenes</h2></div><br><br>
+<div id="img_loader"></div>
+<input type="button" value="cargar" class="cargarImagenesBtn"/>
+<script>
+  $(document).ready( function() {
+    console.log("IMAGENES.");
+    $(document).on('click', '.cargarImagenesBtn', function (e) {
+      console.log("cargar imagenes");
+      var datox = {};
+      $.ajax({
+        type:"GET",
+        dataType : 'json',
+        url: "api/v1/productos",
+        success: function(datos){
+          console.log("Productos", datos);
+          allData = jsonConstructor(datos);
+          for (var i=0;i<allData.length;i++) {
+          console.log("Parametros: " + allData[i]);
+          $.ajax({
+            type:"GET",
+            dataType : 'json',
+            url: "api/v1/descarga_imagenes?productoids=" + allData[i],
+            success: function(datos){
+              console.log("Procesado correctamente " + i + " de " + allData.length);
+            }, 
+            error:  function(){ 
+              var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. (Servicio de Imagenes)</h3></div>'
+              document.getElementById("img_loader").innerHTML = mensajeError;
+            }
+          }); // termina productos            
+          }          
+        },
+        error:  function(){ 
+          var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor. (Servicio de productos)</h3></div>'
+          document.getElementById("img_loader").innerHTML = mensajeError;
+        }
+      }); // termina productos
+    });
+    
+  });
+// Funciones
+function jsonConstructor(json) {
+  //name, value, familia, descargaimg, id
+    var rows = [];
+    var jsonObject = json.response;
+    var strImgIds  = "";
+    indiceJson = 0;
+    indiceImg = 0;
+    imagePackages = [];
+    for (var i=0;i<jsonObject.totalRows;i++) {
+        var row = {};
+        row.Producto_ID     = jsonObject.data[i].id;
+        row.Nombre          = jsonObject.data[i].name;
+        row.Identificador   = jsonObject.data[i].value;
+        //row.Familia         = jsonObject.data[i].familia;
+        row.DescargaImg     = jsonObject.data[i].descargaimg;
+        row.Inventario      = jsonObject.data[i].inventario;
+        row.Marca           = jsonObject.data[i].marca;
+        row.Categoria       = jsonObject.data[i].categoria;
+        row.Busqueda        = jsonObject.data[i].busqueda;
+        row.Video           =  jsonObject.data[i].video;
+        row.autoMarca       =  jsonObject.data[i].autoMarca;
+        row.autoModelo       =  jsonObject.data[i].autoModelo;
+        row.autoAno        =  jsonObject.data[i].autoAno;
+        row.Productoextra   = jsonObject.data[i].productoextraname;
+        row.Precioshow = 0;
+        if (jsonObject.data[i].image == "Y"){
+          row.Image = "imagenesProductos/" + jsonObject.data[i].id + ".png";
+          strImgIds += row.Producto_ID + "_";
+          indiceImg++;
+          if (indiceImg == 20) {
+            imagePackages.push(strImgIds);
+            indiceImg = 0;
+            strImgIds = "";
+          }
+        }
+    }
+    // Valida para residuos en la cadena 
+    if (strImgIds.length > 0) {
+      imagePackages.push(strImgIds);
+    }
+    return imagePackages;
+}  // Termina json Constructor
+</script>
+</body>
+</html>
