@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>PRDCTS</title>
+    <style>
+    .td_cust {
+    	font-size: 200%;
+    	font-weight: bold;
+    	padding: .2em .2em .2em .2em
+    }
+    .td_cust a {
+    	color:#7f8c8d;
+    }
+    </style>
+</head>
+<body>
+	<br><br><br><br><h1>LISTADO DE PRODUCTOS</h1>
+	<div class="input-group"><span class="input-group-addon glyphicon glyphicon-search"></span><input type="text" class="form-control btn_search" aria-describedby="basic-addon1" id="txt_search" autofocus></div>
+	<br><br>
+	<div align="center" id="listadoClientes"><br><br><br><br><br><br><div id="loader-wrapper"><img src="load.gif" height="9%" width="6%"></img></div></div>
+</body>
+<script type="text/javascript">
+emtpyRows = [];
+allData = {
+  rows: emtpyRows
+};
+filterData = {};
+$( document ).ready(function() {
+$.ajax({
+	                type:"GET",
+	                dataType : 'json',
+	                url: "api/v1/customers",
+	                success: function(datox){
+	                console.log("SUCCESS", datox);
+	                allData = jsonConstructor(datox);
+	                buildListado(allData);
+	            },
+	                error:  function(){ 
+	                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor, error en servicio de lectura de clientes.</h3></div>'
+	                document.getElementById("grid").innerHTML = mensajeError;
+	                }
+	    });		
+// Búsqueda por texto
+  $(document).on('keyup', '.btn_search', function (e) {
+    console.log("Busqueda");
+    e.preventDefault();
+    var parametro = document.getElementById("txt_search").value;
+    buscarPalabra(parametro);
+    document.getElementById("txt_search").value = parametro;
+    $("body").scrollTop(0);    
+    $( "#txt_search" ).focus();
+  });
+});
+function jsonConstructor(json) {
+    var rows = [];
+    var jsonObject = json.response;
+	for (var i=0;i<jsonObject.totalRows;i++) {
+		var row = {};
+        row.Cliente_ID		= jsonObject.data[i].id;
+        row.Clave	 		= jsonObject.data[i].value;
+        row.RFC		 		= jsonObject.data[i].rfc;
+        row.Nombre 			= jsonObject.data[i].name;
+        rows.push(row);
+    }    
+    var data = {
+                //facturas: rows
+                rows: rows
+            };
+    return data;
+}  // Termina json Constructor	
+// Construir tabla del listado de clientes.
+function buildListado(json) {
+	var jsonObject = json.rows;	
+	var tabla = '<table width="100%" style="border: 1px solid #7f8c8d;border-radius: 10px;">';
+	var stylePar = "";
+	for (var i=0;i<jsonObject.length;i++) {	
+	//for (var i=0;i<20;i++) {			
+		stylePar = "";
+		if (i%2 == 0) {
+			stylePar='style="background-color:#bdc3c7;"';
+		}
+		tabla += '<tr '+ stylePar +'><td class="td_cust"><a href="www.google.com"><div style="height:100%;width:100%">' + jsonObject[i].Nombre + '</div></a></td><td style="text-align:right;" class="td_cust"><a href="www.google.com"><div style="height:100%;width:100%">' + jsonObject[i].RFC + '</div></a></td></tr>';
+	}
+	tabla += '</table>';
+	document.getElementById("listadoClientes").innerHTML = tabla;
+}
+
+// Búsqueda por palabras clave
+function buscarPalabra(palabra) {
+  var rowsNuevos = [];
+  console.log("PN:|" + palabra + "|");
+  for (var i=0;i<allData.rows.length;i++) {
+    var currentName = allData.rows[i].Nombre;
+    currentName = currentName.toUpperCase();
+    if (currentName.indexOf(palabra.toUpperCase()) > -1) {
+      rowsNuevos.push(allData.rows[i]);
+    }
+  }
+  var rowsNuevos = {
+                rows: rowsNuevos
+            };
+  //filterData = rowsNuevos;
+  buildListado(rowsNuevos);
+}
+
+</script>
+</html>
