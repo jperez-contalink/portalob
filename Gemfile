@@ -24,6 +24,7 @@ gem 'zip-zip' # will load compatibility for old rubyzip API.
 gem 'chilkat', '~> 9.5.0.47'
 gem 'cancan'
 gem 'intercom-rails'
+gem 'newrelic_rpm'
 
 group :development, :test do
   gem 'sqlite3'
