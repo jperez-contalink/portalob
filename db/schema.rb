@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150507162818) do
+ActiveRecord::Schema.define(version: 20150521162655) do
 
   create_table "aplicarcobranzas", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -136,6 +136,8 @@ ActiveRecord::Schema.define(version: 20150507162818) do
     t.boolean  "isadmin"
     t.string   "role"
     t.string   "partner_id"
+    t.string   "vendor_id"
+    t.string   "customer_name"
   end
 
   add_index "usuarios", ["email"], name: "index_usuarios_on_email", unique: true

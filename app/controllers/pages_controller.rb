@@ -101,6 +101,14 @@ def success_order
 	#order_link = "http://csalinas-tegik:KopoTegik@23.23.245.49/openbravo/ws/com.tegik.portalob.DescargaDocumentosPortal?facturaids=893B8B30D84743E69B23D574F59A81DA_"
 
 end	
+def customer_selected
+	puts "SELECCIÓN CLIENTE - ID: " + params[:id] + " + V: " + params[:value]
+	@Change = Usuario.find(current_usuario.id);
+	@Change.partner_id = params[:id]
+	@Change.customer_name = params[:value]
+	@Change.save
+	#redirect_to cobranza_path
+end
 
 def facturas
 	# cancan lo necesita?

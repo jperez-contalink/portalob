@@ -25,7 +25,7 @@ emtpyRows = [];
 allData = {
   rows: emtpyRows
 };
-filterData = {};
+var filterData = {};
 $( document ).ready(function() {
 $.ajax({
 	                type:"GET",
@@ -51,6 +51,33 @@ $.ajax({
     $("body").scrollTop(0);    
     $( "#txt_search" ).focus();
   });
+  $(document).on('click', '.customerSelected', function (e) {
+    e.preventDefault();
+    var par = e.target.id;
+    var parArray   = par.split("_");
+    console.log("ID: " + parArray[0] + " - Nombre: " + parArray[1]);
+    $.ajax({
+        type:"GET",
+        dataType : 'html',
+        url: "/customer_selected?id=" + parArray[0] + "&value=" + parArray[1],
+        success: function(datox){
+        console.log("$> Datos: ", datox);
+        },
+        error:  function(){ 
+            console.log("$> Ocurrio un error");
+        }
+    });
+    var action = "<%= params[:act]%>";
+    if (action == "cbza") {
+      window.location="/cobranza";
+    } else if (action == "vnta") {
+      window.location="/listadeproductos"
+    } else {
+      console.log("Acción desconocida");
+    }
+
+  });
+
 });
 function jsonConstructor(json) {
     var rows = [];
@@ -61,6 +88,7 @@ function jsonConstructor(json) {
         row.Clave	 		= jsonObject.data[i].value;
         row.RFC		 		= jsonObject.data[i].rfc;
         row.Nombre 			= jsonObject.data[i].name;
+        row.Vendedor    = jsonObject.data[i].vendor;
         rows.push(row);
     }    
     var data = {
@@ -80,7 +108,7 @@ function buildListado(json) {
 		if (i%2 == 0) {
 			stylePar='style="background-color:#bdc3c7;"';
 		}
-		tabla += '<tr '+ stylePar +'><td class="td_cust"><a href="www.google.com"><div style="height:100%;width:100%">' + jsonObject[i].Nombre + '</div></a></td><td style="text-align:right;" class="td_cust"><a href="www.google.com"><div style="height:100%;width:100%">' + jsonObject[i].RFC + '</div></a></td></tr>';
+		tabla += '<tr '+ stylePar +'><td class="td_cust"><a class="customerSelected"><div id="' +  jsonObject[i].Cliente_ID + '_' + jsonObject[i].Nombre +'" style="height:100%;width:100%">' + jsonObject[i].Nombre + '</div></a></td><td style="text-align:right;" class="td_cust"><a class="customerSelected"><div id="' +  jsonObject[i].Cliente_ID + '_' + jsonObject[i].Nombre +'" style="height:100%;width:100%">' + jsonObject[i].RFC + '</div></a></td></tr>';
 	}
 	tabla += '</table>';
 	document.getElementById("listadoClientes").innerHTML = tabla;

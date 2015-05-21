@@ -410,11 +410,12 @@
 			<div id="listadoAgregados" class="listadoAgregados" align="center"></div>
 			<div id="listadoAgregadosMetodos" class="listadoAgregados" style="display:none;" align="center"></div>
 		</div>
+		<br><br><br><br><br><div id="headCust" style="color:#848484;font-size:300%;font-weight:bold;" align="left"></div>
 		<!-- LISTADO DE DOCUMENTOS AGREGADOS -->
 		<input type="hidden" id="allinclused">
 		<div class="container" id="container">
 			<div class="content" style="background-color:transparent;">
-				<br><br><br><br>
+				<br>
 				<div  align="right">
 					<button type="button" class="btn btn-default procesar_documento hover_clean" aria-
 					label="Left Align">
@@ -493,7 +494,8 @@
 			                url: "api/v1/metodopagos",
 			                success: function(datoz){
 			                console.log("SUCCESSMETODOS", datoz);
-			                buildMetodosPago(datoz);
+			                buildMetodosPago(datoz);			 
+			                document.getElementById("headCust").innerHTML = 'CLIENTE: <%=current_usuario.customer_name%>&nbsp;<a href="/clientes?act=cbza"><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></a>';
 			            },
 			                error:  function(){ 
 			                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor MÉTODOS DE PAGO.</h3></div>'

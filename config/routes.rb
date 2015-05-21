@@ -53,11 +53,13 @@ Rails.application.routes.draw do
   post "carrito" => "pages#carrito"
   get "success_order" => "pages#success_order"
   get "cambia_linea" => "pages#cambia_linea"
+  get "customer_selected" => "pages#customer_selected"
   get "borrar_linea" => "pages#borrar_linea"
   get "cobranza" => "pages#cobranza"
   get "unauthorized" => "pages#unauthorized"
   get "imagenes" => "pages#importar_imagenes"
   get "clientes" => "pages#clientes"
+  get "listadeproductos" => "pages#lista_productos"
  
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
