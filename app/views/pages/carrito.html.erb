@@ -122,7 +122,7 @@
     e.preventDefault();
     console.log("Cambiar Cantidad de la linea " + (e.currentTarget.id).replace("_Cantidad", "") + " a " + e.currentTarget.value);
     var id = (e.currentTarget.id).replace("_Cantidad", "");
-    if (e.currentTarget.value > 0 && e.currentTarget.value < 10000) {
+    if (e.currentTarget.value > 0 && e.currentTarget.value < 1000000) {
         var value = e.currentTarget.value;
     } else {
         value = 1;

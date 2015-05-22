@@ -655,6 +655,8 @@ function jsonConstructor(json, allPrice) {
             hidden: true
         }
     };
+    // Ordenar items
+    itemsChar.items = rowsSort(itemsChar.items);
     // Contruir el json de datos
     console.log("$> ITEMS: ", itemsChar);
     var data = {
@@ -1515,10 +1517,29 @@ function filterHereda(id) {
   }  
 }
 
-function buildAlertSuccess(titulo, mensaje){
+function rowsSort(array) {
+  var newRows = [];
+  // Generar un array con sólo los nombres
+  for (var i=0;i<array.length;i++) {
+    newRows.push(array[i]);
+  }
+  // Ordenar el array
+  newRows.sort();
+  // Recorrer el array ordenado cuando el nombre coincida con el del array de entrada reemplazar
+  /*for (var j=0;j<array.length;j++) {
+    for (var k=0;k<newRows.length;k++) {
+      if (array[j] == newRows[k]) {
+        newRows[k] = array[j];
+      }
+    }
+  } */ 
+  return newRows;
+}
+
+function buildAlertSuccess(titulo, mensaje) {
   return '<div id="alert_limite" class="alert alert-success alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '<br>Visita tu carrito de compra <a href="/carrito">aqui</a></p></div>';
 }
-function buildAlertError(titulo, mensaje){
+function buildAlertError(titulo, mensaje) {
   return '<div id="alert_limite" class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '</p></div>';
 }
 });
