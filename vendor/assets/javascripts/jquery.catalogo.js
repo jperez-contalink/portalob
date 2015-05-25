@@ -120,7 +120,9 @@
             var auto_marcas = '<strong>MARCA</strong><br><select class="selectAuto selectAutoMarca" id="selectAutoMarca"><option value="0">elige una marca</option>';
             var auto_modelo = '<strong>MODELO</strong><br><select class="selectAuto selectAutoModelo" id="selectAutoModelo"><option value="0">elige un modelo</option>';
             var auto_ano    = '<strong>AÑO</strong><br><select class="selectAuto selectAutoAno" id="selectAutoAno"><option value="0">elige un año</option>';
-
+            // Ordenamiento de filtros
+            var arrMarOrdenado = [];
+            var arrCatOrdenado = [];
 
             var caracteriticas = "";
             marcas += '<div id="div_filtro_marcas">'
@@ -128,11 +130,13 @@
             for (var key in jsonRows) {
                 var obj = jsonRows[key]; 
                 if (arrayMarca.indexOf(obj.Marca) == -1 && obj.Precio != 0) {
-                    marcas += '<input class="fil_multi" type="checkbox" id = "'+obj.Marca+'"/>&nbsp;' + obj.Marca + '<br>';
+                    //marcas += '<input class="fil_multi" type="checkbox" id = "'+obj.Marca+'"/>&nbsp;' + obj.Marca + '<br>';
+                    arrMarOrdenado.push(obj.Marca);
                     arrayMarca.push(obj.Marca);
                 }
                 if (arrayCategoria.indexOf(obj.Categoria) == -1 && obj.Precio != 0) {
-                    categorias += '<input class="fil_multi" type="checkbox" id = "'+obj.Categoria+'"/>&nbsp;' + obj.Categoria + '<br>';
+                    //categorias += '<input class="fil_multi" type="checkbox" id = "'+obj.Categoria+'"/>&nbsp;' + obj.Categoria + '<br>';
+                    arrCatOrdenado.push(obj.Categoria);
                     arrayCategoria.push(obj.Categoria);
                 }
                 // Gestión para empresas con el módulo de automotrices instalada
@@ -164,6 +168,16 @@
                 }                                           
                 // Termina - Gestión para empresas con el módulo de automotrices instalada
             }
+            // ORDENAMIENTO DE FILTROS
+            arrMarOrdenado.sort();
+            arrCatOrdenado.sort();
+            for (var orm = 0;orm<arrMarOrdenado.length;orm++) {
+                marcas += '<input class="fil_multi" type="checkbox" id = "'+arrMarOrdenado[orm]+'"/>&nbsp;' + arrMarOrdenado[orm] + '<br>';
+            }
+            for (var orc = 0;orc<arrCatOrdenado.length;orc++) {
+                categorias += '<input class="fil_multi" type="checkbox" id = "'+arrCatOrdenado[orc]+'"/>&nbsp;' + arrCatOrdenado[orc] + '<br>';
+            }
+
             marcas += "</div>";
             categorias += "</div>";
             auto_marcas += "</select><br>";
