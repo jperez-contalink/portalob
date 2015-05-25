@@ -70,14 +70,21 @@ def carrito
 end
 
 def cambia_linea
-	puts "ENTRA A BORRAR PRODUCTO L: " + params[:linea_id] + " + V: " + params[:valor]
+	puts "Cambia Linea PageController"
 	@Change = Pedidolinea.find_by_id(params[:linea_id]);
 	@Change.cantidad = params[:valor]
 	@Change.total = @Change.cantidad*@Change.precio
 	@Change.save
+	respond_to do |format|
+		format.html {render html: "<br>"}
+	end
 end
 def borrar_linea
+	puts "Borrar linea PageController" 
 	Pedidolinea.find(params[:linea_id]).destroy
+	respond_to do |format|
+		format.html {render html: "<br>"}
+	end	
 end
 
 def registro
