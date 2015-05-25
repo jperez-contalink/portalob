@@ -664,11 +664,9 @@
 				var Docs = strDocs.split("_");
 				var strLineas = "";
 				var totalCobranzaAplicar = 0;
-				for (i=0;i<allData.facturas.length;i++) {
+				for (i=0;i<allData.rows.length;i++) {
 					for (var j=0;j<Docs.length;j++) {
-						console.log("%> FORJ");
 						if (Docs[j] == allData.rows[i].Documento_ID) {
-							console.log("%> ENTRO: ", allData.rows[i]);
 							var aplicar_valor = document.getElementById(allData.rows[i].Documento_ID + "_text").value;
 							//docAdds.push(allData.facturas[i]);
 							//strLineas += allData.facturas[i].Documento_ID + "_" + allData.facturas[i].Aplicar + ":";
@@ -677,7 +675,6 @@
 						}
 					}
 				}
-
 		    	if (totalCobranzaAplicar > -0.01 && totalCobranzaAplicar < 0) {
 		    		totalCobranzaAplicar = 0;
 		    	}				
