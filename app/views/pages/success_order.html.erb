@@ -163,7 +163,8 @@
             },
                 error:  function(){ 
                     console.log("$> Ocurrio un error");
-                    document.getElementById("div_message").innerHTML = "<h2>Algo ha salido mal, contacta con tu proveedor.</h2></div><br><br><br><br><a href=\"/carrito\">Carrito de Compra.</a>";
+                    document.getElementById("loader-wrapper").style.display = "none";
+                    document.getElementById("div_message").innerHTML = "<br><br><br><h2>Algo ha salido mal y no se ha podido completar el pedido, contacta con tu proveedor.</h2></div><br><br><br><br><a href=\"/carrito\">Carrito de Compra.</a>";
                 }
             });            
 	    } else {
@@ -394,12 +395,6 @@ function buildListaOrden(ob, ord, pedido){
                             htmlBuilder += '<div align="right" id="' + lineasPortal[k].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Precio) + '</div>';
                         }
 
-
-
-
-
-
-                        
                         htmlBuilder += '<div align="center" class="qtyGrid" style="float:left;"><input class="chng_qty" type="text" value="' + separaMiles(lineasPortal[k].Cantidad) + '" id="' + lineasPortal[k].Linea_id + '_Cantidad" readonly   /></div>';
                         htmlBuilder += '<div align="right" id="totalGrid" class="totalGrid" style="float:left;">$' + separaMiles(lineasPortal[k].Total) + '<br></div>';
                         htmlBuilder += '</div>';                        
