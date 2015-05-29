@@ -371,6 +371,45 @@
                   document.getElementById("cat_pro").innerHTML = mensajeError;
                 }
         });      
+    console.log("Valida Existencia del pedido en Openbravo");
+    var pedidoActual = "";
+    var openbravo_pedido = "";
+    var crear_nuevo = "";
+    <% Pedido.where(usuario_id: current_usuario.id).find_each do |ords|%>
+      <% if ords.activo? %>
+        pedidoActual = "<%= ords.id %>"
+      <% end %>
+    <% end %>
+      // validar si existe la orden en openbravo
+      console.log("#> api/v1/pedidonuevos?usuario_id=<%=current_usuario.id%>");
+    $.ajax({
+            type:"GET",
+            dataType : 'json',
+            url: "api/v1/pedidosobs?pedido_id=" + pedidoActual,
+               success: function(datox){
+               console.log("$> Success: ", datox);
+               console.log("$> ", datox.data);
+               openbravo_pedido = datox.data;
+                if (openbravo_pedido == undefined) {
+                  console.log("No existe el pedido procede normalente" + openbravo_pedido);
+                } else {
+                  console.log("Ya existe el pedido en openbravo crear uno nuevo y asigna las lineas al nuevo" + openbravo_pedido);
+                    $.ajax({
+                        type:"GET",
+                        dataType : 'json',
+                        url: "api/v1/pedidonuevos?usuario_id=<%=current_usuario.id%>",
+                           success: function(datox){
+                        },
+                            error:  function(){ 
+                            console.log("$> Ocurrio un error");
+                        }
+                    });          
+                }               
+            },
+                error:  function(){ 
+                console.log("$> Ocurrio un error");
+            }
+    });          
     }
   });
   $("#cat_pro").on('click', '.close_cart', function (e) {

@@ -49,7 +49,7 @@
       color: black;
     }
     .cartCantidad {
-      font-size: 160%;
+      font-size: 350%;
       color: black;
       padding: 1% 1% 1% 1%;
       border:0px solid black; 
@@ -83,7 +83,7 @@
     </style>
 </head>
 <body>
-	<br><br><br><br><h1>LISTADO DE PRODUCTOS</h1>
+	<br><br><br><br><h1></h1>
   <div align="center" id="alertas_div"></div>
 	<div class="input-group"><span class="input-group-addon glyphicon glyphicon-search"></span><input type="text" class="form-control btn_search" aria-describedby="basic-addon1" id="txt_search" autofocus></div>
 	<br><br>
@@ -133,7 +133,7 @@ $( document ).ready(function() {
             console.log("Productos", datos);
             allData = jsonConstructor(datos, allPrice);
             console.log("$> PRODUCTOS: ", allData);
-            buildListado(allData);
+            //buildListado(allData);
             },
           error:  function(){ 
             var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
@@ -169,6 +169,7 @@ $(document).on('click', '.addProduct', function (e) {
   var productId = e.currentTarget.id;
   //document.getElementById('cat_pag').style.display = "none";
   document.getElementById("listadoClientes").innerHTML = buildAddProduct(e.target.id);
+  $( "#cartCantidad" ).focus();
 });
 // Cerrar panel de agregar producto
 $(document).on('click', '.close_cart', function (e) {
@@ -424,7 +425,7 @@ function buildListado(json) {
 // Búsqueda por palabras clave
 function buscarPalabra(palabra) {
   var rowsNuevos = [];
-  console.log("PN:|" + palabra + "|");
+  console.log("PN:|" + palabra + "| - " + palabra.length);
   for (var i=0;i<allData.rows.length;i++) {
     var currentName = allData.rows[i].Nombre;
     currentName = currentName.toUpperCase();
@@ -439,7 +440,7 @@ function buscarPalabra(palabra) {
   buildListado(rowsNuevos);
 }
 // Ver descripción del producto
-function buildAddProduct(productID) {
+function buildAddProduct_deprecated(productID) {
   var buildHTML = '<h3>Añadir Producto</h3><br>'
   // Buscar el producto.
   var jsonRows = allData.rows;
@@ -475,7 +476,7 @@ function buildAddProduct(productID) {
             buildHTML += '<div align="left" style="display:none;" class="cartInventario" id="cartInventario">' + obj.Inventario + ' disponibles.</div>';
         }
         // Cantidad
-        buildHTML += '<hr width="80%" align="left"><div  align="left" class="cartCantidad">Cantidad: &nbsp;<input type="text" id="cartCantidad" value="1"/></div>';
+        buildHTML += '<hr width="80%" align="left"><div  style="color:#7f8c8d;font-weight:bold;" align="left" class="cartCantidad">Cantidad: &nbsp;<input type="text" id="cartCantidad" value="1"/></div>';
         // BtonAgregar
         buildHTML += '<div class="cartBtn" align="left"><br><input id="' + obj.Producto_ID + '" type="button" value="añadir producto a la orden" class="btn btn-default btn-anadir submitProduct"> </div>';
         // Valores ocultos para envío de parametros
@@ -486,6 +487,57 @@ function buildAddProduct(productID) {
   }
   return buildHTML;
 }
+
+// añadir producto
+function buildAddProduct(productID) {
+  var buildHTML = "";
+  //var buildHTML = '<h3>Añadir Producto</h3><br>'
+  // Buscar el producto.
+  var jsonRows = allData.rows;
+  for (var key in jsonRows) {
+      var obj = jsonRows[key]; 
+      if (obj.Producto_ID == productID) {
+        var pextra = "";
+        var montoextra = 0;
+        montoextra = (parseFloat(obj.Precioproductoextra)).toFixed(2);
+        if (montoextra > 0) {
+            pextra = '<div style="font-size:100%;color:grey;padding-left:1%;padding-top:1%;">Incluye $' + String(montoextra) + ' (' + obj.Productoextra +  ')</div>';
+        }
+        buildHTML += '<br><div style="border:0px solid blue;width:100%;">';
+        if (obj.Video != null && obj.Video != "") {
+          //buildHTML += '<div style="border:0px solid green;width:60%;float:left;height:100%;" align="center"><iframe width="100%" height="350px" src="http://www.youtube.com/embed/' + obj.Video.replace("https://www.youtube.com/watch?v=", "") +'?autoplay=0"></iframe></div>';          
+        } else {
+          //buildHTML += '<div style="border:0px solid green;width:60%;float:left;height:100%;" align="center"><img src="'+obj.Image+'" width="50%"></img></div>';
+        }
+
+        // Panel Derecho Titulo
+        buildHTML += '<div style="border:0px solid red;width:100%;height:100%;padding:1% 1% 1% 1%;">';
+        buildHTML += '<div style="border:0px solid red;width:100%" align="right"><input type="button" value="x" class="btn-close close_cart"/></div>';
+        buildHTML += '<div align="left"><h2>'+obj.Nombre+'</h2></div>';
+        // Identificador
+        //buildHTML += '<div align="left" class="cartValue" id="cartValue">' + obj.Identificador + '</div>';
+        // Precio
+        //buildHTML += '<div align="left" class="cartPrecio" id="cartPrecio">$' + (parseFloat(obj.Precioshow)).toFixed(2) + '</div>' + pextra;
+        // Inventario
+        /*if (mostrarInventario == "true") {
+            buildHTML += '<div align="left" class="cartInventario" id="cartInventario">' + obj.Inventario + ' disponibles.</div>';
+        } else {
+            //buildHTML += '<div align="left" class="cartInventario" id="cartInventario"></div>';
+            buildHTML += '<div align="left" style="display:none;" class="cartInventario" id="cartInventario">' + obj.Inventario + ' disponibles.</div>';
+        }*/
+        // Cantidad
+        buildHTML += '<hr width="100%" align="left"><div  align="center" class="cartCantidad">Cantidad: &nbsp;<input type="text" id="cartCantidad" value="1"/></div>';
+        // BtonAgregar
+        buildHTML += '<div class="cartBtn" align="center"><br><input id="' + obj.Producto_ID + '" type="button" value="añadir producto a la orden" class="btn btn-default btn-anadir submitProduct"> </div>';
+        // Valores ocultos para envío de parametros
+        buildHTML += '<input type="hidden" id="hdnProduct" value="'+obj.Nombre+'"/><input type="hidden" id="hdnValue" value="'+obj.Identificador+'"/><input type="hidden" id="hdnImagen" value="'+obj.Image+'"/><input type="hidden" id="hdnImpuesto" value="'+obj.Impuesto+'"/><input type="hidden" id="hdnPrecioOB" value="'+obj.Precio+'"/><input type="hidden" id="hdnproductoextra" value="'+obj.Productoextra+'"/><input type="hidden" id="hdnprecioextra" value="'+obj.Precioproductoextra+'"/><input type="hidden" id="hdnimpuestoextra" value="'+obj.Impuestoproductoextra+'"/>';
+        // Cierra panel derecho
+        buildHTML += '</div></div>';
+      }
+  }
+  return buildHTML;
+}
+
 function buildAlertSuccess(titulo, mensaje){
   return '<div id="alert_limite" class="alert alert-success alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '<br>Orden de compra <a href="/carrito">aqui</a></p></div>';
 }

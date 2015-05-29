@@ -135,7 +135,7 @@
         var pedidoCompletadoHTML = "";
 	    if (pedido!="") {
 	    	console.log("Existe el parametro de pedido, ejecutar servicio");
-            // Servicio
+            // Servicio            
             // ESCRIBIR PEDIDO
             $.ajax({
                 type:"GET",
@@ -154,6 +154,18 @@
                                    htmlOrd = buildListaOrden(openbravo, Orden, pedido);
                                    buildListaOrdenes(openbravo, Orden, pedido, htmlOrd);
                                    document.getElementById("loader-wrapper").style.display = "none";
+                                    // BORRAR LINEAS DEL PEDIDO
+                                    $.ajax({
+                                        type:"GET",
+                                        dataType : 'json',
+                                        url: "api/v1/borrarlineas?pedido_id=" + pedido,
+                                        success: function(datox){
+                                            console.log("$> Ocurrio un error"); 
+                                        },
+                                        error:  function(){ 
+                                            console.log("$> Ocurrio un error");
+                                        }
+                                    });
                             },
                                 error:  function(){ 
                                     console.log("$> Ocurrio un error");

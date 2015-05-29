@@ -87,6 +87,18 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
+      resources :pedidonuevos
+    end  
+  end
+
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      resources :borrarlineas
+    end  
+  end  
+
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
       resources :customers
     end  
   end
