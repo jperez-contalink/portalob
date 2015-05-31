@@ -60,6 +60,7 @@ Rails.application.routes.draw do
   get "imagenes" => "pages#importar_imagenes"
   get "clientes" => "pages#clientes"
   get "listadeproductos" => "pages#lista_productos"
+  get "puntodeventa" => "pages#pos"
  
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
@@ -82,6 +83,12 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       resources :metodopagos
+    end  
+  end
+
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      resources :posproductos
     end  
   end
 

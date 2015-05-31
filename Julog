@@ -1,19 +1,26 @@
- 1008  rails s
- 1009  rake assets:precompile
- 1010  rails s
- 1011  rake assets:precompile
- 1012  rails s
- 1013  rake assets:precompile
- 1014  rails s
- 1015  rake assets:precompile
- 1016  rails s
- 1017  rails generate migration AddPrecioobToPedidolinea precioob :float
- 1018  rails db:migration
- 1019  rake db:migrate
- 1020  rails generate migration AddPrecioobToPedidolinea precioob:float
- 1021  rake db:migrate
- 1022  rails generate migration AddExtrasToPedidolinea precioproductoextra:float productoextra:string
- 1023  rake db:migrate
+ 1001  rails s
+ 1002  rake assets:precompile
+ 1003  rails s
+ 1004  rake assets:precompile
+ 1005  rails s
+ 1006  rake assets:precompile
+ 1007  rails s
+ 1008  rake assets:precompile
+ 1009  rails s
+ 1010  rake assets:precompile
+ 1011  rails s
+ 1012  rake assets:precompile
+ 1013  rails s
+ 1014  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
+ 1015  rails c
+ 1016  source ~/.rvm/scripts/rvm
+ 1017  rails c
+ 1018  source ~/.rvm/scripts/rvm
+ 1019  cd /home/julio/Tegik/portalob/
+ 1020  rails s
+ 1021  rake assets:precompile
+ 1022  rails s
+ 1023  rake assets:precompile
  1024  rails s
  1025  rake assets:precompile
  1026  rails s
@@ -29,972 +36,965 @@
  1036  rails s
  1037  rake assets:precompile
  1038  rails s
- 1039  cd public
- 1040  ls
- 1041  cd assets/
- 1042  ls
- 1043  rm application-*
- 1044  cd /home/julio/Tegik/portalob/
- 1045  rails s
- 1046  cd /home/julio/Tegik/portalob/
- 1047  rake assets:precompile
- 1048  rails s
- 1049  git init
- 1050  git add -A
- 1051  git commit -am "Gestión de cascos catalogo y carrito"
- 1052  eb deploy
- 1053  git add -A
- 1054  git commit -am "Gestión de cascos catalogo y carrito HK"
- 1055  eb deploy
- 1056  git add -A
- 1057  git commit -am "Gestión de cascos catalogo y carrito HK2"
- 1058  eb deploy
- 1059  git add -A
- 1060  git commit -am "Gestión de cascos catalogo y carrito HK3"
- 1061  eb deploy
- 1062  git init
- 1063  git add .
- 1064  git commit -am "Gestión de cascos e impuestos"
- 1065  git push
- 1066  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
- 1067  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1068  ssh -i /home/julio/.ssh/extranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1069  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1070  history > amazonhistoryjulio
- 1071  vim amazonhistoryjulio 
- 1072  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1073  ls
- 1074  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1075  ssh -i /home/julio/.ssh/extranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1076  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1077  ssh -i /home/julio/.ssh/extranet ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1078  source ~/.rvm/scripts/rvm
- 1079  cd /home/julio/Tegik/portalob/
- 1080  rails c
- 1081  tail /home/julio/.ssh/config 
- 1082  cat /home/julio/.ssh/config 
- 1083  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
- 1084  source ~/.rvm/scripts/rvm
- 1085  cd /home/julio/Tegik/portalob/
- 1086  rails s
- 1087  rails generate migration AddExtraimpuestoToPedidolinea impuestoextra:float
- 1088  rake db:migrate
+ 1039  rake assets:precompile
+ 1040  rails s
+ 1041  rake assets:precompile
+ 1042  rails s
+ 1043  rake assets:precompile
+ 1044  rm /home/julio/Tegik/portalob/public/assets/application-*
+ 1045  ls /home/julio/Tegik/portalob/public/assets/
+ 1046  rails s
+ 1047  ls /home/julio/Tegik/portalob/public/assets/
+ 1048  rake assets:precompile
+ 1049  rails s
+ 1050  rake assets:precompile
+ 1051  rails s
+ 1052  git init
+ 1053  git add .
+ 1054  git commit -am "Cobranza Primera Parte"
+ 1055  git push
+ 1056  source ~/.rvm/scripts/rvm
+ 1057  rails c
+ 1058  source ~/.rvm/scripts/rvm
+ 1059  cd /home/julio/Tegik/portalob/
+ 1060  rails s
+ 1061  rake assets:precompile
+ 1062  rails s
+ 1063  rake assets:precompile
+ 1064  rails s
+ 1065  rake assets:precompile
+ 1066  rails s
+ 1067  rake assets:precompile
+ 1068  rails s
+ 1069  rake assets:precompile
+ 1070  rails s
+ 1071  rake assets:precompile
+ 1072  rails s
+ 1073  rake assets:precompile
+ 1074  rm /home/julio/Tegik/portalob/public/assets/application-*
+ 1075  rails s
+ 1076  rake assets:precompile
+ 1077  rails s
+ 1078  rake assets:precompile
+ 1079  rails s
+ 1080  rake assets:precompile
+ 1081  rails s
+ 1082  rake assets:precompile
+ 1083  rails s
+ 1084  rake assets:precompile
+ 1085  rails s
+ 1086  rake assets:precompile
+ 1087  rails s
+ 1088  rake assets:precompile
  1089  rails s
- 1090  rails generate scaffold documentoscobranza
- 1091  rake db:migrate
- 1092  rails s
- 1093  rake assets:precompile
- 1094  rails s
- 1095  rake assets:precompile
- 1096  rails s
- 1097  rake assets:precompile
- 1098  rails s
- 1099  rake assets:precompile
- 1100  rails s
- 1101  rake assets:precompile
- 1102  rails s
- 1103  rake assets:precompile
- 1104  rails s
- 1105  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
- 1106  rails c
- 1107  source ~/.rvm/scripts/rvm
- 1108  rails c
- 1109  source ~/.rvm/scripts/rvm
- 1110  cd /home/julio/Tegik/portalob/
- 1111  rails s
- 1112  rake assets:precompile
- 1113  rails s
- 1114  rake assets:precompile
- 1115  rails s
- 1116  rake assets:precompile
- 1117  rails s
- 1118  rake assets:precompile
- 1119  rails s
- 1120  rake assets:precompile
- 1121  rails s
- 1122  rake assets:precompile
- 1123  rails s
- 1124  rake assets:precompile
- 1125  rails s
- 1126  rake assets:precompile
+ 1090  rake assets:precompile
+ 1091  rails s
+ 1092  rake assets:precompile
+ 1093  rails s
+ 1094  rake assets:precompile
+ 1095  rails s
+ 1096  rake assets:precompile
+ 1097  rails server
+ 1098  rails scaffold aplicarcobranza
+ 1099  rails generate scaffold aplicarcobranza
+ 1100  rake db:migrate
+ 1101  rails s
+ 1102  rake assets:precompile
+ 1103  rails s
+ 1104  rake assets:precompile
+ 1105  rails s
+ 1106  rake assets:precompile
+ 1107  rails s
+ 1108  source ~/.rvm/scripts/rvm
+ 1109  cd /home/julio/Tegik/portalob/
+ 1110  rails c
+ 1111  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
+ 1112  cd /home/julio/Tegik/portalob/
+ 1113  source ~/.rvm/scripts/rvm
+ 1114  rails s
+ 1115  it init
+ 1116  git init
+ 1117  git add -
+ 1118  git add .
+ 1119  git commit -am "7 abr Cobranza"
+ 1120  git push
+ 1121  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 8535:localhost:5932 ubuntu@23.23.245.49
+ 1122  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
+ 1123  source ~/.rvm/scripts/rvm
+ 1124  rails c
+ 1125  source ~/.rvm/scripts/rvm
+ 1126  cd /home/julio/Tegik/portalob/
  1127  rails s
- 1128  rake assets:precompile
- 1129  rails s
- 1130  rake assets:precompile
- 1131  rails s
- 1132  rake assets:precompile
- 1133  rails s
- 1134  rake assets:precompile
- 1135  rm /home/julio/Tegik/portalob/public/assets/application-*
- 1136  ls /home/julio/Tegik/portalob/public/assets/
- 1137  rails s
- 1138  ls /home/julio/Tegik/portalob/public/assets/
- 1139  rake assets:precompile
- 1140  rails s
- 1141  rake assets:precompile
- 1142  rails s
- 1143  git init
- 1144  git add .
- 1145  git commit -am "Cobranza Primera Parte"
- 1146  git push
- 1147  source ~/.rvm/scripts/rvm
- 1148  rails c
- 1149  source ~/.rvm/scripts/rvm
- 1150  cd /home/julio/Tegik/portalob/
- 1151  rails s
- 1152  rake assets:precompile
- 1153  rails s
- 1154  rake assets:precompile
- 1155  rails s
- 1156  rake assets:precompile
- 1157  rails s
- 1158  rake assets:precompile
+ 1128  source ~/.rvm/scripts/rvm
+ 1129  rails c
+ 1130  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
+ 1131  source ~/.rvm/scripts/rvm
+ 1132  cd /home/julio/Tegik/portalob/
+ 1133  railos s
+ 1134  rails s
+ 1135  source ~/.rvm/scripts/rvm
+ 1136  rails c
+ 1137  source ~/.rvm/scripts/rvm
+ 1138  cd /home/julio/Tegik/portalob/
+ 1139  rails s
+ 1140  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-161-251-38.compute-1.amazonaws.com
+ 1141  cd /home/julio/Tegik/portalob/
+ 1142  source ~/.rvm/scripts/rvm
+ 1143  rails s
+ 1144  ake assets:precompile
+ 1145  rake assets:precompile
+ 1146  rails s
+ 1147  it init
+ 1148  git init
+ 1149  git add .
+ 1150  git commit -am "Ventana de cobranza Terminada"
+ 1151  git push
+ 1152  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932  ubuntu@23.23.245.49
+ 1153  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
+ 1154  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
+ 1155  source ~/.rvm/scripts/rvm
+ 1156  rails c
+ 1157  cd /home/julio/Tegik/portalob/
+ 1158  source ~/.rvm/scripts/rvm
  1159  rails s
- 1160  rake assets:precompile
- 1161  rails s
- 1162  rake assets:precompile
- 1163  rails s
- 1164  rake assets:precompile
- 1165  rm /home/julio/Tegik/portalob/public/assets/application-*
+ 1160  python -v
+ 1161  source ~/.rvm/scripts/rvm
+ 1162  cd /home/julio/Documentos/
+ 1163  rails new fuel
+ 1164  ls
+ 1165  cd fuel
  1166  rails s
- 1167  rake assets:precompile
- 1168  rails s
- 1169  rake assets:precompile
- 1170  rails s
- 1171  rake assets:precompile
- 1172  rails s
- 1173  rake assets:precompile
- 1174  rails s
- 1175  rake assets:precompile
- 1176  rails s
- 1177  rake assets:precompile
- 1178  rails s
- 1179  rake assets:precompile
- 1180  rails s
- 1181  rake assets:precompile
+ 1167  ls
+ 1168  cd ..
+ 1169  ls
+ 1170  mkdir fuelmatch
+ 1171  cd fuel
+ 1172  git init
+ 1173  git clone https://github.com/jperez-tegik/portalob
+ 1174  ls
+ 1175  cd ..
+ 1176  ls
+ 1177  cd portalob/
+ 1178  ls
+ 1179  rails s
+ 1180  cd /home/julio/Tegik/portalob/
+ 1181  ls
  1182  rails s
- 1183  rake assets:precompile
- 1184  rails s
- 1185  rake assets:precompile
- 1186  rails s
- 1187  rake assets:precompile
- 1188  rails server
- 1189  rails scaffold aplicarcobranza
- 1190  rails generate scaffold aplicarcobranza
- 1191  rake db:migrate
- 1192  rails s
- 1193  rake assets:precompile
- 1194  rails s
- 1195  rake assets:precompile
+ 1183  cd /home/julio/Documentos/
+ 1184  ls
+ 1185  cd fuel
+ 1186  ls
+ 1187  rails s
+ 1188  rake routes
+ 1189  rails s
+ 1190  rake routes
+ 1191  rails s
+ 1192  rake routes
+ 1193  source ~/.rvm/scripts/rvm
+ 1194  cd /home/julio/Documentos/fuel
+ 1195  ls
  1196  rails s
- 1197  rake assets:precompile
- 1198  rails s
- 1199  source ~/.rvm/scripts/rvm
- 1200  cd /home/julio/Tegik/portalob/
- 1201  rails c
- 1202  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
- 1203  cd /home/julio/Tegik/portalob/
- 1204  source ~/.rvm/scripts/rvm
+ 1197  rails generate scaffold biomedida fecha:date peso:float imc:float igc:float cintura:float comentario:text
+ 1198  rake db:migrate
+ 1199  rails generate scaffold logro nombre:text fecha:date descripcion:text clave:text
+ 1200  rake db_migrate
+ 1201  rake db:migrate
+ 1202  rails s
+ 1203  rails c
+ 1204  gem install jquery-rails
  1205  rails s
- 1206  it init
- 1207  git init
- 1208  git add -
- 1209  git add .
- 1210  git commit -am "7 abr Cobranza"
- 1211  git push
- 1212  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 8535:localhost:5932 ubuntu@23.23.245.49
- 1213  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
- 1214  source ~/.rvm/scripts/rvm
- 1215  rails c
- 1216  source ~/.rvm/scripts/rvm
- 1217  cd /home/julio/Tegik/portalob/
+ 1206  rake assets:precompile
+ 1207  rails s
+ 1208  rake assets:precompile
+ 1209  rails s
+ 1210  rake assets:precompile
+ 1211  rails s
+ 1212  rake assets:precompile
+ 1213  rails s
+ 1214  gem install bootstrap-sass
+ 1215  rails s
+ 1216  vim Gemfile
+ 1217  bundle install
  1218  rails s
  1219  source ~/.rvm/scripts/rvm
  1220  rails c
- 1221  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
+ 1221  cd /home/julio/Documentos/fuel
  1222  source ~/.rvm/scripts/rvm
- 1223  cd /home/julio/Tegik/portalob/
- 1224  railos s
- 1225  rails s
- 1226  source ~/.rvm/scripts/rvm
- 1227  rails c
- 1228  source ~/.rvm/scripts/rvm
- 1229  cd /home/julio/Tegik/portalob/
- 1230  rails s
- 1231  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-161-251-38.compute-1.amazonaws.com
+ 1223  rails s
+ 1224  rake assets:precompiles
+ 1225  rake assets:precompile
+ 1226  rails s
+ 1227  rake assets:precompile
+ 1228  rails s
+ 1229  source ~/.rvm/scripts/rvm
+ 1230  rails c
+ 1231  cd /home/julio/Tpo
  1232  cd /home/julio/Tegik/portalob/
  1233  source ~/.rvm/scripts/rvm
  1234  rails s
- 1235  ake assets:precompile
- 1236  rake assets:precompile
- 1237  rails s
- 1238  it init
- 1239  git init
- 1240  git add .
- 1241  git commit -am "Ventana de cobranza Terminada"
- 1242  git push
- 1243  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932  ubuntu@23.23.245.49
- 1244  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
- 1245  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
- 1246  source ~/.rvm/scripts/rvm
- 1247  rails c
- 1248  cd /home/julio/Tegik/portalob/
+ 1235  git add .
+ 1236  git commit -am "Cobranza Correcciones"
+ 1237  git push
+ 1238  source ~/.rvm/scripts/rvm
+ 1239  rails c
+ 1240  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932  ubuntu@23.23.245.49
+ 1241  ssh -i /home/julio/Tegik/sw/tegik.pem  ubuntu@23.23.245.49
+ 1242  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
+ 1243  rails s
+ 1244  cd /home/julio/Tegik/portal
+ 1245  source ~/.rvm/scripts/rvm
+ 1246  cd /home/julio/Tegik/portalob/
+ 1247  rails s
+ 1248  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
  1249  source ~/.rvm/scripts/rvm
- 1250  rails s
- 1251  python -v
- 1252  source ~/.rvm/scripts/rvm
- 1253  cd /home/julio/Documentos/
- 1254  rails new fuel
- 1255  ls
- 1256  cd fuel
- 1257  rails s
- 1258  ls
- 1259  cd ..
- 1260  ls
- 1261  mkdir fuelmatch
- 1262  cd fuel
- 1263  git init
- 1264  git clone https://github.com/jperez-tegik/portalob
- 1265  ls
- 1266  cd ..
- 1267  ls
- 1268  cd portalob/
- 1269  ls
- 1270  rails s
- 1271  cd /home/julio/Tegik/portalob/
+ 1250  cd /home/julio/Tegik/portal
+ 1251  cd /home/julio/Tegik/portalob/
+ 1252  rails s
+ 1253  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
+ 1254  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
+ 1255  source ~/.rvm/scripts/rvm
+ 1256  cd /home/julio/Tegik/portal
+ 1257  cd /home/julio/Tegik/portalob/
+ 1258  rails s
+ 1259  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
+ 1260  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
+ 1261  source ~/.rvm/scripts/rvm
+ 1262  cd /home/julio/Tegik/portalob/
+ 1263  ls
+ 1264  rake assets:precompile
+ 1265  git add -A
+ 1266  git commit -am "Corrección Assets"
+ 1267  eb deploy
+ 1268  cd vendor/assets/
+ 1269  cd ..
+ 1270  cd pu
+ 1271  cd public
  1272  ls
- 1273  rails s
- 1274  cd /home/julio/Documentos/
- 1275  ls
- 1276  cd fuel
- 1277  ls
- 1278  rails s
- 1279  rake routes
- 1280  rails s
- 1281  rake routes
- 1282  rails s
- 1283  rake routes
- 1284  source ~/.rvm/scripts/rvm
- 1285  cd /home/julio/Documentos/fuel
+ 1273  cd assets/
+ 1274  ls
+ 1275  cd javascripts/
+ 1276  ls
+ 1277  cd ..
+ 1278  ls
+ 1279  cd public/
+ 1280  ls
+ 1281  cd assets/
+ 1282  ls
+ 1283  rm application-*
+ 1284  cd ../
+ 1285  cd ..
  1286  ls
- 1287  rails s
- 1288  rails generate scaffold biomedida fecha:date peso:float imc:float igc:float cintura:float comentario:text
- 1289  rake db:migrate
- 1290  rails generate scaffold logro nombre:text fecha:date descripcion:text clave:text
- 1291  rake db_migrate
- 1292  rake db:migrate
- 1293  rails s
- 1294  rails c
- 1295  gem install jquery-rails
- 1296  rails s
- 1297  rake assets:precompile
- 1298  rails s
- 1299  rake assets:precompile
- 1300  rails s
- 1301  rake assets:precompile
- 1302  rails s
- 1303  rake assets:precompile
+ 1287  rake assets:precompile
+ 1288  git add -A
+ 1289  git commit -am "Crrcn - Assets"
+ 1290  eb deploy
+ 1291  git add -A
+ 1292  git commit -am "Corrección documentos incluidods"
+ 1293  eb deploy
+ 1294  source ~/.rvm/scripts/rvm
+ 1295  rails s
+ 1296  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-166-97-141.compute-1.amazonaws.com
+ 1297  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-166-97-141.compute-1.amazonaws.com
+ 1298  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo
+ 1299  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-166-97-141.compute-1.amazonaws.com
+ 1300  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1301  rails s
+ 1302  source ~/.rvm/scripts/rvm
+ 1303  cd /home/julio/Tegik/portalob/
  1304  rails s
- 1305  gem install bootstrap-sass
- 1306  rails s
- 1307  vim Gemfile
- 1308  bundle install
- 1309  rails s
- 1310  source ~/.rvm/scripts/rvm
- 1311  rails c
- 1312  cd /home/julio/Documentos/fuel
- 1313  source ~/.rvm/scripts/rvm
- 1314  rails s
- 1315  rake assets:precompiles
- 1316  rake assets:precompile
- 1317  rails s
- 1318  rake assets:precompile
- 1319  rails s
+ 1305  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1306  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1307  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1308  cd /home/julio/Descargas/
+ 1309  ls
+ 1310  sudo dpkg -i teamviewer_10.0.37742_i386.deb 
+ 1311  source ~/.rvm/scripts/rvm
+ 1312  cd /home/julio/Descargas/
+ 1313  cd ..
+ 1314  cd Tegik/portalob/
+ 1315  rails s
+ 1316  cd /home/julio/.ssh/
+ 1317  ls
+ 1318  vim config 
+ 1319  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
  1320  source ~/.rvm/scripts/rvm
  1321  rails c
- 1322  cd /home/julio/Tpo
- 1323  cd /home/julio/Tegik/portalob/
- 1324  source ~/.rvm/scripts/rvm
+ 1322  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1323  source ~/.rvm/scripts/rvm
+ 1324  cd /home/julio/Tegik/portalob/
  1325  rails s
- 1326  git add .
- 1327  git commit -am "Cobranza Correcciones"
- 1328  git push
- 1329  source ~/.rvm/scripts/rvm
- 1330  rails c
- 1331  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932  ubuntu@23.23.245.49
- 1332  ssh -i /home/julio/Tegik/sw/tegik.pem  ubuntu@23.23.245.49
- 1333  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
- 1334  rails s
- 1335  cd /home/julio/Tegik/portal
+ 1326  git init
+ 1327  git add -A
+ 1328  git commit -am "Ajustes 21 Abril"
+ 1329  eb deploy
+ 1330  rails s
+ 1331  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-107-22-42-22.compute-1.amazonaws.com
+ 1332  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1333  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1334  source ~/.rvm/scripts/rvm
+ 1335  rails c
  1336  source ~/.rvm/scripts/rvm
  1337  cd /home/julio/Tegik/portalob/
  1338  rails s
- 1339  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
- 1340  source ~/.rvm/scripts/rvm
- 1341  cd /home/julio/Tegik/portal
- 1342  cd /home/julio/Tegik/portalob/
+ 1339  git init 
+ 1340  git add -A
+ 1341  git commit -am "Iconos Empresas e imagenes de fondo"
+ 1342  eb deploy
  1343  rails s
- 1344  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
- 1345  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
- 1346  source ~/.rvm/scripts/rvm
- 1347  cd /home/julio/Tegik/portal
- 1348  cd /home/julio/Tegik/portalob/
- 1349  rails s
- 1350  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
- 1351  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.23.245.49
- 1352  source ~/.rvm/scripts/rvm
- 1353  cd /home/julio/Tegik/portalob/
- 1354  ls
+ 1344  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1345  source ~/.rvm/scripts/rvm
+ 1346  rails c
+ 1347  ssh -i /home/julio/Tegik/sw/tegik.pem  openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1348  source ~/.rvm/scripts/rvm
+ 1349  cd /home/julio/Tegik/portalob/
+ 1350  rails s
+ 1351  rake assets:precompile
+ 1352  rails s
+ 1353  rake assets:precompile
+ 1354  rails s
  1355  rake assets:precompile
- 1356  git add -A
- 1357  git commit -am "Corrección Assets"
- 1358  eb deploy
- 1359  cd vendor/assets/
- 1360  cd ..
- 1361  cd pu
- 1362  cd public
- 1363  ls
- 1364  cd assets/
- 1365  ls
- 1366  cd javascripts/
- 1367  ls
- 1368  cd ..
- 1369  ls
- 1370  cd public/
- 1371  ls
- 1372  cd assets/
- 1373  ls
- 1374  rm application-*
- 1375  cd ../
- 1376  cd ..
- 1377  ls
- 1378  rake assets:precompile
- 1379  git add -A
- 1380  git commit -am "Crrcn - Assets"
- 1381  eb deploy
- 1382  git add -A
- 1383  git commit -am "Corrección documentos incluidods"
- 1384  eb deploy
+ 1356  rails s
+ 1357  git init
+ 1358  git add -A
+ 1359  git commit -am "Corrección 2 decimales catalogo JCI"
+ 1360  eb deploy
+ 1361  rails s
+ 1362  rake assets:precompile
+ 1363  rails s
+ 1364  rails generate migration AddInventarioToEmpresas inventario:boolean
+ 1365  rails generate migration AddInventarioToEmpresa inventario:boolean
+ 1366  rake db:migrate
+ 1367  rails s
+ 1368  rake assets:precompile
+ 1369  rails s
+ 1370  rake assets:precompile
+ 1371  rails s
+ 1372  rake assets:precompile
+ 1373  rails s
+ 1374  rake assets:precompile
+ 1375  rails s
+ 1376  source ~/.rvm/scripts/rvm
+ 1377  rails c
+ 1378  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-107-22-42-22.compute-1.amazonaws.com
+ 1379  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1380  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 ubuntu@23.21.93.139/openbravo/org.openbravo.service.json.jsonrest/pob_listapreciosjci?_where=taxid=%27ASJ9810288T9%27
+ 1381  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 ubuntu@23.21.93.139
+ 1382  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.21.93.139
+ 1383  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.21.93.139
+ 1384  cd /home/julio/Tegik/portalob/
  1385  source ~/.rvm/scripts/rvm
  1386  rails s
- 1387  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-166-97-141.compute-1.amazonaws.com
- 1388  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-166-97-141.compute-1.amazonaws.com
- 1389  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo
- 1390  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-166-97-141.compute-1.amazonaws.com
- 1391  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1392  rails s
- 1393  source ~/.rvm/scripts/rvm
+ 1387  rake assets:precompile
+ 1388  rails s
+ 1389  rake assets:precompile
+ 1390  rails s
+ 1391  rake assets:precompile
+ 1392  cd /home/julio/Tegik/portalob/public/assets/
+ 1393  rm application-*
  1394  cd /home/julio/Tegik/portalob/
  1395  rails s
- 1396  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-163-142-19.compute-1.amazonaws.com
- 1397  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1398  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1399  cd /home/julio/Descargas/
- 1400  ls
- 1401  sudo dpkg -i teamviewer_10.0.37742_i386.deb 
- 1402  source ~/.rvm/scripts/rvm
- 1403  cd /home/julio/Descargas/
- 1404  cd ..
- 1405  cd Tegik/portalob/
+ 1396  rake assets:precompile
+ 1397  rails s
+ 1398  rake assets:precompile
+ 1399  rails s
+ 1400  rake assets:precompile
+ 1401  rails s
+ 1402  git init
+ 1403  git add -A
+ 1404  git commit -am "Corrección inventario reservado RASE"
+ 1405  eb deploy
  1406  rails s
- 1407  cd /home/julio/.ssh/
- 1408  ls
- 1409  vim config 
- 1410  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1411  source ~/.rvm/scripts/rvm
- 1412  rails c
- 1413  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1414  source ~/.rvm/scripts/rvm
- 1415  cd /home/julio/Tegik/portalob/
+ 1407  rake assets:precompile
+ 1408  rails s
+ 1409  rake assets:precompile
+ 1410  rails s
+ 1411  rake assets:precompile
+ 1412  rails s
+ 1413  rake assets:precompile
+ 1414  rails s
+ 1415  rake assets:precompile
  1416  rails s
- 1417  git init
- 1418  git add -A
- 1419  git commit -am "Ajustes 21 Abril"
- 1420  eb deploy
- 1421  rails s
- 1422  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-107-22-42-22.compute-1.amazonaws.com
- 1423  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1424  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1425  source ~/.rvm/scripts/rvm
- 1426  rails c
+ 1417  rake assets:precompile
+ 1418  rails s
+ 1419  rake assets:precompile
+ 1420  rails s
+ 1421  source ~/.rvm/scripts/rvm
+ 1422  rails c
+ 1423  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1424  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1425  vim /home/julio/.ssh/config 
+ 1426  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
  1427  source ~/.rvm/scripts/rvm
- 1428  cd /home/julio/Tegik/portalob/
- 1429  rails s
- 1430  git init 
- 1431  git add -A
- 1432  git commit -am "Iconos Empresas e imagenes de fondo"
- 1433  eb deploy
+ 1428  rails c
+ 1429  source ~/.rvm/scripts/rvm
+ 1430  rails s
+ 1431  cd /home/julio/Tegik/portalob/
+ 1432  rails s
+ 1433  rails s -b 192.168.1.85
  1434  rails s
- 1435  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1436  source ~/.rvm/scripts/rvm
- 1437  rails c
- 1438  ssh -i /home/julio/Tegik/sw/tegik.pem  openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1439  source ~/.rvm/scripts/rvm
- 1440  cd /home/julio/Tegik/portalob/
- 1441  rails s
- 1442  rake assets:precompile
- 1443  rails s
- 1444  rake assets:precompile
- 1445  rails s
- 1446  rake assets:precompile
- 1447  rails s
- 1448  git init
- 1449  git add -A
- 1450  git commit -am "Corrección 2 decimales catalogo JCI"
- 1451  eb deploy
- 1452  rails s
- 1453  rake assets:precompile
- 1454  rails s
- 1455  rails generate migration AddInventarioToEmpresas inventario:boolean
- 1456  rails generate migration AddInventarioToEmpresa inventario:boolean
- 1457  rake db:migrate
- 1458  rails s
- 1459  rake assets:precompile
- 1460  rails s
- 1461  rake assets:precompile
- 1462  rails s
- 1463  rake assets:precompile
- 1464  rails s
- 1465  rake assets:precompile
- 1466  rails s
- 1467  source ~/.rvm/scripts/rvm
- 1468  rails c
- 1469  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-107-22-42-22.compute-1.amazonaws.com
- 1470  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1471  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 ubuntu@23.21.93.139/openbravo/org.openbravo.service.json.jsonrest/pob_listapreciosjci?_where=taxid=%27ASJ9810288T9%27
- 1472  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 ubuntu@23.21.93.139
- 1473  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@23.21.93.139
- 1474  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.21.93.139
- 1475  cd /home/julio/Tegik/portalob/
- 1476  source ~/.rvm/scripts/rvm
+ 1435  rails s -b 192.168.1.85
+ 1436  rails s
+ 1437  rails s -b 192.168.1.85
+ 1438  rails s
+ 1439  rails s -b 192.168.1.85
+ 1440  git 
+ 1441  git add .
+ 1442  git commit -am "27 Abril 2015"
+ 1443  git push
+ 1444  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-102-30.compute-1.amazonaws.com
+ 1445  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-163-102-30.compute-1.amazonaws.com
+ 1446  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1447  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1448  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1449  source ~/.rvm/scripts/rvm
+ 1450  rails c
+ 1451  source ~/.rvm/scripts/rvm
+ 1452  cd /home/julio/Tegik/portalob/
+ 1453  rails s -b 192.168.1.85
+ 1454  rails s -b 192.168.88.69
+ 1455  rails s
+ 1456  rails c
+ 1457  rails s
+ 1458  rails s -b 192.168.88.69
+ 1459  rails s
+ 1460  rails s -b 192.168.88.69
+ 1461  rails s
+ 1462  rails s -b 192.168.88.69
+ 1463  rails s
+ 1464  rails s -b 192.168.88.69
+ 1465  rails s
+ 1466  rails s -b 192.168.88.69
+ 1467  rails s
+ 1468  rails s -b 192.168.88.69
+ 1469  rails s
+ 1470  rails s -b 192.168.88.69
+ 1471  rails s
+ 1472  rails s -b 192.168.88.69
+ 1473  rails s
+ 1474  rails s -b 192.168.88.69
+ 1475  rails s
+ 1476  rake assets:precompile
  1477  rails s
  1478  rake assets:precompile
  1479  rails s
  1480  rake assets:precompile
  1481  rails s
  1482  rake assets:precompile
- 1483  cd /home/julio/Tegik/portalob/public/assets/
- 1484  rm application-*
- 1485  cd /home/julio/Tegik/portalob/
- 1486  rails s
- 1487  rake assets:precompile
- 1488  rails s
- 1489  rake assets:precompile
- 1490  rails s
- 1491  rake assets:precompile
- 1492  rails s
- 1493  git init
- 1494  git add -A
- 1495  git commit -am "Corrección inventario reservado RASE"
- 1496  eb deploy
- 1497  rails s
- 1498  rake assets:precompile
- 1499  rails s
- 1500  rake assets:precompile
- 1501  rails s
- 1502  rake assets:precompile
- 1503  rails s
- 1504  rake assets:precompile
- 1505  rails s
- 1506  rake assets:precompile
- 1507  rails s
- 1508  rake assets:precompile
- 1509  rails s
- 1510  rake assets:precompile
- 1511  rails s
- 1512  source ~/.rvm/scripts/rvm
- 1513  rails c
- 1514  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1515  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1516  vim /home/julio/.ssh/config 
- 1517  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1518  source ~/.rvm/scripts/rvm
- 1519  rails c
- 1520  source ~/.rvm/scripts/rvm
- 1521  rails s
- 1522  cd /home/julio/Tegik/portalob/
- 1523  rails s
- 1524  rails s -b 192.168.1.85
- 1525  rails s
- 1526  rails s -b 192.168.1.85
- 1527  rails s
- 1528  rails s -b 192.168.1.85
- 1529  rails s
- 1530  rails s -b 192.168.1.85
- 1531  git 
- 1532  git add .
- 1533  git commit -am "27 Abril 2015"
- 1534  git push
- 1535  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-102-30.compute-1.amazonaws.com
- 1536  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-163-102-30.compute-1.amazonaws.com
- 1537  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-163-142-19.compute-1.amazonaws.com
- 1538  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1539  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1540  source ~/.rvm/scripts/rvm
- 1541  rails c
- 1542  source ~/.rvm/scripts/rvm
- 1543  cd /home/julio/Tegik/portalob/
- 1544  rails s -b 192.168.1.85
- 1545  rails s -b 192.168.88.69
- 1546  rails s
- 1547  rails c
- 1548  rails s
- 1549  rails s -b 192.168.88.69
- 1550  rails s
- 1551  rails s -b 192.168.88.69
- 1552  rails s
- 1553  rails s -b 192.168.88.69
- 1554  rails s
- 1555  rails s -b 192.168.88.69
- 1556  rails s
- 1557  rails s -b 192.168.88.69
- 1558  rails s
- 1559  rails s -b 192.168.88.69
- 1560  rails s
- 1561  rails s -b 192.168.88.69
- 1562  rails s
- 1563  rails s -b 192.168.88.69
- 1564  rails s
- 1565  rails s -b 192.168.88.69
- 1566  rails s
- 1567  rake assets:precompile
- 1568  rails s
- 1569  rake assets:precompile
- 1570  rails s
- 1571  rake assets:precompile
- 1572  rails s
- 1573  rake assets:precompile
- 1574  rails s
- 1575  rake assets:precompile
- 1576  rails s
- 1577  rake assets:precompile
- 1578  rails s
- 1579  rake assets:precompile
- 1580  rails s
- 1581  rake assets:precompile
- 1582  rails s
- 1583  rake assets:precompile
+ 1483  rails s
+ 1484  rake assets:precompile
+ 1485  rails s
+ 1486  rake assets:precompile
+ 1487  rails s
+ 1488  rake assets:precompile
+ 1489  rails s
+ 1490  rake assets:precompile
+ 1491  rails s
+ 1492  rake assets:precompile
+ 1493  rails s
+ 1494  rails s -b 192.168.88.69
+ 1495  rails s
+ 1496  rails s -b 192.168.88.69
+ 1497  ls
+ 1498  vim Gemfile
+ 1499  bundle install
+ 1500  rails g cancan:ability
+ 1501  rake db:generate
+ 1502  rake db:migratino
+ 1503  rake db:migration
+ 1504  rake db:migrate
+ 1505  rails c
+ 1506  rails s
+ 1507  find -type f | xargs grep -l "current_ability"
+ 1508  rails s
+ 1509  rails generate migration AddRoleToUsuario role:string
+ 1510  rake migrate
+ 1511  rake db:migrate
+ 1512  rails s
+ 1513  ls
+ 1514  cd lib/
+ 1515  ls
+ 1516  ls -a
+ 1517  ls+
+ 1518  ls
+ 1519  vim api_constraints.rb 
+ 1520  cd ..
+ 1521  ls
+ 1522  cd bin/
+ 1523  ls
+ 1524  cd ..
+ 1525  ls
+ 1526  cd app/
+ 1527  ls
+ 1528  cd models/
+ 1529  ls
+ 1530  vim ability.rb 
+ 1531  cd ..
+ 1532  cd controllers/
+ 1533  ls
+ 1534  find -type f | xargs grep -l "current_ability"
+ 1535  cd ..
+ 1536  find -type f | xargs grep -l "current_ability"
+ 1537  cd ..
+ 1538  ls
+ 1539  rails s
+ 1540  cd portalob/
+ 1541  rake routes
+ 1542  rails c
+ 1543  source ~/.rvm/scripts/rvm
+ 1544  cd /home/julio/Tegik/portalob/
+ 1545  rails s
+ 1546  rake routes
+ 1547  rails s
+ 1548  rake routes
+ 1549  rails s
+ 1550  rake routes
+ 1551  rails s
+ 1552  vim /home/julio/.ssh/config 
+ 1553  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-158-123-237.compute-1.amazonaws.com
+ 1554  source ~/.rvm/scripts/rvm
+ 1555  rails c
+ 1556  vim /home/julio/.ssh/config 
+ 1557  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-81-152-3.compute-1.amazonaws.com
+ 1558  vim /home/julio/.ssh/config 
+ 1559  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1560  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-81-152-3.compute-1.amazonaws.com
+ 1561  ant smartbuild -Drestart=yes
+ 1562  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-81-152-3.compute-1.amazonaws.com
+ 1563  source ~/.rvm/scripts/rvm
+ 1564  cd /home/julio/Tegik/portalob/
+ 1565  rails s
+ 1566  git init
+ 1567  git add -A
+ 1568  git commit "ROLES Y PERMISOS"
+ 1569  git commit -am "ROLES Y PERMISOS"
+ 1570  eb deploy
+ 1571  source ~/.rvm/scripts/rvm
+ 1572  rails c
+ 1573  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1574  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1575  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1576  ls
+ 1577  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1578  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 ubuntu@ec2-54-146-158-21.compute-1.amazonaws.com
+ 1579  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-146-158-21.compute-1.amazonaws.com
+ 1580  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-146-158-21.compute-1.amazonaws.com
+ 1581  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1582  source ~/.rvm/scripts/rvm
+ 1583  cd /home/julio/Tegik/
  1584  rails s
- 1585  rails s -b 192.168.88.69
+ 1585  cd portalob/
  1586  rails s
- 1587  rails s -b 192.168.88.69
- 1588  ls
- 1589  vim Gemfile
- 1590  bundle install
- 1591  rails g cancan:ability
- 1592  rake db:generate
- 1593  rake db:migratino
- 1594  rake db:migration
- 1595  rake db:migrate
- 1596  rails c
- 1597  rails s
- 1598  find -type f | xargs grep -l "current_ability"
+ 1587  rais c
+ 1588  rails c
+ 1589  rails s
+ 1590  rails c
+ 1591  rails s
+ 1592  git add -A
+ 1593  git commit -am "QUITAR CANDADO REGISTRO DE CORREOS"
+ 1594  eb deploy
+ 1595  rails c
+ 1596  git add -A
+ 1597  git commit -am "Asignar rol en registro de usaurios"
+ 1598  eb deploy
  1599  rails s
- 1600  rails generate migration AddRoleToUsuario role:string
- 1601  rake migrate
- 1602  rake db:migrate
+ 1600  rake routes
+ 1601  rails s
+ 1602  rake routes
  1603  rails s
- 1604  ls
- 1605  cd lib/
- 1606  ls
- 1607  ls -a
- 1608  ls+
- 1609  ls
- 1610  vim api_constraints.rb 
- 1611  cd ..
- 1612  ls
- 1613  cd bin/
- 1614  ls
- 1615  cd ..
- 1616  ls
- 1617  cd app/
- 1618  ls
- 1619  cd models/
- 1620  ls
- 1621  vim ability.rb 
- 1622  cd ..
- 1623  cd controllers/
- 1624  ls
- 1625  find -type f | xargs grep -l "current_ability"
- 1626  cd ..
- 1627  find -type f | xargs grep -l "current_ability"
- 1628  cd ..
- 1629  ls
- 1630  rails s
- 1631  cd portalob/
- 1632  rake routes
- 1633  rails c
- 1634  source ~/.rvm/scripts/rvm
- 1635  cd /home/julio/Tegik/portalob/
- 1636  rails s
- 1637  rake routes
- 1638  rails s
- 1639  rake routes
- 1640  rails s
- 1641  rake routes
- 1642  rails s
- 1643  vim /home/julio/.ssh/config 
- 1644  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-158-123-237.compute-1.amazonaws.com
- 1645  source ~/.rvm/scripts/rvm
- 1646  rails c
- 1647  vim /home/julio/.ssh/config 
- 1648  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-81-152-3.compute-1.amazonaws.com
- 1649  vim /home/julio/.ssh/config 
- 1650  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1651  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-81-152-3.compute-1.amazonaws.com
- 1652  ant smartbuild -Drestart=yes
- 1653  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-81-152-3.compute-1.amazonaws.com
- 1654  source ~/.rvm/scripts/rvm
- 1655  cd /home/julio/Tegik/portalob/
- 1656  rails s
- 1657  git init
- 1658  git add -A
- 1659  git commit "ROLES Y PERMISOS"
- 1660  git commit -am "ROLES Y PERMISOS"
- 1661  eb deploy
- 1662  source ~/.rvm/scripts/rvm
- 1663  rails c
- 1664  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1665  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1666  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1667  ls
- 1668  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1669  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 ubuntu@ec2-54-146-158-21.compute-1.amazonaws.com
- 1670  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-146-158-21.compute-1.amazonaws.com
- 1671  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-146-158-21.compute-1.amazonaws.com
- 1672  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1673  source ~/.rvm/scripts/rvm
- 1674  cd /home/julio/Tegik/
- 1675  rails s
- 1676  cd portalob/
- 1677  rails s
- 1678  rais c
- 1679  rails c
- 1680  rails s
- 1681  rails c
- 1682  rails s
- 1683  git add -A
- 1684  git commit -am "QUITAR CANDADO REGISTRO DE CORREOS"
- 1685  eb deploy
- 1686  rails c
- 1687  git add -A
- 1688  git commit -am "Asignar rol en registro de usaurios"
- 1689  eb deploy
+ 1604  git add -A
+ 1605  git commit -am "Corrección rol de administrador"
+ 1606  eb deploy
+ 1607  rails s
+ 1608  rails c
+ 1609  rails s
+ 1610  rails generate scaffold metodopago
+ 1611  rake db:database
+ 1612  rake db:migrate
+ 1613  rails s
+ 1614  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-146-158-21.compute-1.amazonaws.com
+ 1615  deb http://repository.spotify.com stable non-free 
+ 1616  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 94558F59
+ 1617  sudo apt-get update 
+ 1618  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@
+ 1619  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1620  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1621  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1622  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-166-10-197.compute-1.amazonaws.com
+ 1623  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-166-10-197.compute-1.amazonaws.com
+ 1624  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-166-10-197.compute-1.amazonaws.com
+ 1625  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-166-10-197.compute-1.amazonaws.com
+ 1626  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-166-10-197.compute-1.amazonaws.com
+ 1627  sudo add-apt-repository ppa:me-davidsansome/clementine
+ 1628  sudo apt-get update
+ 1629  source ~/.rvm/scripts/rvm
+ 1630  rails c
+ 1631  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1632  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-23-23-50-162.compute-1.amazonaws.com
+ 1633  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1634  cd /home/julio/.ssh/
+ 1635  ls
+ 1636  vim config 
+ 1637  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-107-22-42-22.compute-1.amazonaws.com
+ 1638  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1639  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1640  curl --include http://usuario-extranet:KopoTegik@openbravo.rase.com.mx/openbravo/org.openbravo.service.json.jsonrest/POB_VistaFacturasPortal?_where=bpartner=%271107816FC5FD4AA6A2591FCC404BC82D%27
+ 1641  ssh openbravo@openbravo.rase.com.mx
+ 1642  A2591FCC404BC82D%27
+ 1643  source ~/.rvm/scripts/rvm
+ 1644  rails c
+ 1645  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1646  cd /home/julio/Tegik/portalob/
+ 1647  top
+ 1648  kill 3157
+ 1649  top
+ 1650  vim /home/julio/.ssh/config 
+ 1651  source ~/.rvm/scripts/rvm
+ 1652  cd /home/julio/Tegik/portalob/
+ 1653  rails s
+ 1654  git init
+ 1655  git add .
+ 1656  git commit -am "Cobranza con métodos de pago."
+ 1657  git push
+ 1658  rials s
+ 1659  rails s
+ 1660  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-205-177-119.compute-1.amazonaws.com
+ 1661  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1662  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1663  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1664  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-107-22-42-22.compute-1.amazonaws.com
+ 1665  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1666  vim /home/julio/.ssh/config 
+ 1667  scp -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-163-142-19.compute-1.amazonaws.com:/op
+ 1668  vim /home/julio/Tegik/portalob/
+ 1669  vim /home/julio/.ssh/config 
+ 1670  scp -P 8080 -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com:/opt/OpenbravoERP/modules/com.tegik.portalob/src-db/database/model/triggers/POB_TAX_TRG.xml /home/julio/Escritorio/
+ 1671  scp -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com:8080:/opt/OpenbravoERP/modules/com.tegik.portalob/src-db/database/model/triggers/POB_TAX_TRG.xml /home/julio/Escritorio/
+ 1672  scp -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com:/opt/OpenbravoERP/modules/com.tegik.portalob/src-db/database/model/triggers/POB_TAX_TRG.xml /home/julio/Escritorio/
+ 1673  scp -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com:/opt/OpenbravoERP/modules/com.tegik.portalob/src-db/database/model/triggers/POB_PRODUCT_TRG.xml  /home/julio/Escritorio/
+ 1674  scp -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com:/opt/OpenbravoERP/modules/com.tegik.portalob/src/com/tegik/portalob/EscribePedidosPortal.java  /home/julio/Escritorio/
+ 1675  scp -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-205-227-243.compute-1.amazonaws.com
+ 1676  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-205-227-243.compute-1.amazonaws.com
+ 1677  scp -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-205-227-243.compute-1.amazonaws.com
+ 1678  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-205-227-243.compute-1.amazonaws.com
+ 1679  exit
+ 1680  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@c2-54-205-227-243.compute-1.amazonaws.com
+ 1681  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-205-227-243.compute-1.amazonaws.com
+ 1682  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-158-161-87.compute-1.amazonaws.com
+ 1683  scp -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com:/opt/OpenbravoERP/com.tegik.portalob-1.0.10.obx  /home/julio/Escritorio/
+ 1684  source ~/.rvm/scripts/rvm
+ 1685  rails c
+ 1686  source ~/.rvm/scripts/rvm
+ 1687  cd /home/julio/Tegik/portalob/
+ 1688  rails s
+ 1689  rake assets:precompile
  1690  rails s
- 1691  rake routes
- 1692  rails s
- 1693  rake routes
- 1694  rails s
- 1695  git add -A
- 1696  git commit -am "Corrección rol de administrador"
- 1697  eb deploy
- 1698  rails s
- 1699  rails c
- 1700  rails s
- 1701  rails generate scaffold metodopago
- 1702  rake db:database
- 1703  rake db:migrate
- 1704  rails s
- 1705  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-146-158-21.compute-1.amazonaws.com
- 1706  deb http://repository.spotify.com stable non-free 
- 1707  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 94558F59
- 1708  sudo apt-get update 
- 1709  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@
- 1710  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-163-142-19.compute-1.amazonaws.com
- 1711  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1712  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1713  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-166-10-197.compute-1.amazonaws.com
- 1714  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-166-10-197.compute-1.amazonaws.com
- 1715  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-166-10-197.compute-1.amazonaws.com
- 1716  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-166-10-197.compute-1.amazonaws.com
- 1717  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-166-10-197.compute-1.amazonaws.com
- 1718  sudo add-apt-repository ppa:me-davidsansome/clementine
- 1719  sudo apt-get update
- 1720  source ~/.rvm/scripts/rvm
- 1721  rails c
- 1722  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1723  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-23-23-50-162.compute-1.amazonaws.com
- 1724  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1725  cd /home/julio/.ssh/
- 1726  ls
- 1727  vim config 
- 1728  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-107-22-42-22.compute-1.amazonaws.com
- 1729  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1730  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
- 1731  curl --include http://usuario-extranet:KopoTegik@openbravo.rase.com.mx/openbravo/org.openbravo.service.json.jsonrest/POB_VistaFacturasPortal?_where=bpartner=%271107816FC5FD4AA6A2591FCC404BC82D%27
- 1732  ssh openbravo@openbravo.rase.com.mx
- 1733  A2591FCC404BC82D%27
- 1734  source ~/.rvm/scripts/rvm
- 1735  rails c
- 1736  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
- 1737  cd /home/julio/Tegik/portalob/
- 1738  top
- 1739  kill 3157
- 1740  top
- 1741  vim /home/julio/.ssh/config 
- 1742  source ~/.rvm/scripts/rvm
- 1743  cd /home/julio/Tegik/portalob/
- 1744  rails s
- 1745  git init
- 1746  git add .
- 1747  git commit -am "Cobranza con métodos de pago."
- 1748  git push
- 1749  rials s
- 1750  rails s
- 1751  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-205-177-119.compute-1.amazonaws.com
- 1752  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1753  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1754  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
- 1755  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-107-22-42-22.compute-1.amazonaws.com
- 1756  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1757  vim /home/julio/.ssh/config 
- 1758  scp -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-163-142-19.compute-1.amazonaws.com:/op
- 1759  vim /home/julio/Tegik/portalob/
- 1760  vim /home/julio/.ssh/config 
- 1761  scp -P 8080 -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com:/opt/OpenbravoERP/modules/com.tegik.portalob/src-db/database/model/triggers/POB_TAX_TRG.xml /home/julio/Escritorio/
- 1762  scp -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com:8080:/opt/OpenbravoERP/modules/com.tegik.portalob/src-db/database/model/triggers/POB_TAX_TRG.xml /home/julio/Escritorio/
- 1763  scp -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com:/opt/OpenbravoERP/modules/com.tegik.portalob/src-db/database/model/triggers/POB_TAX_TRG.xml /home/julio/Escritorio/
- 1764  scp -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com:/opt/OpenbravoERP/modules/com.tegik.portalob/src-db/database/model/triggers/POB_PRODUCT_TRG.xml  /home/julio/Escritorio/
- 1765  scp -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com:/opt/OpenbravoERP/modules/com.tegik.portalob/src/com/tegik/portalob/EscribePedidosPortal.java  /home/julio/Escritorio/
- 1766  scp -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-205-227-243.compute-1.amazonaws.com
- 1767  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-205-227-243.compute-1.amazonaws.com
- 1768  scp -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-205-227-243.compute-1.amazonaws.com
- 1769  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-205-227-243.compute-1.amazonaws.com
- 1770  exit
- 1771  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@c2-54-205-227-243.compute-1.amazonaws.com
- 1772  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-205-227-243.compute-1.amazonaws.com
- 1773  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-158-161-87.compute-1.amazonaws.com
- 1774  scp -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com:/opt/OpenbravoERP/com.tegik.portalob-1.0.10.obx  /home/julio/Escritorio/
- 1775  source ~/.rvm/scripts/rvm
+ 1691  rake assets:precompila
+ 1692  rake assets:precompile
+ 1693  rails s
+ 1694  rake assets:precompile
+ 1695  rails s
+ 1696  rake assets:precompile
+ 1697  rails s
+ 1698  rake assets:precompile
+ 1699  rails s
+ 1700  rake assets:precompile
+ 1701  rails s
+ 1702  generate migration AddConfigToEmpresas filtromarca:boolean filtrocategoria:boolean
+ 1703  rails generate migration AddConfigToEmpresas filtromarca:boolean filtrocategoria:boolean
+ 1704  rake db:migrate
+ 1705  rails s
+ 1706  rake assets:precompile
+ 1707  rails server
+ 1708  rake assets:precompile
+ 1709  rails server
+ 1710  rake assets:precompile
+ 1711  rails server
+ 1712  rake assets:precompile
+ 1713  rails server
+ 1714  rake assets:precompile
+ 1715  rails server
+ 1716  git inid
+ 1717  git init
+ 1718  git add .
+ 1719  git commig -am "Correcciones RASE 7 de Mayo"
+ 1720  git commit -am "Correcciones RASE 7 de Mayo"
+ 1721  git push
+ 1722  rails s
+ 1723  git add .
+ 1724  git commit -am "corrección imagen"
+ 1725  eb deploy
+ 1726  rails s
+ 1727  git add .
+ 1728  git commit -am "Corrección icono pestaña empresa"
+ 1729  eb deploy
+ 1730  rails s
+ 1731  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1732  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1733  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
+ 1734  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@
+ 1735  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-204-226-67.compute-1.amazonaws.com
+ 1736  cd /home/julio/Tegik/portalob/
+ 1737  rake assets:precompile
+ 1738  git add -A
+ 1739  git commit -am "Correción Assets"
+ 1740  eb deploy
+ 1741  rails c
+ 1742  git add -A
+ 1743  git commit -am "Demo Corrección Filtro Automotriz"
+ 1744  eb deploy
+ 1745  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1746  rails s
+ 1747  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-204-226-67.compute-1.amazonaws.com
+ 1748  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 openbravo@ec2-54-204-226-67.compute-1.amazonaws.com
+ 1749  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-204-226-67.compute-1.amazonaws.com
+ 1750  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-204-249-83.compute-1.amazonaws.com
+ 1751  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@54.225.85.210
+ 1752  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1753  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@http://54.225.85.210/
+ 1754  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@54.225.85.210
+ 1755  vim /home/julio/.ssh/config 
+ 1756  cd /home/julio/Tegik/portalob/
+ 1757  rails s
+ 1758  vim Gemfile
+ 1759  bundel install
+ 1760  bundle install
+ 1761  rails s
+ 1762  rails generate intercom:config Extranet/Tegik
+ 1763  rails s
+ 1764  rails generate intercom:config Extranet/Tegik
+ 1765  rails s
+ 1766  rails generate intercom:config Extranet/Tegik
+ 1767  rails s
+ 1768  rails generate intercom:config Extranet/Tegik
+ 1769  rails s
+ 1770  rails generate intercom:config Extranet/Tegik
+ 1771  rails s
+ 1772  rails generate intercom:config Extranet/Tegik
+ 1773  rails s
+ 1774  rails generate intercom:config Extranet/Tegik
+ 1775  rails s
  1776  rails c
- 1777  source ~/.rvm/scripts/rvm
- 1778  cd /home/julio/Tegik/portalob/
- 1779  rails s
- 1780  rake assets:precompile
- 1781  rails s
- 1782  rake assets:precompila
- 1783  rake assets:precompile
- 1784  rails s
- 1785  rake assets:precompile
- 1786  rails s
- 1787  rake assets:precompile
- 1788  rails s
- 1789  rake assets:precompile
- 1790  rails s
- 1791  rake assets:precompile
- 1792  rails s
- 1793  generate migration AddConfigToEmpresas filtromarca:boolean filtrocategoria:boolean
- 1794  rails generate migration AddConfigToEmpresas filtromarca:boolean filtrocategoria:boolean
- 1795  rake db:migrate
- 1796  rails s
- 1797  rake assets:precompile
- 1798  rails server
- 1799  rake assets:precompile
- 1800  rails server
- 1801  rake assets:precompile
- 1802  rails server
- 1803  rake assets:precompile
- 1804  rails server
- 1805  rake assets:precompile
- 1806  rails server
- 1807  git inid
- 1808  git init
- 1809  git add .
- 1810  git commig -am "Correcciones RASE 7 de Mayo"
- 1811  git commit -am "Correcciones RASE 7 de Mayo"
- 1812  git push
- 1813  rails s
- 1814  git add .
- 1815  git commit -am "corrección imagen"
- 1816  eb deploy
- 1817  rails s
- 1818  git add .
- 1819  git commit -am "Corrección icono pestaña empresa"
- 1820  eb deploy
- 1821  rails s
+ 1777  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-197-158-184.compute-1.amazonaws.com
+ 1778  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1779  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@54.225.85.210
+ 1780  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@54.225.85.210
+ 1781  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1782  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1783  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-197-158-184.compute-1.amazonaws.com
+ 1784  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1785  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@54.225.85.210
+ 1786  ec2-54-160-157-23.compute-1.amazonaws.com
+ 1787  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1788  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1789  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1790  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1791  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 openbravo@ec-54-167-146-15.compute-1.amazonaws.com
+ 1792  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 openbravo@ec2-54-167-146-15.compute-1.amazonaws.com
+ 1793  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-167-146-15.compute-1.amazonaws.com
+ 1794  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5833:localhost:5932 ubuntu@ec2-54-167-146-15.compute-1.amazonaws.com
+ 1795  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-167-146-15.compute-1.amazonaws.com
+ 1796  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-167-146-15.compute-1.amazonaws.com
+ 1797  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1798  cd /home/julio/Tegik/portalob/
+ 1799  git add .
+ 1800  git commit -am "Segundo criterio de búsqueda"
+ 1801  git push
+ 1802  git add -A
+ 1803  git commit -am "Sprint 5 - 2da búsqueda"
+ 1804  eb deploy
+ 1805  rails s
+ 1806  git add -A
+ 1807  git commit -am "Coficación oxxo (%) en catálogo de productos"
+ 1808  eb deploy
+ 1809  rails s
+ 1810  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1811  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5833:localhost:5932 ubuntu@ec2-54-167-146-15.compute-1.amazonaws.com
+ 1812  rails c
+ 1813  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-107-22-42-22.compute-1.amazonaws.com
+ 1814  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1815  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1816  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.co
+ 1817  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-167-146-15.compute-1.amazonaws.com
+ 1818  vim /home/julio/.ssh/config 
+ 1819  cd /home/julio/Tegik/portalob/
+ 1820  rails s
+ 1821  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.co
  1822  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
- 1823  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1824  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@23.23.245.49
- 1825  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@
- 1826  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-204-226-67.compute-1.amazonaws.com
- 1827  cd /home/julio/Tegik/portalob/
- 1828  rake assets:precompile
- 1829  git add -A
- 1830  git commit -am "Correción Assets"
- 1831  eb deploy
- 1832  rails c
- 1833  git add -A
- 1834  git commit -am "Demo Corrección Filtro Automotriz"
- 1835  eb deploy
- 1836  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
- 1837  rails s
- 1838  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-204-226-67.compute-1.amazonaws.com
- 1839  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 openbravo@ec2-54-204-226-67.compute-1.amazonaws.com
- 1840  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-204-226-67.compute-1.amazonaws.com
- 1841  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-204-249-83.compute-1.amazonaws.com
- 1842  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@54.225.85.210
- 1843  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
- 1844  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@http://54.225.85.210/
- 1845  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@54.225.85.210
- 1846  vim /home/julio/.ssh/config 
- 1847  cd /home/julio/Tegik/portalob/
+ 1823  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1824  exit
+ 1825  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1826  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1827  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.co
+ 1828  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1829  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.co
+ 1830  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1831  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1832  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1833  cd /home/julio/Tegik/portalob/
+ 1834  rail ss
+ 1835  rail s
+ 1836  rails s
+ 1837  git init
+ 1838  git add -A
+ 1839  git commit -am "Corrección Búsqueda Sustancia"
+ 1840  eb deploy
+ 1841  rails s
+ 1842  git init
+ 1843  eb use extranet-pr
+ 1844  git add -A
+ 1845  git commit -am "Corrección Búsqueda 2do Criterio"
+ 1846  eb deploy
+ 1847  eb use extranet-test
  1848  rails s
- 1849  vim Gemfile
- 1850  bundel install
- 1851  bundle install
- 1852  rails s
- 1853  rails generate intercom:config Extranet/Tegik
- 1854  rails s
- 1855  rails generate intercom:config Extranet/Tegik
- 1856  rails s
- 1857  rails generate intercom:config Extranet/Tegik
- 1858  rails s
- 1859  rails generate intercom:config Extranet/Tegik
- 1860  rails s
- 1861  rails generate intercom:config Extranet/Tegik
- 1862  rails s
- 1863  rails generate intercom:config Extranet/Tegik
- 1864  rails s
- 1865  rails generate intercom:config Extranet/Tegik
- 1866  rails s
- 1867  rails c
- 1868  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-197-158-184.compute-1.amazonaws.com
- 1869  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1870  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@54.225.85.210
- 1871  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@54.225.85.210
- 1872  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-163-142-19.compute-1.amazonaws.com
- 1873  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1874  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-197-158-184.compute-1.amazonaws.com
- 1875  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1876  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@54.225.85.210
- 1877  ec2-54-160-157-23.compute-1.amazonaws.com
- 1878  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
- 1879  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1880  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1881  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1882  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 openbravo@ec-54-167-146-15.compute-1.amazonaws.com
- 1883  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 openbravo@ec2-54-167-146-15.compute-1.amazonaws.com
- 1884  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-167-146-15.compute-1.amazonaws.com
- 1885  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5833:localhost:5932 ubuntu@ec2-54-167-146-15.compute-1.amazonaws.com
- 1886  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5932 ubuntu@ec2-54-167-146-15.compute-1.amazonaws.com
- 1887  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-167-146-15.compute-1.amazonaws.com
- 1888  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
- 1889  cd /home/julio/Tegik/portalob/
- 1890  git add .
- 1891  git commit -am "Segundo criterio de búsqueda"
- 1892  git push
- 1893  git add -A
- 1894  git commit -am "Sprint 5 - 2da búsqueda"
- 1895  eb deploy
- 1896  rails s
- 1897  git add -A
- 1898  git commit -am "Coficación oxxo (%) en catálogo de productos"
- 1899  eb deploy
- 1900  rails s
- 1901  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1902  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5833:localhost:5932 ubuntu@ec2-54-167-146-15.compute-1.amazonaws.com
- 1903  rails c
- 1904  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-107-22-42-22.compute-1.amazonaws.com
- 1905  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1906  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1907  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.co
- 1908  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-167-146-15.compute-1.amazonaws.com
+ 1849  eb use extranet-pr
+ 1850  git add -A
+ 1851  git commit -am "PASSENGER LIMITE VENTA"
+ 1852  eb deploy
+ 1853  git add -A
+ 1854  git commit -am "PASSENGER LIMITE VENTA 2"
+ 1855  eb deploy
+ 1856  eb use extranet-test
+ 1857  eb deploy
+ 1858  eb use extranet-pr
+ 1859  git commit -am "PASSENGER LIMITE VENTA 3"
+ 1860  git add -A
+ 1861  git commit -am "PASSENGER LIMITE VENTA 4"
+ 1862  eb deploy
+ 1863  rails s
+ 1864  rails c
+ 1865  rails s
+ 1866  cd /home/julio/.ssh/
+ 1867  ls
+ 1868  cp keyextranet.pub /home/julio/Escritorio/
+ 1869  cd /home/julio/
+ 1870  history > history_julio
+ 1871  vim history_julio 
+ 1872  scp -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com:/opt/OpenbravoERP/com.tegik.portalob-1.2.1.obx /home/julio/Escritorio/
+ 1873  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1874  vim /home/julio/.ssh/config 
+ 1875  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-158-126-108.compute-1.amazonaws.com
+ 1876  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1877  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-23-21-39-27.compute-1.amazonaws.com
+ 1878  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1879  vim /home/julio/.ssh/config 
+ 1880  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-23-21-39-27.compute-1.amazonaws.com
+ 1881  cd /home/julio/Tegik/portalob/
+ 1882  rails c
+ 1883  rails s
+ 1884  rails c
+ 1885  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1886  vim /home/julio/.ssh/config 
+ 1887  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1888  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-91-164-71.compute-1.amazonaws.com
+ 1889  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1890  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1891  exit
+ 1892  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1893  vim /home/julio/.ssh/config 
+ 1894  vim /home/julio/.ssh/known_hosts 
+ 1895  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1896  cd /home/julio/Tegik/portalob/
+ 1897  rails s
+ 1898  ls
+ 1899  history > Julog
+ 1900  vim Julog 
+ 1901  eb use extranet-test
+ 1902  git add -A
+ 1903  git commit -am "Cobranza Revisión #1"
+ 1904  eb deploy
+ 1905  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1906  vim Julog 
+ 1907  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1908  rails s
  1909  vim /home/julio/.ssh/config 
- 1910  cd /home/julio/Tegik/portalob/
- 1911  rails s
- 1912  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.co
- 1913  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
- 1914  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1915  exit
- 1916  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1917  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1918  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.co
- 1919  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1920  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.co
- 1921  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
- 1922  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-163-142-19.compute-1.amazonaws.com
- 1923  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1924  cd /home/julio/Tegik/portalob/
- 1925  rail ss
- 1926  rail s
- 1927  rails s
- 1928  git init
- 1929  git add -A
- 1930  git commit -am "Corrección Búsqueda Sustancia"
- 1931  eb deploy
- 1932  rails s
- 1933  git init
+ 1910  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1911  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 1912  cd /home/julio/Tegik/portalob/
+ 1913  rails s
+ 1914  rake assets:precompile
+ 1915  rails s
+ 1916  rake assets:precompile
+ 1917  rails s
+ 1918  eb use extranet-pr
+ 1919  git add -A
+ 1920  git commit -am "Corrección Passenger RASE"
+ 1921  eb deploy
+ 1922  eb use extranet-test
+ 1923  git commit -am "Caracteristicas ordenadas alfabeticamente."
+ 1924  eb deploy
+ 1925  eb use extranet-test
+ 1926  rails s
+ 1927  rails c
+ 1928  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-211-16-36.compute-1.amazonaws.com
+ 1929  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1930  eb use extranet-test
+ 1931  cd /home/julio/Tegik/portalob/
+ 1932  eb use extranet-test
+ 1933  rails s
  1934  eb use extranet-pr
  1935  git add -A
- 1936  git commit -am "Corrección Búsqueda 2do Criterio"
- 1937  eb deploy
- 1938  eb use extranet-test
- 1939  rails s
- 1940  eb use extranet-pr
- 1941  git add -A
- 1942  git commit -am "PASSENGER LIMITE VENTA"
- 1943  eb deploy
- 1944  git add -A
- 1945  git commit -am "PASSENGER LIMITE VENTA 2"
- 1946  eb deploy
- 1947  eb use extranet-test
- 1948  eb deploy
- 1949  eb use extranet-pr
- 1950  git commit -am "PASSENGER LIMITE VENTA 3"
- 1951  git add -A
- 1952  git commit -am "PASSENGER LIMITE VENTA 4"
- 1953  eb deploy
- 1954  rails s
- 1955  rails c
- 1956  rails s
- 1957  cd /home/julio/.ssh/
- 1958  ls
- 1959  cp keyextranet.pub /home/julio/Escritorio/
- 1960  cd /home/julio/
- 1961  history > history_julio
- 1962  vim history_julio 
- 1963  scp -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com:/opt/OpenbravoERP/com.tegik.portalob-1.2.1.obx /home/julio/Escritorio/
- 1964  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1965  vim /home/julio/.ssh/config 
- 1966  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-158-126-108.compute-1.amazonaws.com
- 1967  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
- 1968  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-23-21-39-27.compute-1.amazonaws.com
- 1969  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1970  vim /home/julio/.ssh/config 
- 1971  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-23-21-39-27.compute-1.amazonaws.com
- 1972  cd /home/julio/Tegik/portalob/
- 1973  rails c
- 1974  rails s
- 1975  rails c
- 1976  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
- 1977  vim /home/julio/.ssh/config 
- 1978  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1979  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-91-164-71.compute-1.amazonaws.com
- 1980  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1981  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1982  exit
- 1983  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1984  vim /home/julio/.ssh/config 
- 1985  vim /home/julio/.ssh/known_hosts 
- 1986  ssh -i /home/julio/Tegik/sw/tegik.pem -N -L 5835:localhost:5432 openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
- 1987  cd /home/julio/Tegik/portalob/
- 1988  rails s
- 1989  ls
- 1990  history > Julog
- 1991  vim Julog 
- 1992  eb use extranet-test
- 1993  git add -A
- 1994  git commit -am "Cobranza Revisión #1"
- 1995  eb deploy
- 1996  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
- 1997  vim Julog 
- 1998  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
- 1999  rails s
- 2000  eb use extranet-test
- 2001  cd /home/julio/Tegik/portalob/
- 2002  eb use extranet-test
- 2003  git add .
- 2004  git push
- 2005  rails s
- 2006  ls
- 2007  history > Julog 
+ 1936  git commit -am "Passenger 25mayo2015"
+ 1937  rails s
+ 1938  git add -A
+ 1939  eb use extranet-test
+ 1940  git commit -am "Corrección Cobranza"
+ 1941  eb deploy
+ 1942  rails s
+ 1943  git add -
+ 1944  git add .
+ 1945  git commit -am "Antes de ordenamiento de filtros"
+ 1946  git push
+ 1947  rake assets:precompile
+ 1948  rails s
+ 1949  rake assets:precompile
+ 1950  rails s
+ 1951  rake assets:precompile
+ 1952  rails s
+ 1953  git add .
+ 1954  git commit -am "Filtros ordenados"
+ 1955  git push
+ 1956  vim /home/julio/.ssh/config 
+ 1957  rails c
+ 1958  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-160-157-23.compute-1.amazonaws.com
+ 1959  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-159-161-17.compute-1.amazonaws.com
+ 1960  exit
+ 1961  rails s
+ 1962  add .
+ 1963  git add .
+ 1964  git commit -am "Corrección Duplicados"
+ 1965  git push
+ 1966  git add -A
+ 1967  git commit -am "Corrección Duplicados TS"
+ 1968  rails s
+ 1969  eb use extranet-test
+ 1970  git add -A
+ 1971  git commit -am "Corrección Spinner Pedido Fallido"
+ 1972  eb deploy
+ 1973  rails s
+ 1974  cd /home/julio/Descargas/
+ 1975  ls
+ 1976  sudo dpkg -i google-webdesigner_current_amd64.deb 
+ 1977  cd /home/julio/Tegik/portalob/
+ 1978  rails c
+ 1979  cd /home/julio/Tegik/portalob/
+ 1980  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1981  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@ec2-54-161-149-99.compute-1.amazonaws.com
+ 1982  ssh -i /home/julio/Tegik/sw/tegik.pem ubuntu@54.225.85.210
+ 1983  ssh -N -L 5835:localhost:5432 extranetob@aa1hrspq8xiluex.ckhjgx8swabs.us-east-1.rds.amazonaws.com
+ 1984  cd /home/julio/Tegik/portalob/
+ 1985  rails s
+ 1986  rails c
+ 1987  rails s
+ 1988  ssh -i /home/julio/.ssh/keyextranet.pub ec2-user@ec2-54-159-161-17.compute-1.amazonaws.com
+ 1989  rails s
+ 1990  ssh -i /home/julio/Tegik/sw/tegik.pem openbravo@ec2-54-163-142-19.compute-1.amazonaws.com
+ 1991  cd /home/julio/Tegik/portalob/
+ 1992  git init 
+ 1993  git add .
+ 1994  eb use extranet-test"
+ 1995  eb use extranet-test
+ 1996  git commit -am "Fix Error en escritura de pedidos"
+ 1997  git push
+ 1998  eb deploy
+ 1999  ssh -i /home/julio/Tegik/sw/tegik.pem ec2-user@ec2-54-146-147-162.compute-1.amazonaws.com
+ 2000  history > Julog
