@@ -26,7 +26,7 @@ module Api
           # asignar todas las lineas de la orden vieja a la orden nueva
           Pedidolinea.where(pedido_id: @ord.id).find_each do |lins|
             @lin = lins
-            @lin.pedid_id = @new.id
+            @lin.pedido_id = @new.id
             @lin.save
           end
           puts "Se asignaron las lineas a una nueva orden"
