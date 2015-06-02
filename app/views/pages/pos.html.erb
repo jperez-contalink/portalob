@@ -7,6 +7,7 @@
 	    	height: 98%;
 	    	overflow-y:hidden;
 		}
+		/*****************************Grid de Ventas y Lotes*/
 		.gridVenta {
 			width: 100%;
 		}
@@ -28,12 +29,12 @@
 			padding:3% 3% 3% 3%;
 		}
 		.rowGridVenta input[type=text] {
-        width: 100%;
-        text-align:center;
+	        text-align:center;
+	        width: 1.5em;
     	}		
     	.divGridVenta{
     		/*background-color: red;*/
-    		height: 27em;
+    		height: 23em;
     		overflow-y: scroll;
     	}
 		.divGridTotales {
@@ -109,6 +110,55 @@
 			background-color:#3498db;
 			border: 1px solid #3498db;
 		}
+		/**********************************Metodos de Pago***/
+		.rowGridMetodos {
+			height: 2em;
+			border: 0px solid black;
+			color:red;
+			padding-left: 1%;
+			font-size: 130%;
+			border-bottom: 1px solid #3498db;
+			padding:3% 3% 3% 3%;
+		}
+		.rowGridMetodos input[type=text] {
+	        text-align:center;
+	        width: 1.5em;
+    	}		
+
+		/**********************************Teclado Núemerico*/
+		.tabKeyBoard {
+		}
+		.tabKeyBoard td{
+			background-color: #7f8c8d;
+			border:0px solid black;
+			height: 25%;
+			padding: 1% 1% 1% 1%;
+		}
+		.divKeyKB {
+			height: 100%;
+			border:1px solid black;
+			border-radius: 10px;
+			background-color: #ecf0f1;
+			text-align: center;
+			padding: 10% 1% 4% 1%;
+			font-weight: bold;
+			font-size: 200%;
+		}		
+		/**********************************Side Bar**********/
+		.sideBar {
+			background-color: red;
+			height:38em;
+		}
+		#menuBar {
+
+		}
+		#menuBar:hover {
+			-moz-box-shadow: 0 0 10px #ccc; -webkit-box-shadow: 0 0 10px #ccc; box-shadow: 0 0 10px #ccc;
+		}
+		-fullBar {
+			border-bottom-left-radius: 10px;
+			border-bottom-right-radius: 10px;
+		}
 		/****************************************************/
 		#tdImpuestosVenta {
 			text-align: right;
@@ -127,40 +177,39 @@
 			background-color: white;
 			border: 1px solid #3498db;
 		}
+		/*********************Panel izquierdo****************/
+		#leftTopDiv {
+			background-color: red;
+		}
+		#rightTopDiv {
+			background-color: yellow;
+		}
+		#leftBottomDiv {
+			background-color: blue;
+		}
+		#rightBottomDiv {
+			background-color: green;
+		}
     </style>
 </head>
 <!--
 http://csalinas-tegik:KopoTegik@ec2-54-166-72-236.compute-1.amazonaws.com:8080/openbravo/org.openbravo.service.json.jsonrest/pob_catalogoproductos?_where=id=%2784DF7B2B57F6493B86621A3399A5C884%27
 FA5E5D1953094CE5B9834572F6B2DB08
 	-->
-<body><br><br><br><br>
+<body>
+	<br><br><br><br>
 	<div id="allFrame" class="allFrame">
 		<div id="listadoLotes" class="listadoLotes"  align="center"></div>
 	</div>
-	<div id="leftFrame" style="background-color:red;width:50%;float:left;overflow-y:scroll;height:45px;"><br>
-			<table id="GridLote" class="GridLote" width="100%">
-				<tr>
-					<td class="headGridLote" width="90%">Lote</td>
-					<td class="headGridLote" width="10%">Inventario</td>
-				</tr>
-				<tr>
-					<td class="rowGridLote" width="90%">EFM2343232ASASDA3012123392932032030293</td>
-					<td class="rowGridLote" width="10%">2 pzas</td>
-				</tr>				
-				<tr>
-					<td class="rowGridLote" width="90%">EFM2343232ASASDA3012123392932032030293</td>
-					<td class="rowGridLote" width="10%">2 pzas</td>
-				</tr>								
-				<tr>
-					<td class="rowGridLote" width="90%">EFM2343232ASASDA3012123392932032030293</td>
-					<td class="rowGridLote" width="10%">2 pzas</td>
-				</tr>				
-				<tr>
-					<td class="rowGridLote" width="90%">EFM2343232ASASDA3012123392932032030293</td>
-					<td class="rowGridLote" width="10%">2 pzas</td>
-				</tr>												
-			</table>
+	<div id="sideBar" class="sideBar" style="width:2%;float:left">
+		<div id="menuBar" style="width:100%;background-color:blue;height:4em">&nbsp;</div>
+		<div id="emptyBar" style="width:100%;background-color:white;height:33em">&nbsp;</div>
+		<div id="fullBar" style="width:100%;background-color:green;height:1em">&nbsp;</div>
 	</div>
+
+	<div id="leftFrame" style="width:43%;float:left;height:38em;"><br>
+	</div>
+
 	<div id="rightFrame" style="width:50%;float:left">
 		<div>
 			<table id="gridVentaHeader" class="gridVenta">
@@ -168,20 +217,35 @@ FA5E5D1953094CE5B9834572F6B2DB08
 					<td class="headGridVenta" width="50%">Producto</td>
 					<td class="headGridVenta" width="20%">Precio</td>
 					<td class="headGridVenta" width="10%">Cant.</td>
-					<td class="headGridVenta" width="20%">Total</td></tr>
+					<td class="headGridVenta" width="20%">Total</td>
+				</tr>
 			</table>
 		</div>
-		<div id="divGridVenta" class="divGridVenta" width="100%">
-		</div>
+
+		<div id="divGridVenta" class="divGridVenta" width="100%"></div>
 		<hr>
 		<div id="divGridTotales" class="divGridTotales" style="background-color:white;">
-			<table id="gridTotales" class="gridTotales"><tr><td rowspan="2" class="tdGridTotal" width="60%"></td><td  class="tdGridTotal" style="vertical-align:bottom">Impuestos:</td><td id="tdImpuestosVenta">$0.00</td></tr><tr><td colspan="2" class="tdGridTotal" height="65%;"><input type="button" class="btn_total" id="btn_total" value="$0.00"/></td></tr></table>
+			<table id="gridTotales" class="gridTotales">
+				<tr>
+					<td rowspan="2" class="tdGridTotal" width="60%"></td>
+					<td  class="tdGridTotal" style="vertical-align:bottom">Impuestos:</td>
+					<td id="tdImpuestosVenta">$0.00</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="tdGridTotal" height="65%;">
+						<input type="button" class="btn_total" id="btn_total" value="$0.00"/>
+					</td>
+				</tr>
+			</table>
 		</div>
 		<hr>
 		<div id="divGridUpc" width="100%">
-			<input type="text" class="txtGridUpc" id="txtGridUpc" size="80">
+			<input type="text" class="txtGridUpc" id="txtGridUpc" size="87"/>
 		</div>
-	</div>	
+	</div>
+
+
+
 </body>
 <script type="text/javascript">
 $( document ).ready(function() {
@@ -210,6 +274,7 @@ $( document ).ready(function() {
 		// cambia la cantidad del producto
 		console.log("QTYP: ", e.currentTarget.id);
 		// Carga popUp de lotes
+		calcularTotales();
 		loadLotes();
 	});
 	$(document).on('click', '.loteSelected', function (e) {
@@ -217,12 +282,26 @@ $( document ).ready(function() {
 		console.log("Lote seleccionado: ", e);
 		document.getElementById("allFrame").style.display = "none";
 		$( "#txtGridUpc").focus();
+		paintLeftPanel("");
 	});	
+	$(document).on('click', '.btn_total', function (e) {
+		// cambia la cantidad del producto
+		console.log("COMPLETAR-METODOS DE PAGO: ", e);
+		//Mostrar teclado y ocultar el grid
+		upKeyboard();
+	});	
+	$(document).on('click', '.divKeyKB', function (e) {
+		console.log("GODZILLA: ", e.target.id);
+		addMetodo(e.target.id);
+	});		
+	
 });
 /*************************************** FUNCIONES *************************************************************************/
 function loadGrid() {
 	var table = '<table id="gridVenta" class="gridVenta"></table>';
+	table += '<table id="gridVentaMetodos" class="gridVenta" style="display:none;"></table>';
 	document.getElementById("divGridVenta").innerHTML = table;
+	//buildIndicadores();
 }
 function loadLotes() {
 	document.getElementById("allFrame").style.display = "block";
@@ -246,7 +325,7 @@ function addProduct(json) {
 	var datosProducto = [];
   	for (var i=0;i<jsonObject.totalRows;i++) {
   		datosProducto.push(jsonObject.data[i].name);
-  		datosProducto.push("0.00");
+  		datosProducto.push("45.00");
   	}
 	var table = document.getElementById("gridVenta");
 	var lon = document.getElementById("gridVenta").rows.length;
@@ -273,14 +352,62 @@ function addProduct(json) {
 	cell4.className = "rowGridVenta";
 }
 function upKeyboard() {
-	var table = '<table width="100%">';
-	table += '<tr><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td></tr>';
-	table += '<tr><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td></tr>';
-	table += '<tr><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td></tr>';
-	table += '<tr><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td></tr>';
-	table += "</table>";
-	document.getElementById("leftFrame").innerHTML = table;
-}
+	var table = '<br><br><br><table class="tabKeyBoard" align="center" width="90%" height="80%">';
+	table += '<tr><td width="20%"><div id="EFECTIVO" class="divKeyKB">Efectivo</div></td><td width="20%"><div class="divKeyKB">7</div></td><td width="20%"><div class="divKeyKB">8</div></td><td width="20%"><div class="divKeyKB">9</div></td><td width="20%"><div class="divKeyKB"><</div></td></tr>';
 
+	table += '<tr><td width="20%"><div class="divKeyKB">Vale</div></td><td width="20%"><div class="divKeyKB">4</div></td><td width="20%"><div class="divKeyKB">5</div></td><td width="20%"><div class="divKeyKB">6</div></td><td rowspan="3"width="20%"><div class="divKeyKB">Ok</div></td></tr>';
+
+	table += '<tr><td width="20%"><div class="divKeyKB">Efectivo</div></td><td width="20%"><div class="divKeyKB">1</div></td><td width="20%"><div class="divKeyKB">2</div></td><td width="20%"><div class="divKeyKB">3</div></td></tr>';
+
+	table += '<tr><td width="20%"><div class="divKeyKB">Tarjeta</div></td><td colspan="2" width="20%"><div class="divKeyKB">0</div></td><td width="20%"><div class="divKeyKB">.</div></td></tr>';
+	table += "</table>";
+	paintLeftPanel(table);
+}
+function paintLeftPanel(html) {
+	document.getElementById("leftFrame").innerHTML = html;
+}
+function buildIndicadores() {
+	html = "";
+	paintLeftPanel(html);
+}
+function calcularTotales() {
+	//var tab = document.getElementById("myTable").rows[0].cells.length;
+	var rows = document.getElementById("gridVenta").rows;
+	var total = 0;
+	for (var i =0;i<rows.length;i++) {
+		var indx = i + 1;
+		precio = parseFloat(rows[i].cells[1].innerHTML)*parseFloat(document.getElementById("qtyGridVenta_" + i).value);
+		rows[i].cells[3].innerHTML = precio.toFixed(2);
+		total = total + precio;
+	}
+	total = total.toFixed(2);
+	impuestos = (total*.16).toFixed(2);
+	document.getElementById("btn_total").value = "$" + total;
+	document.getElementById("tdImpuestosVenta").innerHTML = "$" + impuestos;
+	// Colocar totales
+
+}
+function addMetodo(metodo) {
+	document.getElementById("gridVenta").style.display = "none";
+	document.getElementById("gridVentaMetodos").style.display = "block";
+
+	var table = document.getElementById("gridVentaMetodos");
+	var lon = document.getElementById("gridVentaMetodos").rows.length;
+	var row = table.insertRow(lon);
+	var cell1 = row.insertCell(0);
+	var cell2 = row.insertCell(1);
+	cell1.innerHTML = metodo;
+	//cell2.innerHTML = datosProducto[1];
+	cell2.innerHTML = '<input type="text" id="qtyGridVentaMetodos_' + lon + '" class="qtyGridVenta" value=""/>';
+	//cell4.innerHTML = "0.00";
+		// enfocar el campo de cantidad
+	$( "#qtyGridVentaMetodos_" + lon).focus();
+	// Display
+	table.style.width = "100%";
+	cell1.className = "rowGridMetodos";
+	cell2.className = "rowGridMetodos";
+	cell2.style.width = "20%";
+	cell1.style.width = "80%";
+}
 </script>
 </html>

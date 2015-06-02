@@ -388,10 +388,10 @@
             url: "api/v1/pedidosobs?pedido_id=" + pedidoActual,
                success: function(datox){
                console.log("$> Success: ", datox);
-               console.log("$> ", datox.data);
-               openbravo_pedido = datox.data;
+               console.log("$> ", datox;
+               openbravo_pedido = datox;
                 if (openbravo_pedido == undefined) {
-                  console.log("No existe el pedido procede normalente" + openbravo_pedido);
+                  console.log("No existe el pedido procede normalente " + openbravo_pedido);
                 } else {
                   console.log("Ya existe el pedido en openbravo crear uno nuevo y asigna las lineas al nuevo" + openbravo_pedido);
                     $.ajax({
