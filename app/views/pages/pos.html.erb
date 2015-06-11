@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 <html>
+<!--
+FA5E5D1953094CE5B9834572F6B2DB08
+FCAE8DB7A8284830BBE27C7FA4FD76D8
+FBBE32A496C24672841E2C2E2E354576
+F911C23B15644B14884076BAAE4533AF
+B78BBB69809742AA9B485D76459A8A21
+	-->
 <head>
     <title>POS</title>
     <style>
-	    body, html {
+	    /*body, html {
 	    	height: 98%;
 	    	overflow-y:hidden;
-		}
+	    	background-color: #E6E6E6;
+		}*/
+		body {
+			background: #f9f7f6;
+			color: #404d5b;
+			font-weight: 500;
+			font-size: 1.15em;
+			overflow-y:hidden;
+			/*(font-family: 'Raleway', Arial, sans-serif;*/
+		}		
 		/*****************************Grid de Ventas y Lotes*/
 		.gridVenta {
 			width: 100%;
@@ -24,18 +40,25 @@
 			border: 0px solid black;
 			color:black;
 			padding-left: 1%;
-			font-size: 130%;
-			border-bottom: 1px solid #3498db;
-			padding:3% 3% 3% 3%;
+			font-size: 100%;
+			border-bottom: 1px solid #E6E6E6;
+			padding:1% 1% 1% 1%;
+		}
+		.trSelected {
+			background-color: red;
 		}
 		.rowGridVenta input[type=text] {
 	        text-align:center;
 	        width: 1.5em;
     	}		
-    	.divGridVenta{
+    	.divGridVenta {
     		/*background-color: red;*/
-    		height: 23em;
+    		height: 16em;
     		overflow-y: scroll;
+    	}
+    	.gridVentaOpciones {
+    		font-weight: bold;
+    		color: #e74c3c;
     	}
 		.divGridTotales {
 			height: 6em;
@@ -112,42 +135,59 @@
 		}
 		/**********************************Metodos de Pago***/
 		.rowGridMetodos {
-			height: 2em;
+			height: 3em;
 			border: 0px solid black;
 			color:red;
 			padding-left: 1%;
 			font-size: 130%;
 			border-bottom: 1px solid #3498db;
 			padding:3% 3% 3% 3%;
+			font-weight: bold;
 		}
 		.rowGridMetodos input[type=text] {
 	        text-align:center;
-	        width: 1.5em;
-    	}		
-
-		/**********************************Teclado Núemerico*/
+	        width: 100%;
+    	}
+    	.txtGridPartner {
+    		border-radius: 3px;
+    		/*padding: 1% 1% 1% 1%;*/
+    	}
+		/**********************************Teclado Númerico*/
 		.tabKeyBoard {
 		}
 		.tabKeyBoard td{
-			background-color: #7f8c8d;
 			border:0px solid black;
 			height: 25%;
 			padding: 1% 1% 1% 1%;
+			background-color: white;
 		}
 		.divKeyKB {
 			height: 100%;
-			border:1px solid black;
+			border:0px solid black;
 			border-radius: 10px;
-			background-color: #ecf0f1;
 			text-align: center;
 			padding: 10% 1% 4% 1%;
-			font-weight: bold;
-			font-size: 200%;
+			font-size: 250%;
+			color:#3498db;
 		}		
 		/**********************************Side Bar**********/
 		.sideBar {
-			background-color: red;
+			background-color: #3498db;
 			height:38em;
+		}
+		#emptyBar {
+			text-align: center;			
+			vertical-align: middle;
+		}
+		#emptyBar p {
+			font-weight: bold;
+			font-size: 250%;
+			color:orange;
+			-moz-transform: rotate(-90.0deg);  /* FF3.5+ */
+			-o-transform: rotate(-90.0deg);  /* Opera 10.5 */
+			-webkit-transform: rotate(-90.0deg);  /* Saf3.1+, Chrome */
+			filter:  progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083);  /* IE6,IE7 */
+			-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)";
 		}
 		#menuBar {
 
@@ -158,6 +198,12 @@
 		-fullBar {
 			border-bottom-left-radius: 10px;
 			border-bottom-right-radius: 10px;
+		}
+		#fullBar {
+			-webkit-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+			-moz-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+			-o-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+			transition:width 300ms ease-in-out, height 300ms ease-in-out;			
 		}
 		/****************************************************/
 		#tdImpuestosVenta {
@@ -172,14 +218,13 @@
 			font-weight: bold;
 			text-align: right;
 			font-size: 250%;
-			border-radius: 5px;
-			color:#3498db;
-			background-color: white;
-			border: 1px solid #3498db;
+			color:white;
+			background-color: #40FF00;
+			border: 1px solid #40FF00;
 		}
 		/*********************Panel izquierdo****************/
 		#leftTopDiv {
-			background-color: red;
+			background-color: #3498db;
 		}
 		#rightTopDiv {
 			background-color: yellow;
@@ -190,64 +235,182 @@
 		#rightBottomDiv {
 			background-color: green;
 		}
+		/********************* Indicadores ****************/
+		.tdIndicadores {
+			background-color: white;
+			margin: 1% 1% 1% 2%;
+		}
+		.tdIndicadoresHeader {
+			height: 20%;
+			text-align: center;
+			border:0px solid red;
+			font-weight: bold;
+			padding-top: 30%; 
+		}
+		.tdIndicadoresValor {
+			height: 80%;
+			border:0px solid red;
+			text-align: center;			
+			font-weight: bold;
+			padding-top: 10%;
+			font-size: 190%;
+		}
+		.tdExtraHeader {
+			height: 20%;
+			text-align: center;
+			border:0px solid red;
+			font-weight: bold;
+			padding-top: 5%; 
+			padding-bottom: 5%; 
+			font-size: 140%;
+		}
+		.tdExtraValor {
+			height: 10%;
+			border:0px solid red;
+			text-align: center;			
+			font-weight: bold;
+			padding-top: 3%;
+			padding-bottom: 1%;
+			font-size: 110%;
+			border-top: 1px solid #bdc3c7;
+			border-bottom: 0px solid #bdc3c7;
+		}
+		.tdExtraDescripcion {
+			height: 10%;
+			border:0px solid red;
+			text-align: center;			
+			font-weight: bold;
+			/*padding-top: 10%;
+			padding-bottom: 10%;*/
+			font-size: 60%;
+			border-top: 0px solid #bdc3c7;
+			border-bottom: 1px solid #bdc3c7;
+		}
+		.tdExtraImg {
+			border-top: 1px solid #bdc3c7;
+			/*height: 10%;
+			border:0px solid red;
+			text-align: center;			
+			font-weight: bold;
+			border-top: 1px solid #bdc3c7;
+			border-bottom: 0px solid #bdc3c7;*/
+		}					
     </style>
 </head>
-<!--
-http://csalinas-tegik:KopoTegik@ec2-54-166-72-236.compute-1.amazonaws.com:8080/openbravo/org.openbravo.service.json.jsonrest/pob_catalogoproductos?_where=id=%2784DF7B2B57F6493B86621A3399A5C884%27
-FA5E5D1953094CE5B9834572F6B2DB08
-	-->
 <body>
-	<br><br><br><br>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+	<!--<div class="container demo-2">
+			<div class="main clearfix">-->
+				<div class="column">
+					<div id="dl-menu" class="dl-menuwrapper">
+						<button class="dl-trigger" style="background-color:#3498db;">Open Menu</button>
+						<ul class="dl-menu" style="background-color:#3498db;width:200%;">
+							<li>
+								<a href="#">Abonos / Edo. Cuenta</a>
+							</li>
+							<li>
+								<a href="#">Apartados</a>
+							</li>
+							<li>
+								<a href="#">Consultar Precios</a>
+							</li>
+							<li>
+								<a href="#">Consultar Invantario</a>
+							</li>
+							<li>
+								<a href="#">Solicitud de crédito</a>
+							</li>
+							<li>
+								<a href="#">Devoluciones</a>
+							</li>
+							<li>
+								<a href="#">Corte de caja</a>
+							</li>		
+							<li>
+								<a href="/estadosdecuenta">Portal</a>
+							</li>																		
+						</ul>
+					</div><!-- /dl-menuwrapper -->
+				</div>
+			<!--</div>
+		</div>--><!-- /container -->	
+    </div>
+  </div>
+</nav>	
 	<div id="allFrame" class="allFrame">
 		<div id="listadoLotes" class="listadoLotes"  align="center"></div>
 	</div>
-	<div id="sideBar" class="sideBar" style="width:2%;float:left">
-		<div id="menuBar" style="width:100%;background-color:blue;height:4em">&nbsp;</div>
-		<div id="emptyBar" style="width:100%;background-color:white;height:33em">&nbsp;</div>
-		<div id="fullBar" style="width:100%;background-color:green;height:1em">&nbsp;</div>
+	<div id="sideBar" class="sideBar" style="width:3%;float:left;height:45em;">
+		<div id="menuBar" style="width:100%;background-color:white;height:40em">&nbsp;</div>
+		<div id="emptyBar" style="width:100%;background-color:white;height:4em"><p>0%</p></div>
+		<div id="fullBar" style="width:100%;background-color:orange;height:1em">&nbsp;</div>
 	</div>
 
-	<div id="leftFrame" style="width:43%;float:left;height:38em;"><br>
+	<div id="leftFrame" style="width:57%;float:left;height:38em;"><br>
 	</div>
-
-	<div id="rightFrame" style="width:50%;float:left">
+<!-- Diego de Montemayor 1115 Sur, col. Monterrey Centro<br>Monterrey Nuevo León, CP. 64000<br>05-06-2014<br><b>ARI300430</b> -->
+	<div id="rightFrame" style="width:35%;float:left;background-color:white;">
+		<br>
+		<div align="center">
+			<img src="/rase.png" width="30%"/><br>
+			Diego de Montemayor 1115 Sur, col. Monterrey Centro<br>
+			Monterrey Nuevo León, CP. 64000<br>
+		</div>		
+		<hr>
 		<div>
-			<table id="gridVentaHeader" class="gridVenta">
-				<tr>
-					<td class="headGridVenta" width="50%">Producto</td>
-					<td class="headGridVenta" width="20%">Precio</td>
-					<td class="headGridVenta" width="10%">Cant.</td>
-					<td class="headGridVenta" width="20%">Total</td>
-				</tr>
-			</table>
+			<span class="input input--yoshiko">
+				<input class="input__field input__field--yoshiko" type="text" id="input-10" />
+				<label class="input__label input__label--yoshiko" for="input-10">
+					<span class="input__label-content input__label-content--yoshiko" data-content="CLIENTE">CLIENTE</span>
+				</label>
+			</span>
 		</div>
-
+		<table id="tabAction" width="100%" style="display:none;">
+			<tr>
+				<td  width="50%" ></td>
+				<td align="right" width="25%" ><a href="#" class="gridVentaOpciones">Cambiar lotes</a></td>
+				<td align="right" width="25%" ><a href="#" class="gridVentaOpciones deleteGrid">Eliminar</a></td>
+			</tr>
+		</table>
 		<div id="divGridVenta" class="divGridVenta" width="100%"></div>
 		<hr>
 		<div id="divGridTotales" class="divGridTotales" style="background-color:white;">
 			<table id="gridTotales" class="gridTotales">
 				<tr>
-					<td rowspan="2" class="tdGridTotal" width="60%"></td>
-					<td  class="tdGridTotal" style="vertical-align:bottom">Impuestos:</td>
+					<!--<td rowspan="2" class="tdGridTotal" width="60%"></td>-->
+					<td  class="tdGridTotal" align="right" style="vertical-align:bottom;">Impuestos:</td>
 					<td id="tdImpuestosVenta">$0.00</td>
 				</tr>
 				<tr>
-					<td colspan="2" class="tdGridTotal" height="65%;">
-						<input type="button" class="btn_total" id="btn_total" value="$0.00"/>
+					<td colspan="2" class="tdGridTotal" height="100%;">
+						<input type="button" class="btn_total" id="btn_total" value="TOTAL $0.00"/>
 					</td>
 				</tr>
 			</table>
 		</div>
-		<hr>
+		<br>
 		<div id="divGridUpc" width="100%">
-			<input type="text" class="txtGridUpc" id="txtGridUpc" size="87"/>
+			<input type="text" class="txtGridUpc" id="txtGridUpc" size="60"/>
 		</div>
+		<br>
 	</div>
 
 
 
 </body>
 <script type="text/javascript">
+var metaVentas = 1549989.09;
+var restoVenta = 0;
+var rowsSelected = [];
+var rowsGrid = [];
+var jsonTicket = {
+	total: 0,
+	resto: 0,
+	selectedrows: rowsSelected,
+	gridrows: rowsGrid
+};
 $( document ).ready(function() {
 	// Cargar panel derecho
 	loadGrid();
@@ -282,26 +445,69 @@ $( document ).ready(function() {
 		console.log("Lote seleccionado: ", e);
 		document.getElementById("allFrame").style.display = "none";
 		$( "#txtGridUpc").focus();
-		paintLeftPanel("");
+		buildIndicadores();
 	});	
 	$(document).on('click', '.btn_total', function (e) {
 		// cambia la cantidad del producto
 		console.log("COMPLETAR-METODOS DE PAGO: ", e);
 		//Mostrar teclado y ocultar el grid
 		upKeyboard();
+		//Actualizar barra (Esto no quedará aca)
+		actualizaBarra(document.getElementById("btn_total").value);
+		// Actualizar resto, el resto será el total de la venta
+		restoVenta = ((document.getElementById("btn_total").value).replace("TOTAL $", "")).replace(",", "");
 	});	
 	$(document).on('click', '.divKeyKB', function (e) {
-		console.log("GODZILLA: ", e.target.id);
-		addMetodo(e.target.id);
+		//addMetodo(e.target.id);
+		console.log("$> KEY: " + e.target.id);
+		switch(e.target.id) {
+			case "EFECTIVO": 
+				addMetodo(e.target.id);
+			break;
+			case "VALE": 
+				addMetodo(e.target.id);
+			break;	
+			case "TARJETA": 
+				addMetodo(e.target.id);
+			break;
+			case "PUNTOS": 
+				addMetodo(e.target.id);
+			break;	
+			case "X": 
+				buildIndicadores();
+			break;												
+			default:
+				console.log("No se encontró funcionalidad.");
+		}
 	});		
-	
+	$(document).on('change', '.qtyGridVentaMetodosack', function (e) {
+		console.log("$> CHNG: ", e.currentTarget.id);
+		addMontoMetodo(e.currentTarget.id);
+	});	
+	$(document).on('click', '.selectRowProducto', function (e) {
+		//row.id = "rowVentaProducto_" + lon;
+		console.log("E: ", e.target.id);
+		var index = (e.target.id).split("_");
+		validateColor = (document.getElementById("rowVentaProducto_" + index[1]).style.backgroundColor).toString();
+		if (validateColor == "") {
+			document.getElementById("rowVentaProducto_" + index[1]).style.backgroundColor = "#3498db";
+			document.getElementById("tabAction").style.display = "block";
+		} else {
+			document.getElementById("rowVentaProducto_" + index[1]).style.backgroundColor = "";
+			document.getElementById("tabAction").style.display = "none";
+		}
+	});
+	$(document).on('click', '.deleteGrid', function (e) {
+		console.log("E: ", e);
+	});
 });
 /*************************************** FUNCIONES *************************************************************************/
 function loadGrid() {
 	var table = '<table id="gridVenta" class="gridVenta"></table>';
-	table += '<table id="gridVentaMetodos" class="gridVenta" style="display:none;"></table>';
+	//table += '<table id="gridVentaMetodos" class="gridVenta" style="display:none;"></table>';
+	table += '<table id="gridVentaMetodos" class="gridVenta" style="border:0px solid black;"></table>';
 	document.getElementById("divGridVenta").innerHTML = table;
-	//buildIndicadores();
+	buildIndicadores();
 }
 function loadLotes() {
 	document.getElementById("allFrame").style.display = "block";
@@ -325,41 +531,54 @@ function addProduct(json) {
 	var datosProducto = [];
   	for (var i=0;i<jsonObject.totalRows;i++) {
   		datosProducto.push(jsonObject.data[i].name);
-  		datosProducto.push("45.00");
+  		datosProducto.push("450.00");
   	}
 	var table = document.getElementById("gridVenta");
 	var lon = document.getElementById("gridVenta").rows.length;
 	var row = table.insertRow(lon);
+	row.id = "rowVentaProducto_" + lon;
+	row.className = "selectRowProducto";
 	var cell1 = row.insertCell(0);
 	var cell2 = row.insertCell(1);
 	var cell3 = row.insertCell(2);
 	var cell4 = row.insertCell(3);
 	cell1.innerHTML = datosProducto[0];
-	cell2.innerHTML = datosProducto[1];
+	cell2.innerHTML = separaMiles(datosProducto[1]);
 	cell3.innerHTML = '<input type="text" id="qtyGridVenta_' + lon + '" class="qtyGridVenta" value=""/>';
 	cell4.innerHTML = "0.00";
-		// enfocar el campo de cantidad
+	// Guardar los datos en el json
+	var linea = {};
+	linea.LineaID	= lon;
+	linea.Producto 	= datosProducto[0];
+	linea.Precio 	= datosProducto[1];
+	linea.cantidad	= 0;
+	jsonTicket.rowsGrid.push(linea);
+	// enfocar el campo de cantidad
 	$( "#qtyGridVenta_" + lon).focus();
 	upKeyboard();
 	// Display
 	cell1.style.width = "50%";
 	cell1.className = "rowGridVenta";
+	cell1.id = "cel1_" + lon;
 	cell2.style.width = "20%";
 	cell2.className = "rowGridVenta";
+	cell2.id = "cel2_" + lon;;
 	cell3.style.width = "10%";
 	cell3.className = "rowGridVenta";
+	cell3.id = "cel3_" + lon;;
 	cell4.style.width = "20%";
 	cell4.className = "rowGridVenta";
+	cell4.id = "cel4_" + lon;;
 }
 function upKeyboard() {
 	var table = '<br><br><br><table class="tabKeyBoard" align="center" width="90%" height="80%">';
-	table += '<tr><td width="20%"><div id="EFECTIVO" class="divKeyKB">Efectivo</div></td><td width="20%"><div class="divKeyKB">7</div></td><td width="20%"><div class="divKeyKB">8</div></td><td width="20%"><div class="divKeyKB">9</div></td><td width="20%"><div class="divKeyKB"><</div></td></tr>';
+	table += '<tr><td width="20%"><div id="EFECTIVO" class="divKeyKB">Efectivo</div></td><td width="20%"><div class="divKeyKB">7</div></td><td width="20%"><div class="divKeyKB">8</div></td><td width="20%"><div class="divKeyKB">9</div></td><td width="20%"><div  id="X" class="divKeyKB">x</div></td></tr>';
 
-	table += '<tr><td width="20%"><div class="divKeyKB">Vale</div></td><td width="20%"><div class="divKeyKB">4</div></td><td width="20%"><div class="divKeyKB">5</div></td><td width="20%"><div class="divKeyKB">6</div></td><td rowspan="3"width="20%"><div class="divKeyKB">Ok</div></td></tr>';
+	table += '<tr><td width="20%"><div  id="VALE" class="divKeyKB">Vale</div></td><td width="20%"><div class="divKeyKB">4</div></td><td width="20%"><div class="divKeyKB">5</div></td><td width="20%"><div class="divKeyKB">6</div></td><td rowspan="3"width="20%"><div class="divKeyKB">Ok</div></td></tr>';
 
-	table += '<tr><td width="20%"><div class="divKeyKB">Efectivo</div></td><td width="20%"><div class="divKeyKB">1</div></td><td width="20%"><div class="divKeyKB">2</div></td><td width="20%"><div class="divKeyKB">3</div></td></tr>';
+	table += '<tr><td width="20%"><div  id="TARJETA" class="divKeyKB">Tarjeta</div></td><td width="20%"><div class="divKeyKB">1</div></td><td width="20%"><div class="divKeyKB">2</div></td><td width="20%"><div class="divKeyKB">3</div></td></tr>';
 
-	table += '<tr><td width="20%"><div class="divKeyKB">Tarjeta</div></td><td colspan="2" width="20%"><div class="divKeyKB">0</div></td><td width="20%"><div class="divKeyKB">.</div></td></tr>';
+	table += '<tr><td width="20%"><div  id="PUNTOS" class="divKeyKB">Puntos</div></td><td width="20%"><div class="divKeyKB">.</div></td><td width="20%"><div class="divKeyKB">0</div></td><td width="20%"><div class="divKeyKB"><</div></td></tr>';
 	table += "</table>";
 	paintLeftPanel(table);
 }
@@ -367,7 +586,23 @@ function paintLeftPanel(html) {
 	document.getElementById("leftFrame").innerHTML = html;
 }
 function buildIndicadores() {
-	html = "";
+	html = '<div align="center" width="100%"><table width="100%" align="center">';
+	// Indicador Uno
+	html += '<tr><td class="tdIndicadores" id="indicadorUno" style="float:left;width:30%;height:15em;"><table width="100%"><tr><td class="tdIndicadoresHeader">Objetivo de ventas</td></td><tr><td class="tdIndicadoresValor">$1,549,989.09</td></tr></table></td>';
+	// Indicador Dos	
+	html += '<td  class="tdIndicadores" id="indicadorDos" style="float:left;width:30%;height:15em;"><table width="100%"><tr><td class="tdIndicadoresHeader">Ventas por mes</td></td><tr><td class="tdIndicadoresValor">$49,989.09</td></tr></table></td>';
+	// Indicador Tres	
+	html += '<td class="tdIndicadores" id="indicadorTres" style="float:left;width:30%;height:15em;"><table width="100%"><tr><td class="tdIndicadoresHeader">Efectivo en caja</td></td><tr><td class="tdIndicadoresValor">$989.09</td></tr></table></td></tr>';
+	// Grafica
+	html += '<tr><td class="tdIndicadores" id="indicadorGrafica" style="float:left;width:63%;height:23em;"></td>';
+	// extra
+	html += '<td class="tdIndicadores" id="indicadorExtra" style="float:left;width:30%;height:23em;"><table width="100%">';
+	html +='<tr><td colspan="2" class="tdExtraValor">Promociones Vigentes</td></tr>';
+	for (var i=1;i<4;i++) {
+		html +='<tr><td  class="tdExtraImg" width="10%"><img src="/oferta.png" width="100%"/></td><td class="tdExtraValor">' + i +'% En toda la tienda</td></tr><tr><td class="tdExtraDescripcion" colspan="2">Vigencia al ' +  i + ' de diciembre de 2015</td></tr>';
+	}
+	html += '</table></td></tr>';
+	html += "</table></div>";
 	paintLeftPanel(html);
 }
 function calcularTotales() {
@@ -376,16 +611,73 @@ function calcularTotales() {
 	var total = 0;
 	for (var i =0;i<rows.length;i++) {
 		var indx = i + 1;
-		precio = parseFloat(rows[i].cells[1].innerHTML)*parseFloat(document.getElementById("qtyGridVenta_" + i).value);
-		rows[i].cells[3].innerHTML = precio.toFixed(2);
+		precio = parseFloat((rows[i].cells[1].innerHTML).replace(",", ""))*parseFloat(document.getElementById("qtyGridVenta_" + i).value);
+		rows[i].cells[3].innerHTML = separaMilesPOS((precio.toFixed(2)).toString());
 		total = total + precio;
 	}
 	total = total.toFixed(2);
 	impuestos = (total*.16).toFixed(2);
-	document.getElementById("btn_total").value = "$" + total;
-	document.getElementById("tdImpuestosVenta").innerHTML = "$" + impuestos;
+	document.getElementById("btn_total").value = "TOTAL $" + separaMilesPOS(total);
+	document.getElementById("tdImpuestosVenta").innerHTML = "$" + separaMilesPOS(impuestos);
 	// Colocar totales
+}
+function actualizaBarra(monto) {
+	/*<div id="menuBar" style="width:100%;background-color:white;height:40em">&nbsp;</div>
+	<div id="emptyBar" style="width:100%;background-color:white;height:4em"><p>0%</p></div> <-- este no se mueve por que tiene el %
+	<div id="fullBar" style="width:100%;background-color:orange;height:1em">&nbsp;</div>*/
+	var mbh = (document.getElementById("menuBar").style.height).replace("em", "");
+	var ebh = (document.getElementById("emptyBar").style.height).replace("em", "");
+	var fbh = (document.getElementById("fullBar").style.height).replace("em", "");
+	var nuevo = monto.replace("TOTAL $", "");
+	nuevo = nuevo.replace(",", "");
+	lenTotal = parseFloat(mbh) + parseFloat(fbh);
+	index = lenTotal/metaVentas;
+	plus = index*nuevo;
+	console.log("PLUS: " + plus);
+	if (plus > 0.1) {
+		var newfbh = parseFloat(fbh) + plus;
+		var newmbh = parseFloat(mbh) - plus;
+		document.getElementById("fullBar").style.height = newfbh + "em";
+		document.getElementById("menuBar").style.height = newmbh + "em";
+		var newPercent = ((newfbh/lenTotal)*100).toFixed(2);
+		document.getElementById("emptyBar").innerHTML = "<p>" + newPercent + "%</p>";		
+	}
+}
+function separaMilesPOS(numero){ 
+    // Variable que contendra el resultado final
+    var resultado = "";
+    
+    // Si el numero empieza por el valor "-" (numero negativo)
+    if(numero[0]=="-")
+    {
+        // Cogemos el numero eliminando los posibles puntos que tenga, y sin
+        // el signo negativo
+        nuevoNumero=numero.replace(/\,/g,'').substring(1);
+    }else{
+        // Cogemos el numero eliminando los posibles puntos que tenga
+        nuevoNumero=numero.replace(/\,/g,'');
+    }
+    
+    // Si tiene decimales, se los quitamos al numero
+    if(numero.indexOf(".")>=0)
+        nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
 
+    // Ponemos un punto cada 3 caracteres
+    for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++) 
+        resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado; 
+    
+    // Si tiene decimales, se lo añadimos al numero una vez forateado con 
+    // los separadores de miles
+    if(numero.indexOf(".")>=0)
+        resultado+=numero.substring(numero.indexOf("."), numero.indexOf(".")+3);
+
+    if(numero[0]=="-")
+    {
+        // Devolvemos el valor añadiendo al inicio el signo negativo
+        return "-"+resultado;
+    }else{
+        return resultado;
+    }
 }
 function addMetodo(metodo) {
 	document.getElementById("gridVenta").style.display = "none";
@@ -396,18 +688,59 @@ function addMetodo(metodo) {
 	var row = table.insertRow(lon);
 	var cell1 = row.insertCell(0);
 	var cell2 = row.insertCell(1);
+	//var btn_total = ((document.getElementById("btn_total").value).replace("TOTAL $", "")).replace(",", "");
+	//restoVenta = parseFloat(restoVenta) - parseFloat(btn_total);
 	cell1.innerHTML = metodo;
-	//cell2.innerHTML = datosProducto[1];
-	cell2.innerHTML = '<input type="text" id="qtyGridVentaMetodos_' + lon + '" class="qtyGridVenta" value=""/>';
-	//cell4.innerHTML = "0.00";
-		// enfocar el campo de cantidad
+	cell2.innerHTML = '<input type="text" id="qtyGridVentaMetodos_' + lon + '" class="qtyGridVentaMetodosack" value="' + restoVenta +'"/>';
 	$( "#qtyGridVentaMetodos_" + lon).focus();
-	// Display
-	table.style.width = "100%";
 	cell1.className = "rowGridMetodos";
 	cell2.className = "rowGridMetodos";
-	cell2.style.width = "20%";
 	cell1.style.width = "80%";
+	cell2.style.width = "20%";
 }
+function addMontoMetodo(id) {
+	document.getElementById(id).readOnly = true;
+	newMonto = document.getElementById(id).value;
+	restoVenta = parseFloat(restoVenta) - parseFloat(newMonto);
+	// añadir 
+}
+</script>
+<script>
+$(function() {
+	$( '#dl-menu' ).dlmenu({
+		animationClasses : { classin : 'dl-animate-in-2', classout : 'dl-animate-out-2' }
+	});
+	// trim polyfill : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
+	if (!String.prototype.trim) {
+		(function() {
+			// Make sure we trim BOM and NBSP
+			var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+			String.prototype.trim = function() {
+				return this.replace(rtrim, '');
+			};
+		})();
+	}
+
+	[].slice.call( document.querySelectorAll( 'input.input__field' ) ).forEach( function( inputEl ) {
+		// in case the input is already filled..
+		if( inputEl.value.trim() !== '' ) {
+			classie.add( inputEl.parentNode, 'input--filled' );
+		}
+
+		// events:
+		inputEl.addEventListener( 'focus', onInputFocus );
+		inputEl.addEventListener( 'blur', onInputBlur );
+	} );
+
+	function onInputFocus( ev ) {
+		classie.add( ev.target.parentNode, 'input--filled' );
+	}
+
+	function onInputBlur( ev ) {
+		if( ev.target.value.trim() === '' ) {
+			classie.remove( ev.target.parentNode, 'input--filled' );
+		}
+	}	
+});
 </script>
 </html>

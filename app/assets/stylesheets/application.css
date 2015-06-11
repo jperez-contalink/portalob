@@ -27,4 +27,8 @@
 *= require 'font-awesome.min'
 *= require 'style.css'
 *= require 'masonry/transitions'
+*= require 'set1'
+*= require 'set2'
+*= require 'default_dlmenu'
+*= require 'component_dlmenu'
 */

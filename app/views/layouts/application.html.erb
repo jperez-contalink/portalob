@@ -23,74 +23,74 @@
     .imglogo {
       height:100%;
     }
-  .menu {
-    width:20%;
-    height:100%;
-    background-color: red;
-  }
-  .imgCuenta {
-    padding-left: 2%;
-    padding-right: 4%;
-    padding-top: 3%;
-    padding-bottom: 3%;
-    content:url(/cuenta.png);
-  }
-  .imgFacturas {
-    padding-left: 2%;
-    padding-right: 4%;
-    padding-top: 3%;
-    padding-bottom: 3%;
-    content:url(/facturas.png);
-  }
-  .imgEdoCta {
-    padding-left: 2%;
-    padding-right: 4%;
-    padding-top: 3%;
-    padding-bottom: 3%;
-    content:url(/banco.png);
-  }
-  .imgContacto {
-    padding-left: 2%;
-    padding-right: 4%;
-    padding-top: 3%;
-    padding-bottom: 3%;
-    content:url(/buzon.png);
-  }
-  .imgTest {
-    padding-left: 2%;
-    padding-right: 4%;
-    padding-top: 3%;
-    padding-bottom: 3%;
-    content:url(/clip.png);
-  }   
-  .imgPedidos {
-    padding-left: 2%;
-    padding-right: 4%;
-    padding-top: 3%;
-    padding-bottom: 3%;
-    content:url(/pedidos.png);
-  }   
-  .imgCobranza {
-    padding-left: 2%;
-    padding-right: 4%;
-    padding-top: 3%;
-    padding-bottom: 3%;
-    content:url(/cobranza.png);
-  }     
-  .imgUsuarios {
-    padding-left: 2%;
-    padding-right: 4%;
-    padding-top: 3%;
-    padding-bottom: 3%;
-    content:url(/usuarios.png);
-  }   
-  /* */     
-  .gn-trigger:hover{
-    background-color: red;
-  }
-  .social-julio {
-    background-color: green;
-  }
+    .menu {
+      width:20%;
+      height:100%;
+      background-color: red;
+    }
+    .imgCuenta {
+      padding-left: 2%;
+      padding-right: 4%;
+      padding-top: 3%;
+      padding-bottom: 3%;
+      content:url(/cuenta.png);
+    }
+    .imgFacturas {
+      padding-left: 2%;
+      padding-right: 4%;
+      padding-top: 3%;
+      padding-bottom: 3%;
+      content:url(/facturas.png);
+    }
+    .imgEdoCta {
+      padding-left: 2%;
+      padding-right: 4%;
+      padding-top: 3%;
+      padding-bottom: 3%;
+      content:url(/banco.png);
+    }
+    .imgContacto {
+      padding-left: 2%;
+      padding-right: 4%;
+      padding-top: 3%;
+      padding-bottom: 3%;
+      content:url(/buzon.png);
+    }
+    .imgTest {
+      padding-left: 2%;
+      padding-right: 4%;
+      padding-top: 3%;
+      padding-bottom: 3%;
+      content:url(/clip.png);
+    }   
+    .imgPedidos {
+      padding-left: 2%;
+      padding-right: 4%;
+      padding-top: 3%;
+      padding-bottom: 3%;
+      content:url(/pedidos.png);
+    }   
+    .imgCobranza {
+      padding-left: 2%;
+      padding-right: 4%;
+      padding-top: 3%;
+      padding-bottom: 3%;
+      content:url(/cobranza.png);
+    }     
+    .imgUsuarios {
+      padding-left: 2%;
+      padding-right: 4%;
+      padding-top: 3%;
+      padding-bottom: 3%;
+      content:url(/usuarios.png);
+    }   
+    /* */     
+    .gn-trigger:hover{
+      background-color: red;
+    }
+    .social-julio {
+      background-color: green;
+    }
   </style>  
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
@@ -99,111 +99,120 @@
 </head>
 
 <body>
-<div class="container">
-      <ul id="gn-menu" class="gn-menu-main">
-        <% if usuario_signed_in? %>
-        <li class="gn-trigger">
-          <a class="gn-icon gn-icon-menu"><span>Menu</span></a>
-          <nav class="gn-menu-wrapper">
-            <div class="gn-scroller">
-            <ul class="gn-menu">
-            <!-- OPCIONES PARA ADMINISTRADORES-->
-            <% if current_usuario.isadmin == true %>
-              <li><a href="/registro">
-                <div style="float:left;border:0px solid black;" class="gn-icon imgUsuarios"></div>
-                <div style="border:1px solid transparent;padding-left:2%;"><strong>Gestión de usuarios</strong></div>
-              </a></li>
-            <% end %>
-            <% if current_usuario.role == "Administrador" %>
-              <li><a href="/usuarios/edit.<%= current_usuario.id %>">
-                <div style="float:left;border:0px solid black;" class="gn-icon imgCuenta"></div>
-                <div style="border:1px solid transparent;padding-left:2%;"><strong>Mi Cuenta</strong></div>
-              </a></li>              
-            <% end %>
-            <!-- OPCIONES PARA USUARIOS -->
-            <% if current_usuario.role == "Cliente" %>
-              <li><a href="/usuarios/edit.<%= current_usuario.id %>">
-                <div style="float:left;border:0px solid black;" class="gn-icon imgCuenta"></div>
-                <div style="border:1px solid transparent;padding-left:2%;"><strong>Mi Cuenta</strong></div>
-              </a></li>
-              <li><a href="/estadosdecuenta">
-                <div style="float:left;border:0px solid black;" class="gn-icon imgEdoCta"></div>
-                <div style="border:1px solid transparent;padding-left:2%;"><strong>Estado de Cuenta</strong></div>
-              </a></li>
-              <li><a href="/facturas">
-                <div style="float:left;border:0px solid black;" class="gn-icon imgFacturas"></div>
-                <div style="border:1px solid transparent;padding-left:2%;"><strong>Mis Facturas</strong></div>
-              </a></li>
-              <li><a href="/catalogoproductos">
-                <div style="float:left;border:0px solid black;" class="gn-icon imgTest"></div>
-                <div style="border:1px solid transparent;padding-left:2%;"><strong>Cátalogo de Productos</strong></div>
-              </a></li>            
-              <li><a href="/success_order">
-                <div style="float:left;border:0px solid black;" class="gn-icon imgPedidos"></div>
-                <div style="border:1px solid transparent;padding-left:2%;"><strong>Mis Pedidos</strong></div>
-              </a></li>    
-              <li><a href="/contactos/new">
-                <div style="float:left;border:0px solid black;" class="gn-icon imgContacto"></div>
-                <div style="border:1px solid transparent;padding-left:2%;"><strong>Contacto</strong></div>
-              </a></li>                            
-            <% end %>    
-            <!-- OPCIONES PARA VENDEDORES -->
-            <% if current_usuario.role == "Vendedor" %>
-              <li><a href="/usuarios/edit.<%= current_usuario.id %>">
-                <div style="float:left;border:0px solid black;" class="gn-icon imgCuenta"></div>
-                <div style="border:1px solid transparent;padding-left:2%;"><strong>Mi Cuenta</strong></div>
-              </a></li>
-              <!-- NUEVA VENTANA DE CREAR PEDIDOS VENDEDOR-->            
-              <li><a href="/clientes?act=vnta">
-                <div style="float:left;border:0px solid black;" class="gn-icon imgFacturas"></div>
-                <div style="border:1px solid transparent;padding-left:2%;"><strong>Crear Pedido</strong></div>
-              </a></li>
-              <!-- NUEVA VENTANA DE COBRANZA VENDEDOR-->            
-              <li><a href="/clientes?act=cbza">
-                <div style="float:left;border:0px solid black;" class="gn-icon imgCobranza"></div>
-                <div style="border:1px solid transparent;padding-left:2%;"><strong>Cobranza</strong></div>
-              </a></li>
-            <% end %>
-            </ul> 
-            </div><!-- /gn-scroller -->
-          </nav>
-        </li>
-        <% end %>
-      <% if usuario_signed_in? %>
-        <li style="background-color:#ecf0f1;"><%= link_to (image_tag current_usuario.empresa.logo.url(), class: "imglogo"), estadosdecuenta_path, class:"navbar-brand" %></li>
-      <% else %>
-        <li><a href="/usuarios/sign_in">Extranet</a></li>
-      <% end %>
-        <li><ul class="company-social">
+<% if !current_page?(puntodeventa_path) %>  
+  <div class="container">
+        <ul id="gn-menu" class="gn-menu-main">
           <% if usuario_signed_in? %>
-            <% if current_usuario.role == "Cliente" %>
-              <li><%= link_to  carrito_path do %>
-                <i class="glyphicon glyphicon-shopping-cart"></i><% end %>
-              </li>              
-            <% end %>
-            <li><%= link_to  destroy_usuario_session_path, class: "social-google", method: :delete do %>
-              <i class="glyphicon glyphicon-log-out"></i><% end %>
-            </li>
+          <li class="gn-trigger">
+            <a class="gn-icon gn-icon-menu"><span>Menu</span></a>
+            <nav class="gn-menu-wrapper">
+              <div class="gn-scroller">
+              <ul class="gn-menu">
+              <!-- OPCIONES PARA ADMINISTRADORES-->
+              <% if current_usuario.isadmin == true %>
+                <li><a href="/registro">
+                  <div style="float:left;border:0px solid black;" class="gn-icon imgUsuarios"></div>
+                  <div style="border:1px solid transparent;padding-left:2%;"><strong>Gestión de usuarios</strong></div>
+                </a></li>
+              <% end %>
+              <% if current_usuario.role == "Administrador" %>
+                <li><a href="/usuarios/edit.<%= current_usuario.id %>">
+                  <div style="float:left;border:0px solid black;" class="gn-icon imgCuenta"></div>
+                  <div style="border:1px solid transparent;padding-left:2%;"><strong>Mi Cuenta</strong></div>
+                </a></li>              
+              <% end %>
+              <!-- OPCIONES PARA USUARIOS -->
+              <% if current_usuario.role == "Cliente" %>
+                <li><a href="/usuarios/edit.<%= current_usuario.id %>">
+                  <div style="float:left;border:0px solid black;" class="gn-icon imgCuenta"></div>
+                  <div style="border:1px solid transparent;padding-left:2%;"><strong>Mi Cuenta</strong></div>
+                </a></li>
+                <li><a href="/estadosdecuenta">
+                  <div style="float:left;border:0px solid black;" class="gn-icon imgEdoCta"></div>
+                  <div style="border:1px solid transparent;padding-left:2%;"><strong>Estado de Cuenta</strong></div>
+                </a></li>
+                <li><a href="/facturas">
+                  <div style="float:left;border:0px solid black;" class="gn-icon imgFacturas"></div>
+                  <div style="border:1px solid transparent;padding-left:2%;"><strong>Mis Facturas</strong></div>
+                </a></li>
+                <li><a href="/catalogoproductos">
+                  <div style="float:left;border:0px solid black;" class="gn-icon imgTest"></div>
+                  <div style="border:1px solid transparent;padding-left:2%;"><strong>Cátalogo de Productos</strong></div>
+                </a></li>            
+                <li><a href="/success_order">
+                  <div style="float:left;border:0px solid black;" class="gn-icon imgPedidos"></div>
+                  <div style="border:1px solid transparent;padding-left:2%;"><strong>Mis Pedidos</strong></div>
+                </a></li>    
+                <li><a href="/contactos/new">
+                  <div style="float:left;border:0px solid black;" class="gn-icon imgContacto"></div>
+                  <div style="border:1px solid transparent;padding-left:2%;"><strong>Contacto</strong></div>
+                </a></li>    
+                <li><a href="/puntodeventa">
+                  <div style="float:left;border:0px solid black;" class="gn-icon imgCobranza"></div>
+                  <div style="border:1px solid transparent;padding-left:2%;"><strong>Punto de venta</strong></div>
+                </a></li>                                         
+              <% end %>    
+              <!-- OPCIONES PARA VENDEDORES -->
+              <% if current_usuario.role == "Vendedor" %>
+                <li><a href="/usuarios/edit.<%= current_usuario.id %>">
+                  <div style="float:left;border:0px solid black;" class="gn-icon imgCuenta"></div>
+                  <div style="border:1px solid transparent;padding-left:2%;"><strong>Mi Cuenta</strong></div>
+                </a></li>
+                <!-- NUEVA VENTANA DE CREAR PEDIDOS VENDEDOR-->            
+                <li><a href="/clientes?act=vnta">
+                  <div style="float:left;border:0px solid black;" class="gn-icon imgFacturas"></div>
+                  <div style="border:1px solid transparent;padding-left:2%;"><strong>Crear Pedido</strong></div>
+                </a></li>
+                <!-- NUEVA VENTANA DE COBRANZA VENDEDOR-->            
+                <li><a href="/clientes?act=cbza">
+                  <div style="float:left;border:0px solid black;" class="gn-icon imgCobranza"></div>
+                  <div style="border:1px solid transparent;padding-left:2%;"><strong>Cobranza</strong></div>
+                </a></li>
+              <% end %>
+              </ul> 
+              </div><!-- /gn-scroller -->
+            </nav>
+          </li>
           <% end %>
-        </ul> </li>
-      </ul>
-</div> <!--CIERRA CONTAINER-->
+        <% if usuario_signed_in? %>
+          <li style="background-color:#ecf0f1;"><%= link_to (image_tag current_usuario.empresa.logo.url(), class: "imglogo"), estadosdecuenta_path, class:"navbar-brand" %></li>
+        <% else %>
+          <li><a href="/usuarios/sign_in">Extranet</a></li>
+        <% end %>
+          <li><ul class="company-social">
+            <% if usuario_signed_in? %>
+              <% if current_usuario.role == "Cliente" %>
+                <li><%= link_to  carrito_path do %>
+                  <i class="glyphicon glyphicon-shopping-cart"></i><% end %>
+                </li>              
+              <% end %>
+              <li><%= link_to  destroy_usuario_session_path, class: "social-google", method: :delete do %>
+                <i class="glyphicon glyphicon-log-out"></i><% end %>
+              </li>
+            <% end %>
+          </ul> </li>
+        </ul>
+  </div> <!--CIERRA CONTAINER-->
+<% end %>
 <div class="container">
   <!--FLASH ALERT AQUI-->
   <%= yield %>
 </div>
 
   <!-- Footer -->
-  <footer><div style="background-color:#E6E6E6;position:fixed;bottom:0;height:5%;width:100%;z-index:120;" class="center">
-  <div class="column-container">
-  <div class="column-main" style="padding-top:5px;padding-right:2%;" align="right">
-  <p style="color:#585858;font-size:100%;">
-    <bdi>&copy; 2015 <b style="color:#16a085;"><a href="http://www.tegik.com">Tegik</a></b> S.A. de C.V. todos los derechos reservados.</bdi>        
-  </p>
-  </div>
-  
-  </div>
-  </div></footer>
+<% if !current_page?(puntodeventa_path) %>
+  <footer>
+    <div style="background-color:#E6E6E6;position:fixed;bottom:0;height:5%;width:100%;z-index:120;" class="center">
+      <div class="column-container">
+        <div class="column-main" style="padding-top:5px;padding-right:2%;" align="right">
+        <p style="color:#585858;font-size:100%;">
+          <bdi>&copy; 2015 <b style="color:#16a085;"><a href="http://www.tegik.com">Tegik</a></b> S.A. de C.V. todos los derechos reservados.</bdi>    
+        </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+<% end %>
   <script>
   <% if usuario_signed_in? %>
   window.intercomSettings = {

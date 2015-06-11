@@ -23,6 +23,8 @@
 //= require dragdrop
 //= require bootstrap-datepicker
 //= requite bootstrap.min.js
+//= require classie
+//= require jquery.dlmenu
 //= require_tree .
 //= require bootstrap
 //= require masonry/jquery.masonry

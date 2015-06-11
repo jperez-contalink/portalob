@@ -42,6 +42,7 @@ Rails.application.routes.draw do
 
 
   root :to => 'pages#home'
+  get "test" => "pages#test"
   get "facturas" => "pages#facturas"
   get "estadosdecuenta" => "pages#estadosdecuenta"
   get "contacto" => "pages#contacto"
