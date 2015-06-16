@@ -92,6 +92,18 @@ Rails.application.routes.draw do
       resources :posproductos
     end  
   end
+  
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      resources :posprecios
+    end  
+  end
+
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      resources :poslotes
+    end  
+  end
 
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do

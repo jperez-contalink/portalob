@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
 <!--
-FA5E5D1953094CE5B9834572F6B2DB08
-FCAE8DB7A8284830BBE27C7FA4FD76D8
-FBBE32A496C24672841E2C2E2E354576
-F911C23B15644B14884076BAAE4533AF
-B78BBB69809742AA9B485D76459A8A21
+UPCS
+7501493870543
+7501128112109	
 	-->
 <head>
     <title>POS</title>
@@ -93,7 +91,22 @@ B78BBB69809742AA9B485D76459A8A21
 			border-radius: 10px;
 			padding: 3% 2% 1% 2%;
 			/*overflow-y:scroll;*/
-		}	
+		}
+		.listadoLotes input[type=text] {
+			width: 80%;
+			text-align: center;
+			font-weight: bold;
+		}
+		.listadoLotes input[type=checkbox] {
+			text-align: center;
+		}
+		.tdHeadLote input[type=button] {
+			color:blue;
+			background-color: white;
+			width: 100%;
+			font-weight: bold;
+			font-size: 110%;
+		}
 		.tdHeadLote {
 			background-color: #2980b9;
 			height: 3em;
@@ -124,12 +137,14 @@ B78BBB69809742AA9B485D76459A8A21
 			font-size: 130%;
 			border-bottom: 1px solid #3498db;
 		}		
+
 		.btnLote {
-			width: 100%;
-			height: 100%;
+			width: 30%;
+			height: 10%;
 			font-weight: bold;
 			text-align: center;
 			color:white;
+			font-size: 130%;
 			background-color:#3498db;
 			border: 1px solid #3498db;
 		}
@@ -222,6 +237,9 @@ B78BBB69809742AA9B485D76459A8A21
 			background-color: #40FF00;
 			border: 1px solid #40FF00;
 		}
+		.totalCubierto {
+			background-color: orange;
+		}
 		/*********************Panel izquierdo****************/
 		#leftTopDiv {
 			background-color: #3498db;
@@ -298,47 +316,47 @@ B78BBB69809742AA9B485D76459A8A21
     </style>
 </head>
 <body>
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-	<!--<div class="container demo-2">
-			<div class="main clearfix">-->
-				<div class="column">
-					<div id="dl-menu" class="dl-menuwrapper">
-						<button class="dl-trigger" style="background-color:#3498db;">Open Menu</button>
-						<ul class="dl-menu" style="background-color:#3498db;width:200%;">
-							<li>
-								<a href="#">Abonos / Edo. Cuenta</a>
-							</li>
-							<li>
-								<a href="#">Apartados</a>
-							</li>
-							<li>
-								<a href="#">Consultar Precios</a>
-							</li>
-							<li>
-								<a href="#">Consultar Invantario</a>
-							</li>
-							<li>
-								<a href="#">Solicitud de crédito</a>
-							</li>
-							<li>
-								<a href="#">Devoluciones</a>
-							</li>
-							<li>
-								<a href="#">Corte de caja</a>
-							</li>		
-							<li>
-								<a href="/estadosdecuenta">Portal</a>
-							</li>																		
-						</ul>
-					</div><!-- /dl-menuwrapper -->
-				</div>
-			<!--</div>
-		</div>--><!-- /container -->	
-    </div>
-  </div>
-</nav>	
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+		<!--<div class="container demo-2">
+				<div class="main clearfix">-->
+					<div class="column">
+						<div id="dl-menu" class="dl-menuwrapper">
+							<button class="dl-trigger" style="background-color:#3498db;">Open Menu</button>
+							<ul class="dl-menu" style="background-color:#3498db;width:200%;">
+								<li>
+									<a href="#">Abonos / Edo. Cuenta</a>
+								</li>
+								<li>
+									<a href="#">Apartados</a>
+								</li>
+								<li>
+									<a href="#">Consultar Precios</a>
+								</li>
+								<li>
+									<a href="#">Consultar Invantario</a>
+								</li>
+								<li>
+									<a href="#">Solicitud de crédito</a>
+								</li>
+								<li>
+									<a href="#">Devoluciones</a>
+								</li>
+								<li>
+									<a href="#">Corte de caja</a>
+								</li>		
+								<li>
+									<a href="/estadosdecuenta">Portal</a>
+								</li>																		
+							</ul>
+						</div><!-- /dl-menuwrapper -->
+					</div>
+				<!--</div>
+			</div>--><!-- /container -->	
+	    </div>
+	  </div>
+	</nav>	
 	<div id="allFrame" class="allFrame">
 		<div id="listadoLotes" class="listadoLotes"  align="center"></div>
 	</div>
@@ -350,7 +368,7 @@ B78BBB69809742AA9B485D76459A8A21
 
 	<div id="leftFrame" style="width:57%;float:left;height:38em;"><br>
 	</div>
-<!-- Diego de Montemayor 1115 Sur, col. Monterrey Centro<br>Monterrey Nuevo León, CP. 64000<br>05-06-2014<br><b>ARI300430</b> -->
+	<!-- Diego de Montemayor 1115 Sur, col. Monterrey Centro<br>Monterrey Nuevo León, CP. 64000<br>05-06-2014<br><b>ARI300430</b> -->
 	<div id="rightFrame" style="width:35%;float:left;background-color:white;">
 		<br>
 		<div align="center">
@@ -396,21 +414,23 @@ B78BBB69809742AA9B485D76459A8A21
 		</div>
 		<br>
 	</div>
-
-
-
 </body>
 <script type="text/javascript">
 var metaVentas = 1549989.09;
 var restoVenta = 0;
 var rowsSelected = [];
 var rowsGrid = [];
+var metodosPago = [];
+var allPrice = {};
+var currentProduct = "";
 var jsonTicket = {
 	total: 0,
 	resto: 0,
 	selectedrows: rowsSelected,
-	gridrows: rowsGrid
+	gridrows: rowsGrid,
+	metodospago: metodosPago
 };
+var jsonMetodos = []
 $( document ).ready(function() {
 	// Cargar panel derecho
 	loadGrid();
@@ -418,13 +438,14 @@ $( document ).ready(function() {
 	// Captura cantidad de productos
 	$(document).on('change', '.txtGridUpc', function (e) {
 		console.log("Captura UPC");
-		var producto_id = document.getElementById("txtGridUpc").value;
+		var upc = document.getElementById("txtGridUpc").value;
 		$.ajax({
 		  type:"GET",
 		  dataType : 'json',
-		  url: "api/v1/posproductos?producto_id=" + producto_id,
+		  url: "api/v1/posproductos?upc=" + upc,
 		  success: function(datos){
 		  console.log("Producto", datos);
+		  jsonLineBuilder(datos);
 		  addProduct(datos);
 		},
 		  error:  function(){ 
@@ -436,16 +457,36 @@ $( document ).ready(function() {
 	$(document).on('change', '.qtyGridVenta', function (e) {
 		// cambia la cantidad del producto
 		console.log("QTYP: ", e.currentTarget.id);
+		actualizaLineaJSON(e.currentTarget.id);
 		// Carga popUp de lotes
 		calcularTotales();
-		loadLotes();
+		// Consultar lotes
+		  $.ajax({
+		          type:"GET",
+		          dataType : 'json',
+		          url: "api/v1/poslotes?producto_id=" + currentProduct,
+		          success: function(datos){
+		          console.log("Lotes", datos);
+		          loadLotes(datos);
+		      },
+		          error:  function(){ 
+		          	console.log("Error no gestionado");
+		          }
+		  });
+
 	});
 	$(document).on('click', '.loteSelected', function (e) {
 		// Lote seleccionado
-		console.log("Lote seleccionado: ", e);
+		console.log("Lote seleccionado: %)$=#", e);
+		var selected = [];
+		$('#panellotes input:checked').each(function() {
+		    selected.push($(this).attr('name'));
+		});		
+		asignarLotes(selected);
 		document.getElementById("allFrame").style.display = "none";
 		$( "#txtGridUpc").focus();
 		buildIndicadores();
+		console.log("JSON ORDER: ", jsonTicket);
 	});	
 	$(document).on('click', '.btn_total', function (e) {
 		// cambia la cantidad del producto
@@ -490,18 +531,53 @@ $( document ).ready(function() {
 		var index = (e.target.id).split("_");
 		validateColor = (document.getElementById("rowVentaProducto_" + index[1]).style.backgroundColor).toString();
 		if (validateColor == "") {
-			document.getElementById("rowVentaProducto_" + index[1]).style.backgroundColor = "#3498db";
+			document.getElementById("rowVentaProducto_" + index[1]).style.backgroundColor = "#CEF6F5";
 			document.getElementById("tabAction").style.display = "block";
+			if (jsonTicket.selectedrows.indexOf(index[1]) == -1) {
+				jsonTicket.selectedrows.push(index[1]);
+			}
 		} else {
 			document.getElementById("rowVentaProducto_" + index[1]).style.backgroundColor = "";
-			document.getElementById("tabAction").style.display = "none";
+			if (jsonTicket.selectedrows.length < 1) {
+				document.getElementById("tabAction").style.display = "none";
+			}
+			// Eliminar del json
+			var newSelectedRows = [];
+			for (var i=0;i<jsonTicket.selectedrows.length;i++) {
+				if (jsonTicket.selectedrows[i] != index[1]) {
+					newSelectedRows.push(jsonTicket.selectedrows[i]);
+				}
+			}
+			jsonTicket.selectedrows = newSelectedRows;
 		}
 	});
+
 	$(document).on('click', '.deleteGrid', function (e) {
-		console.log("E: ", e);
+		// Eliminar de la orden (json)
+		var newRows = [];
+		for (var i=0;i<jsonTicket.gridrows.length;i++) {
+			for (var j=0;j<jsonTicket.selectedrows.length;j++) {
+				if (jsonTicket.selectedrows[j] != jsonTicket.gridrows[i]) {
+					console.log("$>>BORRALINEA");
+					newRows.push(jsonTicket.gridrows[i]);
+				}
+			}
+		}
+		jsonTicket.gridrows = newRows;
+		// Eliminar de la tabla
+		for (var k=0;k<jsonTicket.selectedrows.length;k++) {
+			var row = document.getElementById("rowVentaProducto_" + jsonTicket.selectedrows[k]);
+    		row.parentNode.removeChild(row);
+		}
+		jsonTicket.selectedrows = [];
+		document.getElementById("tabAction").style.display = "none";
+		calcularTotales();
 	});
 });
 /*************************************** FUNCIONES *************************************************************************/
+function jsonLineBuilder(datos) {
+
+}
 function loadGrid() {
 	var table = '<table id="gridVenta" class="gridVenta"></table>';
 	//table += '<table id="gridVentaMetodos" class="gridVenta" style="display:none;"></table>';
@@ -509,32 +585,75 @@ function loadGrid() {
 	document.getElementById("divGridVenta").innerHTML = table;
 	buildIndicadores();
 }
-function loadLotes() {
+function loadLotes(json) {
+	console.log("$json: ", json);
+	var jsonRows = json.response.data;
 	document.getElementById("allFrame").style.display = "block";
 	var table = "<h3>Lotes</h3>";
-	table += '<table width="90%"><tr><td width="100%" class="tdHeadLote">Lote</td></tr></table>';	
-	table += '<div style="width:100%;height:70%;overflow-y:scroll;"><table width="90%">';
-	for (var i=0;i<15;i++) {
-		var lote = Math.floor((Math.random() * 1000000) + 1)*Math.floor((Math.random() * 1000000) + 1);
-		if (i%2 == 0) {
-			var style = 'style="background-color:white;color:#3498db"';
-		} else {
-			var style = 'style="background-color:#3498db;color:white"';
+	table += '<table width="90%"><tr><td width="85%" class="tdHeadLote">Lote</td><td align="left" width="15%" class="tdHeadLote">Cantidad</td><td width="10%" class="tdHeadLote"></td></tr></table>';	
+	table += '<div style="width:100%;height:60%;overflow-y:scroll;" id="panellotes"><table width="90%">';
+	for (var i=0;i<jsonRows.length;i++) {
+		if (jsonRows[i].qtyonhand > 0) {
+			//var lote = Math.floor((Math.random() * 1000000) + 1)*Math.floor((Math.random() * 1000000) + 1);
+			if (i%2 == 0) {
+				var style = 'style="background-color:white;color:black"';
+			} else {
+				var style = 'style="background-color:#3498db;color:black"';
+			}
+			table += '<tr><td width="85%" ' + style + ' class="tdRowLote"><a class="loteSelected_x"><div id="' +  jsonRows[i].description  +'" style="height:100%;width:100%">' + jsonRows[i].description + '</div></a></td><td width="15%" class="tdRowLote"  ' + style + ' ><input type="text" id="textLote" class="textLote_' + i + '" value="' + jsonRows[i].qtyonhand + '"/></td><td align="right" width="10%" class="tdRowLote" ' + style + ' ><input type="checkbox" id="checkLote_' + i + '" class="checkLote" name="' + jsonRows[i].qtyonhand + '_' + jsonRows[i].lot +'"/></td></tr>';
 		}
-		table += '<tr><td width="100%" ' + style + ' class="tdRowLote"><a class="loteSelected"><div id="' +  lote  +'" style="height:100%;width:100%">' + lote + '</div></a></td></tr>';
 	}
 	table += '</table></div>';
+	table += '<td align="right"><input type="button" class="btnLote loteSelected" value="listo"/></td>';
 	document.getElementById("listadoLotes").innerHTML = table;
 }
 function addProduct(json) {
 	var jsonObject = json.response;
 	var datosProducto = [];
-  	for (var i=0;i<jsonObject.totalRows;i++) {
-  		datosProducto.push(jsonObject.data[i].name);
-  		datosProducto.push("450.00");
-  	}
+ 	var jsonRows = allPrice.rows;
+ 	var lon = document.getElementById("gridVenta").rows.length;
+ 	// si ya existe un row con indice lon entonces lon valdra lon++
+ 	var exist = document.getElementById("rowVentaProducto_" + lon);
+ 	console.log("EXISTE? " + exist);
+ 	if (document.getElementById("rowVentaProducto_" + lon) != null) {
+ 		lon++;
+ 	}
+
+	datosProducto.push(jsonObject.data[0].name);
+	datosProducto.push("10");
+	// Guardar los datos en el json
+	var linea = {};
+	linea.LineaID			= lon;
+	linea.ProductoID 		= jsonObject.data[0].id;
+	currentProduct			= jsonObject.data[0].id;
+	linea.Producto 			= jsonObject.data[0].name;
+	linea.Clave				= jsonObject.data[0].value;
+	linea.Precio 			= 0;
+	linea.Impuesto 			= 0;
+	linea.Total 			= 0;
+	linea.totalImpuestos	= 0;
+	linea.Cantidad			= 0;
+	linea.Inventario		= jsonObject.data[0].inventario;
+	linea.Familia			= jsonObject.data[0].familia;
+	linea.Marca				= jsonObject.data[0].marca;
+	linea.Categoria			= jsonObject.data[0].categoria;
+	linea.Caracteristicas	= jsonObject.data[0].caracteristicas;
+	linea.Lotes 			= [];
+	for (var key in jsonRows) {
+		var obj = jsonRows[key]; 
+		if (obj.Producto_ID == linea.ProductoID) {
+		    linea.Precio = (parseFloat(obj.Precio)+parseFloat(obj.Impuesto)).toFixed(2);
+		    linea.Impuesto = obj.Impuesto;
+		}
+		/*	GESTION DE PRODUCTOS EXTRA PRECIOS
+		if (obj.Producto_ID == jsonObject.data[i].productextra) {
+		  linea.Precioproductoextra = (parseFloat(obj.Precio)+parseFloat(obj.Impuesto)).toFixed(2);
+		  linea.Impuestoproductoextra = obj.Impuesto;
+		}*/
+	}
+	jsonTicket.gridrows.push(linea);
+
 	var table = document.getElementById("gridVenta");
-	var lon = document.getElementById("gridVenta").rows.length;
 	var row = table.insertRow(lon);
 	row.id = "rowVentaProducto_" + lon;
 	row.className = "selectRowProducto";
@@ -542,17 +661,12 @@ function addProduct(json) {
 	var cell2 = row.insertCell(1);
 	var cell3 = row.insertCell(2);
 	var cell4 = row.insertCell(3);
-	cell1.innerHTML = datosProducto[0];
-	cell2.innerHTML = separaMiles(datosProducto[1]);
+	/*cell1.innerHTML = datosProducto[0];
+	cell2.innerHTML = separaMiles(datosProducto[1]);*/
+	cell1.innerHTML = linea.Producto;
+	cell2.innerHTML = separaMiles(linea.Precio);	
 	cell3.innerHTML = '<input type="text" id="qtyGridVenta_' + lon + '" class="qtyGridVenta" value=""/>';
 	cell4.innerHTML = "0.00";
-	// Guardar los datos en el json
-	var linea = {};
-	linea.LineaID	= lon;
-	linea.Producto 	= datosProducto[0];
-	linea.Precio 	= datosProducto[1];
-	linea.cantidad	= 0;
-	jsonTicket.rowsGrid.push(linea);
 	// enfocar el campo de cantidad
 	$( "#qtyGridVenta_" + lon).focus();
 	upKeyboard();
@@ -571,18 +685,20 @@ function addProduct(json) {
 	cell4.id = "cel4_" + lon;;
 }
 function upKeyboard() {
+	console.log("Meto: ", jsonMetodos);
 	var table = '<br><br><br><table class="tabKeyBoard" align="center" width="90%" height="80%">';
-	table += '<tr><td width="20%"><div id="EFECTIVO" class="divKeyKB">Efectivo</div></td><td width="20%"><div class="divKeyKB">7</div></td><td width="20%"><div class="divKeyKB">8</div></td><td width="20%"><div class="divKeyKB">9</div></td><td width="20%"><div  id="X" class="divKeyKB">x</div></td></tr>';
+	table += '<tr><td width="20%"><div id="EFECTIVO" class="divKeyKB">' + jsonMetodos[0].Name + '</div></td><td width="20%"><div class="divKeyKB">7</div></td><td width="20%"><div class="divKeyKB">8</div></td><td width="20%"><div class="divKeyKB">9</div></td><td width="20%"><div  id="X" class="divKeyKB">x</div></td></tr>';
 
-	table += '<tr><td width="20%"><div  id="VALE" class="divKeyKB">Vale</div></td><td width="20%"><div class="divKeyKB">4</div></td><td width="20%"><div class="divKeyKB">5</div></td><td width="20%"><div class="divKeyKB">6</div></td><td rowspan="3"width="20%"><div class="divKeyKB">Ok</div></td></tr>';
+	table += '<tr><td width="20%"><div  id="VALE" class="divKeyKB">' + jsonMetodos[1].Name + '</div></td><td width="20%"><div class="divKeyKB">4</div></td><td width="20%"><div class="divKeyKB">5</div></td><td width="20%"><div class="divKeyKB">6</div></td><td rowspan="3"width="20%"><div class="divKeyKB">Ok</div></td></tr>';
 
-	table += '<tr><td width="20%"><div  id="TARJETA" class="divKeyKB">Tarjeta</div></td><td width="20%"><div class="divKeyKB">1</div></td><td width="20%"><div class="divKeyKB">2</div></td><td width="20%"><div class="divKeyKB">3</div></td></tr>';
+	table += '<tr><td width="20%"><div  id="TARJETA" class="divKeyKB">' + jsonMetodos[2].Name + '</div></td><td width="20%"><div class="divKeyKB">1</div></td><td width="20%"><div class="divKeyKB">2</div></td><td width="20%"><div class="divKeyKB">3</div></td></tr>';
 
 	table += '<tr><td width="20%"><div  id="PUNTOS" class="divKeyKB">Puntos</div></td><td width="20%"><div class="divKeyKB">.</div></td><td width="20%"><div class="divKeyKB">0</div></td><td width="20%"><div class="divKeyKB"><</div></td></tr>';
 	table += "</table>";
 	paintLeftPanel(table);
 }
 function paintLeftPanel(html) {
+	// Imprimir printleftpanel
 	document.getElementById("leftFrame").innerHTML = html;
 }
 function buildIndicadores() {
@@ -617,9 +733,19 @@ function calcularTotales() {
 	}
 	total = total.toFixed(2);
 	impuestos = (total*.16).toFixed(2);
-	document.getElementById("btn_total").value = "TOTAL $" + separaMilesPOS(total);
-	document.getElementById("tdImpuestosVenta").innerHTML = "$" + separaMilesPOS(impuestos);
-	// Colocar totales
+	//document.getElementById("btn_total").value = "TOTAL $" + separaMilesPOS(total);
+	//document.getElementById("tdImpuestosVenta").innerHTML = "$" + separaMilesPOS(impuestos);
+	// calculo en JSON
+	jsonTotal = 0;
+	jsonImpuestos = 0;
+	for (var j=0;j<jsonTicket.gridrows.length;j++) {
+		console.log("$> Entra>> " + parseFloat(jsonTicket.gridrows[j].Total));
+		jsonTotal = jsonTotal + parseFloat(jsonTicket.gridrows[j].Total);
+		jsonImpuestos = jsonImpuestos + parseFloat(jsonTicket.gridrows[j].totalImpuestos);
+	}
+	console.log("Calculo json: " + jsonTotal);
+	document.getElementById("btn_total").value = "TOTAL $" + separaMilesPOS(jsonTotal.toString());
+	document.getElementById("tdImpuestosVenta").innerHTML = "$" + separaMilesPOS(jsonImpuestos.toString());
 }
 function actualizaBarra(monto) {
 	/*<div id="menuBar" style="width:100%;background-color:white;height:40em">&nbsp;</div>
@@ -688,8 +814,7 @@ function addMetodo(metodo) {
 	var row = table.insertRow(lon);
 	var cell1 = row.insertCell(0);
 	var cell2 = row.insertCell(1);
-	//var btn_total = ((document.getElementById("btn_total").value).replace("TOTAL $", "")).replace(",", "");
-	//restoVenta = parseFloat(restoVenta) - parseFloat(btn_total);
+	var metodolinea = {};
 	cell1.innerHTML = metodo;
 	cell2.innerHTML = '<input type="text" id="qtyGridVentaMetodos_' + lon + '" class="qtyGridVentaMetodosack" value="' + restoVenta +'"/>';
 	$( "#qtyGridVentaMetodos_" + lon).focus();
@@ -697,16 +822,89 @@ function addMetodo(metodo) {
 	cell2.className = "rowGridMetodos";
 	cell1.style.width = "80%";
 	cell2.style.width = "20%";
+	// Añadir metodos a la orden
+	metodolinea.LineaID = "jsonline_" + lon;
+	metodolinea.Monto = restoVenta;
+	metodolinea.Metodo = metodo;
+	jsonTicket.metodospago.push(metodolinea);
+	restoVenta = 0;
+	// Al añadir un nuevo metodo el total siempre es alcanzado por lo que el botón cambiara, cuando se modifica el monto hay que validar si aun se alcanza el total si no para cambiar el botón
+	document.getElementById('btn_total').className = "totalCubierto";
+	document.getElementById("btn_total").value = "Listo!";
 }
 function addMontoMetodo(id) {
-	document.getElementById(id).readOnly = true;
+	//document.getElementById(id).readOnly = true;
 	newMonto = document.getElementById(id).value;
 	restoVenta = parseFloat(restoVenta) - parseFloat(newMonto);
+	if (restoVenta <= 0) {
+		document.getElementById('btn_total').className = "totalCubierto";
+		document.getElementById("btn_total").value = "Listo!";		
+	}
 	// añadir 
+}
+function actualizaLineaJSON(id) {
+	console.log("TICKET: ", jsonTicket);
+	var idArray = id.split("_");
+	var lineaID = idArray[1];
+	var nuevoValor = document.getElementById(id).value;
+	console.log("$> Actualiza la linea " + lineaID + " con el valor: " + nuevoValor + " LNGHT: " + jsonTicket.gridrows.length);
+	for (var i=0;i<jsonTicket.gridrows.length;i++) {
+		console.log("LINEA: " + jsonTicket.gridrows[i].LineaID)
+		if (jsonTicket.gridrows[i].LineaID == lineaID) {
+			jsonTicket.gridrows[i].Cantidad = nuevoValor;
+			jsonTicket.gridrows[i].Total = parseFloat(jsonTicket.gridrows[i].Cantidad)*parseFloat(jsonTicket.gridrows[i].Precio);
+			jsonTicket.gridrows[i].totalImpuestos = parseFloat(jsonTicket.gridrows[i].Cantidad)*parseFloat(jsonTicket.gridrows[i].Impuesto);
+		}
+	}
+}
+function asignarLotes(lotes) {
+	var lote = {};
+	console.log("LOTES: " + lotes);
+	for (var i=0;i<lotes.length;i++) {
+		console.log("LOTE: " + lotes[i]);
+		loteProperties = lotes[i].split("_");
+		lote.ProductID = currentProduct;
+		lote.Lote = loteProperties[1];
+		lote.Cantidad = loteProperties[0];
+		for (var j=0;j<jsonTicket.gridrows.length;j++) {
+			if (jsonTicket.gridrows[j].ProductoID == currentProduct) {
+				jsonTicket.gridrows[j].Lotes.push(lote);
+			}
+		}
+		lote = {};
+	}
 }
 </script>
 <script>
 $(function() {
+ console.log("$> Al entrar se cargara la lista de precios venta en piso.");
+  var datox = {};
+  $.ajax({
+          type:"GET",
+          dataType : 'json',
+          url: "api/v1/precios",
+          success: function(datos){
+          console.log("Precios", datos);
+          allPrice = jsonConstructorPrice(datos);
+          // Metodos de pago
+			$.ajax({
+				type:"GET",
+				dataType : 'json',
+				url: "api/v1/metodopagos",
+				success: function(datoz){
+				buildMetodosPago(datoz);
+			},
+			error:  function(){ 
+				console.log("Error no gestionado");
+			}
+			});         
+      },
+          error:  function(){ 
+          var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor [Pricing].</h3></div>'
+            document.getElementById("cat_pro").innerHTML = mensajeError;
+          }
+  });	
+
 	$( '#dl-menu' ).dlmenu({
 		animationClasses : { classin : 'dl-animate-in-2', classout : 'dl-animate-out-2' }
 	});
@@ -742,5 +940,67 @@ $(function() {
 		}
 	}	
 });
+// FUNCIONES
+function jsonConstructorPrice(json) {
+//name, value, familia, descargaimg, id
+  var rows = [];
+  var jsonObject = json.response;
+  for (var i=0;i<jsonObject.totalRows;i++) {
+    //console.log("$> LINEA: ", jsonObject.data[i].impuesto);
+      var row = {};
+      row.Producto_ID = jsonObject.data[i].product;
+      row.Impuesto = (jsonObject.data[i].impuesto).toFixed(2);
+      row.Precio = (jsonObject.data[i].pricelista).toFixed(2);
+      rows.push(row);
+  } 
+  // Definir columnas
+  var cols = {
+      Nombre: {
+          index: 1,
+          type: "string",
+          friendly: "Nombre"
+      },
+      Identificador: {
+          index: 2,
+          type: "string",
+          friendly: "Identificador"
+      },
+      /*Familia: {
+          index: 3,
+          type: "string",
+          friendly: "Familia"
+      },*/
+      DescargaImg: {
+          index: 4,
+          type: "string",
+          hidden: true
+      },
+      Producto_ID: {
+          index: 5,
+          type: "string",
+          id: true,
+          hidden: true
+      }
+  };
+  // Contruir el json de datos
+  var data = {
+              cols: cols,
+              rows: rows
+          };
+  console.log("$> Termina Construcción Precios");              
+  return data;
+}  // Termina json Constructor
+function buildMetodosPago(json) {
+    var jsonObject = json.response;
+    metodos = [];
+    metodo = {};
+    for (var i=0;i<jsonObject.totalRows;i++) {
+    	metodo.Name = jsonObject.data[i].name;
+    	metodo.MetodoID = jsonObject.data[i].id;
+    	metodos.push(metodo);
+    	metodo = {};
+    }
+    jsonMetodos = metodos;
+}
 </script>
 </html>
