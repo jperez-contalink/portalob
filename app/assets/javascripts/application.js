@@ -28,3 +28,4 @@
 //= require_tree .
 //= require bootstrap
 //= require masonry/jquery.masonry
+//= require handlebars-v3.0.3
