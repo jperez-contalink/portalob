@@ -508,6 +508,7 @@ var jsonTicket = {
 	total: 0,
 	impuestos: 0,
 	resto: 0,
+	cambio: 0,
 	selectedrows: rowsSelected,
 	selectedmetodos: metsSelected,
 	gridrows: rowsGrid,
@@ -528,7 +529,7 @@ $( document ).ready(function() {
 		  url: "api/v1/posproductos?upc=" + upc,
 		  success: function(datos){
 		  console.log("Producto", datos);
-		  jsonLineBuilder(datos);
+		  //jsonLineBuilder(datos);//
 		  addProduct(datos);
 		},
 		  error:  function(){ 
@@ -606,19 +607,15 @@ $( document ).ready(function() {
 		switch(e.target.id) {
 			case "EFECTIVO": 
 				addMetodo(e.target.id);
-				document.getElementById("tabAction").style.display = "none";
 			break;
 			case "VALE": 
 				addMetodo(e.target.id);
-				document.getElementById("tabAction").style.display = "none";
 			break;	
 			case "TARJETA": 
 				addMetodo(e.target.id);
-				document.getElementById("tabAction").style.display = "none";
 			break;
 			case "PUNTOS": 
 				addMetodo(e.target.id);
-				document.getElementById("tabAction").style.display = "none";
 			break;	
 			case "X": 
 				buildIndicadores();
@@ -811,7 +808,10 @@ $( document ).ready(function() {
 	});
 	$(document).on('click', '.totalCubierto', function (e) {
 		// cosas escritas
-		console.log("COMPLETAR VENTA", jsonTicket);
+		console.log("Venta Terminada", jsonTicket);
+		// meter el jsonTicket a un json de cierre de caja 
+		// limpiar la pantalla
+		limpiaPantalla();
 	});
 	$(document).on('click', '.btnAlert', function (e) {
 		document.getElementById("alert").style.display = "none";
@@ -819,9 +819,6 @@ $( document ).ready(function() {
 	});
 });
 /*************************************** FUNCIONES *************************************************************************/
-function jsonLineBuilder(datos) {
-
-}
 function loadGrid() {
 	var table = '<table id="gridVenta" class="gridVenta"></table>';
 	//table += '<table id="gridVentaMetodos" class="gridVenta" style="display:none;"></table>';
@@ -926,8 +923,7 @@ function addProduct(json) {
 
 	} else {
 		popAlert("No hay inventario", "No hay existencias registradas para este producto por lo tanto no puede ser vendido, valida el inventario e intentalo nuevamente.", "entendido");
-	}
-	
+	}	
 }
 function upKeyboard() {
 	console.log("Meto: ", jsonMetodos);
@@ -999,6 +995,18 @@ function calculaResto() {
 		descontar = descontar + parseFloat(jsonTicket.metodospago[i].Monto);
 	}
 	jsonTicket.resto = jsonTicket.total - descontar;
+	calculaCambio();
+}
+function calculaCambio() {
+	var pagado = 0;
+	for (var i=0;i<jsonTicket.metodospago.length;i++) {
+		pagado = pagado + parseFloat(jsonTicket.metodospago[i].Monto);
+	}
+	if(pagado > jsonTicket.total) {
+		jsonTicket.cambio = pagado - jsonTicket.total;
+	}
+	document.getElementById("tdCambioVenta").innerHTML = "$" + separaMilesPOS(jsonTicket.cambio.toFixed(2).toString());
+	jsonTicket.resto = jsonTicket.resto + jsonTicket.cambio;
 }
 function actualizaBarra(monto) {
 	/*<div id="menuBar" style="width:100%;background-color:white;height:40em">&nbsp;</div>
@@ -1238,6 +1246,23 @@ function buildAlertError(titulo, mensaje){
 function buildAlertSuccess(titulo, mensaje){
 	// Verde
  	return '<div id="alert_limite" class="alert alert-success alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '</p></div>';
+}
+function limpiaPantalla() {
+	jsonTicket.total = 0;
+	jsonTicket.impuestos = 0;
+	jsonTicket.resto = 0;
+	jsonTicket.cambio = 0;
+	jsonTicket.selectedrows = [];
+	jsonTotal.selectedmetodos = [];
+	jsonTicket.gridrows = [];
+	jsonTicket.metodospago = [];
+	document.getElementById("btn_total").className = "btn_total";
+	calcularTotales();
+	calculaResto();
+	calculaCambio();
+	loadGrid();
+	buildTab("H");
+	$( "#txtGridUpc").focus();
 }
 </script>
 <script>

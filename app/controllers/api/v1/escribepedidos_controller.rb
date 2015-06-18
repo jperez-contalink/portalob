@@ -13,8 +13,12 @@ module Api
           #lins.product_id lins.cantidad lins.precio lins.tota current_usuario.rfc
           lineas = lineas + lins.product_id + "_"
           lineas = lineas + lins.cantidad.to_s + "_"
-          lineas = lineas + lins.precioob.to_s + "_"
-          lineas = lineas + lins.total.to_s + "*"
+          #lineas = lineas + lins.precioob.to_s + "_"
+          #lineas = lineas + lins.total.to_s + "*"
+          precio = lins.precioob - lins.impuesto
+          total = precio*lins.cantidad
+          lineas = lineas + precio.to_s + "_"
+          lineas = lineas + total.to_s + "*"          
           end
           puts lineas
           @user = current_usuario
