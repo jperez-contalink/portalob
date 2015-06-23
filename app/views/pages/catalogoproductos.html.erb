@@ -607,7 +607,7 @@ function jsonConstructor(json, allPrice) {
         row.autoAno        =  jsonObject.data[i].autoAno;
 
         row.Productoextra   = jsonObject.data[i].productoextraname;
-        if (jsonObject.data[i].image == "Y"){
+        if (jsonObject.data[i].imagen == "Y"){
           row.Image = "imagenesProductos/" + jsonObject.data[i].id + ".png";
         } else {
           // Asignar una imagen por marca si no coicide la marca row.Image = "N"
