@@ -36,9 +36,44 @@
         <%= render "devise/shared/links" %>
       </div>
       <div class="actions" align="right">
-        <button type="submit" class="btn btn-primary btn-lg">entrar</button>
+        <button type="submit" onclick="validarUsuarioOpenbravo()" class="btn btn-primary btn-lg">entrar</button>
       </div>
     </div>
   </div>
   <% end %>
 </body>
+<script>
+function validarUsuarioOpenbravo() {
+  document.getElementById("new_usuario").submit();
+  /*console.log("Validar existencia en Openbravo si no existe lo creara en devise.");
+  var usr = document.getElementById("usuario_email").value;
+  var pwd = document.getElementById("usuario_password").value;
+  var url = window.location.href;
+  console.log("URL: " + url);
+  $.ajax({request.referer.include 
+    type:"GET",
+    dataType : 'json',
+    url: "../api/v1/usuarios?usr=" + usr + "&pwd=" + pwd + "&url=" + url,
+    success: function(datoz){
+      // Validar que exista el usuario en device
+       $.ajax({
+        type:"GET",
+        dataType : 'json',
+        url: "../api/v1/usuarios?usr=" + usr + "&pwd=" + pwd + "&url=" + url,
+        success: function(datoz){
+
+        },  
+        error:  function(){ 
+          console.log("Error no gestionado");
+        }
+      });
+      alert("El usuario de openbravo acaba de ser registrado, vuelve a intentarlo.");
+    },  
+    error:  function(){ 
+      console.log("Error no gestionado");
+      // El usuario no existe en ningún servidor
+      console.log("No existe el usuario");
+    }
+  }); */
+}
+</script>

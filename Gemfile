@@ -25,6 +25,8 @@ gem 'chilkat', '~> 9.5.0.47'
 gem 'cancan'
 gem 'intercom-rails'
 gem 'newrelic_rpm'
+gem 'httparty'
+gem 'aws-s3', :require => 'aws/s3'
 
 group :development, :test do
   gem 'sqlite3'

@@ -5,6 +5,7 @@ class Usuario < ActiveRecord::Base
   has_many :pedidos
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+  validates :email, :presence => true, :email => true
 
   private
     def set_usuario

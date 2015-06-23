@@ -44,7 +44,7 @@
     .qtyGrid input[type=text] {
         width: 50%;
         text-align:center;
-        border-radius: 20px;
+        border-radius: 5px;
     }
     .totalGrid {
         width: 20%;
@@ -179,16 +179,22 @@
     //guardarCambios();
   });
   $(document).on('click', '.btn_sbmt', function (e) {
-    e.preventDefault();
     console.log("Colocar Pedido ", e);
+    document.getElementById("btn_submit").disabled = true;
+    e.preventDefault();
+    Validacion();
+  });
+  $(document).on('click', '.sbmt_pedido', function (e) {
+    console.log("sbmt_pedido!!!!!!!!!!!!");
+    document.getElementById("btn_submit").disabled = true;
     Validacion();
   });
 // FUNCIONES  
 function Validacion() {   
     console.log("Submit Forma");
-    document.getElementById('hdn_sbmt').value = "Y";
-    document.getElementById('productos_drop').value = dropLineas;
-    document.getElementById('productos_change').value = changeLineas;
+    //document.getElementById('hdn_sbmt').value = "Y";
+    //document.getElementById('productos_drop').value = dropLineas;
+    //document.getElementById('productos_change').value = changeLineas;
     document.getElementById("carrito_form").submit();    
 }
 function guardarCambios(){

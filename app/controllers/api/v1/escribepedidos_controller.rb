@@ -9,7 +9,9 @@ module Api
         # Recibir id de pedido y contruir el json para enviarlo a Openbravo en forma de cadena.
       lineas = ""
       Pedido.where(id: params[:pedido_id], activo: true).find_each do |ord|
+        puts "Iteración Pedido"
         Pedidolinea.where(pedido_id: ord.id).find_each do |lins|
+          puts "Iteración Pedidolinea"
           #lins.product_id lins.cantidad lins.precio lins.tota current_usuario.rfc
           lineas = lineas + lins.product_id + "_"
           lineas = lineas + lins.cantidad.to_s + "_"

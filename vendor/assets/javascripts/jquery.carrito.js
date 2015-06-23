@@ -60,7 +60,7 @@
                 htmlBuilder += '<div class="cartBtn" id="cartBtn" style="float:left;width:100%;padding:2% 1% 1% 1%;border:0px solid red;" align="right">';
                 htmlBuilder += '<br><br><input type="button" id="btn_guardar" onclick="guardarCambios()" value="Catálogo de productos" class="btn btn-default btn-sbmt sbmt_pedido btn_save"/>';
                 if (j > 0) {
-                    htmlBuilder += '&nbsp;&nbsp;<input type="submit" id="btn_submit" value="Colocar Pedido" class="btn btn-default btn-sbmt sbmt_pedido btn_sbmt"/></div>';
+                    htmlBuilder += '&nbsp;&nbsp;<input type="submit" id="btn_submit" value="Colocar Pedido" class="btn btn-default btn-sbmt sbmt_pedido"/></div>';
                 }  else {
                     listavacia = '<br><br><h3 align="center">El carrito esta vacío, agrega algunos productos desde el catálogo de productos.</h3>';
                     listavacia += '<br><br><div align="center"><input type="button" id="btn_guardar" onclick="guardarCambios()" value="Catálogo de productos" class="btn btn-default btn-sbmt sbmt_pedido btn_save"/></div>';

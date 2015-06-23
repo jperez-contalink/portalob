@@ -102,12 +102,12 @@ def registro
 	end
 end
 
-def success_order
-	puts "ENTRA A SUCCESS ORDER" + current_usuario.email
-	@user = current_usuario
+#def success_order
+	#puts "ENTRA A SUCCESS ORDER" + current_usuario.email
+	#@user = current_usuario
 	#order_link = "http://csalinas-tegik:KopoTegik@23.23.245.49/openbravo/ws/com.tegik.portalob.DescargaDocumentosPortal?facturaids=893B8B30D84743E69B23D574F59A81DA_"
+#end	
 
-end	
 def customer_selected
 	puts "SELECCIÓN CLIENTE - ID: " + params[:id] + " + V: " + params[:value]
 	@Change = Usuario.find(current_usuario.id);
