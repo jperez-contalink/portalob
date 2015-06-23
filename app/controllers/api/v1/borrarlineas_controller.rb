@@ -6,6 +6,7 @@ module Api
         puts "BORRAR LINEAS DEL PEDIDO QUE SE ACABA DE COMPLETAR"
         Pedidolinea.where(pedido_id: params[:pedido_id]).destroy_all
         puts "Líneas borradas..."
+        #head :no_content
       end
     end
   end
