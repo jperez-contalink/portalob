@@ -21,21 +21,6 @@ module Api
     	   end
       end
 
-      def show
-        respond_with Listaprecio.find(params[:id])
-      end
-
-      def create
-        respond_with Listaprecio.create(params[:product])
-      end
-
-      def update
-        respond_with Listaprecio.update(params[:id], params[:product])
-      end
-
-      def destroy
-        respond_with Listaprecio.destroy(params[:id])
-      end
     end
   end
 end

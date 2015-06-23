@@ -14,21 +14,6 @@ module Api
     	   end
       end
 
-      def show
-        respond_with Poslote.find(params[:id])
-      end
-
-      def create
-        respond_with Poslote.create(params[:product])
-      end
-
-      def update
-        respond_with Poslote.update(params[:id], params[:product])
-      end
-
-      def destroy
-        respond_with Poslote.destroy(params[:id])
-      end
     end
   end
 end

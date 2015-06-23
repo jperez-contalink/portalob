@@ -26,6 +26,8 @@
 //= require classie
 //= require jquery.dlmenu
 //= require_tree .
+//= require api/v1/ad_images.js
 //= require bootstrap
 //= require masonry/jquery.masonry
 //= require handlebars-v3.0.3
+
