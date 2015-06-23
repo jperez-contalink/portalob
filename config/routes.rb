@@ -66,6 +66,7 @@ Rails.application.routes.draw do
       resources :listaprecios, only: [:index]
       resources :escribepedidos, only: [:index]
       resources :aplicarcobranzas, only: [:index]
+      resources :ad_images, only: [:show]
     end  
   end
 end
