@@ -9,12 +9,15 @@ AdImage = (function (){
 	init = function () {
 		url = "/api/v1/ad_images";
 	};
-	getAdImage = function (id, elem) {
+	getAdImage = function (image_id, elem, ids) {
+
 		$.ajax({
-			url: url + "/"+id,
+			url: url + "/"+image_id,
 			success: function (data) {
 				var image_url = "data:"+data.mimetype+";base64,"+data.bindaryData
-				$(elem).attr('src', image_url)
+				$.each(ids, function(idx, value) { 
+					$(elem+"[data-product-id="+value+"]").css('background', "url("+image_url+")")
+				});
 			},
 			error: function () {
 				console.log('no se pudo obtener la imagen');
@@ -27,8 +30,8 @@ AdImage = (function (){
 	};
 }());
 
-/*
-There is an example in how implement this
-AdImage.init();
-AdImage.getAdImage("FCA42C3E8A684B72AC00854C4243859B", "#imagen-bonita");
+
+//There is an example in how implement this
+/*AdImage.init();
+AdImage.getAdImage("FCA42C3E8A684B72AC00854C4243859B", ".img-bonitas", ["1","2"]);
 */
