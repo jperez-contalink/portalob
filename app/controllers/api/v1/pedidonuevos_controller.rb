@@ -1,9 +1,6 @@
 module Api
   module V1
     class PedidonuevosController < ApplicationController
-      
-      #respond_to :json
-
       def index
         #Aca debo obtener el ultimo pedio abierto del usuario, cerrarlo y asignar las lineas a un nuevo pedido.
         Pedido.where(usuario_id: params[:usuario_id]).find_each do |ords|
@@ -39,22 +36,6 @@ module Api
           #Pedidolinea.create!({:pedido_id => @ord.id, :producto => params[:producto], :product_value => params[:product_value], :precio => params[:precio], :total => total, :cantidad => params[:cantidad], :product_id => params[:producto_id], :imagen => params[:imagenurl], :maximo => params[:invmax].to_f, :impuesto => params[:impuesto].to_f, :precioob => params[:precioob].to_f, :precioproductoextra => params[:precioproductoextra].to_f, :productoextra => params[:productoextra], :impuestoextra => params[:impuestoproductoextra]})
           @pedidolineas = Pedidolinea.all        
         end
-      end
-
-      def show
-        respond_with Pedidonuevo.find(params[:id])
-      end
-
-      def create
-        respond_with Pedidonuevo.create(params[:product])
-      end
-
-      def update
-        respond_with Pedidonuevo.update(params[:id], params[:product])
-      end
-
-      def destroy
-        respond_with Pedidonuevo.destroy(params[:id])
       end
     end
   end

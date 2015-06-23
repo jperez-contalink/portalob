@@ -49,23 +49,23 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       resources :reporte_facturas
-      resources :documentoscobranzas
-      resources :pedidosobs
-      resources :metodopagos
-      resources :posproductos
-      resources :posprecios
-      resources :poslotes
-      resources :pedidonuevos
-      resources :borrarlineas
-      resources :customers
-      resources :reporte_estado_cuenta
-      resources :impresion_documentos
-      resources :descarga_imagenes
-      resources :precios
-      resources :productos
-      resources :listaprecios
-      resources :escribepedidos
-      resources :aplicarcobranzas
+      resources :documentoscobranzas, only: [:index]
+      resources :pedidosobs, only: [:index]
+      resources :metodopagos, only: [:index]
+      resources :posproductos, only: [:index]
+      resources :posprecios, only: [:index]
+      resources :poslotes, only: [:index]
+      resources :pedidonuevos, only: [:index]
+      resources :borrarlineas, only: [:index]
+      resources :customers, only: [:index]
+      resources :reporte_estado_cuenta, only: [:index]
+      resources :impresion_documentos, only: [:index]
+      resources :descarga_imagenes, only: [:index]
+      resources :precios, only: [:index]
+      resources :productos, only: [:index]
+      resources :listaprecios, only: [:index]
+      resources :escribepedidos, only: [:index]
+      resources :aplicarcobranzas, only: [:index]
     end  
   end
 end
