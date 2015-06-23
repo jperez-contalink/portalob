@@ -99,6 +99,7 @@
 </head>
 
 <body>
+
 <% if !current_page?(puntodeventa_path) %>  
   <div class="container">
         <ul id="gn-menu" class="gn-menu-main">
@@ -195,8 +196,10 @@
   </div> <!--CIERRA CONTAINER-->
 <% end %>
 <div class="container">
+  
   <!--FLASH ALERT AQUI-->
   <%= yield %>
+  <img id="imagen-bonita" >
 </div>
 
   <!-- Footer -->

@@ -14,21 +14,6 @@ module Api
     	   end
       end
 
-      def show
-        respond_with Posproducto.find(params[:id])
-      end
-
-      def create
-        respond_with Posproducto.create(params[:product])
-      end
-
-      def update
-        respond_with Posproducto.update(params[:id], params[:product])
-      end
-
-      def destroy
-        respond_with Posproducto.destroy(params[:id])
-      end
     end
   end
 end

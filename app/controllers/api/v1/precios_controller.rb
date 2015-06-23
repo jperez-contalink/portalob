@@ -20,21 +20,6 @@ module Api
     	   end
       end
 
-      def show
-        respond_with Precio.find(params[:id])
-      end
-
-      def create
-        respond_with Precio.create(params[:product])
-      end
-
-      def update
-        respond_with Precio.update(params[:id], params[:product])
-      end
-
-      def destroy
-        respond_with Precio.destroy(params[:id])
-      end
     end
   end
 end
