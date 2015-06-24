@@ -88,9 +88,9 @@ def borrar_linea
 end
 
 def registro
-	puts "Registro"
-	if params[:txtNombre] && params[:txtRFC] && params[:txtCorreo]
-		puts "Registra al usuario: " + params[:txtNombre] + " - " + params[:txtRFC]
+	puts "Registro "
+	if params[:txtNombre] && params[:txtRFC] && params[:txtCorreo] && params[:bpartner_id]
+		puts "Registra al usuario: " + params[:txtNombre] + " - " + params[:txtRFC] + " - " + params[:bpartner_id]
 		if (Usuario.find_by_email(params[:txtCorreo]))
 			puts "EL CORREO YA EXISTE!"
 			redirect_to registro_path({:estado => "error"})

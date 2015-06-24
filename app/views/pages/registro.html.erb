@@ -6,6 +6,58 @@
     <style>
     </style>
 </head>
+<script type="text/javascript">
+var allData = {};
+$( document ).ready(function() {
+	$.ajax({
+		                type:"GET",
+		                dataType : 'json',
+		                url: "api/v1/customers",
+		                success: function(datox){
+		                console.log("SUCCESS", datox);
+		                allData = jsonConstructor(datox);
+		                buildDropDown(allData);
+		            },
+		                error:  function(){ 
+		                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor, error en servicio de lectura de clientes.</h3></div>'
+		                document.getElementById("listadoClientes").innerHTML = mensajeError;
+		                }
+		    });
+});
+function jsonConstructor(json) {
+    var rows = [];
+    var jsonObject = json.response;
+	for (var i=0;i<jsonObject.totalRows;i++) {
+		var row = {};
+        row.Cliente_ID		= jsonObject.data[i].id;
+        row.Clave	 		= jsonObject.data[i].value;
+        row.RFC		 		= jsonObject.data[i].rfc;
+        row.Nombre 			= jsonObject.data[i].name;
+        row.Vendedor    = jsonObject.data[i].vendor;
+        rows.push(row);
+    }    
+    var data = {
+                //facturas: rows
+                rows: rows
+            };
+    return data;
+}  // Termina json Constructor
+function buildDropDown(json) {
+	var jsonObject = json.rows;	
+	var tabla = '<select id="bpartner_id" class=""dropdown-cliente width="100%" style="font-size:120%;font-weight:bold;">';
+	var rfc = "";
+	for (var i=0;i<jsonObject.length;i++) {	
+		if (jsonObject[i].RFC != null) {
+			rfc = "(" + jsonObject[i].RFC + ")";
+		} else {
+			rfc = "";
+		}
+		tabla += '<option value="' + jsonObject[i].Cliente_ID + '">' + jsonObject[i].Nombre + "&nbsp;&nbsp;" + rfc + '</option>';
+	}
+	tabla += '</select>';
+	document.getElementById("btn_clientes").innerHTML = tabla;
+}
+</script>
 <body>
 <br><br><br><br>
 <div align="center"><h2>Registro de usuarios</h2></div><br><br>
@@ -25,10 +77,12 @@
 		<input type="text" id="txtNombre" name="txtNombre" class="form-control"/>
 		<br><strong>RFC</strong><br>
 		<input type="text" id="txtRFC" name="txtRFC" class="form-control"/>
+		<br><strong>Tercero</strong><br>
+		<div id="btn_clientes" width="100%"></div>
 		<br><strong>Correo</strong><br>
 		<input type="text" id="txtCorreo" name="txtCorreo" class="form-control"/><br><br>
 		<input type="hidden" id="hdnRFC" name="hdnRFC" value="<%= current_usuario.empresa.rfc %>"/><br><br>
-		<input type="hidden" id="hdnID" name="hdnID" value="<%= current_usuario.empresa_id %>"/><br><br>
+		<input type="hidden" id="hdnID" name="hdnID" value="<%= current_usuario.empresa_id %>"/>
 		<div align="right">			
 			<input type="submit" value="guardar" class="btn btn-default">      
 		</div>
