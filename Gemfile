@@ -26,17 +26,28 @@ gem 'cancan'
 gem 'intercom-rails'
 gem 'newrelic_rpm'
 
-group :development, :test do
-  gem 'sqlite3'
-end
-
 group :production do
   gem 'pg'
   gem 'rails_12factor'
+  gem "exception_notification"
 end
+
 
 group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'
   gem 'spring'
+  gem "spring-commands-rspec"
+  gem 'sqlite3'
+  gem "awesome_print"
+  gem "factory_girl_rails"
+  gem "pry-rails"
+  gem "rspec-rails", "~> 3.1.0"
+  gem "ffaker"
+end
+
+group :test do
+  gem "database_cleaner"
+  gem "shoulda-matchers"
+  gem 'rspec-collection_matchers'
 end
