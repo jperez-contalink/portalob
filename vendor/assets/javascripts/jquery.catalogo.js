@@ -39,6 +39,7 @@
             var search = '<div class="input-group"><span class="input-group-addon glyphicon glyphicon-search"></span><input type="text" class="form-control btn_search" aria-describedby="basic-addon1" id="txt_search" autofocus></div>';
             var tabla = search + '<br><div width="100%">';
             var style="";
+            var product_ids = [];
             for (var key in jsonRows) {
                 var obj = jsonRows[key]; 
                 var inventario = parseFloat((obj.Inventario).replace(" Piezas", ""));
@@ -58,12 +59,24 @@
                         inventarioShow = obj.Inventario;
                     }
 
-                    tabla += '<a href="javascript:agregar();" class="addProduct" id="' + obj.Producto_ID + '"><div class="itemA" align="left"><div align="center" class="bgImage" style="background-image:url('+obj.Image+');"><br><br><br><br><br><br></div><br><b>'+obj.Nombre +'</b><br>$'+(parseFloat(obj.Precioshow)).toFixed(2)+' ' + pextra + '<br>'+inventarioShow+'</div></a>';
+                    tabla += '<a href="javascript:agregar();" class="addProduct"'+
+                    ' id="' + obj.Producto_ID + '">'+
+                    '<div class="itemA" align="left">'+
+                    '<div align="center" class="bgImage"'+
+                     'data-product-id='+obj.Producto_ID+
+                     ' data-image-id='+obj.imageId+'>'+
+                    '<br><br><br><br><br><br></div><br><b>'+
+                    obj.Nombre +'</b><br>$'+
+                    (parseFloat(obj.Precioshow)).toFixed(2)+' ' + pextra + '<br>'
+                    +inventarioShow+'</div></a>';
                     style="";
+                    product_ids.push(obj.Producto_ID);
                 }
             }
             tabla += "</div>";
             document.getElementById("cat_pro").innerHTML = tabla;
+            AdImage.init();
+            AdImage.getAdImage(".bgImage");
             // PINTAR PAGINACIÓN
             priv.drawPagination(pData);
             
