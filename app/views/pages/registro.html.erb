@@ -9,6 +9,7 @@
 <script type="text/javascript">
 var allData = {};
 $( document ).ready(function() {
+	$( "#txtNombre" ).focus();
 	$.ajax({
 		                type:"GET",
 		                dataType : 'json',
@@ -23,6 +24,33 @@ $( document ).ready(function() {
 		                document.getElementById("listadoClientes").innerHTML = mensajeError;
 		                }
 		    });
+
+	$(document).on('click', '.post_user', function (e) {
+		console.log("POST USER");
+		var varCorreo = document.getElementById("txtCorreo").value;
+		var varNombre = document.getElementById("txtNombre").value;
+		var varRFC = document.getElementById("txtRFC").value;
+		var varHdnRFC = document.getElementById("hdnRFC").value;
+		var varHdnId = document.getElementById("hdnId").value;
+		var e = document.getElementById("bpartner_id");
+		var bpartner_id = e.options[e.selectedIndex].value;
+		$.ajax({
+	                type:"GET",
+	                dataType : 'html',
+	                url: "/registro_nuevo?txtCorreo=" + varCorreo + "&txtNombre=" + varNombre + "&txtRFC=" + varRFC + "&hdnRFC=" + varHdnRFC + "&hdnID=" + varHdnId + "&bpartner_id=" + bpartner_id,
+	                success: function(datox){
+	                console.log("SUCCESS REGISTRO" + datox);
+	                buildSuccess(datox);
+	            },
+	                error:  function(){ 
+	                var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor, error en servicio de lectura de clientes.</h3></div>'
+	                console.log("ERROR REGISTRO");
+	                //document.getElementById("listadoClientes").innerHTML = mensajeError;
+	                }
+			    });
+	});
+
+
 });
 function jsonConstructor(json) {
     var rows = [];
@@ -47,12 +75,7 @@ function buildDropDown(json) {
 	var tabla = '<select id="bpartner_id" class=""dropdown-cliente width="100%" style="font-size:120%;font-weight:bold;">';
 	var rfc = "";
 	for (var i=0;i<jsonObject.length;i++) {	
-		if (jsonObject[i].RFC != null) {
-			rfc = "(" + jsonObject[i].RFC + ")";
-		} else {
-			rfc = "";
-		}
-		tabla += '<option value="' + jsonObject[i].Cliente_ID + '">' + jsonObject[i].Nombre + "&nbsp;&nbsp;" + rfc + '</option>';
+		tabla += '<option value="' + jsonObject[i].Cliente_ID + '">' + jsonObject[i].Clave + "&nbsp;&nbsp;" + jsonObject[i].Nombre + '</option>';
 	}
 	tabla += '</select>';
 	document.getElementById("btn_clientes").innerHTML = tabla;
@@ -61,16 +84,8 @@ function buildDropDown(json) {
 <body>
 <br><br><br><br>
 <div align="center"><h2>Registro de usuarios</h2></div><br><br>
-<% if  params[:estado]%>
-	<% if  params[:estado] == "error"%>
-		<div id="alert_limite" class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>Ha ocurrido un error!</h4><p>Por el momento no es posible registrar usuarios, intentalo más tarde.</p></div>
-	<% end %>
-	<% if  params[:estado] == "success"%>
-		<div id="alert_limite" class="alert alert-success alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>Correcto!</h4><p>Se ha realizado el registro con éxito.</p></div>
-	<% end %>
-<% end %>
 <div id="alert_limite"></div><div id="alert_correo"></div>
- <form accept-charset="UTF-8" action="/registro" method="POST" onsubmit="return Validacion()">
+<!-- <form accept-charset="UTF-8" action="/registro" method="POST" onsubmit="return Validacion()">-->
   <div width="50%" style="padding-left:18%;padding-right:18%;">
 	<div class="form-group" id="form_registro">
 		<br><strong>Nombre</strong><br>
@@ -81,14 +96,15 @@ function buildDropDown(json) {
 		<div id="btn_clientes" width="100%"></div>
 		<br><strong>Correo</strong><br>
 		<input type="text" id="txtCorreo" name="txtCorreo" class="form-control"/><br><br>
-		<input type="hidden" id="hdnRFC" name="hdnRFC" value="<%= current_usuario.empresa.rfc %>"/><br><br>
-		<input type="hidden" id="hdnID" name="hdnID" value="<%= current_usuario.empresa_id %>"/>
+		<input type="hidden" id="hdnRFC" name="hdnRFC" value="<%=current_usuario.empresa.rfc %>" class="form-control"/>
+		<input type="hidden" id="hdnId" name="hdnId" value="<%=current_usuario.empresa_id %>"class="form-control"/>
 		<div align="right">			
-			<input type="submit" value="guardar" class="btn btn-default">      
+			<!--<input type="submit" value="guardar" class="btn btn-default">-->
+			<input type="button" value="guardar" class="btn btn-default post_user">
 		</div>
     </div>
    </div>
-</form>
+<!--</form>-->
 </body>
 <script>
 // ROLES
@@ -130,6 +146,28 @@ function validateEmail(email) {
     console.log("$> " + re.test(email));
     //return re.test(email);
     return true;
+}
+
+function buildSuccess(param) {
+	alerta = "";
+	switch (param) {
+	    case "success":
+	        var alerta = '<div id="alert_limite" class="alert alert-success alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>Correcto!.</h4><p>Se completo el registro correctamente.</p></div>';
+			document.getElementById("txtCorreo").value = "";
+			document.getElementById("txtNombre").value = "";
+			document.getElementById("txtRFC").value = "";
+			document.getElementById("hdnRFC").value = "";
+			document.getElementById("hdnId").value = "";			
+			$( "#txtNombre" ).focus();	        
+	        break;
+	    case "error":
+	        var alerta = '<div id="alert_limite" class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>Ya existe el correo.</h4><p>Ya existe un usuario con este correo registrado.</p></div>';
+	        $( "#txtCorreo" ).focus();	        
+	        break;
+	    default:
+	        console.log("No existe en un parametro");
+	}	
+	document.getElementById("alert_limite").innerHTML = alerta;
 }
 </script>
 </html>

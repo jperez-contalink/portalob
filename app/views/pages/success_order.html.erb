@@ -142,42 +142,48 @@
                 dataType : 'html',
                 url: "api/v1/escribepedidos?pedido_id=" + pedido,
                    success: function(datox){
-                        // PINTA PEDIDOS INCLUIDO EL ULTIMO QUE SE ACABA DE ESCRIBIR
+                    // PINTA PEDIDOS INCLUIDO EL ULTIMO QUE SE ACABA DE ESCRIBIR
+                    console.log("SUCCESS ESCRIBE PEDIDO: res=" + datox);
+                    if (datox == "OK") {
                         $.ajax({
-                                type:"GET",
-                                dataType : 'json',
-                                url: "api/v1/pedidosobs",
-                                   success: function(datox){
-                                   document.getElementById("div_message").innerHTML = "<h2>Tú Pedido se completó correctamente.</h2></div><br><br><br><br><a href=\"/catalogoproductos\">Cátalogo de productos.</a>";
-                                   openbravo = orderOpenBravo(datox);
-                                   // Pintar Ordenes
-                                   htmlOrd = buildListaOrden(openbravo, Orden, pedido);
-                                   buildListaOrdenes(openbravo, Orden, pedido, htmlOrd);
-                                   document.getElementById("loader-wrapper").style.display = "none";
-                                    // BORRAR LINEAS DEL PEDIDO
-                                    $.ajax({
-                                        type:"GET",
-                                        dataType : 'json',
-                                        url: "api/v1/borrarlineas?pedido_id=" + pedido,
-                                        success: function(datox){
-                                            console.log("$> Ocurrio un error"); 
-                                        },
-                                        error:  function(){ 
-                                            console.log("$> Ocurrio un error");
-                                        }
-                                    });
-                            },
-                                error:  function(){ 
+                            type:"GET",
+                            dataType : 'json',
+                            url: "api/v1/pedidosobs",
+                            success: function(datoz){
+                                console.log("%> SUCCESS ESCRIBE" + datoz);
+                                document.getElementById("div_message").innerHTML = "<h2>Tú Pedido se completó correctamente.</h2></div><br><br><br><br><a href=\"/catalogoproductos\">Cátalogo de productos.</a>";
+                                openbravo = orderOpenBravo(datoz);
+                                // Pintar Ordenes
+                                htmlOrd = buildListaOrden(openbravo, Orden, pedido);
+                                buildListaOrdenes(openbravo, Orden, pedido, htmlOrd);
+                                document.getElementById("loader-wrapper").style.display = "none";
+                                // BORRAR LINEAS DEL PEDIDO
+                                $.ajax({
+                                    type:"GET",
+                                    dataType : 'json',
+                                    url: "api/v1/borrarlineas?pedido_id=" + pedido,
+                                    success: function(datox){
+                                    console.log("$> Ocurrio un error"); 
+                                    },
+                                    error:  function(){ 
                                     console.log("$> Ocurrio un error");
-                                    document.getElementById("div_message").innerHTML = "<h2>Tu Pedido se completó correctamente pero no se han podido obtener tus pedidos, contacta con tu proveedor.</h2></div><br><br><br><br><a href=\"/carrito\">Carrito de Compra.</a>";
-                                }
-                        });
-            },
-                error:  function(){ 
-                    console.log("$> Ocurrio un error");
+                                    }
+                                });                            
+                            },
+                            error:  function(){ 
+                            console.log("$> Ocurrio un error");
+                            document.getElementById("div_message").innerHTML = "<h2>Tu Pedido se completó correctamente pero no se han podido obtener tus pedidos, contacta con tu proveedor.</h2></div><br><br><br><br><a href=\"/carrito\">Carrito de Compra.</a>";
+                            }
+                            });
+                    } else {
+                        buildError(datox);
+                    }
+                    },
+                    error:  function(datox){ 
+                    console.log("$> Ocurrio un error", datox);
                     document.getElementById("loader-wrapper").style.display = "none";
-                    document.getElementById("div_message").innerHTML = "<br><br><br><h2>Algo ha salido mal y no se ha podido completar el pedido, contacta con tu proveedor.</h2></div><br><br><br><br><a href=\"/carrito\">Carrito de Compra.</a>";
-                }
+                    document.getElementById("div_message").innerHTML = "<br><br><br><h2>Ha ocurrido un error de comunicación, vuelve a intentarlo más tarde.</h2></div><br><br><br><br><a href=\"/carrito\">Carrito de Compra.</a>";
+                    }       
             });            
 	    } else {
             // PINTA PEDIDOS
@@ -427,6 +433,19 @@ function buildListaOrden(ob, ord, pedido){
     //document.getElementById("div_message").innerHTML = htmlBuilder;
     //console.log("%> " + html + htmlBuilder);
     return htmlBuilder;
+}
+function buildError(param) {
+    // Gestionar los errores
+    console.log("$>BE ERROR: " + param);
+    //param = (param.split("Caused by:")[1]).split(".")[0];
+    var error = param;
+    if (param.indexOf('ERROR: null value in column "c_tax_id" violates not-null constrain') != -1) {
+        error = "No se ha podido colocar tu orden debido a que uno de los productos agregados a tu orden pertenece a una categoría de impuesto que no tiene asignado un impuesto por defecto.";
+    } else if (param.indexOf("Ya existe un pedido con referencia a la orden") != -1) {
+        error = "No se ha podido colocar tu orden debido a que ya existe en el sistema un pedido con la misma referencia, comunicate con tu proveedor.";
+    }
+    document.getElementById("div_message").innerHTML = "<h2>" + error + "</h2></div><br><br><br><br><a href=\"/catalogoproductos\">Cátalogo de productos.</a>";
+    document.getElementById("loader-wrapper").style.display = "none";
 }
 function buildListaOrdenX(ob, ord, pedido){
     if (pedido != ""){

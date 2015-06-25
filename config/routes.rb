@@ -32,11 +32,12 @@ Rails.application.routes.draw do
   get "catalogoproductos" => "pages#catalogoproductos"
   get "carrito" => "pages#carrito"
   get "registro" => "pages#registro"
-  post "registro" => "pages#registro"
+  #post "registro" => "pages#registro"
   get "success" => "pages#success"
   post "carrito" => "pages#carrito"
   get "success_order" => "pages#success_order"
   get "cambia_linea" => "pages#cambia_linea"
+  get "registro_nuevo" => "pages#registro_nuevo"
   get "customer_selected" => "pages#customer_selected"
   get "borrar_linea" => "pages#borrar_linea"
   get "cobranza" => "pages#cobranza"
@@ -64,9 +65,14 @@ Rails.application.routes.draw do
       resources :precios, only: [:index]
       resources :productos, only: [:index]
       resources :listaprecios, only: [:index]
-      resources :escribepedidos, only: [:index]
       resources :aplicarcobranzas, only: [:index]
       resources :ad_images, only: [:show]
     end  
   end
+  namespace :api, defaults: {format: 'html'} do
+    namespace :v1 do
+      resources :escribepedidos, only: [:index]
+    end
+  end
+
 end

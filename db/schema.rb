@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150521162655) do
+ActiveRecord::Schema.define(version: 20150624215256) do
 
   create_table "aplicarcobranzas", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 20150521162655) do
     t.float    "precioproductoextra"
     t.string   "productoextra"
     t.float    "impuestoextra"
+    t.string   "adimageid"
   end
 
   create_table "pedidos", force: :cascade do |t|

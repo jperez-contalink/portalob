@@ -36,7 +36,12 @@
                 for (var j=0;j<jsonRows.length;j++) {    
                     if (jsonOrders[i].Order_id == jsonRows[j].Order_id) {
                         htmlBuilder += '<div style="border:0px solid grey;" id="' + jsonRows[j].Product_id + '_ROW">';
-                        htmlBuilder += '<div align="center" class="imgGrid" style="float:left;"><img src="' + jsonRows[j].Imagen + '" height="100px"></img></div>';
+                        if (jsonRows[j].Imagen == "Y") {
+                            htmlBuilder += '<div align="center" class="imgGrid" style="float:left;"><img  class="imgProduct" data-product-id=' + jsonRows[j].Product_id + ' data-image-id=' + jsonRows[j].imagenId + ' height="100px"></img></div>';
+                        } else {
+                            htmlBuilder += '<div align="center" class="imgGrid" style="float:left;"><img src="imagenesProductos/noimage.png" height="100px"></img></div>';
+                        }
+
                         if (jsonRows[j].Productoextra != "null") {
                             htmlBuilder += '<div align="left" class="nameGrid" style="float:left;">' + jsonRows[j].Producto + ' + ' + jsonRows[j].Productoextra + '</div>';
                             htmlBuilder += '<div align="right" id="' + jsonRows[j].Linea_id + '_Precio" class="priceGrid" style="float:left;">$' + priv.separaMiles((parseFloat(jsonRows[j].Precio) - parseFloat(jsonRows[j].Precioproductoextra)).toFixed(2)) + ' + $' + priv.separaMiles(jsonRows[j].Precioproductoextra) +'</div>';
@@ -78,6 +83,8 @@
             document.getElementById('div_container').innerHTML = listavacia;
         } else {
             document.getElementById('div_container').innerHTML = htmlBuilder;
+            AdImage.init();
+            AdImage.getAdImageToImage(".imgProduct");
         }
 
         };

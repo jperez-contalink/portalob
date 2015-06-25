@@ -238,6 +238,7 @@ function orderContructor(){
                 row.Impuestoextra = <%= lins.impuestoextra %>;
             <% end %>
             row.Imagen = "<%= lins.imagen %>";
+            row.imagenId = "<%= lins.adimageid %>";
             subTotal = subTotal + (parseFloat(row.Precio) * parseFloat(row.Cantidad)) - (parseFloat(row.Impuesto) * parseFloat(row.Cantidad)) - (parseFloat(row.Impuestoextra) * parseFloat(row.Cantidad));
             Impuestos = Impuestos + parseFloat(row.Impuesto) * parseFloat(row.Cantidad);
             Impuestosextra = Impuestosextra + parseFloat(row.Impuestoextra) * parseFloat(row.Cantidad);
