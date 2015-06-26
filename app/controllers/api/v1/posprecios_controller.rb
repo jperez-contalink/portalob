@@ -19,6 +19,6 @@ module Api
       		format.json {render json: response}
     	   end
       end
-
+    end  
   end
 end
