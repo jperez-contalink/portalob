@@ -6,6 +6,7 @@ module Api
   module V1
     class DescargaImagenesController < ApplicationController
       def index
+=begin
         @user = current_usuario
         order_link = "http://" + @user.empresa.usuariosob + ":" + @user.empresa.passob + "@" + @user.empresa.urlwebservice + "/openbravo/ws/com.tegik.portalob.DescargaImagenesPortal?productoids=#{params[:productoids]}"
         file_name = "ImagenesPortal2.zip"
@@ -27,6 +28,7 @@ module Api
             content = entry.get_input_stream.read
           end
         end      
+=end
     	end
   end
 end

@@ -110,6 +110,16 @@
         border-radius: 5px;
         padding: 1% 0% 1% 0%;
     }
+    .headOrden {
+        font-weight: bold;
+        font-size: 150%;
+        padding-bottom: 1em;
+    }
+    .rowOrden {
+        font-weight: bold;
+        font-size: 130%;
+        color: #7f8c8d;
+    }
 </style>
 </head>
 <body>
@@ -143,7 +153,7 @@
                 url: "api/v1/escribepedidos?pedido_id=" + pedido,
                    success: function(datox){
                     // PINTA PEDIDOS INCLUIDO EL ULTIMO QUE SE ACABA DE ESCRIBIR
-                    console.log("SUCCESS ESCRIBE PEDIDO: res=" + datox);
+                    console.log("SUCCESS ESCRIBE PEDIDO:");
                     if (datox == "OK") {
                         $.ajax({
                             type:"GET",
@@ -314,6 +324,9 @@ function orderOpenBravo(json) {
         row.Entregado       = jsonObject.data[i].isdelivered;
         row.Facturado       = jsonObject.data[i].isinvoiced;
         row.FechaCreacion   = jsonObject.data[i].creationDate;
+        row.Total           = jsonObject.data[i].total;
+        row.Subtotal        = jsonObject.data[i].subtotal;
+        row.Impuestos       = jsonObject.data[i].tax;
         //jsDate = new Date(strDate);
         rows.push(row);
     }
@@ -335,10 +348,18 @@ function buildListaOrdenes(ob, ord, pedido, html){
     var lineasPortal = ord.rows;
     var htmlBuilder = "";
     // Recorrer todos los pedidos existentes en Openbravo
+    var htmlBuilder = '<table width="100%">';
+    htmlBuilder += '<tr><td class="headOrden">Pedido</td><td class="headOrden">Fecha</td><td class="headOrden">Subtotal</td><td class="headOrden">Impuestos</td><td class="headOrden">Total</td><td class="headOrden">Estado</td></tr>';
     for (var i=0;i<pedidosOB.length;i++) {
+        var currentDate = getStandarDate(pedidosOB[i].FechaCreacion);
+        htmlBuilder += '<tr><td class="rowOrden">' + pedidosOB[i].Documentno + '</td><td class="rowOrden">' + currentDate + '</td><td class="rowOrden">$' + parseFloat(pedidosOB[i].Subtotal).toFixed(2) + '</td><td class="rowOrden">$' + parseFloat(pedidosOB[i].Impuestos).toFixed(2) + '</td><td class="rowOrden">$' + parseFloat(pedidosOB[i].Total).toFixed(2) + '</td><td class="rowOrden">' + pedidosOB[i].Estado + '</td></tr>';
+    }
+    htmlBuilder += '</table>';
+    // VERSION ANTERIOR (CON DETALLES)
+    /*for (var i=0;i<pedidosOB.length;i++) {
         for (var j=0;j<pedidosPortal.length;j++) {
             if (pedidosOB[i].Pedido_ID == pedidosPortal[j].Order_id && (pedidosPortal[j].Order_id != pedido || todos == true)) {
-                htmlBuilder += '<div align="left" class="headRow"><h2>PEDIDO # ' + pedidosOB[i].Documentno + '</h2><br>ESTADO: ' + pedidosOB[i].Estado + '<br><a href="javascript:mostrarDetalle(\'' + pedidosOB[i].Documentno + '\')">Detalles</a></div>';
+                htmlBuilder += '<div align="left" class="headRow"><h2>PEDIDO # ' + pedidosOB[i].Documentno + '</h2><br>ESTADO: ' + pedidosOB[i].Estado + ' Total: ' + pedidosOB[i].Total + '<br><!--<a href="javascript:mostrarDetalle(\'' + pedidosOB[i].Documentno + '\')">Detalles</a>--></div>';
                 htmlBuilder += '<div align="center" class="lineGrid" id="lineGrid_' + pedidosOB[i].Documentno + '" style="display:none;">';
                 for (var k=0;k<lineasPortal.length;k++) {
                     if (pedidosPortal[j].Order_id == lineasPortal[k].Order_id && (lineasPortal[k].Order_id != pedido || todos == true)){
@@ -368,7 +389,7 @@ function buildListaOrdenes(ob, ord, pedido, html){
             htmlBuilder += '<div class="total" align="right">Total: $' + separaMiles(pedidosPortal[j].Total) + '</div></div><br>';
             }
         }
-    }
+    }*/
     // PINTAR EN div
     document.getElementById("div_message").innerHTML = html + htmlBuilder;
 }
@@ -386,7 +407,15 @@ function buildListaOrden(ob, ord, pedido){
     var mensaje = " y ha sido completado con éxito";
     var tipoAlerta = "success";
     // Recorrer todos los pedidos existentes en Openbravo
+    var htmlBuilder = '<table width="100%">';
+    htmlBuilder += '<tr><td class="headOrden">Pedido</td><td class="headOrden">Fecha</td><td class="headOrden">Subtotal</td><td class="headOrden">Impuestos</td><td class="headOrden">Total</td><td class="headOrden">Estado</td></tr>';
     for (var i=0;i<pedidosOB.length;i++) {
+        var currentDate = getStandarDate(pedidosOB[i].FechaCreacion);
+        htmlBuilder += '<tr><td class="rowOrden">' + pedidosOB[i].Documentno + '</td><td class="rowOrden">' + currentDate + '</td><td class="rowOrden">$' + parseFloat(pedidosOB[i].Subtotal).toFixed(2) + '</td><td class="rowOrden">$' + parseFloat(pedidosOB[i].Impuestos).toFixed(2) + '</td><td class="rowOrden">$' + parseFloat(pedidosOB[i].Total).toFixed(2) + '</td><td class="rowOrden">' + pedidosOB[i].Estado + '</td></tr>';
+    }
+    htmlBuilder += '</table>';
+    // VERSION CON DETALLE
+    /*for (var i=0;i<pedidosOB.length;i++) {
         for (var j=0;j<pedidosPortal.length;j++) {
             if (pedidosOB[i].Pedido_ID == pedidosPortal[j].Order_id && pedidosPortal[j].Order_id == pedido){
                 if (pedidosOB[i].Docstatus != "CO") {
@@ -428,7 +457,7 @@ function buildListaOrden(ob, ord, pedido){
             htmlBuilder += '<div class="total" align="right">Total: $' + separaMiles(pedidosPortal[j].Total) + '</div></div><br>';
             }
         }
-    }
+    }*/
     // PINTAR EN div
     //document.getElementById("div_message").innerHTML = htmlBuilder;
     //console.log("%> " + html + htmlBuilder);
@@ -436,13 +465,12 @@ function buildListaOrden(ob, ord, pedido){
 }
 function buildError(param) {
     // Gestionar los errores
-    console.log("$>BE ERROR: " + param);
-    //param = (param.split("Caused by:")[1]).split(".")[0];
-    var error = param;
-    if (param.indexOf('ERROR: null value in column "c_tax_id" violates not-null constrain') != -1) {
+    if (param.indexOf('violates not-null constraint') != -1 && param.indexOf('c_tax_id') != -1) {
         error = "No se ha podido colocar tu orden debido a que uno de los productos agregados a tu orden pertenece a una categoría de impuesto que no tiene asignado un impuesto por defecto.";
     } else if (param.indexOf("Ya existe un pedido con referencia a la orden") != -1) {
         error = "No se ha podido colocar tu orden debido a que ya existe en el sistema un pedido con la misma referencia, comunicate con tu proveedor.";
+    } else {
+        error = "Tu pedido no se ha podido generar debido a un error inesperado, comunicate con tu proveedor.";
     }
     document.getElementById("div_message").innerHTML = "<h2>" + error + "</h2></div><br><br><br><br><a href=\"/catalogoproductos\">Cátalogo de productos.</a>";
     document.getElementById("loader-wrapper").style.display = "none";
@@ -548,6 +576,53 @@ function mostrarDetalle(documentno) {
         document.getElementById(idQty).style.display = "none";
         document.getElementById(idBlank).style.display = "none";
     }
+}
+function getStandarDate(strDate){
+    var datex = new Date(strDate);
+    var day = datex.getDate();
+    var month = datex.getMonth();
+    var year = datex.getFullYear();
+    switch (month) {
+        case 0:
+            month = "Enero";
+        break;
+        case 1: 
+            month = "Febrero";
+        break;
+        case 2:
+            month = "Marzo";
+        break;
+        case 3:
+            month = "Abril";
+        break;
+        case 4:
+            month = "Mayo";
+        break;
+        case 5:
+            month = "Junio";
+        break;
+        case 6:
+            month = "Julio";
+        break;
+        case 7:
+            month = "Agosto";
+        break;
+        case 8:
+            month = "Septiembre";
+        break;
+        case 9:
+            month = "Octubre";
+        break;
+        case 10:
+            month = "Noviembre";
+        break;
+        case 11:
+            month = "Diciembre";
+        break;
+        default:
+            month = month;     
+    }
+    return day + " - " + month + " - " + year;
 }
 </script>
 </html>
