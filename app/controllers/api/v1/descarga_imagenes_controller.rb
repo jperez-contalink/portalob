@@ -27,8 +27,8 @@ module Api
             # Read into memory
             content = entry.get_input_stream.read
           end
-        end      
-=end
-    	end
+=end          
+      end     
+    end
   end
 end
