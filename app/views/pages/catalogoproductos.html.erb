@@ -349,98 +349,133 @@
     var productoextra = document.getElementById("hdnproductoextra").value;
     var inventarioMaximo = parseFloat(inventario.replace(" Piezas disponibles.", ""));
     var varhdnadimageid = document.getElementById("hdnadimageid").value;
-    var arrLineasCarrito = [
-    <%Pedido.where(usuario_id: current_usuario.id, activo: true, abierto: true).find_each do |ord|%>
-      <%Pedidolinea.where(pedido_id: ord.id).find_each do |lins|%>
-        '<%=lins.product_id%>',
-      <%end%>
-    <%end%> ''];
-    // Valida inventario
-    console.log("Cantidad: |" + fcantidad + "| - Pedido");
-    if (isNaN(fcantidad)) {
-      fcantidad = -1;
-    }
-    console.log("%> ARRE: " + arrLineasCarrito);
-    if (parseFloat(inventario.replace(" Piezas disponibles.", "")) < parseFloat(cantidad) || (fcantidad > 1000000 || fcantidad < 0) || arrLineasCarrito.indexOf(productid) != -1) {
-      $("body").scrollTop(0);
-      if (parseFloat(inventario.replace(" Piezas disponibles.", "")) < parseFloat(cantidad)) {
-        // No hay inventario despliega la alerta.
-        console.log("No inventario");
-        document.getElementById('alertas').innerHTML = buildAlertError("Stock Insuficiente", "No hay suficiente stock este producto sólo tiene disponibles " + inventario.replace(" Piezas disponibles.", "") + " piezas.");
-      } else if (fcantidad > 1000000 || fcantidad < 0) {
-        console.log("Cantidad incorrecta");
-        document.getElementById('alertas').innerHTML = buildAlertError("La cantidad no es correcta", "El valor ingresado en el campo de cantidad no es correcto.");        
-      } else if (arrLineasCarrito.indexOf(productid) != -1) {
-        console.log("Producto Existente");
-        document.getElementById('alertas').innerHTML = buildAlertError('Ya has agregado este producto', 'Este producto ya fue agregado al carrito ¿necesitas agregar más? puedes cambiar la cantidad agregada en el carrito de compra <a href="/carrito">carrito</a>.');        
-      }
-    } else {
-      // Hay inventario Procede el submit del producto
-      $.ajax({
+    /*var arrLineasCarrito = [
+    <Pedido.where(usuario_id: current_usuario.id, activo: true, abierto: true).find_each do |ord|>
+      <Pedidolinea.where(pedido_id: ord.id).find_each do |lins|>
+        '<=lins.product_id>',
+      <end>
+    <end> ''];*/
+    var existline = false;
+    $.ajax({
                 type:"GET",
                 dataType : 'html',
-                url: "/pedidolineas?usuario_id=<%=current_usuario.id%>&producto_id=" + productid + '&cantidad=' + cantidad + '&precio=' + precio.replace("$", "") + "&producto=" + product + "&product_value=" + product_value + "&imagenurl=" + imagenurl + "&invmax=" + inventarioMaximo + "&impuesto=" + impuesto + "&precioob=" + precioob + "&productoextra=" + productoextra + "&precioproductoextra=" + precioproductoextra + "&impuestoproductoextra=" + impuestoproductoextra + "&adimageid=" + varhdnadimageid,
-                success: function(datos){
-                console.log("$> linea añadida");     
-                // Reestablecer Catálogo
-                filterData = allData;
-                cato.drawFiltros(allData);
-                //cato.setData(allData);
-                cambiaPaginaPLUS(1, 12);
-                document.getElementById('cat_pag').style.display = "initial";
-                document.getElementById('cat_fil_aplicados').style.display = 'none';
-                jQuery('#cat_fil_aplicados div').html('');
-                // Deseleccionar los checks de marca
-                $("#cat_filter input[type=checkbox]").prop('checked', false);
-                // Desplegar mensaje de producto agregado.
-                document.getElementById('alertas').innerHTML = buildAlertSuccess("Producto Agregado", "Se ha agregado el producto correctamente a tu carrito de compra.");
-                $("body").scrollTop(0);
-                },
-                error:  function(){ 
-                var mensajeError = '<br><br><br><div align="center"><h1>Ha ocurrido un error al agregar la línea, por favor si el problema persiste cominiquese con su proveedor.</h3></div>'
-                  document.getElementById("cat_pro").innerHTML = mensajeError;
-                }
-        });      
-    console.log("Valida Existencia del pedido en Openbravo");
-    var pedidoActual = "";
-    var openbravo_pedido = "";
-    var crear_nuevo = "";
-    <% Pedido.where(usuario_id: current_usuario.id).find_each do |ords|%>
-      <% if ords.activo? %>
-        pedidoActual = "<%= ords.id %>"
-      <% end %>
-    <% end %>
-      // validar si existe la orden en openbravo
-      console.log("#> api/v1/pedidonuevos?usuario_id=<%=current_usuario.id%>");
-    $.ajax({
-            type:"GET",
-            dataType : 'json',
-            url: "api/v1/pedidosobs?pedido_id=" + pedidoActual,
-               success: function(datox){
-               console.log("$> Success: ", datox);
-               openbravo_pedido = datox;
-               console.log("$> LENGHT: ", openbravo_pedido.response.data.length);
-                if (openbravo_pedido.response.data.length == 0) {
-                  console.log("No existe el pedido procede normalente " + openbravo_pedido);
-                } else {
-                  console.log("Ya existe el pedido en openbravo crear uno nuevo y asigna las lineas al nuevo" + openbravo_pedido);
+                url: "/valida_linea?product_id=" + productid,
+                   success: function(datox){
+                   console.log("$> Success valida linea: ", datox);      
+                   if (datox == "true") {
+                      console.log("$> SI existe el producto");
+                      existline = true;
+                   } else  if (datox == "false") {
+                      console.log("$> NO existe el producto");
+                      existline = false;
+                   }
+                    // Valida inventario
+                    console.log("Cantidad: |" + fcantidad + "| - Pedido");
+                    if (isNaN(fcantidad)) {
+                      fcantidad = -1;
+                    }
+                    console.log("%>%&%# Existe el producto: " + existline);
+                    if (parseFloat(inventario.replace(" Piezas disponibles.", "")) < parseFloat(cantidad) || (fcantidad > 1000000 || fcantidad < 0) || existline == true) {
+                      $("body").scrollTop(0);
+                      if (parseFloat(inventario.replace(" Piezas disponibles.", "")) < parseFloat(cantidad)) {
+                        // No hay inventario despliega la alerta.
+                        console.log("No inventario");
+                        document.getElementById('alertas').innerHTML = buildAlertError("Stock Insuficiente", "No hay suficiente stock este producto sólo tiene disponibles " + inventario.replace(" Piezas disponibles.", "") + " piezas.");
+                      } else if (fcantidad > 1000000 || fcantidad < 0) {
+                        console.log("Cantidad incorrecta");
+                        document.getElementById('alertas').innerHTML = buildAlertError("La cantidad no es correcta", "El valor ingresado en el campo de cantidad no es correcto.");        
+                      } else if (existline == true ) {
+                        console.log("Producto Existente");
+                        document.getElementById('alertas').innerHTML = buildAlertError('Ya has agregado este producto', 'Este producto ya fue agregado al carrito ¿necesitas agregar más? puedes cambiar la cantidad agregada en el carrito de compra <a href="/carrito">carrito</a>.');        
+                      }
+                    } else {
+                      // Hay inventario Procede el submit del producto
+                      $.ajax({
+                                type:"GET",
+                                dataType : 'html',
+                                url: "/pedidolineas?usuario_id=<%=current_usuario.id%>&producto_id=" + productid + '&cantidad=' + cantidad + '&precio=' + precio.replace("$", "") + "&producto=" + product + "&product_value=" + product_value + "&imagenurl=" + imagenurl + "&invmax=" + inventarioMaximo + "&impuesto=" + impuesto + "&precioob=" + precioob + "&productoextra=" + productoextra + "&precioproductoextra=" + precioproductoextra + "&impuestoproductoextra=" + impuestoproductoextra + "&adimageid=" + varhdnadimageid,
+                                success: function(datos){
+                                console.log("$> linea añadida");     
+                                // Reestablecer Catálogo
+                                filterData = allData;
+                                cato.drawFiltros(allData);
+                                //cato.setData(allData);
+                                cambiaPaginaPLUS(1, 12);
+                                document.getElementById('cat_pag').style.display = "initial";
+                                document.getElementById('cat_fil_aplicados').style.display = 'none';
+                                jQuery('#cat_fil_aplicados div').html('');
+                                // Deseleccionar los checks de marca
+                                $("#cat_filter input[type=checkbox]").prop('checked', false);
+                                // Desplegar mensaje de producto agregado.
+                                document.getElementById('alertas').innerHTML = buildAlertSuccess("Producto Agregado", "Se ha agregado el producto correctamente a tu carrito de compra.");
+                                $("body").scrollTop(0);
+                                },
+                                error:  function(){ 
+                                var mensajeError = '<br><br><br><div align="center"><h1>Ha ocurrido un error al agregar la línea, por favor si el problema persiste cominiquese con su proveedor.</h3></div>'
+                                  document.getElementById("cat_pro").innerHTML = mensajeError;
+                                }
+                        });      
+                    console.log("Valida Existencia del pedido en Openbravo");
+                    var pedidoActual = "";
+                    var openbravo_pedido = "";
+                    var crear_nuevo = "";
+                    <% Pedido.where(usuario_id: current_usuario.id).find_each do |ords|%>
+                      <% if ords.activo? %>
+                        pedidoActual = "<%= ords.id %>"
+                      <% end %>
+                    <% end %>
+                      // validar si existe la orden en openbravo
+                      console.log("#> api/v1/pedidonuevos?usuario_id=<%=current_usuario.id%>");
                     $.ajax({
-                        type:"GET",
-                        dataType : 'json',
-                        url: "api/v1/pedidonuevos?usuario_id=<%=current_usuario.id%>",
-                           success: function(datox){
-                        },
-                            error:  function(){ 
-                            console.log("$> Ocurrio un error");
-                        }
+                            type:"GET",
+                            dataType : 'json',
+                            url: "api/v1/pedidosobs?pedido_id=" + pedidoActual,
+                               success: function(datox){
+                               console.log("$> Success: ", datox);
+                               openbravo_pedido = datox;
+                               console.log("$> LENGHT: ", openbravo_pedido.response.data.length);
+                                if (openbravo_pedido.response.data.length == 0) {
+                                  console.log("No existe el pedido procede normalente " + openbravo_pedido);
+                                } else {
+                                  console.log("Ya existe el pedido en openbravo crear uno nuevo y asigna las lineas al nuevo" + openbravo_pedido);
+                                    $.ajax({
+                                        type:"GET",
+                                        dataType : 'json',
+                                        url: "api/v1/pedidonuevos?usuario_id=<%=current_usuario.id%>",
+                                           success: function(datox){
+                                        },
+                                            error:  function(){ 
+                                            console.log("$> Ocurrio un error");
+                                        }
+                                    });          
+                                }               
+                            },
+                                error:  function(){ 
+                                console.log("$> Ocurrio un error");
+                            }
                     });          
-                }               
-            },
-                error:  function(){ 
-                console.log("$> Ocurrio un error");
-            }
-    });          
-    }
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                },
+                    error:  function(){ 
+                    console.log("$> Ocurrio un error");
+                }
+        });
   });
   $("#cat_pro").on('click', '.close_cart', function (e) {
     console.log("CANCELAR PRODUCT HTML", e);

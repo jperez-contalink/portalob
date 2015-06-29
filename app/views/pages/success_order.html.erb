@@ -407,13 +407,21 @@ function buildListaOrden(ob, ord, pedido){
     var mensaje = " y ha sido completado con éxito";
     var tipoAlerta = "success";
     // Recorrer todos los pedidos existentes en Openbravo
+
     var htmlBuilder = '<h3>Nuevo Pedido</h3><br><table width="100%">';
     htmlBuilder += '<tr><td class="headOrden">Pedido</td><td class="headOrden">Fecha</td><td class="headOrden">Subtotal</td><td class="headOrden">Impuestos</td><td class="headOrden">Total</td><td class="headOrden">Estado</td></tr>';
     for (var i=0;i<pedidosOB.length;i++) {
-        var currentDate = getStandarDate(pedidosOB[i].FechaCreacion);
-        htmlBuilder += '<tr><td class="rowOrden">' + pedidosOB[i].Documentno + '</td><td class="rowOrden">' + currentDate + '</td><td class="rowOrden">$' + parseFloat(pedidosOB[i].Subtotal).toFixed(2) + '</td><td class="rowOrden">$' + parseFloat(pedidosOB[i].Impuestos).toFixed(2) + '</td><td class="rowOrden">$' + parseFloat(pedidosOB[i].Total).toFixed(2) + '</td><td class="rowOrden">' + pedidosOB[i].Estado + '</td></tr>';
+        if (pedidosOB[i].Pedido_ID == pedido){        
+            if (pedidosOB[i].Docstatus != "CO") {
+                mensaje = " Pero no se ha completado correctamente, comunicate con tu proveedor para que el pedido pueda ser completado";
+                tipoAlerta = "warning";
+            }        
+            document.getElementById("alerta_orden").innerHTML = '<div id="alert_limite" class="alert alert-'+tipoAlerta+' alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>Correcto!</h4><p>Se ha creado el pedido ' + pedidosOB[i].Documentno + ' correctamente ' + mensaje + '.</p></div>';        
+            var currentDate = getStandarDate(pedidosOB[i].FechaCreacion);
+            htmlBuilder += '<tr><td class="rowOrden">' + pedidosOB[i].Documentno + '</td><td class="rowOrden">' + currentDate + '</td><td class="rowOrden">$' + parseFloat(pedidosOB[i].Subtotal).toFixed(2) + '</td><td class="rowOrden">$' + parseFloat(pedidosOB[i].Impuestos).toFixed(2) + '</td><td class="rowOrden">$' + parseFloat(pedidosOB[i].Total).toFixed(2) + '</td><td class="rowOrden">' + pedidosOB[i].Estado + '</td></tr>';
+        }
     }
-    htmlBuilder += '</table>';
+    htmlBuilder += '</table><hr>';
     // VERSION CON DETALLE
     /*for (var i=0;i<pedidosOB.length;i++) {
         for (var j=0;j<pedidosPortal.length;j++) {

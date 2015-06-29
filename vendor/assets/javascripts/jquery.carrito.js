@@ -68,7 +68,7 @@
                     htmlBuilder += '&nbsp;&nbsp;<input type="submit" id="btn_submit" value="Colocar Pedido" class="btn btn-default btn-sbmt sbmt_pedido"/></div>';
                 }  else {
                     listavacia = '<br><br><h3 align="center">El carrito esta vacío, agrega algunos productos desde el catálogo de productos.</h3>';
-                    listavacia += '<br><br><div align="center"><input type="button" id="btn_guardar" onclick="guardarCambios()" value="Catálogo de productos" class="btn btn-default btn-sbmt"/></div>';
+                    listavacia += '<br><br><div align="center"><input type="button" id="btn_guardar" onclick="goCatalago()" value="Catálogo de productos" class="btn btn-default btn-sbmt"/></div>';
                 }
                 htmlBuilder += '<input type="hidden" value="N" name="hdn_sbmt" id="hdn_sbmt"/>';
                 htmlBuilder += '<input type="hidden" value="N" name="hdn_save" id="hdn_save"/> ';

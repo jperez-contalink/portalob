@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   post "carrito" => "pages#carrito"
   get "success_order" => "pages#success_order"
   get "cambia_linea" => "pages#cambia_linea"
+  get "valida_linea" => "pages#valida_linea"
   get "registro_nuevo" => "pages#registro_nuevo"
   get "customer_selected" => "pages#customer_selected"
   get "borrar_linea" => "pages#borrar_linea"

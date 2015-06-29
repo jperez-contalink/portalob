@@ -86,6 +86,20 @@ def borrar_linea
 		format.html {render html: "<br>"}
 	end	
 end
+def valida_linea
+	puts "Valida si existe una linea con este producto en el pedido actual" 
+	valor = "false"
+	puts "PRODUCT_ID1 ", params[:product_id]
+	Pedido.where(usuario_id: current_usuario.id, activo: true, abierto: true).find_each do |ord|
+	      Pedidolinea.where(pedido_id: ord.id, product_id: params[:product_id]).find_each do |lins|
+	      	puts "PRODUCT_ID2 ", params[:product_id]
+	      	valor = "true"
+	      end
+	end
+	respond_to do |format|
+		format.html {render html: valor}
+	end	
+end
 
 def registro_nuevo
 	puts "Registro"
