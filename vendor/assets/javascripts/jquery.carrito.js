@@ -63,12 +63,12 @@
                 htmlBuilder += '<div class="impuestos" id="idImpuestos" align="right">Impuestos: $' + priv.separaMiles(jsonOrders[i].Impuestos) + '</div>';
                 htmlBuilder += '<div class="total"  id="idTotal" align="right">Total: $' + priv.separaMiles(jsonOrders[i].Total) + '</div></div>';
                 htmlBuilder += '<div class="cartBtn" id="cartBtn" style="float:left;width:100%;padding:2% 1% 1% 1%;border:0px solid red;" align="right">';
-                htmlBuilder += '<br><br><input type="button" id="btn_guardar" onclick="guardarCambios()" value="Catálogo de productos" class="btn btn-default btn-sbmt sbmt_pedido btn_save"/>';
+                htmlBuilder += '<br><br><input type="button" id="btn_guardar" onclick="guardarCambios()" value="Catálogo de productos" class="btn btn-default btn_save"/>';
                 if (j > 0) {
                     htmlBuilder += '&nbsp;&nbsp;<input type="submit" id="btn_submit" value="Colocar Pedido" class="btn btn-default btn-sbmt sbmt_pedido"/></div>';
                 }  else {
                     listavacia = '<br><br><h3 align="center">El carrito esta vacío, agrega algunos productos desde el catálogo de productos.</h3>';
-                    listavacia += '<br><br><div align="center"><input type="button" id="btn_guardar" onclick="guardarCambios()" value="Catálogo de productos" class="btn btn-default btn-sbmt sbmt_pedido btn_save"/></div>';
+                    listavacia += '<br><br><div align="center"><input type="button" id="btn_guardar" onclick="guardarCambios()" value="Catálogo de productos" class="btn btn-default btn-sbmt"/></div>';
                 }
                 htmlBuilder += '<input type="hidden" value="N" name="hdn_sbmt" id="hdn_sbmt"/>';
                 htmlBuilder += '<input type="hidden" value="N" name="hdn_save" id="hdn_save"/> ';

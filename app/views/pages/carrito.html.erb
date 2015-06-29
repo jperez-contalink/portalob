@@ -86,6 +86,11 @@
         border-radius: 5px;
         padding: 1% 0% 1% 0%;
     }
+    .btn-save {
+        width: 20%;
+        border-radius: 5px;
+        padding: 1% 0% 1% 0%;
+    }    
     </style>
 </head>
 <body>
@@ -202,7 +207,8 @@ function guardarCambios(){
     document.getElementById('hdn_save').value = "Y"; 
     document.getElementById('productos_drop').value = dropLineas;
     document.getElementById('productos_change').value = changeLineas;
-    document.getElementById("carrito_form").submit();    
+    //document.getElementById("carrito_form").submit();    
+    window.location="/catalogoproductos";
 }  
 function orderContructor(){
     var rows = [];

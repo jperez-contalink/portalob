@@ -348,7 +348,7 @@ function buildListaOrdenes(ob, ord, pedido, html){
     var lineasPortal = ord.rows;
     var htmlBuilder = "";
     // Recorrer todos los pedidos existentes en Openbravo
-    var htmlBuilder = '<table width="100%">';
+    var htmlBuilder = '<h3>Tus Pedidos</h3><br><table width="100%">';
     htmlBuilder += '<tr><td class="headOrden">Pedido</td><td class="headOrden">Fecha</td><td class="headOrden">Subtotal</td><td class="headOrden">Impuestos</td><td class="headOrden">Total</td><td class="headOrden">Estado</td></tr>';
     for (var i=0;i<pedidosOB.length;i++) {
         var currentDate = getStandarDate(pedidosOB[i].FechaCreacion);
@@ -407,7 +407,7 @@ function buildListaOrden(ob, ord, pedido){
     var mensaje = " y ha sido completado con éxito";
     var tipoAlerta = "success";
     // Recorrer todos los pedidos existentes en Openbravo
-    var htmlBuilder = '<table width="100%">';
+    var htmlBuilder = '<h3>Nuevo Pedido</h3><br><table width="100%">';
     htmlBuilder += '<tr><td class="headOrden">Pedido</td><td class="headOrden">Fecha</td><td class="headOrden">Subtotal</td><td class="headOrden">Impuestos</td><td class="headOrden">Total</td><td class="headOrden">Estado</td></tr>';
     for (var i=0;i<pedidosOB.length;i++) {
         var currentDate = getStandarDate(pedidosOB[i].FechaCreacion);
