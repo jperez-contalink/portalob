@@ -127,7 +127,7 @@
             priv.init();
             return publ;
         };
-        publ.drawFiltros = function(pData){
+        publ.drawFiltros = function(pData){/*
             console.log("Crear Filtros");
             var jsonRows = pData.rows;
             var arrayMarca = [];
@@ -168,6 +168,7 @@
             var filtros = filPrice + marcas + "<br>" + categorias + caracteriticas;
             //var filtros = marcas + "<br>" + categorias + caracteriticas;
             document.getElementById("cat_filter").innerHTML = filtros;
+        */
         };
 
         return publ;
