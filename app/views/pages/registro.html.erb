@@ -59,9 +59,11 @@ function jsonConstructor(json) {
 		var row = {};
         row.Cliente_ID		= jsonObject.data[i].id;
         row.Clave	 		= jsonObject.data[i].value;
-        row.RFC		 		= jsonObject.data[i].rfc;
+        //row.RFC		 		= jsonObject.data[i].rfc;
+        row.RFC		 		= "";
         row.Nombre 			= jsonObject.data[i].name;
-        row.Vendedor    = jsonObject.data[i].vendor;
+        //row.Vendedor    = jsonObject.data[i].vendor;
+        row.Vendedor    = "";
         rows.push(row);
     }    
     var data = {
