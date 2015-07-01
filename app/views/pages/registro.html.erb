@@ -58,7 +58,7 @@ function jsonConstructor(json) {
 	for (var i=0;i<jsonObject.totalRows;i++) {
 		var row = {};
         row.Cliente_ID		= jsonObject.data[i].id;
-        row.Clave	 		= jsonObject.data[i].searchkey;
+        row.Clave	 		= jsonObject.data[i].searchKey;
         //row.RFC		 		= jsonObject.data[i].rfc;
         row.RFC		 		= "";
         row.Nombre 			= jsonObject.data[i].name;
