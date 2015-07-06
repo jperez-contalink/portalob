@@ -7,7 +7,7 @@ module Api
         puts order_link 
         response = RestClient.get order_link
         respond_to do |format|
-          format.xml {
+          format.json {
               #render xml: response
               send_data(response, :filename => 'TusCFDIS.zip')
             }
