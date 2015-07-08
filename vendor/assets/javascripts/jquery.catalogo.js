@@ -39,6 +39,32 @@
             var search = '<div class="input-group"><span class="input-group-addon glyphicon glyphicon-search"></span><input type="text" class="form-control btn_search" aria-describedby="basic-addon1" id="txt_search" autofocus></div>';
             var tabla = search + '<br><div width="100%">';
             var style="";
+            // Obtener todos los reservados
+            var str_items = "";
+            for (var key in jsonRows) {
+                var item = jsonRows[key];
+                str_items += "product=%27" + item.Producto_ID + "%27%20or%20";
+                //str_items += "product='" + item.Producto_ID + "' or ";
+            }
+            str_items += "_"
+            str_items = str_items.replace("%20or%20_", "");
+            //str_items = str_items.replace(" or _", "");
+            json_reservados = [];
+            $.ajax({
+                type:"GET",
+                dataType : 'json',
+                url: "api/v1/reservations?products=" + str_items,
+                success: function(reservados){
+                    console.log("SUCCESS RESERVADOS");
+                    json_reservados = buildJSONReserva(reservados);
+                    console.log("$> json_reservados: ", json_reservados);
+                },
+                error:  function(){ 
+                    console.log("$ERROR RESERVADOS");
+                    var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
+                    //document.getElementById("cat_pro").innerHTML = mensajeError;
+                }
+            }); // termina productos
             for (var key in jsonRows) {
                 var obj = jsonRows[key]; 
                 var inventario = parseFloat((obj.Inventario).replace(" Piezas", ""));
@@ -55,16 +81,27 @@
                     
                     var inventarioShow = "";
                     if (mostrarInventario == "true") {
-                        inventarioShow = obj.Inventario;
+                        //inventarioShow = obj.Inventario;
+                        for (var ki = 0; ki<json_reservados.length;ki++) {
+                            if (json_reservados[ki].Producto_ID == obj.Producto_ID) {
+                                inventario = inventario + parseFloat(json_reservados[ki].QtyReserved);
+                            }
+                        }
+                        inventarioShow = " " + inventario + " Piezas";
                     }
                     console.log("$> obj.Image: " + obj.Image);
                     if (obj.Imagen == "Y") {
+                        if (obj.imageMiniId != null) {
+                            var mini = obj.imageMiniId;
+                        } else {
+                            var mini = obj.Imagen;
+                        }
                         tabla += '<a href="javascript:agregar();" class="addProduct"'+
                         ' id="' + obj.Producto_ID + '">'+
                         '<div class="itemA" align="left">'+
                         '<div align="center" class="bgImage1"'+
                         'data-product-id='+obj.Producto_ID+
-                        ' data-image-id='+obj.imageId+'>'+
+                        ' data-image-id='+obj.imageMiniId+'>'+
                         '<br><br><br><br><br><br></div><br><b>'+
                         obj.Nombre +'</b><br>$'+
                         (parseFloat(obj.Precioshow)).toFixed(2)+' ' + pextra + '<br>'
@@ -261,4 +298,17 @@
 })(jQuery);  
     function agregar(){
         console.log("Agregar JS VENDOR");
+    }
+    function buildJSONReserva(json) {
+        console.log("$>> RESERVASS!!!!!!! ", json);
+        //qtyreserved
+        var jsonObject = json.response;
+        var rows = [];
+        for (var i=0;i<jsonObject.totalRows;i++) {
+            var row = {};
+            row.QtyReserved = jsonObject.data[i].qtyreserved;
+            row.Producto_ID = jsonObject.data[i].product;
+            rows.push(row);
+        }
+        return rows;
     }

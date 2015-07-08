@@ -227,35 +227,48 @@
   $.ajax({
           type:"GET",
           dataType : 'json',
-          url: "api/v1/precios",
-          success: function(datos){
-          console.log("Precios", datos);
-          allPrice = jsonConstructorPrice(datos);
-        $.ajax({
-          type:"GET",
-          dataType : 'json',
-          url: "api/v1/productos",
-          success: function(datos){
-            console.log("Productos", datos);
-            allData = jsonConstructor(datos, allPrice);
-            filterData = allData;
-            searchData = allData;
-            cato.drawFiltros(allData);
-            //cato.setData(allData);
-            cambiaPaginaPLUS(1, 12);
-            },
-          error:  function(){ 
-            var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
+          url: "api/v1/listprices",
+          success: function(json_pricelist){
+            var str_pricelist = getPriceList(json_pricelist);
+            $.ajax({
+                    type:"GET",
+                    dataType : 'json',
+                    url: "api/v1/precios?pricelist=" + str_pricelist,
+                    success: function(datos){
+                    console.log("Precios", datos);
+                    allPrice = jsonConstructorPrice(datos);
+                  $.ajax({
+                    type:"GET",
+                    dataType : 'json',
+                    url: "api/v1/productos",
+                    success: function(datos){
+                      console.log("Productos", datos);
+                      allData = jsonConstructor(datos, allPrice);
+                      filterData = allData;
+                      searchData = allData;
+                      cato.drawFiltros(allData);
+                      //cato.setData(allData);
+                      cambiaPaginaPLUS(1, 12);
+                      },
+                    error:  function(){ 
+                      var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor.</h3></div>'
+                      document.getElementById("cat_pro").innerHTML = mensajeError;
+                    }
+                  }); // termina productos
+                    //cato.setData(allData);
+                },
+                    error:  function(){ 
+                    var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor [Pricing].</h3></div>'
+                      document.getElementById("cat_pro").innerHTML = mensajeError;
+                    }
+            });
+          },
+          error: function () {
+            var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor [pricelist].</h3></div>'
             document.getElementById("cat_pro").innerHTML = mensajeError;
           }
-        }); // termina productos
-          //cato.setData(allData);
-      },
-          error:  function(){ 
-          var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor [Pricing].</h3></div>'
-            document.getElementById("cat_pro").innerHTML = mensajeError;
-          }
-  });  
+  });          
+  
   $("#cat_pro").on('keyup', '.btn_search', function (e) {
     console.log("Busqueda");
     e.preventDefault();
@@ -660,6 +673,7 @@ function jsonConstructor(json, allPrice) {
           row.Image = "imagenesProductos/" + jsonObject.data[i].id + ".png";
           row.Imagen = "Y";
           row.imageId = jsonObject.data[i].image;
+          row.imageMiniId = jsonObject.data[i].imagemini;
         } else {
           // Asignar una imagen por marca si no coicide la marca row.Image = "N"
           row.Image = imagenMarca(row.Marca, row.Categoria);
@@ -1641,6 +1655,27 @@ function buildAlertSuccess(titulo, mensaje) {
 }
 function buildAlertError(titulo, mensaje) {
   return '<div id="alert_limite" class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4>' + titulo + '</h4><p>' + mensaje + '</p></div>';
+}
+function getPriceList(json) {
+  var jsonObject = json.response;
+  var pricelist_str = "";
+    for (var i=0;i<jsonObject.totalRows;i++) {
+      pricelist_str = jsonObject.data[i].priceList;
+    }
+  return pricelist_str;
+}
+function buildJSONReserva(json) {
+    console.log("$>> RESERVASS!!!!!!! ", json);
+    //qtyreserved
+    var jsonObject = json.response;
+    var rows = [];
+    for (var i=0;i<jsonObject.totalRows;i++) {
+        var row = {};
+        row.QtyReserved = jsonObject.data[i].qtyreserved;
+        row.Producto_ID = jsonObject.data[i].product;
+        rows.push(row);
+    }
+    return rows;
 }
 });
   </script>
