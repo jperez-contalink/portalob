@@ -28,17 +28,17 @@
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
       <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
     <% end %>
-
+    <% if current_usuario.role == "Cliente"%>
     <div class="fform-groupield">
-      <strong>Contraseña</strong> <i>(Deja esto en blanco si no quieres cambiarlo)</i><br />
+      <strong>Contraseñas</strong> <i>(Deja esto en blanco si no quieres cambiarlo)</i><br />
       <%= f.password_field :password, autocomplete: "off", class: "form-control"  %>
     </div>
     <br>
-    <div class="form-group">
-      <strong>Confirmar Contraseña</strong><br />
-      <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control"  %>
-    </div>
-
+      <div class="form-group">
+        <strong>Confirmar Contraseña</strong><br />
+        <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control"  %>
+      </div>
+    <% end %>
     <div class="form-group">
       <strong>Contraseña Actual </strong><i>(Necesitamos tu password actual para poder guardar los cambios)</i><br />
       <%= f.password_field :current_password, autocomplete: "off", class: "form-control"  %>

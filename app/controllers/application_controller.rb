@@ -34,35 +34,48 @@ class ApplicationController < ActionController::Base
     end
     
     if request.referer.include? "sign_in"
-      #usr = params["usuario"]["email"]
-      #pwd = params["usuario"]["password"]
-      #url = request.referer
-      #usr.gsub! '@', '%40'
-      #pwd.gsub! '@', '%40'
-      #order_link = "http://" + usr + ":" + pwd + "@" + "ec2-54-147-241-223.compute-1.amazonaws.com:8080" + "/openbravo/org.openbravo.service.json.jsonrest/pob_catalogoproductos?_startRow=1&_endRow=2"
-      #response = HTTParty.get('http://example.com', headers: {"User-Agent" => APPLICATION_NAME})
-      #UserValidate
-      #/openbravo/ws/com.tegik.portalob.EscribePedidosPortal
-      #order_link = "http://csalinas-tegik:KopoTegik@ec2-54-158-147-120.compute-1.amazonaws.com:8080" + "/openbravo/ws/com.tegik.portalob.UserValidate "
-      #response = HTTParty.get(order_link, headers: {"Usr" => usr, "Pwd" => pwd})
-      #puts order_link
-      #puts "CODIGO: ", response.code
-      #puts "MESSAGE: ", response.message
-      #puts "headers.inspect: ", response.headers.inspect
-      #puts "BODY: ", response.body
-      #if response.code == 200
-        #puts "El usuario existe en openbravo"
-      #  # Existe el usuario en Devise?
-      #  if usuario_signed_in?
-      #    puts "El usuario esta logeado"
-      #  else
-      #    puts "El usuario no esta logeado"
-      #  end
-      #else
-      #  puts "El usuario no existe en openbravo"
-      #end
-      #usr.gsub! '%40', '@'
-      #pwd.gsub! '%40', '@'
+      usr = params["usuario"]["email"]
+      pwd = params["usuario"]["password"]
+      found = false
+      url = request.referer
+      usr.gsub! '@', '%40'
+      pwd.gsub! '@', '%40'
+      # en función de la url asignar los valores de la conexión
+      ip = "ec2-54-166-7-161.compute-1.amazonaws.com:8080"
+      order_link = "http://csalinas-tegik:KopoTegik@" + ip + "/openbravo/ws/com.tegik.portalob.UserValidate"
+      response = HTTParty.get(order_link, headers: {"Usr" => usr, "Pwd" => pwd})
+      puts order_link
+      puts "CODIGO: ", response.code
+      puts "MESSAGE: ", response.message
+      puts "headers.inspect: ", response.headers.inspect
+      puts "BODY: ", response.body
+      usr.gsub! '%40', '@'
+      pwd.gsub! '%40', '@'
+      if response.code == 200
+        puts "El usuario y contraseña son correctos en Openbravo"
+        # El usuario existe en devise
+        Usuario.where(email: usr).find_each do |user|
+          found = true;
+          puts "El usuario existe en devise actualizar la contraseña a la de openbravo"
+          user.password = pwd;
+          user.save;
+        end
+        if found == false
+          puts "El usuario no existe en devise - Crearlo"
+        # El usuario no existe en devise
+          # Se registra el usuario en devise
+          Usuario.create!({:email => usr, :password => pwd, :password_confirmation => pwd, :nombre => usr, :rfc => "rfc", :rfcempresa => "rfcempresa", :empresa_id => "2", :isadmin => false, :role => "Cliente", :partner_id => "A1315DE706FF4D36ADA80829F26C2A85"})
+        end
+      else
+        # En ambos casos el usuario tiene que validar sus datos de acceso
+        puts "El usuario o la contraseña no son correctos"
+        if response.body.include? 'NOTFOUNDUSER'
+          puts "El usuario no fue encontrado en la base de datos de OB"
+        end
+        if response.body.include? 'INCORRECTPWD'
+          puts "La contraseña no es correcta o no coincide con la de OB"
+        end
+      end
     end #termina if signin
 	end 
 

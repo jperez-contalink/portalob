@@ -23,21 +23,20 @@
     </div>
 
     <%= f.hidden_field :empresa_id, class: "form-control" %>
+      <div class="form-group">
+        <!--<%= f.label :password %>-->
+        <strong>Contraseña </strong><br />
+        <% if @validatable %>
+        <em>(<%= @minimum_password_length %> caracteres minimo)</em>
+        <% end %><br />
+        <%= f.password_field :password, autocomplete: "off", class: "form-control"  %>
+      </div>
 
-    <div class="form-group">
-      <!--<%= f.label :password %>-->
-      <strong>Contraseña </strong><br />
-      <% if @validatable %>
-      <em>(<%= @minimum_password_length %> caracteres minimo)</em>
-      <% end %><br />
-      <%= f.password_field :password, autocomplete: "off", class: "form-control"  %>
-    </div>
-
-    <div class="form-group">
-      <!--<%= f.label :password_confirmation %><br />-->
-      <strong>Confirma Contraseña </strong><br />
-      <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control"  %>
-    </div>
+      <div class="form-group">
+        <!--<%= f.label :password_confirmation %><br />-->
+        <strong>Confirma Contraseña </strong><br />
+        <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control"  %>
+      </div>
 
     <div class="actions">
       <%= f.submit "Registrate" %>

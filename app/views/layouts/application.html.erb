@@ -219,8 +219,8 @@
   </footer>
 <% end %>
   <script>
-  <% if usuario_signed_in? %>
   window.intercomSettings = {
+  <% if usuario_signed_in? %>
       name: "<%= current_usuario.nombre %>",
       email: "<%= current_usuario.email %>",
       created_at: <%= current_usuario.created_at.to_i %>,

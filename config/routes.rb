@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   resources :reporte_facturas
   resources :listprices
   resources :reservations
+  resources :pedidospos
+  resources :escribecortes
   
   devise_for :usuarios do
     get "/usuarios/sign_out" => "devise/sessions#destroy", 
@@ -72,11 +74,13 @@ Rails.application.routes.draw do
       resources :ad_images, only: [:show]
       resources :listprices, only: [:index]
       resources :reservations, only: [:index]
+      resources :pedidospos, only: [:index]
     end  
   end
   namespace :api, defaults: {format: 'html'} do
     namespace :v1 do
       resources :escribepedidos, only: [:index]
+      resources :escribecortes, only: [:index]
     end
   end
 

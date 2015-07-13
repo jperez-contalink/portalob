@@ -312,6 +312,10 @@ UPCS
 		#rightBottomDiv {
 			background-color: green;
 		}
+		/********************* Terceros*** ****************/
+		.bpartner_row {
+			color:black;
+		}
 		/********************* Indicadores ****************/
 		.tdIndicadores {
 			background-color: white;
@@ -372,6 +376,32 @@ UPCS
 			border-top: 1px solid #bdc3c7;
 			border-bottom: 0px solid #bdc3c7;*/
 		}					
+		/*****************************Corte de Caja*/
+		.cte_metodo {
+			/*background-color: #ecf0f1;*/
+			color:black;
+			border-radius: 5px;
+			font-size: 200%;
+			font-weight: bold;
+			padding: 1% 1% 1% 1%;
+		}
+		.row_Corte {
+			text-align: left;
+		}
+		.row_Corte td {
+			width: 25%;
+		}
+		.cte_btn {
+			width: 90%;
+			font-size: 130%;
+			font-weight: bold;
+			padding: 3% 1% 3% 1%;
+			margin-top: 15%;
+			/*CHI*/
+			border:1px solid blue;
+			color:blue;
+			background-color: white;
+		}
     </style>
 </head>
 <body>
@@ -403,7 +433,7 @@ UPCS
 									<a href="#">Devoluciones</a>
 								</li>
 								<li>
-									<a href="#">Corte de caja</a>
+									<a href="#" onclick="corteCaja();">Corte de caja</a>
 								</li>		
 								<li>
 									<a href="/estadosdecuenta">Portal</a>
@@ -440,8 +470,8 @@ UPCS
 		</div>		
 		<hr>
 		<div>
-			<span class="input input--yoshiko">
-				<input class="input__field input__field--yoshiko" type="text" id="input-10" />
+			<span class="input input--yoshiko" id="span_terceros">
+				<input class="input__field input__field--yoshiko bpartner_select" data-toggle="popover" data-trigger="focus" title="Terceros disponibles" data-html="true" data-placement="bottom" type="text" id="input-10" />
 				<label class="input__label input__label--yoshiko" for="input-10">
 					<span class="input__label-content input__label-content--yoshiko" data-content="CLIENTE">CLIENTE</span>
 				</label>
@@ -502,13 +532,16 @@ var rowsSelected = [];
 var metsSelected = [];
 var rowsGrid = [];
 var metodosPago = [];
-var allPrice = {};
+var allPrice = [];
+var allPartner = {};
+var jsonCorte = {};
 var currentProduct = "";
 var jsonTicket = {
 	total: 0,
 	impuestos: 0,
 	resto: 0,
 	cambio: 0,
+	customer: "",
 	selectedrows: rowsSelected,
 	selectedmetodos: metsSelected,
 	gridrows: rowsGrid,
@@ -791,6 +824,26 @@ $( document ).ready(function() {
 			}			
 		}
 	});
+	$(document).on('keyup', '.bpartner_select', function (e) {
+		var str_search = document.getElementById("input-10").value;
+		popHtml = '<input class="input__field input__field--yoshiko bpartner_select"';
+		popHtml += ' data-toggle="popover" data-trigger="focus" title="Terceros disponibles"';
+		popHtml += ' data-html="true" data-placement="bottom" type="text"';
+		popHtml += ' data-content="' + filterBPartner(str_search) + '" id="input-10"/>';
+		popHtml += '<label class="input__label input__label--yoshiko" for="input-10">';
+		popHtml += '<span class="input__label-content input__label-content--yoshiko"';
+		popHtml += 'data-content="CLIENTE">CLIENTE</span></label>';
+		console.log("Lista de popHtml html: " + popHtml);
+		document.getElementById("span_terceros").innerHTML = popHtml;
+		document.getElementById("input-10").value = str_search;
+		$( "#input-10" ).focus();
+		$('#input-10').popover('show');
+	});
+	$(document).on('click', '.bpartner_row', function (e) {
+		console.log("$> ", e);
+		document.getElementById("input-10").value = e.target.innerText;
+		jsonTicket.customer = e.target.id;
+	});
 	$(document).on('change', '.txtlote_qty', function (e) {
 		console.log("E: ",  e);
 		var loteNum = e.target.id.split("_")[1];
@@ -817,6 +870,23 @@ $( document ).ready(function() {
 		document.getElementById("alert").style.display = "none";
 		document.getElementById("panellotes").style.overflowY = "scroll";
 	});
+	$(document).on('click', '.cte_btn_cancel', function (e) {
+		window.print();
+		//buildIndicadores();
+	});
+	$(document).on('click', '.cte_btn_submit', function (e) {
+		$.ajax({
+			type:"GET",
+			dataType : 'html',
+			url: "api/v1/escribecortes?fecha_corte=2015-06-13&caja_id=27A8009ADBDF41CDAA823054FD18586B",
+			success: function(corte){
+				console.log("$> " + corte);
+			},
+			error:  function(corte){ 
+				console.log("$> " + corte);
+			}
+		});	
+	});
 });
 /*************************************** FUNCIONES *************************************************************************/
 function loadGrid() {
@@ -824,7 +894,8 @@ function loadGrid() {
 	//table += '<table id="gridVentaMetodos" class="gridVenta" style="display:none;"></table>';
 	table += '<table id="gridVentaMetodos" class="gridVenta" style="border:0px solid black;"></table>';
 	document.getElementById("divGridVenta").innerHTML = table;
-	buildIndicadores();
+	corteCaja();
+	//buildIndicadores();
 }
 function loadLotes(json) {
 	console.log("$json: ", json);
@@ -1230,8 +1301,8 @@ function buildTab(op) {
 }
 function popAlert(title, mensaje, boton) {
 	document.getElementById("alert").style.display = "block";
-	html = "<h1>" + title + "</h1>"
-	html += "<p>" + mensaje + "</p>"
+	html = "<h2>" + title + "</h2>"
+	html += "<h1>" + mensaje + "</h1>"
 	html += '<div alignt="center"><input type="button" class="btnAlert" value="' + boton + '"/><div>';
 	document.getElementById("frameAlert").innerHTML = html;
 }
@@ -1264,36 +1335,209 @@ function limpiaPantalla() {
 	buildTab("H");
 	$( "#txtGridUpc").focus();
 }
+function buildPartner(json) {
+    var rows = [];
+    var jsonObject = json.response;
+	for (var i=0;i<jsonObject.totalRows;i++) {
+		var row = {};
+        row.Cliente_ID		= jsonObject.data[i].id;
+        row.Clave	 		= jsonObject.data[i].searchKey;
+        row.RFC		 		= "";
+        row.Nombre 			= jsonObject.data[i].name;
+        row.Vendedor    	= "";
+        rows.push(row);
+    }    
+    var data = {
+                //facturas: rows
+                rows: rows
+            };
+    return rows;
+}
+function filterBPartner(str) {
+	var listPartners = "<div style='overflow-y:scroll;height:15em;'>";
+	for (var i=0;i<allPartner.length;i++) {
+		if (allPartner[i].Nombre.toUpperCase().includes(str.toUpperCase())) {
+			listPartners += "<a class='bpartner_row' id='" + allPartner[i].Cliente_ID + "'>" + allPartner[i].Nombre + "</a><br>";
+		}
+		//listPartners += '<a>' + allPartner[i].Nombre + '</a><br>';
+	}
+	listPartners += "</div>";
+	return listPartners;
+}
+function corteCaja() {
+	// Obtener la información de los pedidos abiertos
+	var pedidospos = {};
+	$.ajax({
+		type:"GET",
+		dataType : 'json',
+		url: "api/v1/pedidospos",
+		success: function(json){
+			// Obtener datos de los pedidos y calcular resumen
+			console.log("Success Pedidos Corte");
+			var orderLines = [];
+			var methods = [];
+			var methodNames = [];
+			var methodAmount = [];
+			var jsonObject = json.response.data;
+			console.log("Array: ", jsonObject);
+			for (var i=0;i<jsonObject.length;i++) {
+				var row = {};
+				row.DocumentNo 		= jsonObject[i].documentNo;
+				row.Total 			= (jsonObject[i].grandTotalAmount).toFixed(2);
+				row.SubTotal 		= (jsonObject[i].summedLineAmount).toFixed(2);
+				row.Date 			= jsonObject[i].orderDate;
+				row.paymentMethod 	= jsonObject[i].paymentMethod$_identifier;
+				orderLines.push(row);
+				// Sumar metodos
+				if (methodNames.indexOf(row.paymentMethod) > -1) {
+					methodAmount[methodNames.indexOf(row.paymentMethod)] = parseFloat(methodAmount[methodNames.indexOf(row.paymentMethod)]) + parseFloat(row.Total);
+				} else {
+					methodNames.push(row.paymentMethod);
+					methodAmount.push(parseFloat(row.Total));
+				}
+			}
+			for (var j=0;j<methodNames.length;j++) {
+				var meth = {};
+				meth.Method = methodNames[j];
+				meth.Amount = methodAmount[j];
+				methods.push(meth);
+			}
+			console.log("$> Lineas: ", orderLines);
+			data = {
+				paymentmethods: methods,
+				orderlines: orderLines
+			};
+			jsonCorte = data;
+			// Pintar el corte de caja
+				//var htmlCorte = '<br><h1 align="center" style="background-color:white;">Corte de Caja</h1>';
+				// RESUMEN DE MÉTODOS DE PAGO
+				var htmlCorte = '<div style="width:96%;height:96%;margin:1% 2% 1% 2%;background-color:white;"><h1 align="center" style="padding-top:2%;	">Corte de caja</h1>';
+				//for (var i=0;i<5;i++) {
+				console.log("$> Validate undefined: " + jsonCorte.paymentmethods);
+				if (jsonCorte.paymentmethods != undefined) {
+					for (var i=0;i<jsonCorte.paymentmethods.length;i++) {
+						htmlCorte += '<div class="cte_metodo" style="width:45%;float:left;background-color:white;">' + jsonCorte.paymentmethods[i].Method + ': $' + separaMiles(parseFloat(jsonCorte.paymentmethods[i].Amount).toFixed(2)) + '</div>';
+					}
+					//htmlCorte += '</div>';		
+				}
+				// LISTADO DE PEDIDOS A INLCUIR
+				htmlCorte += '<br><div align="center" style="width:98%;margin:1% 2% 1% 2%;"><table width="100%"><tr class="row_Corte"><td>Pedido</td><td>Fecha</td><td>Subtotal</td><td>Total</td></tr></table></div>';
+				htmlCorte += '<div align="center" style="width:98%;height:40%;background-color:white;overflow-y:scroll;margin:1% 2% 1% 2%;">';
+				htmlCorte += '<table width="100%">';
+				if (jsonCorte.orderlines != undefined) {
+					for (var j=0;j<jsonCorte.orderlines.length;j++) {
+						htmlCorte += '<tr class="row_Corte"><td>' + jsonCorte.orderlines[j].DocumentNo + '</td><td>' + jsonCorte.orderlines[j].Date + '</td><td>$' + jsonCorte.orderlines[j].SubTotal + '</td><td>$' + jsonCorte.orderlines[j].Total + '</td></tr>';
+					}
+				}
+				htmlCorte += '</table>';
+				htmlCorte += '</div>';
+				// BOTON(ES) CORTE
+				htmlCorte += '<div align="center" style="width:100%;height:10%;">';
+				htmlCorte += '<div style="float:left;width:50%">&nbsp;</div>';
+				htmlCorte += '<div style="float:left;width:25%"><input class="cte_btn cte_btn_cancel" type="button" value="Cancelar"/></div>';
+				htmlCorte += '<div style="float:left;width:25%"><input class="cte_btn cte_btn_submit" type="button" value="Corte"/></div>';
+				htmlCorte += '</div></div>';
+				paintLeftPanel(htmlCorte);
+				//document.getElementById("leftFrame").style.backgroundColor = "white";			
+			
+		},
+		error:  function(){ 
+			console.log("Error no gestionado");
+		}
+	});	
+}
+function corteBuild(json) {
+	var orderLines = [];
+	var methods = [];
+	var methodNames = [];
+	var methodAmount = [];
+	var jsonObject = json.response.data;
+	console.log("Array: ", jsonObject);
+	for (var i=0;i<jsonObject.length;i++) {
+		var row = {};
+		row.DocumentNo 		= jsonObject[i].documentNo;
+		row.Total 			= (jsonObject[i].grandTotalAmount).toFixed(2);
+		row.SubTotal 		= (jsonObject[i].summedLineAmount).toFixed(2);
+		row.Date 			= jsonObject[i].orderDate;
+		row.paymentMethod 	= jsonObject[i].paymentMethod$_identifier;
+		orderLines.push(row);
+		// Sumar metodos
+		if (methodNames.indexOf(row.paymentMethod) > -1) {
+			methodAmount[methodNames.indexOf(row.paymentMethod)] = parseFloat(methodAmount[methodNames.indexOf(row.paymentMethod)]) + parseFloat(row.Total);
+		} else {
+			methodNames.push(row.paymentMethod);
+			methodAmount.push(parseFloat(row.Total));
+		}
+	}
+	for (var j=0;j<methodNames.length;j++) {
+		var meth = {};
+		meth.Method = methodNames[j];
+		meth.Amount = methodAmount[j];
+		methods.push(meth);
+	}
+	console.log("$> Lineas: ", orderLines);
+	data = {
+		paymentmethods: methods,
+		orderlines: orderLines
+	};
+	jsonCorte = data;
+}
 </script>
 <script>
 $(function() {
- console.log("$> Al entrar se cargara la lista de precios venta en piso.");
-  var datox = {};
+ // POPOVER
+	$('[data-toggle="popover"]').popover(); 
+	console.log("$> Al entrar se cargara la lista de precios venta en piso.");
+	var datox = {};
   $.ajax({
           type:"GET",
           dataType : 'json',
-          url: "api/v1/precios",
-          success: function(datos){
-          console.log("Precios", datos);
-          allPrice = jsonConstructorPrice(datos);
-          // Metodos de pago
-			$.ajax({
-				type:"GET",
-				dataType : 'json',
-				url: "api/v1/metodopagos",
-				success: function(datoz){
-				buildMetodosPago(datoz);
-			},
-			error:  function(){ 
-				console.log("Error no gestionado");
-			}
-			});         
-      },
-          error:  function(){ 
-          var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor [Pricing].</h3></div>'
-            document.getElementById("cat_pro").innerHTML = mensajeError;
-          }
-  });	
+          url: "api/v1/listprices",
+          success: function(json_pricelist){
+            var str_pricelist = getPriceList(json_pricelist);  
+			  $.ajax({
+			          type:"GET",
+			          dataType : 'json',
+			          url: "api/v1/precios?pricelist=" + str_pricelist,
+			          success: function(datos){
+			          console.log("Precios", datos);
+			          allPrice = jsonConstructorPrice(datos);
+			          // Metodos de pago
+						$.ajax({
+							type:"GET",
+							dataType : 'json',
+							url: "api/v1/metodopagos",
+							success: function(datoz){
+							buildMetodosPago(datoz);
+			          // Metodos de pago
+								$.ajax({
+									type:"GET",
+									dataType : 'json',
+									url: "api/v1/customers",
+									success: function(terceros){
+									allPartner = buildPartner(terceros);
+									},
+									error:  function(){ 
+										console.log("Error no gestionado");
+									}
+								});							
+							},
+							error:  function(){ 
+								console.log("Error no gestionado");
+							}
+						});         
+			      },
+			          error:  function(){ 
+			          var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor [Pricing].</h3></div>'
+			            //document.getElementById("cat_pro").innerHTML = mensajeError;
+			          }
+			  });
+	      },
+	      error: function () {
+	        var mensajeError = '<br><br><br><div align="center"><h1>Ups!! algo ha salido mal.</h1><h3>No ha sido posible entablar comunicación, por favor comuniquese con su proveedor [pricelist].</h3></div>'
+	        //document.getElementById("cat_pro").innerHTML = mensajeError;
+	      }
+	});			  	
 
 	$( '#dl-menu' ).dlmenu({
 		animationClasses : { classin : 'dl-animate-in-2', classout : 'dl-animate-out-2' }
@@ -1391,6 +1635,14 @@ function buildMetodosPago(json) {
     	metodo = {};
     }
     jsonMetodos = metodos;
+}
+function getPriceList(json) {
+  var jsonObject = json.response;
+  var pricelist_str = "";
+    for (var i=0;i<jsonObject.totalRows;i++) {
+      pricelist_str = jsonObject.data[i].priceList;
+    }
+  return pricelist_str;
 }
 </script>
 </html>
